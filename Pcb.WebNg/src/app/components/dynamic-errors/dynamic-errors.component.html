@@ -1,0 +1,3 @@
+    <mat-error class="error-message" *ngIf="formControlItem.hasError(validation.type) && (formControlItem.dirty || formControlItem.touched)">
+        <span [innerHTML]="validation.message"></span>
+    </mat-error>

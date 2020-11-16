@@ -1,0 +1,25 @@
+<form [formGroup]="nutrition" class="p-1 flex-box flex-row flex-align-items-center">
+	<span class="flex-box flex-row flex-grow-1">
+		<mat-form-field class="mr-2 w-25">
+			<input matInput type="text" placeholder="Title" formControlName="title">
+		</mat-form-field>
+		<mat-form-field class="mr-2 max-width7">
+			<input matInput type="number" placeholder="Amount" formControlName="amount">
+		</mat-form-field>
+
+		<mat-form-field class="mr-2 max-width7">
+			<mat-label [id]="'unit-label' + index">Unit</mat-label>
+			<mat-select role="" formControlName="unit">
+				<div role="listbox" [attr.aria-labelledby]="'unit-label' + index">
+					<mat-option role="option" *ngFor="let nUnit of nutritionUnits" [value]="nUnit.value">{{nUnit.value}}</mat-option>
+				</div>
+			</mat-select>
+		</mat-form-field>
+		<mat-form-field class="mr-2 max-width4">
+			<input matInput type="number" placeholder="Percent of Daily Needs" formControlName="percentOfDailyNeeds">
+		</mat-form-field>
+	</span>
+		<!--      todo: Make sure this is only visible to admins -->
+	<button mat-icon-button color="warn" (click)="deleteItem.emit()" type="button" title="delete"><mat-icon>delete</mat-icon></button>
+
+</form>

@@ -1,0 +1,180 @@
+import { ObjectUtils } from './objectutils';
+
+export class FilterUtils {
+
+	public static filter(value: any[], fields: any[], filterValue: string, filterMatchMode: string, filterLocale?: string) {
+		const filteredItems: any[] = [];
+		const filterText = ObjectUtils.removeAccents(filterValue).toLocaleLowerCase(filterLocale);
+
+		if (value) {
+			for (const item of value) {
+				for (const field of fields) {
+					const fieldValue = ObjectUtils.removeAccents(String(ObjectUtils.resolveFieldData(item, field))).toLocaleLowerCase(filterLocale);
+
+					if (FilterUtils[filterMatchMode](fieldValue, filterText, filterLocale)) {
+						filteredItems.push(item);
+						break;
+					}
+				}
+			}
+		}
+
+		return filteredItems;
+	}
+
+	public static startsWith(value, filter, filterLocale?): boolean {
+		if (filter === undefined || filter === null || filter.trim() === '') {
+			return true;
+		}
+
+		if (value === undefined || value === null) {
+			return false;
+		}
+
+		const filterValue = ObjectUtils.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
+		const stringValue = ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale);
+
+		return stringValue.slice(0, filterValue.length) === filterValue;
+	}
+
+	public static contains(value, filter, filterLocale?): boolean {
+		if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
+			return true;
+		}
+
+		if (value === undefined || value === null) {
+			return false;
+		}
+
+		const filterValue = ObjectUtils.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
+		const stringValue = ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale);
+
+		return stringValue.indexOf(filterValue) !== -1;
+	}
+
+	public static endsWith(value, filter, filterLocale?): boolean {
+		if (filter === undefined || filter === null || filter.trim() === '') {
+			return true;
+		}
+
+		if (value === undefined || value === null) {
+			return false;
+		}
+
+		const filterValue = ObjectUtils.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
+		const stringValue = ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale);
+
+		return stringValue.indexOf(filterValue, stringValue.length - filterValue.length) !== -1;
+	}
+
+	public static equals(value, filter, filterLocale?): boolean {
+		if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
+			return true;
+		}
+
+		if (value === undefined || value === null) {
+			return false;
+		}
+
+		if (value.getTime && filter.getTime)
+			return value.getTime() === filter.getTime();
+		else
+			return ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale) === ObjectUtils
+				.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
+	}
+
+	public static notEquals(value, filter, filterLocale?): boolean {
+		if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
+			return false;
+		}
+
+		if (value === undefined || value === null) {
+			return true;
+		}
+
+		if (value.getTime && filter.getTime)
+			return value.getTime() !== filter.getTime();
+		else
+			return ObjectUtils.removeAccents(value.toString()).toLocaleLowerCase(filterLocale) !== ObjectUtils
+				.removeAccents(filter.toString()).toLocaleLowerCase(filterLocale);
+	}
+
+	public static in(value, filter: any[], filterLocale?): boolean {
+		if (filter === undefined || filter === null || filter.length === 0) {
+			return true;
+		}
+
+		if (value === undefined || value === null) {
+			return false;
+		}
+
+		// tslint:disable-next-line: prefer-for-of
+		for (let i = 0; i < filter.length; i++) {
+			if (ObjectUtils.equals(value, filter[i])) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static lt(value, filter, filterLocale?): boolean {
+		if (filter === undefined || filter === null) {
+			return true;
+		}
+
+		if (value === undefined || value === null) {
+			return false;
+		}
+
+		if (value.getTime && filter.getTime)
+			return value.getTime() < filter.getTime();
+		else
+			return value < filter;
+	}
+
+	public static lte(value, filter, filterLocale?): boolean {
+		if (filter === undefined || filter === null) {
+			return true;
+		}
+
+		if (value === undefined || value === null) {
+			return false;
+		}
+
+		if (value.getTime && filter.getTime)
+			return value.getTime() <= filter.getTime();
+		else
+			return value <= filter;
+	}
+
+	public static gt(value, filter, filterLocale?): boolean {
+		if (filter === undefined || filter === null) {
+			return true;
+		}
+
+		if (value === undefined || value === null) {
+			return false;
+		}
+
+		if (value.getTime && filter.getTime)
+			return value.getTime() > filter.getTime();
+		else
+			return value > filter;
+	}
+
+	public static gte(value, filter, filterLocale?): boolean {
+		if (filter === undefined || filter === null) {
+			return true;
+		}
+
+		if (value === undefined || value === null) {
+			return false;
+		}
+
+		if (value.getTime && filter.getTime)
+			return value.getTime() >= filter.getTime();
+		else
+			return value >= filter;
+	}
+}

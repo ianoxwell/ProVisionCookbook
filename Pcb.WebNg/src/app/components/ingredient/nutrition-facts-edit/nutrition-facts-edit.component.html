@@ -1,0 +1,98 @@
+<div [formGroup]="nutritionFacts" class="flex-box flex-row-column">
+	<div class="flex-box flex-row flex-grow-1">
+		<div class="flex-box flex-column column-one">
+			<mat-form-field class="pr-1">
+				<mat-label>Total Fat</mat-label>
+				<input type="text" matInput
+					digitOnly inputmode="numeric" decimal="true" [pattern]="decimalTwoPlaces"
+					formControlName="totalFat"/>
+			</mat-form-field>
+			<mat-form-field class="ml-2">
+				<mat-label>Saturated Fat</mat-label>
+				<input type="text" matInput
+					digitOnly inputmode="numeric" decimal="true" [pattern]="decimalTwoPlaces"
+					formControlName="saturatedFat"/>
+			</mat-form-field>
+			<mat-form-field class="ml-2">
+				<mat-label>Trans Fat</mat-label>
+				<input type="text" matInput
+					digitOnly inputmode="numeric" decimal="true" [pattern]="decimalThreePlaces"
+					formControlName="transFat"/>
+			</mat-form-field>
+			<mat-form-field class="ml-2">
+				<mat-label>Poly Unsaturated Fat</mat-label>
+				<input type="text" matInput
+					digitOnly inputmode="numeric" decimal="true" [pattern]="decimalThreePlaces"
+					formControlName="polyUnsaturatedFat"/>
+			</mat-form-field>
+			<mat-form-field class="ml-2">
+				<mat-label>Mono Unsaturated Fat</mat-label>
+				<input type="text" matInput
+					digitOnly inputmode="numeric" decimal="true" [pattern]="decimalThreePlaces"
+					formControlName="monoUnsaturatedFat"/>
+			</mat-form-field>
+			<mat-form-field class="ml-2">
+				<mat-label>Omega 3s</mat-label>
+				<input type="text" matInput
+					digitOnly inputmode="numeric" decimal="true" [pattern]="decimalTwoPlaces"
+					formControlName="omega3s"/>
+			</mat-form-field>
+			<mat-form-field class="ml-2">
+				<mat-label>Omega 6s</mat-label>
+				<input type="text" matInput 
+					digitOnly inputmode="numeric" decimal="true" [pattern]="decimalTwoPlaces"
+					formControlName="omega6s"/>
+			</mat-form-field>
+			<div class="ml-2">
+				<mat-label>Omega 3 to 6 Ratio (higher is desirable)</mat-label>
+				<span class="ml-2">{{O3ToO6Ratio}}</span>
+			</div>
+			<mat-form-field>
+				<mat-label>Cholesterol</mat-label>
+				<input type="number" matInput formControlName="cholesterol"/>
+			</mat-form-field>
+		</div>
+		<div class="flex-box flex-column column-two">
+			<mat-form-field>
+				<mat-label>Total Carbohydrate (g)</mat-label>
+				<input type="text" matInput
+					digitOnly inputmode="numeric" decimal="true" [pattern]="decimalTwoPlaces"
+					formControlName="totalCarbohydrate"/>
+			</mat-form-field>
+			<mat-form-field class="ml-2">
+				<mat-label>Dietary Fibre (g)</mat-label>
+				<input type="text" matInput
+					digitOnly inputmode="numeric" decimal="true" [pattern]="decimalTwoPlaces"
+					formControlName="dietaryFiber"/>
+			</mat-form-field>
+			<mat-form-field class="ml-2">
+				<mat-label>Total Sugars (g)</mat-label>
+				<input type="text" matInput
+					digitOnly inputmode="numeric" decimal="true" [pattern]="decimalTwoPlaces"
+					formControlName="totalSugars"/>
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Protein (g)</mat-label>
+				<input type="text" matInput
+					digitOnly inputmode="numeric" decimal="true" [pattern]="decimalTwoPlaces"
+					formControlName="protein"/>
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Water (g)</mat-label>
+				<input type="text" matInput
+					digitOnly inputmode="numeric" decimal="true" [pattern]="decimalTwoPlaces"
+					formControlName="water"/>
+			</mat-form-field>
+		</div>
+	</div>
+	<div class="column-three">
+		<canvas baseChart aria-label="Caloric Breakdown pie chart" role="img"
+			[data]="pieChartData"
+			[labels]="pieChartLabels"
+			[chartType]="pieChartType"
+			[options]="pieChartOptions"
+			[colors]="pieChartColors"
+			[legend]="pieChartLegend">
+		</canvas>
+	</div>
+</div>

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.0" />
+    <PackageReference Include="MailKit" Version="2.9.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.8" />
+    <PackageReference Include="MimeKit" Version="2.9.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PCB.Common\Pcb.Common.csproj" />
+    <ProjectReference Include="..\Pcb.Configuration\Pcb.Configuration.csproj" />
+    <ProjectReference Include="..\Pcb.Dto\Pcb.Dto.csproj" />
+    <ProjectReference Include="..\Pcb.Mapping\Pcb.Mapping.csproj" />
+    <ProjectReference Include="..\PcbSecurity\Pcb.Security.csproj" />
+  </ItemGroup>
+
+</Project>

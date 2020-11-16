@@ -1,0 +1,53 @@
+<app-page-title></app-page-title>
+<div class="flex-box flex-justify-space-between mt-2 mb-2">
+	<ng-container *ngIf="cookBookUserProfile$ | async as cookBookUserProfile">
+		<span *ngIf="cookBookUserProfile.lastName==='Oxwell' && selectedTab === 0">
+			<!-- <span class="mr-1 ml-1">
+				<button mat-flat-button color="primary" (click)="cleanRecipeIngredients()"><mat-icon>add</mat-icon> Clean Ingredients</button>
+			</span> -->
+			<span>
+				<button mat-flat-button color="accent"  (click)="getRecipeList()"><mat-icon>add</mat-icon> Search Spoonacular</button>
+			</span>
+		</span>
+	</ng-container>
+	<span>&nbsp;</span>
+	<span class="mr-2">
+		<button mat-flat-button type="button" color="accent" *ngIf="selectedTab === 1" (click)="changeTab(0)"><mat-icon>keyboard_return</mat-icon> Back</button>
+		<button mat-flat-button type="button" color="accent" *ngIf="selectedTab === 0" (click)="createOrEdit('new')"><mat-icon>add</mat-icon> New</button>
+	</span>
+</div>
+<ng-template #loading>
+	<app-loading-indicator></app-loading-indicator>
+</ng-template>
+<mat-tab-group dynamicHeight="true" [selectedIndex]="selectedTab" class="ingredients-list-tabs" *ngIf="data$ | async as data; else loading">
+	<mat-tab>
+		<app-ingredient-filter [filterQuery]="filterObject" (filterChanged)="onFilterChanged($event)"></app-ingredient-filter>
+		<app-ingredient-table [data]="data"
+			[sortPageObj]="sortPageObj"
+			(sortingPageChange)="sortPageChange($event)"
+			(editRow)="createOrEdit('edit', $event)">
+		</app-ingredient-table>
+	</mat-tab>
+	<mat-tab>
+		<ng-container *ngIf=" selectedIngredient$ | async as selectedIngredient">
+			<app-ingredient-edit *ngIf="selectedTab === 1" [singleIngredient]="selectedIngredient" [isNew]="isNew" (back)="changeTab(0)" [refData]="refData" [measurements]="measurements" ></app-ingredient-edit>
+		</ng-container>
+	</mat-tab>
+</mat-tab-group>
+<!--<div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="testIngredients" >-->
+<!--  <div cdkDrag *ngFor="let ingredient of testIngredients">-->
+<!--    <mat-icon cdkDragHandle>drag_handle</mat-icon>-->
+<!--    <span>{{ingredient.name}} - {{ingredient.averagePrice | currency}}</span>-->
+<!--  <button mat-flat-button style="margin-left: 1em;" (click)="updateIngredient(ingredient, [{key: 'name', value: ingredient.name + ' 1'}, {key: 'parent', value: 'just kidding'}])">Update</button>-->
+<!--  <button mat-flat-button color="warn" (click)="deleteIngredient(ingredient)" style="margin-left: 1em;">Delete</button>-->
+<!--  <div *ngFor="let price of ingredient.prices" style="margin-left: 2em;">-->
+<!--    <span>{{price.brandName}} - {{price.price | currency}}</span>-->
+<!--    <button mat-flat-button (click)="createSubPrice(ingredient)" style="margin-left: 1em;">Create</button>-->
+<!--    <button mat-flat-button (click)="updateSubIngredient(ingredient, 'prices', price._id, [{key: 'brandName', value: 'Sasquatch'}, {key: 'price', value: 8.99}] )" style="margin-left: 1em;">-->
+<!--      Update-->
+<!--    </button>-->
+<!--    <button mat-flat-button color="warn" (click)="deletePrice(ingredient, 'prices', price._id)" style="margin-left: 1em;">Delete</button>-->
+<!--  </div>-->
+<!--  <button mat-flat-button color="accent" (click)="getIngredientList()" style="margin-left: 1em;">Refresh</button>-->
+<!--</div>-->
+

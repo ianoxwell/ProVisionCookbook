@@ -1,0 +1,4 @@
+documentation - https://compodoc.app/ 
+swagger - implemented
+
+mocking components - https://github.com/ike18t/ng-mocks 

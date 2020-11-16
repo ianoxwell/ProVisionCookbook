@@ -1,0 +1,274 @@
+$spaces: (0,1,2,3,4,5,6);
+$sides: (top, right, bottom, left);
+
+// Bootstrap utility classes:
+// p-0: [padding: 0rem]
+// ml-0: [margin-left: 0rem]
+
+// pl-1 : [ padding-left: 0.5em ]
+// mr-2 : [ margin-right: 1em ]
+// pt-3 : [ padding-top: 1.5em ]
+// mb-4 : [ margin-bottom: 2em ]
+
+// pl-5 : [ padding-left: 2.5em ]
+// mr-6 : [ margin-right: 3em ]
+
+@each $space in $spaces {
+  .m-#{$space} {
+    margin: #{$space/2}em;
+  }
+  .p-#{$space} {
+    padding: #{$space/2}em;
+  }
+  @each $side in $sides {
+    .m#{str-slice($side, 0, 1)}-#{$space} {
+      margin-#{$side}: #{$space/2}em !important;
+	}
+    .p#{str-slice($side, 0, 1)}-#{$space} {
+      padding-#{$side}: #{$space/2}em !important;
+    }
+  }
+}
+$widthsEm: (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20);
+@each $width in $widthsEm {
+	.w-#{$width}em {
+		width: #{$width}em;
+	}
+}
+$widthsPercent: (5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100);
+@each $width in $widthsPercent {
+	.w-#{$width} {
+		width: percentage($width / 100);
+	}
+}
+
+  .text- {
+	&small {
+	  font-size: 0.8em;
+	}
+	&really-small {
+	  font-size: 0.65em;
+	}
+	&extra-small {
+	  font-size: 0.55em;
+	}
+	&muted {
+	  color: $muted;
+	}
+	&success {
+	  color: $success;
+	}
+	&red {
+	  color: $danger;
+	}
+	&warning {
+	  color: $warning;
+	}
+  }
+
+.ingredients-list-tabs {
+	mat-tab-header{
+		display: none;
+	}
+}
+
+.flex-row-column {
+	@include flex-direction(column);
+	@include breakpoint(md) {
+		@include flex-direction(row);
+	}
+}
+
+.print-only {
+	display: none;
+	visibility: hidden;
+}
+
+// https://www.w3.org/WAI/tutorials/forms/labels/#note-on-hiding-elements
+.visually-hidden {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+
+.recipe-filter-paginator {
+	.mat-paginator-outer-container {
+		.mat-paginator-container {
+			@include justify-content(center);
+			.mat-paginator-range-actions {
+				@include flex-wrap(wrap);
+				@include justify-content(center);
+				.mat-paginator-range-label {
+					width: 100%;
+					text-align: center;
+				}
+			}
+		}
+	}
+}
+
+// body .ui-message {
+// 	padding: 0.429em;
+// 	margin: 0;
+//   }
+//   body .ui-message.ui-message-info {
+// 	background-color: #7fbcec;
+// 	border: 0 none;
+// 	color: #212121;
+//   }
+//   body .ui-message.ui-message-info .ui-message-icon {
+// 	color: #212121;
+//   }
+//   body .ui-message.ui-message-success {
+// 	background-color: #b7d8b7;
+// 	border: 0 none;
+// 	color: #212121;
+//   }
+//   body .ui-message.ui-message-success .ui-message-icon {
+// 	color: #212121;
+//   }
+//   body .ui-message.ui-message-warn {
+// 	background-color: #ffe399;
+// 	border: 0 none;
+// 	color: #212121;
+//   }
+//   body .ui-message.ui-message-warn .ui-message-icon {
+// 	color: #212121;
+//   }
+//   body .ui-message.ui-message-error {
+// 	background-color: #f8b7bd;
+// 	border: 0 none;
+// 	color: #212121;
+//   }
+//   body .ui-message.ui-message-error .ui-message-icon {
+// 	color: #212121;
+//   }
+//   body .ui-message .ui-message-icon {
+// 	font-size: 1.25em;
+//   }
+//   body .ui-message .ui-message-text {
+// 	font-size: 1em;
+//   }
+//   body .ui-messages {
+// 	padding: 1em;
+// 	margin: 1em 0;
+//   }
+//   body .ui-messages.ui-messages-info {
+// 	background-color: #7fbcec;
+// 	border: 0 none;
+// 	color: #212121;
+//   }
+//   body .ui-messages.ui-messages-info .ui-messages-icon {
+// 	color: #212121;
+//   }
+//   body .ui-messages.ui-messages-info .ui-messages-close {
+// 	color: #212121;
+//   }
+//   body .ui-messages.ui-messages-success {
+// 	background-color: #b7d8b7;
+// 	border: 0 none;
+// 	color: #212121;
+//   }
+//   body .ui-messages.ui-messages-success .ui-messages-icon {
+// 	color: #212121;
+//   }
+//   body .ui-messages.ui-messages-success .ui-messages-close {
+// 	color: #212121;
+//   }
+//   body .ui-messages.ui-messages-warn {
+// 	background-color: #ffe399;
+// 	border: 0 none;
+// 	color: #212121;
+//   }
+//   body .ui-messages.ui-messages-warn .ui-messages-icon {
+// 	color: #212121;
+//   }
+//   body .ui-messages.ui-messages-warn .ui-messages-close {
+// 	color: #212121;
+//   }
+//   body .ui-messages.ui-messages-error {
+// 	background-color: #f8b7bd;
+// 	border: 0 none;
+// 	color: #212121;
+//   }
+//   body .ui-messages.ui-messages-error .ui-messages-icon {
+// 	color: #212121;
+//   }
+//   body .ui-messages.ui-messages-error .ui-messages-close {
+// 	color: #212121;
+//   }
+//   body .ui-messages .ui-messages-close {
+// 	top: 0.25em;
+// 	right: 0.5em;
+// 	font-size: 1.5em;
+// 	overflow: hidden;
+// 	line-height: 1;
+// 	-moz-border-radius: 3px;
+// 	-webkit-border-radius: 3px;
+// 	border-radius: 3px;
+// 	-moz-transition: box-shadow 0.2s;
+// 	-o-transition: box-shadow 0.2s;
+// 	-webkit-transition: box-shadow 0.2s;
+// 	transition: box-shadow 0.2s;
+//   }
+//   body .ui-messages .ui-messages-close:focus {
+// 	outline: 0 none;
+// 	outline-offset: 0;
+// 	-webkit-box-shadow: 0 0 0 0.2em #8dcdff;
+// 	-moz-box-shadow: 0 0 0 0.2em #8dcdff;
+// 	box-shadow: 0 0 0 0.2em #8dcdff;
+//   }
+//   body .ui-messages .ui-messages-icon {
+// 	font-size: 2em;
+//   }
+  body .ui-toast .ui-toast-message {
+	-webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+	-moz-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+	box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+	margin: 0 0 1em 0;
+	padding: 1em;
+	.ui-toast-close-icon {
+		margin-top: -2em;
+		margin-right: -0.7em;
+	}
+  }
+  body .ui-toast .ui-toast-message.ui-toast-message-info {
+	background-color: $accent-lighter;
+	border: 0 none;
+	color: #212121;
+	
+  }
+  body .ui-toast .ui-toast-message.ui-toast-message-info .ui-toast-close-icon {
+	color: #212121;
+
+  }
+  body .ui-toast .ui-toast-message.ui-toast-message-success {
+	background-color: $success;
+	border: 0 none;
+	color: $colour-text-on-success;
+  }
+//   body .ui-toast .ui-toast-message.ui-toast-message-success .ui-toast-close-icon {
+// 	color: $colour-text-on-success;
+//   }
+  body .ui-toast .ui-toast-message.ui-toast-message-warn {
+	background-color: $warning;
+	border: 0 none;
+	color: $colour-text-on-success;
+  }
+//   body .ui-toast .ui-toast-message.ui-toast-message-warn .ui-toast-close-icon {
+// 	color: #212121;
+//   }
+  body .ui-toast .ui-toast-message.ui-toast-message-error {
+	background-color: $warn;
+	border: 0 none;
+	color: $colour-text-on-success;
+  }
+//   body .ui-toast .ui-toast-message.ui-toast-message-error .ui-toast-close-icon {
+// 	color: #212121;
+//   }
+

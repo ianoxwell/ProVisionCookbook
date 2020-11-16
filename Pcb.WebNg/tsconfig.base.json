@@ -1,0 +1,34 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+	"baseUrl": ".",
+	"paths": {
+		"@services/*": ["src/app/services/*"],
+		"@models/*": ["src/app/models/*"],
+		"@pipes/*": ["src/app/pipes/*"],
+		"@guards/*": ["src/app/guards/*"],
+		"@components/*": ["src/app/components/*"],
+		"@store/*": ["src/app/store/*"],
+		"@tests/*": ["src/app/tests/*"],
+		"@styles/*": ["src/app/styles/*"],
+		"autospy": ["src/app/tests/auto-spy"]
+	},
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ]
+  }
+}

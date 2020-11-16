@@ -1,0 +1,27 @@
+<form [formGroup]="searchForm" >
+	<div class="flex-box">
+		<mat-form-field class="ml-2 mr-2 w-14em">			
+			<input matInput type="text" placeholder="Name" Title="Name" formControlName="name" >
+		</mat-form-field>
+		<mat-form-field class="mr-2 w-14em">
+			<mat-label>Parent Type</mat-label>
+			<mat-select formControlName="parent" >
+				<mat-option *ngFor="let item of parentTypes" [value]="item.value">
+				{{item.value}}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-form-field class="mr-2 w-14em">
+			<mat-label>Allergies</mat-label>
+			<mat-select formControlName="allergies" multiple>
+				<mat-option *ngFor="let item of allergyArray" [value]="item.name">
+					{{item.name}}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+		<button mat-button type="button" aria-label="Clear filter terms" (click)="clearFilterTerms()">
+			<span class="clear-all-text">Clear all</span>
+		</button>
+	</div>
+</form>
+

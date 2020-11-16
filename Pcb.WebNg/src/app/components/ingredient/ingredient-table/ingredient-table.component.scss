@@ -1,0 +1,11 @@
+@import '../../../styles/variables.scss';
+
+table {
+  width: 100%;
+}
+.highlight {
+  background-color: $accent-darker !important;
+}
+.responsive-table {
+	margin: 0.5rem;
+}

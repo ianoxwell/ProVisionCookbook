@@ -1,0 +1,50 @@
+
+	<mat-card-header>
+		<mat-card-title>
+			<h2 class="flex-box flex-align-items-center"><mat-icon aria-hidden="false" aria-label="User Login" class="mr-2">account_circle</mat-icon>Login</h2>
+		</mat-card-title>
+	</mat-card-header>
+  
+	<form [formGroup]="loginForm" mat-card-content>
+		<div class="flex-box flex-column"  (keyup.enter)="login()">
+			<mat-form-field class="mt-1">
+				<mat-icon matPrefix class="pr-1">email</mat-icon>
+				<input matInput type="email" placeholder="Email *" Title="Email" formControlName="usernameControl">
+				<mat-error *ngFor="let validation of validationMessages.email">
+					<mat-error class="error-message" *ngIf="f.usernameControl.hasError(validation.type) && (f.usernameControl.dirty || f.usernameControl.touched)">
+						<span [innerHTML]="validation.message"></span>
+					</mat-error>
+				  </mat-error>
+			</mat-form-field>
+			<mat-form-field class="mt-1">
+				<mat-icon matPrefix class="pr-1">lock</mat-icon>
+				<input matInput type="password" placeholder="Password *" #passwordInput Title="Password" formControlName="passwordControl">
+				<mat-error *ngFor="let validation of validationMessages.password">
+					<mat-error class="error-message" *ngIf="f.passwordControl.hasError(validation.type) && (f.passwordControl.dirty || f.passwordControl.touched)">
+						<span [innerHTML]="validation.message"></span>
+					</mat-error>
+				</mat-error>
+			</mat-form-field>
+		</div>
+		<div class="flex-box flex-justify-space-between flex-align-items-center mt-2">
+			<mat-checkbox aria-label="Remember Me" formControlName="rememberControl" (change)="rememberChange($event)">Remember Me</mat-checkbox>
+			<button mat-flat-button type="button" aria-label="Need an email password reminder?" routerLink="/account/forgot-password">Forgot password?</button>
+		</div>
+		<div class="mt-4 mb-4 flex-box flex-column">
+			<app-save-button [dirty]="loginForm.dirty" color="accent" [valid]="loginForm.valid" [isSaving]="isSubmitting" label="Login" iconName="chevron_right" iconPosition="right" (save)="login()"></app-save-button>
+			<!-- <button mat-flat-button type="button" (click)="login()" color="accent" aria-label="Login Button">Login</button> -->
+			<div class="pcb-divider">OR</div>
+			<button mat-flat-button color="primary" class="w-100" type="button" (click)="googleSignIn()" aria-label="Sign in with Google button">
+				<span class="flex-box flex-row flex-align-items-center">
+					<svg-icon key="google" aria-label="Google Icon"></svg-icon>
+					<span class="flex-grow-1 flex-box flex-justify-center">Continue with Google</span>
+				</span>
+			</button>
+		</div>
+	</form>
+
+	<mat-divider></mat-divider>
+	<mat-card-footer class="flex-box flex-row flex-align-items-center">
+	  <span class="pl-2">New to Provisioner's CookBook?</span>
+	  <button mat-flat-button type="button" routerLink="/account/register" aria-label="Sign up Button">Register now!</button>
+	</mat-card-footer>

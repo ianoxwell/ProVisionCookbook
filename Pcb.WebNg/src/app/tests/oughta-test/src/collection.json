@@ -1,0 +1,15 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "oughta-test": {
+      "description": "A spec generator schematic for Angular Material and service imports in the constructor",
+	  "factory": "./oughta-test/index#oughtaTest",
+	  "schema": "./oughta-test/schema.json"
+	},
+	"autospy": {
+		"description": "Create an autoSpy function. Supports jasmine only",
+		"factory": "./autospy/index",
+		"schema": "./autospy/schema.json"
+	  }
+  }
+}

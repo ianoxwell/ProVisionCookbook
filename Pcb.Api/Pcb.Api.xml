@@ -1,0 +1,497 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Pcb.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Pcb.Api.Auth.IJwtFactory">
+            <summary>
+            JWT Factory Interface
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.Auth.IJwtFactory.GenerateToken(System.Collections.Generic.IEnumerable{System.Security.Claims.Claim})">
+            <summary>
+            Generates the token.
+            </summary>
+            <param name="claims">The claims.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Pcb.Api.Auth.JwtFactory">
+            <inheritdoc />
+        </member>
+        <member name="F:Pcb.Api.Auth.JwtFactory.Config">
+            <summary>
+            The Cpt configuration instance
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.Auth.JwtFactory.#ctor(Pcb.Configuration.IPcbConfiguration)">
+            <summary>
+            JWT Factory Interface contructor.
+            </summary>
+            <param name="configuration">The Cpt configuration instance.</param>
+        </member>
+        <member name="M:Pcb.Api.Auth.JwtFactory.GenerateToken(System.Collections.Generic.IEnumerable{System.Security.Claims.Claim})">
+            <inheritdoc />
+        </member>
+        <member name="T:Pcb.Api.Auth.UserAccount">
+            <summary>
+            The User Account Class
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.Auth.UserAccount.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Pcb.Api.Auth.UserAccount"/> class.
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.Auth.UserAccount.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Pcb.Api.Auth.UserAccount" /> class.
+            </summary>
+            <param name="email">Name of the user.</param>
+            <param name="password">The password.</param>
+        </member>
+        <member name="P:Pcb.Api.Auth.UserAccount.Email">
+            <summary>
+            Gets or sets the email of the user.
+            </summary>
+            <value>
+            The email of the user.
+            </value>
+        </member>
+        <member name="P:Pcb.Api.Auth.UserAccount.Password">
+            <summary>
+            Gets or sets the password.
+            </summary>
+            <value>
+            The password.
+            </value>
+        </member>
+        <member name="T:Pcb.Api.Auth.UserRefresh">
+            <summary>
+            The User Refresh Class
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.Auth.UserRefresh.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Pcb.Api.Auth.UserRefresh"/> class.
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.Auth.UserRefresh.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Pcb.Api.Auth.UserRefresh" /> class.
+            </summary>
+            <param name="username">The username.</param>
+            <param name="refreshToken">The refresh token.</param>
+        </member>
+        <member name="P:Pcb.Api.Auth.UserRefresh.Username">
+            <summary>
+            Gets or sets the name of the user.
+            </summary>
+            <value>
+            The name of the user.
+            </value>
+        </member>
+        <member name="P:Pcb.Api.Auth.UserRefresh.RefreshToken">
+            <summary>
+            Gets or sets the password.
+            </summary>
+            <value>
+            The password.
+            </value>
+        </member>
+        <member name="T:Pcb.Api.ConfigureSwaggerOptions">
+            <summary>
+            Swagger Gen options of type SwaggerGenOptions
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.ConfigureSwaggerOptions.Configure(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
+            <summary>
+            
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="F:Pcb.Api.Controllers.AccountController.AccountService">
+            <summary>
+            The user service.
+            </summary>
+        </member>
+        <member name="T:Pcb.Api.Controllers.Admin.AdminReferenceController">
+            <summary>
+            Provides administrative reference data methods.
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.AdminReferenceController.#ctor(Pcb.Service.Interfaces.IReferenceService)">
+            <summary>
+            Initialises a new instance of the <see cref="T:Pcb.Api.Controllers.Admin.AdminReferenceController"/> class.
+            Creates a reference controller.
+            </summary>
+            <param name="refService">The reference query service.</param>
+        </member>
+        <member name="P:Pcb.Api.Controllers.Admin.AdminReferenceController.RefService">
+            <summary>
+            The reference query service instance.
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.AdminReferenceController.GetTypes">
+            <summary>
+            Returns all reference type names.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.AdminReferenceController.Post(Pcb.Dto.Reference.ReferenceItemEx,Pcb.Dto.Reference.ReferenceType)">
+            <summary>
+            Saves a reference item.
+            </summary>
+            <param name="item">The item.</param>
+            /// <param name="type">The type.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Pcb.Api.Controllers.Admin.UserController">
+            <summary>
+            The User Controller
+            </summary>
+            <seealso cref="T:Microsoft.AspNetCore.Mvc.Controller" />
+        </member>
+        <member name="P:Pcb.Api.Controllers.Admin.UserController.UserService">
+            <summary>
+            The user service instance from DI.
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.UserController.#ctor(Pcb.Service.Interfaces.IUserService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Pcb.Api.Controllers.Admin.UserController"/> class.
+            </summary>
+            <param name="userService">The user service.</param>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.UserController.Get(System.Int32)">
+            <summary>
+            Returns a user based on their user id
+            </summary>
+            <param name="id">The user's id</param>
+            <returns>A user, their roles and the facilities those roles are applied in.</returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.UserController.GetList(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Returns a list of users given a sort, order, filter and page number.
+            </summary>
+            <param name="sort">Target property for sorting</param>
+            <param name="order">Target property order e.g. asc or desc</param>
+            <param name="filter">Search applied to log messages</param>
+            <param name="pageIndex">Index of the page.</param>
+            <returns>
+            A list of users that meet the provided parameters
+            </returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.UserController.GetProfile(System.Int32)">
+            <summary>
+            Gets the user profile based on their user id.
+            </summary>
+            <param name="id">The user identifier.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.UserController.SaveProfile(Pcb.Dto.User.UserProfile)">
+            <summary>
+            Saves the users profile settings
+            </summary>
+            <param name="data">The data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.UserController.SaveUserAndRoles(Pcb.Dto.User.UserRoleFacility)">
+            <summary>
+            Saves the user and its associated role/facility mapping
+            </summary>
+            <param name="data">The data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.UserController.ToggleUserStatus(Pcb.Dto.User.UserSummary)">
+            <summary>
+            Toggles the active status for the given user
+            </summary>
+            <param name="data">The data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.UserController.AddUserToFacility(Pcb.Dto.User.AddUserToFacilityRequest)">
+            <summary>
+            Adds a user selected in the user search dialog to the selected facility
+            </summary>
+            <param name="data">The data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.UserController.GetUsersInFacility(System.Int32,System.String)">
+            <summary>
+            Gets the list of users in a given facility
+            </summary>
+            <param name="facilityId">The facility id.</param>
+            <param name="includeIds">The include ids.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.UserController.GetAllUsers">
+            <summary>
+            Gets the list of users
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.UserController.GetUsersForUserSearch(System.String,System.String)">
+            <summary>
+            Gets the users for user search dialog box in transfer form
+            </summary>
+            <param name="familyName">The family name.</param>
+            <param name="givenNames">The given names.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Pcb.Api.Controllers.IngredientController">
+            <summary>
+            Provide access to the Ingredients
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.Controllers.IngredientController.#ctor(Pcb.Service.Interfaces.IIngredientService)">
+            <summary>
+            Initialises a new instance of the IngredientController Class
+            Expected lifetime is scope to the web request
+            </summary>
+            <param name="ingredientService">The ingredient service.</param>
+        </member>
+        <member name="M:Pcb.Api.Controllers.IngredientController.GetIngredient(System.Int32)">
+            <summary>
+            Get a single Ingredient by Id
+            </summary>
+            <param name="ingredientId">Ingredient Identifier</param>
+            <returns>IngredientDto</returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.IngredientController.SearchIngredient(System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Search for ingredients with paged results
+            </summary>
+            <param name="pageSize">Number of results per page</param>
+            <param name="page">Page offset - default is 0</param>
+            <param name="sort">Sort field name - default is name</param>
+            <param name="order">Direction of sort - default is asc</param>
+            <param name="filter">Searches a number of fields to contain text</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.IngredientController.IngredientSuggestion(System.String,System.Int32)">
+            <summary>
+            List of possible ingredient suggestions
+            </summary>
+            <param name="filter">Text to filter name on</param>
+            <param name="limit">Number of results</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.IngredientController.CreateIngredient(Pcb.Dto.Ingredient.IngredientDto)">
+            <summary>
+            Create a new Ingredient
+            </summary>
+            <param name="ingredientDto">Ingredient Object</param>
+            <returns>New IngredientDto</returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.IngredientController.UpdateIngredient(Pcb.Dto.Ingredient.IngredientDto,System.Int32)">
+            <summary>
+            Update ingredient
+            </summary>
+            <param name="ingredientDto">Ingredient Object</param>
+            <param name="ingredientId">Ingredient Id check</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.IngredientController.DeleteIngredient(System.Int32)">
+            <summary>
+            Delete a single ingredient by ingredientId
+            </summary>
+            <param name="ingredientId">Ingredient Identifier</param>
+            <returns></returns>
+        </member>
+        <member name="T:Pcb.Api.Controllers.RecipeController">
+            <summary>
+            Provide access to the Recipes
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.Controllers.RecipeController.#ctor(Pcb.Service.Interfaces.IRecipeService)">
+            <summary>
+            Initialises a new instance of the RecipeController Class
+            Expected lifetime is scope to the web request
+            </summary>
+            <param name="recipeService">The recipe service.</param>
+        </member>
+        <member name="M:Pcb.Api.Controllers.RecipeController.GetRecipe(System.Int32)">
+            <summary>
+            Get a single Recipe by Id
+            </summary>
+            <param name="recipeId">Recipe Identifier</param>
+            <returns>RecipeDto</returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.RecipeController.SearchRecipe(System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Search for recipes with paged results
+            </summary>
+            <param name="pageSize">Number of results per page</param>
+            <param name="page">Page offset - default is 0</param>
+            <param name="sort">Sort field name - default is name</param>
+            <param name="order">Direction of sort - default is asc</param>
+            <param name="filter">Searches a number of fields to contain text</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.RecipeController.RecipeSuggestion(System.String,System.Int32)">
+            <summary>
+            List of possible recipe suggestions
+            </summary>
+            <param name="filter">Text to filter name on</param>
+            <param name="limit">Number of results</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.RecipeController.CreateRecipe(Pcb.Dto.Recipes.RecipeDto)">
+            <summary>
+            Create a new Recipe
+            </summary>
+            <param name="dto">Recipe Object</param>
+            <returns>New RecipeDto</returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.RecipeController.UpdateRecipe(Pcb.Dto.Recipes.RecipeDto,System.Int32)">
+            <summary>
+            Update Recipe
+            </summary>
+            <param name="RecipeDto">Recipe Object</param>
+            <param name="recipeId">Recipe Id check</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.RecipeController.DeleteRecipe(System.Int32)">
+            <summary>
+            Delete a single Recipe by recipeId
+            </summary>
+            <param name="recipeId">Recipe Identifier</param>
+            <returns></returns>
+        </member>
+        <member name="T:Pcb.Api.Controllers.ReferenceController">
+            <summary>
+            Provides access to Pcb reference data.
+            All reference data is cached on the web server.
+            </summary>
+            <inheritdoc />
+        </member>
+        <member name="P:Pcb.Api.Controllers.ReferenceController.ReferenceService">
+            <summary>
+            The reference service instance from DI.
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.Controllers.ReferenceController.#ctor(Pcb.Service.Interfaces.IReferenceService)">
+            <summary>
+            Initialises a new instance of the <see cref="T:Pcb.Api.Controllers.ReferenceController" /> class.
+            Expected lifetime is scoped to a web request.
+            </summary>
+            <param name="referenceService">The reference service.</param>
+        </member>
+        <member name="M:Pcb.Api.Controllers.ReferenceController.GetReference(Pcb.Dto.Reference.ReferenceType,Pcb.Common.Enums.ReferenceDetail)">
+            <summary>
+            Returns reference items by type.
+            </summary>
+            <param name="type">The reference type, e.g. Ward</param>
+            <param name="detail">The level of detail to return, defaulting to simply {Id,Title}.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Pcb.Api.Controllers.TokenController">
+            <summary>
+            Primary JWT controller used for authentication.
+            </summary>
+        </member>
+        <member name="P:Pcb.Api.Controllers.TokenController.Config">
+            <summary>
+            The configuration instance from DI.
+            </summary>
+        </member>
+        <member name="P:Pcb.Api.Controllers.TokenController.PcbSecurityService">
+            <summary>
+            The Pcb security service instance from DI.
+            </summary>
+        </member>
+        <member name="P:Pcb.Api.Controllers.TokenController.SecurityService">
+            <summary>
+            The security service instance from DI.
+            </summary>
+        </member>
+        <member name="P:Pcb.Api.Controllers.TokenController.JwtFactory">
+            <summary>
+            The Jwt factory instance from DI.
+            </summary>
+        </member>
+        <member name="P:Pcb.Api.Controllers.TokenController.Logger">
+            <summary>
+            The logger instance from DI.
+            </summary>
+        </member>
+        <member name="F:Pcb.Api.Controllers.TokenController.UserService">
+            <summary>
+            The user service.
+            </summary>
+        </member>
+        <member name="M:Pcb.Api.Controllers.TokenController.#ctor(Pcb.Service.Interfaces.IUserService,Pcb.Configuration.IPcbConfiguration,Pcb.Security.IPcbSecurityService,Pcb.Service.Interfaces.ISecurityService,Pcb.Api.Auth.IJwtFactory,Microsoft.Extensions.Logging.ILogger{Pcb.Api.Controllers.TokenController})">
+            <summary>
+            Initialises a new instance of the <see cref="T:Pcb.Api.Controllers.TokenController"/> class.
+            Constructor
+            </summary>
+            <param name="userService">The user service.</param>
+            <param name="config">The configuration.</param>
+            <param name="pcbSecurityService">The Pcb security service.</param>
+            <param name="securityService">The security service.</param>
+            <param name="jwtFactory">The JWT factory.</param>
+            <param name="logger">The logger.</param>
+        </member>
+        <member name="M:Pcb.Api.Controllers.TokenController.Create(Pcb.Api.Auth.UserAccount)">
+            <summary>
+            Creates a bearer jwt based on a username and password.
+            </summary>
+            <param name="model">Username and password</param>
+            <returns>
+            A JWT with appropriate claims and a refresh token
+            </returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.TokenController.Refresh(Pcb.Api.Auth.UserRefresh)">
+            <summary>
+            Attempts to reissue a access token using a refresh token (GUID)
+            </summary>
+            <param name="model">Username and Refresh Token</param>
+            <returns>
+            A JWT with appropriate claims and a refresh token
+            </returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.TokenController.CreateJwtFromGooggle(System.String)">
+            <summary>
+            Creates a bearer jwt based on a username and password.
+            </summary>
+            <param name="email">Users google email address</param>
+            <returns>
+            A JWT with appropriate claims and a refresh token
+            </returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.TokenController.GetJwt(System.String,System.Collections.Generic.IEnumerable{System.Security.Claims.Claim})">
+            <summary>
+            Gets the JWT and constructs the result.
+            </summary>
+            <param name="refreshToken">The refresh token.</param>
+            <param name="claims">The claims.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.TokenController.TryPassword(System.String,System.String,System.Boolean)">
+            <summary>
+            Issues an access token and a refresh token.
+            </summary>
+            <param name="email">Name of the user.</param>
+            <param name="password">The password.</param>
+            <param name="isSocial">is the login attempt already authenticated using a social Provider like Google.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.TokenController.TryRefreshToken(System.String,System.String)">
+            <summary>
+            Tries the refresh token.
+            On Success - Returns a new access token and a new refresh token
+            </summary>
+            <param name="refreshToken">The refresh token.</param>
+            <param name="email">Name of the user.</param>
+            <param name="ipAddress">IP Address of the request.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Pcb.Api.Helper.InterfaceContractResolver`1">
+            <inheritdoc />
+        </member>
+        <member name="M:Pcb.Api.Helper.InterfaceContractResolver`1.CreateProperties(System.Type,Newtonsoft.Json.MemberSerialization)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>
