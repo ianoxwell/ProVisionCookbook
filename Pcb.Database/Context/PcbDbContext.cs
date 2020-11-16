@@ -20,7 +20,8 @@ namespace Pcb.Database.Context
 		// Ingredient section
 		public virtual DbSet<Ingredient> Ingredient { get; set; }
 		public virtual DbSet<IngredientConversion> IngredientConversion { get; set; }
-		public virtual DbSet<IngredientNutrition> IngredientNutrition { get; set; }
+		//public virtual DbSet<IngredientNutrition> IngredientNutrition { get; set; }
+		public virtual DbSet<RawFoodUsda> RawFoodUsda { get; set; }
 
 		// Recipe
 		public virtual DbSet<Recipe> Recipe { get; set; }
@@ -80,10 +81,6 @@ namespace Pcb.Database.Context
 				entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetimeoffset())");
 			});
 			modelBuilder.Entity<IngredientConversion>(entity =>
-			{
-				entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetimeoffset())");
-			});
-			modelBuilder.Entity<IngredientNutrition>(entity =>
 			{
 				entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetimeoffset())");
 			});

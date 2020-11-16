@@ -7,16 +7,14 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Pcb.Database.Context.Models
 {
-	[Table("Ingredient", Schema = "dbo")]
-	public partial class Ingredient
+	[Table("RawFoodUsda", Schema = "dbo")]
+	public partial class RawFoodUsda
 	{
 		public int Id { get; set; }
-		public int? UsdaFoodId { get; set; }
+		public int UsdaFoodId { get; set; }
 		[Required]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public string Name { get; set; }
-		public string LinkUrl { get; set; }
-		public MeasurementType? PurchasedBy { get; set; }
 		public int? Calories { get; set; }
 		[Column(TypeName = "decimal(18,3)")]
 		public int? PralScore { get; set; }
@@ -139,22 +137,7 @@ namespace Pcb.Database.Context.Models
 		public int? CalorieWeight200 { get; set; }
 
 
-
-		/// <summary>
-		/// Price Section
-		/// </summary>
-		public string PriceBrandName { get; set; }
-		[Column(TypeName = "decimal(18,2)")]
-		[DataType(DataType.Currency)]
-		public decimal? PriceDollar { get; set; }
-		[Column(TypeName = "decimal(18,2)")]
-		public decimal? PriceQuantity { get; set; }
-		public MeasurementType? PriceMeasurement { get; set; }
-		public string PriceStoreName { get; set; }
-		[AllowNull]
-		public string PriceApiLink { get; set; }
 		public int? FoodGroupId { get; set; }
-		public int? IngredientStateId { get; set; }
 
 
 		[Timestamp]
@@ -163,9 +146,6 @@ namespace Pcb.Database.Context.Models
 
 		public DateTimeOffset CreatedAt { get; set; }
 		public IngredientFoodGroup FoodGroup { get; set; }
-		public ICollection<IngredientConversion> IngredientConversions { get; set; }
-		public ICollection<IngredientAllergyWarning> IngredientAllergyWarning { get; set; }
-		public ICollection<IngredientNutrition> IngredientNutrition { get; set; }
-		public ICollection<RecipeIngredientList> RecipeIngredientList { get; set; }
+
 	}
 }
