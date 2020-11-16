@@ -62,7 +62,6 @@ namespace Pcb.Service.Implementations
 					.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
 					.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
 					.Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
-					.Include(x => x.IngredientNutrition)
 					.ToListAsync();
 
 				PagedResult<IngredientDto> pagedIngredientResult = new PagedResult<IngredientDto>
@@ -98,7 +97,6 @@ namespace Pcb.Service.Implementations
 					.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
 					.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
 					.Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
-					.Include(x => x.IngredientNutrition)
 					.Include(x => x.RecipeIngredientList).ThenInclude(y => y.Recipe)
 					.FirstOrDefaultAsync();
 
@@ -120,7 +118,6 @@ namespace Pcb.Service.Implementations
 				.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
 				.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
 				.Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
-				.Include(x => x.IngredientNutrition)
 				.FirstOrDefaultAsync();
 
 			ingredientObj = IngredientMapper.UpdateIngredientWithDto(ingredientObj, dto);
@@ -142,7 +139,6 @@ namespace Pcb.Service.Implementations
 				.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
 				.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
 				.Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
-				.Include(x => x.IngredientNutrition)
 				.FirstOrDefaultAsync();
 
 			if (ingredientObj == null)

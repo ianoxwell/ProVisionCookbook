@@ -104,26 +104,6 @@ namespace Pcb.Mapping.Implementation
 			return convertList;
 		}
 
-		public List<IngredientNutritionDto> MapNutritionListToDtoList(IEnumerable<IngredientNutrition> map)
-		{
-			if (map == null) { return null; }
-			List<IngredientNutritionDto> convertList = new List<IngredientNutritionDto>();
-			foreach (var item in map.ToList())
-			{
-				convertList.Add(new IngredientNutritionDto
-				{
-					Id = item.Id,
-					IngredientId = item.IngredientId,
-					Title = item.Title,
-					Amount = item.Amount,
-					PercentOfDailyNeeds = item.PercentOfDailyNeeds,
-					RowVer = item.RowVer,
-					CreatedAt = item.CreatedAt
-				});
-			}
-			return convertList;
-		}
-
 		public IngredientDto MapIngredientToDto(Ingredient ingredientObj)
 		{
 			if (ingredientObj == null) { return null; }
@@ -407,17 +387,6 @@ namespace Pcb.Mapping.Implementation
 			};
 		}
 
-		private IngredientNutrition MapDtoToIngredientNutritionMapping(IngredientNutritionDto map, int ingredientId)
-		{
-			if (map == null) { return null; }
-			return new IngredientNutrition
-			{
-				IngredientId = ingredientId,
-				Title = map.Title,
-				Amount = map.Amount,
-				PercentOfDailyNeeds = map.PercentOfDailyNeeds,
-				Unit = map.Unit
-			};
-		}
+
 	}
 }

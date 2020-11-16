@@ -165,7 +165,6 @@ namespace Pcb.Database.Context.Models
 		public IngredientFoodGroup FoodGroup { get; set; }
 		public ICollection<IngredientConversion> IngredientConversions { get; set; }
 		public ICollection<IngredientAllergyWarning> IngredientAllergyWarning { get; set; }
-		public ICollection<IngredientNutrition> IngredientNutrition { get; set; }
 		public ICollection<RecipeIngredientList> RecipeIngredientList { get; set; }
 	}
 }

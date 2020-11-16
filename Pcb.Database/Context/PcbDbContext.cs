@@ -20,7 +20,7 @@ namespace Pcb.Database.Context
 		// Ingredient section
 		public virtual DbSet<Ingredient> Ingredient { get; set; }
 		public virtual DbSet<IngredientConversion> IngredientConversion { get; set; }
-		//public virtual DbSet<IngredientNutrition> IngredientNutrition { get; set; }
+
 		public virtual DbSet<RawFoodUsda> RawFoodUsda { get; set; }
 
 		// Recipe
@@ -182,10 +182,10 @@ namespace Pcb.Database.Context
 			{
 				entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetimeoffset())");
 			});
-			//modelBuilder.Entity<RefreshToken>(entity =>
-			//{
-			//	entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetimeoffset())");
-			//});
+			modelBuilder.Entity<RawFoodUsda>(entity =>
+		   {
+			   entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetimeoffset())");
+		   });
 			modelBuilder.Entity<Role>(entity =>
 			{
 				entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetimeoffset())");
@@ -906,45 +906,6 @@ namespace Pcb.Database.Context
 			//		ConvertToStateId = 6,
 			//		ConvertToMeasurementUnitId = 2,
 			//		ConvertToQuantity = 120,
-			//	});
-
-			//modelBuilder.Entity<IngredientNutrition>().HasData(
-			//	new IngredientNutrition()
-			//	{
-			//		Id = 1,
-			//		IngredientId = 1,
-			//		Title = "Calories",
-			//		Amount = 340,
-			//		Unit = NutritionUnit.cal
-			//	});
-			//modelBuilder.Entity<IngredientNutrition>().HasData(
-			//	new IngredientNutrition()
-			//	{
-			//		Id = 2,
-			//		IngredientId = 1,
-			//		Title = "Potassium ",
-			//		Amount = 363,
-			//		Unit = NutritionUnit.mg,
-			//		PercentOfDailyNeeds = 10
-			//	});
-			//modelBuilder.Entity<IngredientNutrition>().HasData(
-			//	new IngredientNutrition()
-			//	{
-			//		Id = 3,
-			//		IngredientId = 2,
-			//		Title = "Calories",
-			//		Amount = 23,
-			//		Unit = NutritionUnit.cal
-			//	});
-			//modelBuilder.Entity<IngredientNutrition>().HasData(
-			//	new IngredientNutrition()
-			//	{
-			//		Id = 4,
-			//		IngredientId = 2,
-			//		Title = "Potassium ",
-			//		Amount = 558,
-			//		Unit = NutritionUnit.mg,
-			//		PercentOfDailyNeeds = 10
 			//	});
 
 			modelBuilder.Entity<School>().HasData(

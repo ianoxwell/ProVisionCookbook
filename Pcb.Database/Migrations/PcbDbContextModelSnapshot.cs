@@ -951,45 +951,6 @@ namespace Pcb.Database.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Pcb.Database.Context.Models.IngredientNutrition", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(sysdatetimeoffset())");
-
-                    b.Property<int>("IngredientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PercentOfDailyNeeds")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("RowVer")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Unit")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IngredientId");
-
-                    b.ToTable("IngredientNutrition","dbo");
-                });
-
             modelBuilder.Entity("Pcb.Database.Context.Models.IngredientState", b =>
                 {
                     b.Property<int>("Id")
@@ -1465,6 +1426,224 @@ namespace Pcb.Database.Migrations
                             Summary = "",
                             Title = "User"
                         });
+                });
+
+            modelBuilder.Entity("Pcb.Database.Context.Models.RawFoodUsda", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("Alcohol")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Caffeine")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Calcium")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("CalorieWeight200")
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<int?>("Calories")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Carbohydrate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("Cholesterol")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("CopperCu")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasDefaultValueSql("(sysdatetimeoffset())");
+
+                    b.Property<decimal?>("Fat")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("FattyAcidsTotalMonounsaturated")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FattyAcidsTotalPolyunsaturated")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FattyAcidsTotalTransMonoenoic")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FattyAcidsTotalTransPolyenoic")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Fiber")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("FluorideF")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("FolateB9")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FolateDfe")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FolicAcid")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FoodFolate")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FoodGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Fructose")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("Galactose")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("GlucoseDextrose")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("IronFe")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Lactose")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("Magnesium")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Maltose")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("Manganese")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("NetCarbs")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("NiacinB3")
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal>("Omega3s")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Omega6s")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("PantothenicAcidB5")
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<int?>("PhosphorusP")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PotassiumK")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("PralScore")
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal?>("Protein")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("RiboflavinB2")
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<byte[]>("RowVer")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<decimal?>("SaturatedFat")
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal?>("SeleniumSe")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ServingDescription1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ServingDescription2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("ServingWeight1")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("ServingWeight2")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("Sodium")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Starch")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Sucrose")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("Sugars")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("Theobromine")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("ThiaminB1")
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal?>("TransFattyAcids")
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<int>("UsdaFoodId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("VitaminAIu")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("VitaminARae")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("VitaminB12")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("VitaminB6")
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<decimal?>("VitaminC")
+                        .HasColumnType("decimal(18,1)");
+
+                    b.Property<decimal?>("VitaminD")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("VitaminDIu")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("VitaminE")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("VitaminK")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("Water")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("ZincZn")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FoodGroupId");
+
+                    b.ToTable("RawFoodUsda","dbo");
                 });
 
             modelBuilder.Entity("Pcb.Database.Context.Models.Recipe", b =>
@@ -2181,7 +2360,7 @@ namespace Pcb.Database.Migrations
                             IsStudent = false,
                             LastFailedLoginAttempt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PasswordHash = "$2a$11$PaFLHch37b.AbSJqaGhdF.tLEndkHDCzVx7BeeauX21NfLxP8SqY.",
+                            PasswordHash = "$2a$11$5F1Gt5Zk382..OQ81hSB6.Tc4xEoSA.nhfK3PPcKeR5r7XgGVEU5O",
                             TimesLoggedIn = 0,
                             Username = "admin",
                             Verified = new DateTime(2018, 10, 10, 10, 10, 0, 0, DateTimeKind.Unspecified)
@@ -2302,20 +2481,18 @@ namespace Pcb.Database.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Pcb.Database.Context.Models.IngredientNutrition", b =>
-                {
-                    b.HasOne("Pcb.Database.Context.Models.Ingredient", "Ingredient")
-                        .WithMany("IngredientNutrition")
-                        .HasForeignKey("IngredientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Pcb.Database.Context.Models.Permission", b =>
                 {
                     b.HasOne("Pcb.Database.Context.Models.PermissionGroup", "PermissionGroup")
                         .WithMany("Permission")
                         .HasForeignKey("PermissionGroupId");
+                });
+
+            modelBuilder.Entity("Pcb.Database.Context.Models.RawFoodUsda", b =>
+                {
+                    b.HasOne("Pcb.Database.Context.Models.IngredientFoodGroup", "FoodGroup")
+                        .WithMany()
+                        .HasForeignKey("FoodGroupId");
                 });
 
             modelBuilder.Entity("Pcb.Database.Context.Models.RecipeAllergyWarning", b =>
