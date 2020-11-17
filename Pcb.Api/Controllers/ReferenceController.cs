@@ -47,7 +47,7 @@ namespace Pcb.Api.Controllers
 		/// <returns></returns>
 		//[Route("active")]
 		[HttpGet]
-		//[Authorize]
+		[Authorize]
 		public IActionResult GetReference(
 			Dto.Reference.ReferenceType type,
 			ReferenceDetail detail = ReferenceDetail.Basic)

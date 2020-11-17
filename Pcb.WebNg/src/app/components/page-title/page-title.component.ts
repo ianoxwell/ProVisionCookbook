@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 export class PageTitleComponent implements OnInit {
 
 	pageTitle$: Observable<string>;
+	pageSymbol$: Observable<string>;
 
   constructor(
 	  private pageTitleService: PageTitleService
@@ -17,6 +18,7 @@ export class PageTitleComponent implements OnInit {
 
   ngOnInit() {
 	this.pageTitle$ = this.pageTitleService.pageTitle$;
+	this.pageSymbol$ = this.pageTitleService.pageSymbol$;
   }
 
 }

@@ -62,7 +62,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 	// conversionsForm: FormGroup;
 	editedItem: EditedFieldModel[] = [];
 	validationMessages = ValidationMessages;
-	purchasedByEnum =  Object.values(IngredientNameSpace.PurchasedByEnum).map((item: string, id: number) => ({id, item}));
+	
 
 	// getFormKeys = (controls: FormGroup): string[] => { return Object.keys(controls); }
 
@@ -92,19 +92,6 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 		this.selected = this.singleIngredient;
 		this.ingredientForm = this.createForm(this.singleIngredient);
 		console.log('raw ingredient form', this.ingredientForm.getRawValue(), this.nutritionFacts.controls);
-
-		// this.caloricBreakdown.valueChanges.pipe(
-		// 	debounceTime(250),
-		// 	map(item => {
-		// 		const values = this.whichKeyChanged(this.pieChartData, item);
-		// 		Object.keys(values).forEach((key: string) => {
-		// 			this.caloricBreakdown.patchValue({
-		// 				[key]: item[key] + values[key]
-		// 			}, {emitEvent: false});
-		// 		})
-		// 	}),
-		// 	takeUntil(this.ngUnsubscribe)
-		// ).subscribe(() => this.pieChartData = this.updatePieChartData());
 	}
 
 	ngAfterViewInit(): void {
@@ -164,7 +151,6 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 	// 	return this.measurements;
 	// }
 
-	get nameControl() { return this.ingredientForm.get('name'); }
 	get foodGroup() { return this.ingredientForm.get('foodGroup'); }
 	get allergiesControl() { return this.ingredientForm.get('allergies'); }
 	get purchasedByControl() { return this.ingredientForm.get('purchasedBy'); }
@@ -210,6 +196,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 
 	initNutritionFactsFormGroup(nutrition: INutritionFacts): FormGroup {
 		const fbGroup = this.fb.group({
+			calories: [nutrition.calories, [Validators.min(0)]],
 			cholesterol: [nutrition.cholesterol, [Validators.min(0)]],
 			dietaryFiber: [nutrition.dietaryFiber, [Validators.min(0)]],
 			monoUnsaturatedFat: [nutrition.monoUnsaturatedFat, [Validators.min(0)]],
@@ -258,13 +245,12 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 			linkUrl: ingredient.linkUrl,
 			price: priceSummary,
 			conversions: this.fb.array(conversionSummary),
-			caloricBreakdown: this.fb.group({
-				carbohydrate: [Number(ingredient.caloricBreakdown.carbohydrate), [Validators.min(0), Validators.max(100)]],
-				fat: [Number(ingredient.caloricBreakdown.fat), [Validators.min(0), Validators.max(100)]],
-				protein: [Number(ingredient.caloricBreakdown.protein), [Validators.min(0), Validators.max(100)]],
-				water: [Number(ingredient.caloricBreakdown.water), [Validators.min(0), Validators.max(100)]],
-			}),
-			calories: [ingredient.calories, [Validators.min(0)]],
+			// caloricBreakdown: this.fb.group({
+			// 	carbohydrate: [Number(ingredient.caloricBreakdown.carbohydrate), [Validators.min(0), Validators.max(100)]],
+			// 	fat: [Number(ingredient.caloricBreakdown.fat), [Validators.min(0), Validators.max(100)]],
+			// 	protein: [Number(ingredient.caloricBreakdown.protein), [Validators.min(0), Validators.max(100)]],
+			// 	water: [Number(ingredient.caloricBreakdown.water), [Validators.min(0), Validators.max(100)]],
+			// }),
 			nutritionFacts: this.initNutritionFactsFormGroup(ingredient.nutritionFacts),
 		});
 	}
@@ -278,7 +264,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 		const saveObject: Ingredient = {
 			id: this.selected.id,
 			// nutrition: this.selected.nutrition,
-			caloricBreakdown: this.selected.caloricBreakdown,
+			// caloricBreakdown: this.selected.caloricBreakdown,
 			...this.ingredientForm.getRawValue(),
 		};
 		console.log('ingredient form', this.ingredientForm.getRawValue(), this.selected, saveObject);

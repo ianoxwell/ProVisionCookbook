@@ -67,7 +67,7 @@ const routes: Routes = [
 			{
 				path: 'ingredients/item/:ingredientId',
 				component: IngredientsComponent,
-				data: { title: `Ingredient Edit` }
+				data: { title: `Ingredient Edit`, symbol: `edit` }
 			},
 			{
 				path: 'recipes/browse',

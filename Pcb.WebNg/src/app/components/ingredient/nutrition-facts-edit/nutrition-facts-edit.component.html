@@ -1,4 +1,4 @@
-<div [formGroup]="nutritionFacts" class="flex-box flex-row-column">
+<div [formGroup]="nutritionFacts" class="flex-box flex-row-column ml-2">
 	<div class="flex-box flex-row flex-grow-1">
 		<div class="flex-box flex-column column-one">
 			<mat-form-field class="pr-1">
@@ -53,6 +53,10 @@
 			</mat-form-field>
 		</div>
 		<div class="flex-box flex-column column-two">
+			<mat-form-field class="pr-1">
+				<mat-label>Calories</mat-label>
+				<input type="number" matInput formControlName="calories"/>
+			</mat-form-field>
 			<mat-form-field>
 				<mat-label>Total Carbohydrate (g)</mat-label>
 				<input type="text" matInput
@@ -86,7 +90,7 @@
 		</div>
 	</div>
 	<div class="column-three">
-		<canvas baseChart aria-label="Caloric Breakdown pie chart" role="img"
+		<canvas #doughNutCanvas baseChart aria-label="Caloric Breakdown pie chart" role="img"
 			[data]="pieChartData"
 			[labels]="pieChartLabels"
 			[chartType]="pieChartType"

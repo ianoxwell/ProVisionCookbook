@@ -114,15 +114,7 @@ namespace Pcb.Mapping.Implementation
 				Name = ingredientObj.Name,
 				LinkUrl = ingredientObj.LinkUrl,
 				PurchasedBy = ingredientObj.PurchasedBy,
-				Calories = ingredientObj.Calories,
 				PralScore = ingredientObj.PralScore,
-				CaloricBreakdown = new CaloricBreakdownDto()
-				{
-					Protein = ingredientObj.Protein,
-					Fat = ingredientObj.Fat,
-					Carbohydrate = ingredientObj.Carbohydrate,
-					Water = ingredientObj.Water
-				},
 				Price = new PriceDto()
 				{
 					BrandName = ingredientObj.PriceBrandName,
@@ -134,6 +126,7 @@ namespace Pcb.Mapping.Implementation
 				},
 				NutritionFacts = new NutritionFactsDto
 				{
+					Calories = ingredientObj.Calories,
 					TotalFat = ingredientObj.Fat,
 					SaturatedFat = ingredientObj.SaturatedFat,
 					TransFat = ingredientObj.TransFattyAcids,
@@ -221,10 +214,10 @@ namespace Pcb.Mapping.Implementation
 				Name = dto.Name,
 				LinkUrl = dto.LinkUrl,
 				PurchasedBy = dto.PurchasedBy,
-				Calories = dto.Calories,
 				PralScore = dto.PralScore,
 
 				// Nutrition Facts
+				Calories = dto.NutritionFacts.Calories,
 				Protein = dto.NutritionFacts.Protein,
 				Fat = dto.NutritionFacts.TotalFat,
 				Carbohydrate = dto.NutritionFacts.TotalCarbohydrate,
@@ -294,10 +287,10 @@ namespace Pcb.Mapping.Implementation
 			updateObj.UsdaFoodId = dto.UsdaFoodId;
 			updateObj.LinkUrl = dto.LinkUrl;
 			updateObj.PurchasedBy = dto.PurchasedBy;
-			updateObj.Calories = dto.Calories;
 			updateObj.PralScore = dto.PralScore;
 
 			// Nutrition Facts
+			updateObj.Calories = dto.NutritionFacts.Calories;
 			updateObj.Protein = dto.NutritionFacts.Protein;
 			updateObj.Fat = dto.NutritionFacts.TotalFat;
 			updateObj.Carbohydrate = dto.NutritionFacts.TotalCarbohydrate;

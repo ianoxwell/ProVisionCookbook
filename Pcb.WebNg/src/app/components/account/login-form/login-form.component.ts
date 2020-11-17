@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
 import { ComponentBase } from '@components/base/base.component.base';
 import { MessageResult } from '@models/common.model';
@@ -50,8 +51,8 @@ export class LoginFormComponent extends ComponentBase implements OnInit {
 			rememberControl: false
 		});
 	}
-	rememberChange() {
-		console.log('Im not going to remember you, terrible with names');
+	rememberChange(ev: MatCheckboxChange) {
+		console.log('Im not going to remember you, terrible with names', ev);
 	}
 
 	login() {

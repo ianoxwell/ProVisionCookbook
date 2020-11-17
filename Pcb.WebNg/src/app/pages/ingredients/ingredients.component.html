@@ -1,11 +1,11 @@
 <app-page-title></app-page-title>
 <div class="flex-box flex-justify-space-between mt-2 mb-2">
 	<ng-container *ngIf="cookBookUserProfile$ | async as cookBookUserProfile">
-		<span *ngIf="cookBookUserProfile.lastName==='Oxwell' && selectedTab === 0">
+		<span *ngIf="cookBookUserProfile.lastName==='Oxwell' && selectedTab === 0" class="ml-12">
 			<!-- <span class="mr-1 ml-1">
 				<button mat-flat-button color="primary" (click)="cleanRecipeIngredients()"><mat-icon>add</mat-icon> Clean Ingredients</button>
 			</span> -->
-			<span>
+			<span class="ml-12">
 				<button mat-flat-button color="accent"  (click)="getRecipeList()"><mat-icon>add</mat-icon> Search Spoonacular</button>
 			</span>
 		</span>
@@ -34,20 +34,4 @@
 		</ng-container>
 	</mat-tab>
 </mat-tab-group>
-<!--<div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="testIngredients" >-->
-<!--  <div cdkDrag *ngFor="let ingredient of testIngredients">-->
-<!--    <mat-icon cdkDragHandle>drag_handle</mat-icon>-->
-<!--    <span>{{ingredient.name}} - {{ingredient.averagePrice | currency}}</span>-->
-<!--  <button mat-flat-button style="margin-left: 1em;" (click)="updateIngredient(ingredient, [{key: 'name', value: ingredient.name + ' 1'}, {key: 'parent', value: 'just kidding'}])">Update</button>-->
-<!--  <button mat-flat-button color="warn" (click)="deleteIngredient(ingredient)" style="margin-left: 1em;">Delete</button>-->
-<!--  <div *ngFor="let price of ingredient.prices" style="margin-left: 2em;">-->
-<!--    <span>{{price.brandName}} - {{price.price | currency}}</span>-->
-<!--    <button mat-flat-button (click)="createSubPrice(ingredient)" style="margin-left: 1em;">Create</button>-->
-<!--    <button mat-flat-button (click)="updateSubIngredient(ingredient, 'prices', price._id, [{key: 'brandName', value: 'Sasquatch'}, {key: 'price', value: 8.99}] )" style="margin-left: 1em;">-->
-<!--      Update-->
-<!--    </button>-->
-<!--    <button mat-flat-button color="warn" (click)="deletePrice(ingredient, 'prices', price._id)" style="margin-left: 1em;">Delete</button>-->
-<!--  </div>-->
-<!--  <button mat-flat-button color="accent" (click)="getIngredientList()" style="margin-left: 1em;">Refresh</button>-->
-<!--</div>-->
 

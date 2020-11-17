@@ -11,15 +11,13 @@
  */
 
 import {Conversion} from './conversion';
-import { ICaloricBreakdown, ICommonMinerals, ICommonVitamins, INutritionFacts, PriceModel } from './ingredient-model';
+import { ICommonMinerals, ICommonVitamins, INutritionFacts, PriceModel } from './ingredient-model';
 import {Nutrition} from './nutrition';
 import {Recipe} from './recipe';
 import {ReferenceItemFull} from './reference.model';
 
 export interface Ingredient {
 	allergies: Array<ReferenceItemFull>;
-	caloricBreakdown: ICaloricBreakdown;
-	calories: number;
 	commonMinerals: ICommonMinerals;
 	commonVitamins: ICommonVitamins;
 	foodGroup: ReferenceItemFull;

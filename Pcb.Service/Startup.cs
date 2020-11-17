@@ -19,6 +19,7 @@ namespace Pcb.Service
 			services.AddScoped<IRecipeService, RecipeService>();
 			services.AddScoped<IEmailService, EmailService>();
 			services.AddScoped<IAccountService, AccountService>();
+			services.AddScoped<IRawFoodService, RawFoodService>();
 
 		}
 	}

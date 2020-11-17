@@ -2,6 +2,7 @@
 {
 	public class NutritionFactsDto
 	{
+		public int? Calories { get; set; }
 		public int? TotalFat { get; set; }
 		public int? SaturatedFat { get; set; }
 		public int? MonoUnsaturatedFat { get; set; }

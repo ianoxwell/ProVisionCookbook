@@ -3,6 +3,7 @@
 <!-- action bar -->
 <div class="mt-2 mb-2">
   	<div class="flex-box flex-justify-space-between mt-2 mb-2 pl-2 pr-2">
+		<span class="ml-12"></span>
 		<span *ngIf="!!cookBookUserProfile && cookBookUserProfile.lastName==='Oxwell' && selectedTab === 0">
 			<span class="mr-1">Index: {{selectedIndex}}</span>
 			<button mat-flat-button (click)="getSpoonAcularRecipe()" type="button">Get 3 random recipes</button>

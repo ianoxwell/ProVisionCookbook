@@ -1,0 +1,50 @@
+<form class="ml-2" [formGroup]="ingredientForm">
+	<mat-form-field class="mr-2 w-30">
+		<mat-icon matPrefix class="pr-1">beach_access</mat-icon>
+		<input matInput type="text" placeholder="Name *" Title="Name" formControlName="name">
+		<mat-error *ngFor="let validation of validationMessages.reasonControl">
+			<mat-error class="error-message" *ngIf="nameControl.hasError(validation.type) && (nameControl.dirty || nameControl.touched)">
+					<span [innerHTML]="validation.message"></span>
+			</mat-error>
+		</mat-error>
+	</mat-form-field>
+	<mat-form-field class="mr-2">
+		<mat-label id="parent-label">Food Group</mat-label>
+		<mat-select placeholder="Food Group" role="" formControlName="foodGroup" >
+			<div role="listbox" aria-labelledby="parent-label">
+				<mat-option role="option" *ngFor="let parent of refData.IngredientFoodGroup" [value]="parent.id" >{{parent.title}}</mat-option>
+			</div>
+		</mat-select>
+	</mat-form-field>
+	<mat-form-field class="mr-2">
+		<mat-label id="ex1-label" for="ex1-listbox">Consistency / state</mat-label>
+		<mat-select id="constanceId" role="" placeholder="Consistency" formControlName="consistency" [attr.aria-owns]="'ex1-listbox'" aria-haspopup="listbox" >				
+			<div role="listbox" aria-labelledby="ex1-label">
+				<mat-option role="option" *ngFor="let consistency of refData.IngredientState" [value]="consistency.id" >{{consistency.title}}</mat-option>
+			</div>
+		</mat-select>
+	</mat-form-field>
+	<mat-form-field class="mr-2">
+		<mat-label id="allergy-label">Food Allergies</mat-label>
+		<mat-select placeholder="Allergies" role="" formControlName="allergies" multiple>
+			<div role="listbox" aria-labelledby="allergy-label">
+				<mat-option role="option" *ngFor="let allergy of refData.AllergyWarning" [value]="allergy.id">{{allergy.title}}</mat-option>
+			</div>
+		</mat-select>
+	</mat-form-field>
+	<mat-form-field class="pr-1">
+		<mat-label id="purchased-by-label">Generally Purchased By</mat-label>
+		<mat-select placeholder="Purchased By" role="" formControlName="purchasedBy">
+			<div role="listbox" aria-labelledby="purchased-by-label">
+				<mat-option role="option" *ngFor="let type of purchasedByEnum" [value]="type.id" >{{type.item | toTitleCase}}</mat-option>
+			</div>
+		</mat-select>
+	</mat-form-field>
+	<!-- TODO make visible only to ADMIN -->
+	<span>
+		<mat-form-field>
+			<input matInput type="text" placeholder="Link Id" formControlName="linkUrl">
+		</mat-form-field>
+		<!-- <button mat-flat-button aria-label="Refresh data online" (click)="refreshData()" [disabled]="!linkUrl.value || linkUrl.value.length === 0">Refresh Data online</button> -->
+	</span>
+</form>

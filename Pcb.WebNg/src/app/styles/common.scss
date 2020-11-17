@@ -1,4 +1,4 @@
-$spaces: (0,1,2,3,4,5,6);
+$spaces: (0,1,2,3,4,5,6,7,8,9,10,11,12);
 $sides: (top, right, bottom, left);
 
 // Bootstrap utility classes:
@@ -15,17 +15,17 @@ $sides: (top, right, bottom, left);
 
 @each $space in $spaces {
   .m-#{$space} {
-    margin: #{$space/2}em;
+    margin: #{$space/2}rem;
   }
   .p-#{$space} {
-    padding: #{$space/2}em;
+    padding: #{$space/2}rem;
   }
   @each $side in $sides {
     .m#{str-slice($side, 0, 1)}-#{$space} {
-      margin-#{$side}: #{$space/2}em !important;
+      margin-#{$side}: #{$space/2}rem !important;
 	}
     .p#{str-slice($side, 0, 1)}-#{$space} {
-      padding-#{$side}: #{$space/2}em !important;
+      padding-#{$side}: #{$space/2}rem !important;
     }
   }
 }
@@ -96,6 +96,13 @@ $widthsPercent: (5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100);
 	width: 1px;
 }
 
+.background-bar-light-grey {
+	background-color: $light-grey;
+}
+.accent-left {
+	border-left: 2px $accent solid;
+}
+
 .recipe-filter-paginator {
 	.mat-paginator-outer-container {
 		.mat-paginator-container {
@@ -110,6 +117,15 @@ $widthsPercent: (5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100);
 			}
 		}
 	}
+}
+
+.bottom-sticky {
+	position: sticky;
+	bottom: 0;
+	z-index: 1;
+}
+.table-footer {	
+	margin-bottom: 4em;
 }
 
 // body .ui-message {

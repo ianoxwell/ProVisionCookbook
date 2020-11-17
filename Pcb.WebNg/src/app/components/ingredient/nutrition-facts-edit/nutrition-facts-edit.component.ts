@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ComponentBase } from '@components/base/base.component.base';
 import { DecimalThreePlaces, DecimalTwoPlaces } from '@models/static-variables';
@@ -12,7 +12,8 @@ import { ChartOptions, ChartType } from 'chart.js';
   templateUrl: './nutrition-facts-edit.component.html',
   styleUrls: ['./nutrition-facts-edit.component.scss']
 })
-export class NutritionFactsEditComponent extends ComponentBase implements OnInit {
+export class NutritionFactsEditComponent extends ComponentBase implements OnInit, AfterViewInit {
+	@ViewChild('doughNutCanvas') doughNutCanvas: ElementRef;
 	@Input() nutritionFacts: FormGroup;
 	@Output() markAsDirty = new EventEmitter<void>();
 
@@ -20,8 +21,8 @@ export class NutritionFactsEditComponent extends ComponentBase implements OnInit
 	decimalThreePlaces = DecimalThreePlaces;
 	O3ToO6Ratio = 0;
 	public pieChartLabels: Label[] = ['Carbohydrates', 'Fat', 'Protein', 'Water'];
-	public pieChartData: number[];
-	public pieChartType: ChartType = 'pie';
+	public pieChartData: number[] = [0,0,0,0];
+	public pieChartType: ChartType = 'doughnut';
 	public pieChartLegend = true;
 	public pieChartColors = [
 	  {
@@ -32,8 +33,11 @@ export class NutritionFactsEditComponent extends ComponentBase implements OnInit
 	 public pieChartOptions: ChartOptions = {
 		responsive: true,
 		legend: {
-		  position: 'left',
+		  position: 'bottom',
 		},
+		animation:{ onProgress: () => this.updateTextCenterDoughNut() },
+		// tooltips: {enabled: false},
+		hover: {mode: null},
 	  };
 	constructor() { super(); }
 
@@ -41,9 +45,12 @@ export class NutritionFactsEditComponent extends ComponentBase implements OnInit
 		this.listenAnyFormChanges();
 		this.listenOmegaRatio();
 		this.listenNutrientTotals();
-		this.pieChartData = this.updatePieChartData();
+		this.pieChartData = this.updatePieChartData()
 	}
 
+	ngAfterViewInit(): void {
+		setTimeout(() => this.pieChartData = this.updatePieChartData(), 500);
+	}
 	// Mark the parent form as Dirty if any form element changes
 	// only listens for the first change (because then it is dirty) - may have to reload on save...
 	listenAnyFormChanges(): void {
@@ -69,11 +76,13 @@ export class NutritionFactsEditComponent extends ComponentBase implements OnInit
 		const fat: FormControl = this.nutritionFacts.get('totalFat') as FormControl;
 		const water: FormControl = this.nutritionFacts.get('water') as FormControl;
 		const protein: FormControl = this.nutritionFacts.get('protein') as FormControl;
+		const calories: FormControl = this.nutritionFacts.get('calories') as FormControl;
 		merge(
 			carbs.valueChanges,
 			fat.valueChanges,
 			water.valueChanges,
-			protein.valueChanges).pipe(
+			protein.valueChanges,
+			calories.valueChanges).pipe(
 			tap(() => {
 				carbs.markAsTouched();
 				fat.markAsTouched();
@@ -94,6 +103,35 @@ export class NutritionFactsEditComponent extends ComponentBase implements OnInit
 	updatePieChartData(): number[] {
 		const pieValues = this.nutritionFacts.getRawValue();
 		return [pieValues.totalCarbohydrate, pieValues.totalFat, pieValues.protein, pieValues.water];
+	}
+
+	updateTextCenterDoughNut(): void {
+		const ctx = this.doughNutCanvas.nativeElement.getContext('2d');
+		const formValue = this.nutritionFacts.getRawValue();
+		const calories = formValue.calories;
+		const subheading = 'Kcal / 100g';
+		const stringWidth = (txt: string) => ctx.measureText(txt).width;
+		const width = ctx.canvas.width;
+		const height = ctx.canvas.clientHeight;
+
+		ctx.textAlign = 'center';
+		ctx.textBaseline = 'middle';
+
+
+		const caloriesFontSize = Math.floor(1.3 * (width / stringWidth(calories)));
+		const subheadingFontSize = Math.floor(caloriesFontSize / 2);
+		const centerX = (width * 0.5);
+		const centerY = (height / 2 - 16);
+
+		ctx.font = caloriesFontSize + 'px Arial';
+		ctx.fillStyle = 'blue';
+		ctx.fillText(calories, centerX, centerY - caloriesFontSize/2);
+
+		ctx.font = subheadingFontSize + 'px Arial';
+		ctx.fillStyle = 'orange';
+		ctx.fillText(subheading, centerX, centerY + subheadingFontSize);
+		console.log('ctxx', caloriesFontSize, ctx.measureText(calories).width, subheadingFontSize, centerX, centerY, ctx.canvas.clientWidth);
+		ctx.restore();
 	}
 
 }

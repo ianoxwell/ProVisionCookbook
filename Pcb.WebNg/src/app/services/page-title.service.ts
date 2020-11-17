@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
@@ -11,8 +11,10 @@ import { BehaviorSubject } from 'rxjs';
 export class PageTitleService {
 	defaultTitle = `Provisioner's Cookbook`;
 	pageTitleSubject$ = new BehaviorSubject<string>(null);
+	pageSymbolSubject$ = new BehaviorSubject<string>(null);
 
 	pageTitle$ = this.pageTitleSubject$.asObservable();
+	pageSymbol$ = this.pageSymbolSubject$.asObservable();
 
 	constructor(
 		private router: Router,
@@ -21,8 +23,8 @@ export class PageTitleService {
 		private liveAnnouncer: LiveAnnouncer
 	) { }
 
-	listen() {
-		this.router.events
+	listen(): Observable<string> {
+		return this.router.events
 			.pipe(
 				filter(event => event instanceof NavigationEnd),
 				map(() => this.activeRoute),
@@ -33,9 +35,12 @@ export class PageTitleService {
 					return route;
 				}),
 				switchMap(route => route.data),
-				map(data => (data && data.title) ? data.title : this.defaultTitle)
-			)
-			.subscribe(title => this.setTitle(title));
+				map(data => {
+					(data && data.symbol) ?	this.setSymbol(data.symbol) : this.setSymbol(null);
+					return (data && data.title) ? data.title : this.defaultTitle; }
+					),
+				tap((title: string) => this.setTitle(title))
+			);
 	}
 
 	setTitle(title: string) {
@@ -45,6 +50,10 @@ export class PageTitleService {
 			this.pageTitleSubject$.next(fullTitle);
 			this.liveAnnouncer.announce(fullTitle);
 		}
+	}
+
+	setSymbol(symbol: string) {
+		this.pageSymbolSubject$.next(symbol);
 	}
 
 	// action to announce for screen reader the page title

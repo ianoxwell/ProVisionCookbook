@@ -11,7 +11,7 @@ export enum ReferenceType {
 	DishTag,
 	DishType,
 	HealthLabel,
-	IngredientParentType,
+	IngredientFoodType,
 	IngredientState,
 	LogLevel,
 	PermissionGroup

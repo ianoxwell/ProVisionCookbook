@@ -63,6 +63,7 @@ export interface ICommonVitamins {
 	vitaminK?: number;
 }
 export interface INutritionFacts {
+	calories?: number;
 	cholesterol?: number;
 	dietaryFiber?: number; // d
 	monoUnsaturatedFat?: number;

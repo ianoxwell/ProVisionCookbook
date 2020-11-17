@@ -12,11 +12,9 @@ namespace Pcb.Dto.Ingredient
 		public int? UsdaFoodId { get; set; }
 		public string Name { get; set; }
 		public string LinkUrl { get; set; }
-		public int? Calories { get; set; }
 		public int? PralScore { get; set; }
 		public MeasurementType? PurchasedBy { get; set; }
 
-		public CaloricBreakdownDto CaloricBreakdown { get; set; }
 		public PriceDto Price { get; set; }
 		public NutritionFactsDto NutritionFacts { get; set; }
 		public CommonMineralsDto CommonMinerals { get; set; }
@@ -28,7 +26,7 @@ namespace Pcb.Dto.Ingredient
 		public DateTimeOffset CreatedAt { get; set; }
 		public int? ParentId { get; set; }
 		public ReferenceItemEx FoodGroup { get; set; }
-		public int? IngredientStateId { get; set; }
+		public int? IngredientStateId { get; set; } // spoonacular field consistency e.g. solid
 		public List<ReferenceItemEx> Allergies { get; set; }
 		public List<IngredientConversionDto> IngredientConversions { get; set; }
 		public List<ShortRecipeDto> Recipes { get; set; }

@@ -8,4 +8,6 @@ table {
 }
 .responsive-table {
 	margin: 0.5rem;
+	height: calc(100vh - 14rem);
+	overflow: auto;
 }

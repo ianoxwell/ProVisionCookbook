@@ -34,6 +34,7 @@ import { SharedComponentModule } from './shared-component.module';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { NutritionFactsEditComponent } from './ingredient/nutrition-facts-edit/nutrition-facts-edit.component';
 import { NutrientTotalValidator } from '../validators/nutrient-total.validator';
+import { EditIngredientBasicComponent } from './ingredient/edit-ingredient-basic/edit-ingredient-basic.component';
 
 @NgModule({
   imports: [
@@ -73,7 +74,8 @@ import { NutrientTotalValidator } from '../validators/nutrient-total.validator';
 	TooltipDirective,
 	PageTitleComponent,
 	IngredientNutritionFormComponent,
-	NutritionFactsEditComponent
+	NutritionFactsEditComponent,
+	EditIngredientBasicComponent,
   ],
   exports: [
 	DragNDropComponent,
