@@ -62,7 +62,6 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 	// conversionsForm: FormGroup;
 	editedItem: EditedFieldModel[] = [];
 	validationMessages = ValidationMessages;
-	
 
 	// getFormKeys = (controls: FormGroup): string[] => { return Object.keys(controls); }
 
