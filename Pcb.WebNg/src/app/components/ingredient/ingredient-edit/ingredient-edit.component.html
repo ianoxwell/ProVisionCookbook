@@ -10,7 +10,7 @@
 			<h3>Nutrition Facts</h3>
 			<span class="ml-2 text-muted mb-2">Serving Size - 100grams (100g)</span>
 		</div>
-		<app-nutrition-facts-edit [nutritionFacts]="nutritionFacts" (markAsDirty)="nutritionFacts.markAsDirty()"></app-nutrition-facts-edit>
+		<app-edit-ingredient-nutrition [form]="nutritionFacts" (markAsDirty)="nutritionFacts.markAsDirty()"></app-edit-ingredient-nutrition>
 	</section>
 
     <section class="mt-2 mb-2">
@@ -43,7 +43,21 @@
 				</app-ingredient-conversion-form>
 			</div>
 		</div>
-    </section>
+	</section>
+	<section class="mt-2 mb-2">
+		<div class="flex-box flex-row flex-align-items-center background-bar-light-grey pt-2 pl-2 accent-left mb-2">
+			<h3>Common Vitamins</h3>
+			<span class="ml-2 text-muted mb-2">Serving Size - 100grams (100g)</span>
+		</div>
+		<app-edit-common-vitamins [form]="commonVitamins" (markAsDirty)="commonVitamins.markAsDirty()"></app-edit-common-vitamins>
+	</section>
+	<section class="mt-2 mb-2">
+		<div class="flex-box flex-row flex-align-items-center background-bar-light-grey pt-2 pl-2 accent-left mb-2">
+			<h3>Common Minerals</h3>
+			<span class="ml-2 text-muted mb-2">Serving Size - 100grams (100g)</span>
+		</div>
+		<app-edit-common-minerals [form]="commonMinerals" (markAsDirty)="commonMinerals.markAsDirty()"></app-edit-common-minerals>
+	</section>
 	<!-- Recipes with this ingredient -->
     <section *ngIf="!isNew" class="mt-2 mb-2">	
     	<h3 >Recipes this ingredient is used in: {{singleIngredient.recipes.length}}</h3>

@@ -3,18 +3,18 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ComponentBase } from '@components/base/base.component.base';
 import { DecimalThreePlaces, DecimalTwoPlaces } from '@models/static-variables';
 import { first, takeUntil, tap } from 'rxjs/operators';
-import { merge, zip } from 'rxjs';
+import { merge } from 'rxjs';
 import { Label } from 'ng2-charts';
 import { ChartOptions, ChartType } from 'chart.js';
 
 @Component({
-  selector: 'app-nutrition-facts-edit',
-  templateUrl: './nutrition-facts-edit.component.html',
-  styleUrls: ['./nutrition-facts-edit.component.scss']
+  selector: 'app-edit-ingredient-nutrition',
+  templateUrl: './edit-ingredient-nutrition.component.html',
+  styleUrls: ['./edit-ingredient-nutrition.component.scss']
 })
-export class NutritionFactsEditComponent extends ComponentBase implements OnInit, AfterViewInit {
+export class EditIngredientNutritionComponent extends ComponentBase implements OnInit, AfterViewInit {
 	@ViewChild('doughNutCanvas') doughNutCanvas: ElementRef;
-	@Input() nutritionFacts: FormGroup;
+	@Input() form: FormGroup;
 	@Output() markAsDirty = new EventEmitter<void>();
 
 	decimalTwoPlaces = DecimalTwoPlaces;
@@ -54,15 +54,15 @@ export class NutritionFactsEditComponent extends ComponentBase implements OnInit
 	// Mark the parent form as Dirty if any form element changes
 	// only listens for the first change (because then it is dirty) - may have to reload on save...
 	listenAnyFormChanges(): void {
-		this.nutritionFacts.valueChanges.pipe(
+		this.form.valueChanges.pipe(
 			first(),
 			tap(() => this.markAsDirty.emit()),
 		).subscribe();
 	}
 	listenOmegaRatio(): void {
 		// recalculate the Omega3 ratio on changes to their respective fields only
-		merge(this.nutritionFacts.get('omega3s').valueChanges,
-			this.nutritionFacts.get('omega6s').valueChanges).pipe(
+		merge(this.form.get('omega3s').valueChanges,
+			this.form.get('omega6s').valueChanges).pipe(
 			tap(() => this.O3ToO6Ratio = this.getO3ToO6Ratio()),
 			takeUntil(this.ngUnsubscribe)
 		).subscribe();
@@ -72,11 +72,11 @@ export class NutritionFactsEditComponent extends ComponentBase implements OnInit
 	// Subscribe to valueChanges in the major 4 items and mark as touched to update the error status of the form
 	// links to nutrient-total.validator
 	listenNutrientTotals(): void {
-		const carbs: FormControl = this.nutritionFacts.get('totalCarbohydrate') as FormControl;
-		const fat: FormControl = this.nutritionFacts.get('totalFat') as FormControl;
-		const water: FormControl = this.nutritionFacts.get('water') as FormControl;
-		const protein: FormControl = this.nutritionFacts.get('protein') as FormControl;
-		const calories: FormControl = this.nutritionFacts.get('calories') as FormControl;
+		const carbs: FormControl = this.form.get('totalCarbohydrate') as FormControl;
+		const fat: FormControl = this.form.get('totalFat') as FormControl;
+		const water: FormControl = this.form.get('water') as FormControl;
+		const protein: FormControl = this.form.get('protein') as FormControl;
+		const calories: FormControl = this.form.get('calories') as FormControl;
 		merge(
 			carbs.valueChanges,
 			fat.valueChanges,
@@ -96,18 +96,18 @@ export class NutritionFactsEditComponent extends ComponentBase implements OnInit
 
 	// Omega 6 is known to fuel inflammatory cycles in the body, a high ratio of omega3 to 6 is therefore preferred
 	getO3ToO6Ratio(): number {
-		const formValue = this.nutritionFacts.getRawValue();
+		const formValue = this.form.getRawValue();
 		return (Number(formValue.omega3s) && formValue.omega6s > 0) ? Math.round(formValue.omega3s / formValue.omega6s * 100) / 100 : 0;
 	}
 
 	updatePieChartData(): number[] {
-		const pieValues = this.nutritionFacts.getRawValue();
+		const pieValues = this.form.getRawValue();
 		return [pieValues.totalCarbohydrate, pieValues.totalFat, pieValues.protein, pieValues.water];
 	}
 
 	updateTextCenterDoughNut(): void {
 		const ctx = this.doughNutCanvas.nativeElement.getContext('2d');
-		const formValue = this.nutritionFacts.getRawValue();
+		const formValue = this.form.getRawValue();
 		const calories = formValue.calories;
 		const subheading = 'Kcal / 100g';
 		const stringWidth = (txt: string) => ctx.measureText(txt).width;

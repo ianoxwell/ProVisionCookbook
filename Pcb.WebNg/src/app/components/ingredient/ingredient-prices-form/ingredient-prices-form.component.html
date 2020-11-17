@@ -10,8 +10,8 @@
 		<input matInput type="number" placeholder="Qty" Title="Qty" formControlName="quantity">
 	</mat-form-field>
 	<mat-form-field class="mr-2 max-width7">
-		<mat-select placeholder="Measurement" Title="Measurement" formControlName="measurement">
-			<mat-option *ngFor="let measure of measurements" [value]="measure.name">{{measure.name}}</mat-option>
+		<mat-select role="" placeholder="Measurement" Title="Measurement" formControlName="measurement">
+			<mat-option role="option" *ngFor="let measure of measurements" [value]="measure.title">{{measure.title}}</mat-option>
 		</mat-select>
 	</mat-form-field>
 	<mat-form-field class="mr-2 w-25">

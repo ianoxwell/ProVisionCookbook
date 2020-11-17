@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Form, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { ConversionModel, EditedFieldModel, ICommonMinerals, INutritionFacts, MeasurementModel, NutritionModel, PriceModel} from '@models/ingredient-model';
+import { ConversionModel, EditedFieldModel, ICommonMinerals, ICommonVitamins, INutritionFacts, MeasurementModel, NutritionModel, PriceModel} from '@models/ingredient-model';
 import {DateTimeService} from '@services/date-time.service';
 import {RestService} from '@services/rest-service.service';
 import {catchError, debounceTime, map, takeUntil, tap} from 'rxjs/operators';
@@ -159,6 +159,8 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 	get nutrition() { return this.ingredientForm.get('nutrition') as FormArray; }
 	get caloricBreakdown(): FormGroup {return this.ingredientForm.get('caloricBreakdown') as FormGroup; }
 	get nutritionFacts(): FormGroup {return this.ingredientForm.get('nutritionFacts') as FormGroup; }
+	get commonVitamins(): FormGroup {return this.ingredientForm.get('commonVitamins') as FormGroup; }
+	get commonMinerals(): FormGroup {return this.ingredientForm.get('commonMinerals') as FormGroup; }
 
 	initPricesFormGroup(price: Price, isNew = false): FormGroup {
 		const fbGroup = this.fb.group({
@@ -213,8 +215,46 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 		return fbGroup;
 	}
 
+	initCommonMineralsFormGroup(minerals: ICommonMinerals): FormGroup {
+		const fbGroup = this.fb.group({
+			calcium: [minerals.calcium, [Validators.min(0)]],
+			copperCu: [minerals.copperCu, [Validators.min(0)]],
+			fluorideF: [minerals.fluorideF, [Validators.min(0)]],
+			ironFe: [minerals.ironFe, [Validators.min(0)]],
+			magnesium: [minerals.magnesium, [Validators.min(0)]],
+			manganese: [minerals.manganese, [Validators.min(0)]],
+			potassiumK: [minerals.potassiumK, [Validators.min(0)]],
+			seleniumSe: [minerals.seleniumSe, [Validators.min(0)]],
+			sodium: [minerals.sodium, [Validators.min(0)]],
+			zincZn: [minerals.zincZn, [Validators.min(0)]],
+		});
+		return fbGroup;
+	}
+
+	initCommonVitaminsFormGroup(vita: ICommonVitamins): FormGroup {
+		const fbGroup = this.fb.group({
+			folateB9: [vita.folateB9, [Validators.min(0)]],
+			folateDfe: [vita.folateDfe, [Validators.min(0)]],
+			folicAcid: [vita.folicAcid, [Validators.min(0)]],
+			foodFolate: [vita.foodFolate, [Validators.min(0)]],
+			niacinB3: [vita.niacinB3, [Validators.min(0)]],
+			pantothenicAcidB5: [vita.pantothenicAcidB5, [Validators.min(0)]],
+			riboflavinB2: [vita.riboflavinB2, [Validators.min(0)]],
+			thiaminB1: [vita.thiaminB1, [Validators.min(0)]],
+			vitaminAIu: [vita.vitaminAIu, [Validators.min(0)]],
+			vitaminARae: [vita.vitaminARae, [Validators.min(0)]],
+			vitaminB6: [vita.vitaminB6, [Validators.min(0)]],
+			vitaminB12: [vita.vitaminB12, [Validators.min(0)]],
+			vitaminC: [vita.vitaminC, [Validators.min(0)]],
+			vitaminD: [vita.vitaminD, [Validators.min(0)]],
+			vitaminDIu: [vita.vitaminDIu, [Validators.min(0)]],
+			vitaminE: [vita.vitaminE, [Validators.min(0)]],
+			vitaminK: [vita.vitaminK, [Validators.min(0)]],
+		});
+		return fbGroup;
+	}
+
 	createForm(ingredient: Ingredient): FormGroup {
-		let priceSummary: FormGroup;
 		let conversionSummary = [];
 		// let nutritionSummary = [];
 		// if editing the ingredient, then populate the additional controls needed to edit any of the sub-documents
@@ -222,17 +262,10 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 			if (!ingredient.price) {
 				ingredient.price = new PriceModel();
 			}
-			priceSummary = this.initPricesFormGroup(ingredient.price);
-
 			if (!ingredient.ingredientConversions) {
 				ingredient.ingredientConversions = [ new ConversionModel() ];
 			}
 			conversionSummary = ingredient.ingredientConversions.map((convert: Conversion) => this.initConversionFormGroup(convert));
-
-			// if (!ingredient.nutrition) {
-			// 	ingredient.nutrition = [ new NutritionModel() ];
-			// }
-			// nutritionSummary = ingredient.nutrition.map((nutation: Nutrition) => this.initNutritionFormGroup(nutation));
 		}
 		// Create the controls for the reactive forms
 		return this.fb.group({
@@ -242,15 +275,11 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 			consistency: ingredient.ingredientStateId,
 			purchasedBy: ingredient.purchasedBy,
 			linkUrl: ingredient.linkUrl,
-			price: priceSummary,
+			price: this.initPricesFormGroup(ingredient.price),
 			conversions: this.fb.array(conversionSummary),
-			// caloricBreakdown: this.fb.group({
-			// 	carbohydrate: [Number(ingredient.caloricBreakdown.carbohydrate), [Validators.min(0), Validators.max(100)]],
-			// 	fat: [Number(ingredient.caloricBreakdown.fat), [Validators.min(0), Validators.max(100)]],
-			// 	protein: [Number(ingredient.caloricBreakdown.protein), [Validators.min(0), Validators.max(100)]],
-			// 	water: [Number(ingredient.caloricBreakdown.water), [Validators.min(0), Validators.max(100)]],
-			// }),
 			nutritionFacts: this.initNutritionFactsFormGroup(ingredient.nutritionFacts),
+			commonMinerals: this.initCommonMineralsFormGroup(ingredient.commonMinerals),
+			commonVitamins: this.initCommonVitaminsFormGroup(ingredient.commonVitamins)
 		});
 	}
 	markFormClean(): void {

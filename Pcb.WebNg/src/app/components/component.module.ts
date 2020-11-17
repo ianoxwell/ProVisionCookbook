@@ -23,18 +23,20 @@ import { IngredientPricesFormComponent } from './ingredient/ingredient-prices-fo
 import { IngredientConversionFormComponent } from './ingredient/ingredient-conversion-form/ingredient-conversion-form.component';
 import { SelectAutoCompleteComponent } from './select-auto-complete/select-auto-complete.component';
 import { ToastItemComponent } from './toast/toast-item/toast-item.component';
-import { ToastComponent } from './toast/toast.component';import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
+import { ToastComponent } from './toast/toast.component';
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { DropDownComponent } from './drop-down/drop-down.component';
 import { DropdownItemComponent } from './drop-down/drop-down-item.component';
 import { TooltipDirective } from '../directives/tooltip.directive';
 import { ChartsModule } from 'ng2-charts';
 import { PageTitleComponent } from './page-title/page-title.component';
-import { IngredientNutritionFormComponent } from './ingredient/ingredient-nutrition-form/ingredient-nutrition-form.component';
 import { SharedComponentModule } from './shared-component.module';
 import { DigitOnlyModule } from '@uiowa/digit-only';
-import { NutritionFactsEditComponent } from './ingredient/nutrition-facts-edit/nutrition-facts-edit.component';
 import { NutrientTotalValidator } from '../validators/nutrient-total.validator';
 import { EditIngredientBasicComponent } from './ingredient/edit-ingredient-basic/edit-ingredient-basic.component';
+import { EditCommonMineralsComponent } from './ingredient/edit-common-minerals/edit-common-minerals.component';
+import { EditCommonVitaminsComponent } from './ingredient/edit-common-vitamins/edit-common-vitamins.component';
+import { EditIngredientNutritionComponent } from './ingredient/edit-ingredient-nutrition/edit-ingredient-nutrition.component';
 
 @NgModule({
   imports: [
@@ -73,9 +75,10 @@ import { EditIngredientBasicComponent } from './ingredient/edit-ingredient-basic
 	DropDownComponent,
 	TooltipDirective,
 	PageTitleComponent,
-	IngredientNutritionFormComponent,
-	NutritionFactsEditComponent,
 	EditIngredientBasicComponent,
+	EditCommonMineralsComponent,
+	EditCommonVitaminsComponent,
+	EditIngredientNutritionComponent
   ],
   exports: [
 	DragNDropComponent,
@@ -99,7 +102,6 @@ import { EditIngredientBasicComponent } from './ingredient/edit-ingredient-basic
 	DropDownComponent,
 	TooltipDirective,
 	PageTitleComponent,
-	IngredientNutritionFormComponent
   ],
   providers: [
 	  NutrientTotalValidator
