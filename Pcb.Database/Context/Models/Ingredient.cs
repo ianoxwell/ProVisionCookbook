@@ -15,6 +15,7 @@ namespace Pcb.Database.Context.Models
 		[Required]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public string Name { get; set; }
+		[AllowNull]
 		public string LinkUrl { get; set; }
 		public MeasurementType? PurchasedBy { get; set; }
 		public int? Calories { get; set; }
@@ -143,6 +144,7 @@ namespace Pcb.Database.Context.Models
 		/// <summary>
 		/// Price Section
 		/// </summary>
+		[AllowNull]
 		public string PriceBrandName { get; set; }
 		[Column(TypeName = "decimal(18,2)")]
 		[DataType(DataType.Currency)]
@@ -150,6 +152,7 @@ namespace Pcb.Database.Context.Models
 		[Column(TypeName = "decimal(18,2)")]
 		public decimal? PriceQuantity { get; set; }
 		public MeasurementType? PriceMeasurement { get; set; }
+		[AllowNull]
 		public string PriceStoreName { get; set; }
 		[AllowNull]
 		public string PriceApiLink { get; set; }
@@ -163,6 +166,8 @@ namespace Pcb.Database.Context.Models
 
 		public DateTimeOffset CreatedAt { get; set; }
 		public IngredientFoodGroup FoodGroup { get; set; }
+		public IngredientState IngredientState { get; set; }
+		[AllowNull]
 		public ICollection<IngredientConversion> IngredientConversions { get; set; }
 		public ICollection<IngredientAllergyWarning> IngredientAllergyWarning { get; set; }
 		public ICollection<RecipeIngredientList> RecipeIngredientList { get; set; }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pcb.Database.Context;
 
 namespace Pcb.Database.Migrations
 {
     [DbContext(typeof(PcbDbContext))]
-    partial class PcbDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201118013732_AllowedIngredientNulls")]
+    partial class AllowedIngredientNulls
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2360,7 +2362,7 @@ namespace Pcb.Database.Migrations
                             IsStudent = false,
                             LastFailedLoginAttempt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PasswordHash = "$2a$11$ExOjJLkd1rs18hh2DxbYMehvGhCOTfip.pOW7cukLHEEJW1Rt4pWy",
+                            PasswordHash = "$2a$11$Y61hWAby0C9UTia5hdtaAOe18d0KqpV9sji1oDUp2wCG1bK6vMyLW",
                             TimesLoggedIn = 0,
                             Username = "admin",
                             Verified = new DateTime(2018, 10, 10, 10, 10, 0, 0, DateTimeKind.Unspecified)
@@ -2436,7 +2438,7 @@ namespace Pcb.Database.Migrations
                         .WithMany("Ingredient")
                         .HasForeignKey("FoodGroupId");
 
-                    b.HasOne("Pcb.Database.Context.Models.IngredientState", "IngredientState")
+                    b.HasOne("Pcb.Database.Context.Models.IngredientState", null)
                         .WithMany("Ingredient")
                         .HasForeignKey("IngredientStateId");
                 });

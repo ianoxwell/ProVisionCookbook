@@ -115,6 +115,7 @@ namespace Pcb.Mapping.Implementation
 				LinkUrl = ingredientObj.LinkUrl,
 				PurchasedBy = ingredientObj.PurchasedBy,
 				PralScore = ingredientObj.PralScore,
+				IngredientStateId = ingredientObj.IngredientStateId,
 				Price = new PriceDto()
 				{
 					BrandName = ingredientObj.PriceBrandName,
@@ -215,6 +216,7 @@ namespace Pcb.Mapping.Implementation
 				LinkUrl = dto.LinkUrl,
 				PurchasedBy = dto.PurchasedBy,
 				PralScore = dto.PralScore,
+				IngredientStateId = dto.IngredientStateId,
 
 				// Nutrition Facts
 				Calories = dto.NutritionFacts.Calories,
@@ -288,6 +290,7 @@ namespace Pcb.Mapping.Implementation
 			updateObj.LinkUrl = dto.LinkUrl;
 			updateObj.PurchasedBy = dto.PurchasedBy;
 			updateObj.PralScore = dto.PralScore;
+			updateObj.IngredientStateId = dto.IngredientStateId;
 
 			// Nutrition Facts
 			updateObj.Calories = dto.NutritionFacts.Calories;
@@ -367,7 +370,7 @@ namespace Pcb.Mapping.Implementation
 
 		private IngredientConversion MapDtoToIngredientConversionMapping(IngredientConversionDto map, int ingredientId)
 		{
-			if (map == null) { return null; }
+			if (map == null || ingredientId == 0) { return null; }
 			return new IngredientConversion
 			{
 				IngredientId = ingredientId,

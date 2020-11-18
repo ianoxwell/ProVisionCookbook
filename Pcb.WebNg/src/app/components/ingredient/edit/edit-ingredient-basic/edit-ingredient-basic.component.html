@@ -20,22 +20,12 @@
 				</mat-form-field>
 				<mat-form-field class="mr-2 w-30">
 					<mat-label id="ex1-label" for="ex1-listbox">Consistency / state</mat-label>
-					<mat-select id="constanceId" role="" placeholder="Consistency" formControlName="consistency" [attr.aria-owns]="'ex1-listbox'" aria-haspopup="listbox" >				
+					<mat-select id="constanceId" role="" placeholder="Consistency" formControlName="ingredientStateId" [attr.aria-owns]="'ex1-listbox'" aria-haspopup="listbox" >				
 						<div role="listbox" aria-labelledby="ex1-label">
 							<mat-option role="option" *ngFor="let consistency of refData.IngredientState" [value]="consistency.id" >{{consistency.title}}</mat-option>
 						</div>
 					</mat-select>
 				</mat-form-field>
-				<mat-form-field class="mr-2 w-30">
-					<mat-label id="allergy-label">Food Allergies</mat-label>
-					<mat-select placeholder="Allergies" role="" formControlName="allergies" multiple>
-						<div role="listbox" aria-labelledby="allergy-label">
-							<mat-option role="option" *ngFor="let allergy of refData.AllergyWarning" [value]="allergy.id">{{allergy.title}}</mat-option>
-						</div>
-					</mat-select>
-				</mat-form-field>
-			</div>
-			<div>
 				<mat-form-field class="mr-2 w-30">
 					<mat-label id="purchased-by-label">Generally Purchased By</mat-label>
 					<mat-select placeholder="Purchased By" role="" formControlName="purchasedBy">
@@ -44,6 +34,17 @@
 						</div>
 					</mat-select>
 				</mat-form-field>
+			</div>
+			<div>
+				<mat-form-field class="mr-2 w-50">
+					<mat-label id="allergy-label">Food Allergies</mat-label>
+					<mat-select placeholder="Allergies" role="" formControlName="allergies" multiple>
+						<div role="listbox" aria-labelledby="allergy-label">
+							<mat-option role="option" *ngFor="let allergy of refData.AllergyWarning" [value]="allergy.id">{{allergy.title}}</mat-option>
+						</div>
+					</mat-select>
+				</mat-form-field>
+
 				<mat-form-field class="mr-2 w-30" >
 					<mat-label>Pral Score (0 is neutral)</mat-label>
 					<input type="text" matInput digitOnly inputmode="numeric" decimal="false" formControlName="pralScore"/>

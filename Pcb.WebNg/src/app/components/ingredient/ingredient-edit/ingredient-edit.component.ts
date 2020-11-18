@@ -16,7 +16,7 @@ import {MatSelect} from '@angular/material/select';
 import {Nutrition} from '@models/nutrition';
 import {ReferenceService} from '@services/reference.service';
 import {Ingredient, IngredientNameSpace} from '@models/ingredient';
-import {ReferenceAll} from '@models/reference.model';
+import {ReferenceAll, ReferenceItemFull} from '@models/reference.model';
 import {Price} from '@models/price';
 import {Conversion} from '@models/conversion';
 import {ValidationMessages} from '@models/static-variables';
@@ -156,7 +156,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 	get purchasedByControl() { return this.ingredientForm.get('purchasedBy'); }
 	get linkUrl() { return this.ingredientForm.get('linkUrl'); }
 	get price() { return this.ingredientForm.get('price') as FormArray; }
-	get conversions() { return this.ingredientForm.get('conversions') as FormArray; }
+	get ingredientConversions() { return this.ingredientForm.get('ingredientConversions') as FormArray; }
 	get nutrition() { return this.ingredientForm.get('nutrition') as FormArray; }
 	get caloricBreakdown(): FormGroup {return this.ingredientForm.get('caloricBreakdown') as FormGroup; }
 	get nutritionFacts(): FormGroup {return this.ingredientForm.get('nutritionFacts') as FormGroup; }
@@ -171,10 +171,14 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 
 	onSaveItem(): void {
 		this.isSavingResults = true;
+		const formRaw = this.ingredientForm.getRawValue();
 		const saveObject: Ingredient = {
 			id: this.selected.id,
-			...this.ingredientForm.getRawValue(),
+			...formRaw,
 		};
+		saveObject.allergies = formRaw.allergies.map((id: number) =>
+			this.refData.AllergyWarning.find((item: ReferenceItemFull) => item.id === id));
+		saveObject.foodGroup = this.refData.IngredientFoodGroup.find((item: ReferenceItemFull) => item.id === formRaw.foodGroup);
 		console.log('ingredient form', this.ingredientForm.getRawValue(), this.selected, saveObject);
 		// getRawValue evaluates arrays as null if the array is empty
 		if (!saveObject.allergies) {
@@ -228,7 +232,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 		// expected either prices, conversions, or nutrition
 		// add a new subDoc to this.selected[subDocument] with an empty model, then create a set of controls based on that
 		switch (subDocument) {
-			case 'conversions': this.conversions.push(this.ingredientEditFormService.initConversionFormGroup(new ConversionModel(), true)); break;
+			case 'conversions': this.ingredientConversions.push(this.ingredientEditFormService.initConversionFormGroup(new ConversionModel(), true)); break;
 			// case 'nutrition': this.nutrition.push(this.initNutritionFormGroup(new NutritionModel(), true)); break;
 			default: this.messageService.add({severity: MessageStatus.Warning, summary: `Unidentified subDocument created, ${subDocument}`})
 		}
