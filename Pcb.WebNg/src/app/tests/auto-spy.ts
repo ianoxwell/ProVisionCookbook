@@ -1,3 +1,5 @@
+export type Spy<T> = T & jasmine.SpyObj<T>;
+
 // Based on parlakov scuri work - https://github.com/gparlakov/scuri
 /** Create an object with methods that are autoSpy-ed to use as mock dependency */
 export function autoSpy<T>(obj: new (...args: any[]) => T): SpyOf<T> {
@@ -11,7 +13,7 @@ export function autoSpy<T>(obj: new (...args: any[]) => T): SpyOf<T> {
 		res[key] = jasmine.createSpy(key);
 	});
 
-	return res;
+	return res as Spy<T>;
 }
 
 /** Keeps the types of properties of a type but assigns type of Spy to the methods */

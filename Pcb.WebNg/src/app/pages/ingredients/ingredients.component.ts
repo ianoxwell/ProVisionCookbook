@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { combineLatest, Observable, of } from 'rxjs';
-import { takeUntil, tap, catchError, map, switchMap, filter, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntil, tap, catchError, map, switchMap, filter, distinctUntilChanged, first } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 
@@ -168,8 +168,15 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 		console.log('CreateOrEdit', editOrNew, row);
 		this.isNew = (editOrNew === 'new');
 		if (this.isNew) {
-			this.selectedIngredient$ = of({} as Ingredient);
-			return this.changeTab(1);
+			this.dialogService.newIngredientDialog(this.refData.IngredientFoodGroup).pipe(
+				first(),
+				tap((result: Ingredient) => {
+					console.log('result form dialog', result);
+					this.selectedIngredient$ = of({} as Ingredient);
+					return this.changeTab(1);
+				}),
+			).subscribe();
+			return;
 		}
 		this.location.replaceState(`/savoury/ingredients/item/${row.id}`);
 		this.selectedIngredient$ = this.getSingleIngredient(row.id);

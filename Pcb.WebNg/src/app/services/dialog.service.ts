@@ -7,6 +7,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { ComponentBase } from '../components/base/base.component.base';
 import { MessageStatus, StatusUpdate } from '../models/message.models';
 import { ConfirmDialogComponent } from '../dialogs/dialog-confirm/confirm.component';
+import { ReferenceItemFull } from '@models/reference.model';
+import { Ingredient } from '@models/ingredient';
+import { DialogNewIngredientComponent } from '../dialogs/dialog-new-ingredient/dialog-new-ingredient.component';
 
 @Injectable()
 export class DialogService extends ComponentBase {
@@ -26,27 +29,27 @@ export class DialogService extends ComponentBase {
 		super();
 	}
 
-		/** Opens Material UI dialog boxes with given parameters */
-		createDialog(data: any, component: any, width: string = '60%'): Observable<any> {
+	/** Opens Material UI dialog boxes with given parameters */
+	createDialog<T>(data: any, component: any, width: string = '60%'): Observable<T> {
 
-			const dialogRef = this.dialog.open(component, {
-				width,
-				data,
-				position: { top: '50px' }
-			});
+		const dialogRef = this.dialog.open(component, {
+			width,
+			data,
+			position: { top: '50px' }
+		});
 
-			return dialogRef.afterClosed();
-		}
+		return dialogRef.afterClosed();
+	}
 
-		/** Returns the last value of statusUpdate when this function is called */
-		getStatus() {
-			return this.statusUpdate.getValue();
-		}
+	/** Returns the last value of statusUpdate when this function is called */
+	getStatus() {
+		return this.statusUpdate.getValue();
+	}
 
-			/** Opens a confirm dialog */
+		/** Opens a confirm dialog */
 	confirm(status: MessageStatus, title: string, message: string, buttonText: string = 'Confirm'): Observable<boolean> {
 		const data = { status, title, message, buttonText };
-		return this.createDialog(data, ConfirmDialogComponent);
+		return this.createDialog<boolean>(data, ConfirmDialogComponent);
 	}
 
 	/** Opens an alert dialog */
@@ -54,7 +57,11 @@ export class DialogService extends ComponentBase {
 		// if error message if of type HttpErrorResponse then it will have a message
 		const message = (!!err.message) ? err.message : err;
 		const data = { status: MessageStatus.Error, heading, message, confirmButton };
-		return this.createDialog(data, ConfirmDialogComponent);
+		return this.createDialog<void>(data, ConfirmDialogComponent);
+	}
+
+	newIngredientDialog(foodGroup: ReferenceItemFull[]): Observable<Ingredient> {
+		return this.createDialog<Ingredient>(foodGroup, DialogNewIngredientComponent);
 	}
 
 	/** Closes all dialogs */

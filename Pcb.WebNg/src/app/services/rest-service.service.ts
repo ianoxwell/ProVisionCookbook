@@ -9,6 +9,7 @@ import {Ingredient} from '../models/ingredient';
 import { query } from '@angular/animations';
 import { IngredientFilterObject, IngredientPaginator, PagedResult, SortPageObj } from '@models/common.model';
 import { environment } from 'src/environments/environment';
+import { IRawFoodIngredient } from '@models/rawFoodIngredient.model';
 
 
 @Injectable({
@@ -69,6 +70,14 @@ export class RestService {
   }
   public deleteItem(itemID: number): Observable<Ingredient> {
 	return this.httpClient.delete<Ingredient>(`${this.apiUrl}ingredient/${itemID}`, {headers: this.defaultHeader});
+  }
+
+  public getRawFoodSuggestion(queryString: string, limit: number = 10, foodGroupId: number = 0): Observable<IRawFoodIngredient[]> {
+	let queryStr = `?filter=${queryString}&limit=${limit}`;
+	if (foodGroupId > 0) {
+		  queryStr += `&foodGroupId=${foodGroupId}`
+	  }
+	  return this.httpClient.get<IRawFoodIngredient[]>(`${this.apiUrl}rawfooddata/suggestion${queryStr}`, {headers: this.defaultHeader})
   }
 
 }

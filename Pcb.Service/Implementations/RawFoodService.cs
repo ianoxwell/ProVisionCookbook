@@ -84,23 +84,25 @@ namespace Pcb.Service.Implementations
 		}
 
 
-		public async Task<List<SuggestedIngredientDto>> SuggestedIngredient(string filter = "", int pageSize = 10, int foodGroupId = 0)
+		public async Task<List<SuggestedRawFoodDto>> SuggestedIngredient(string filter = "", int pageSize = 10, int foodGroupId = 0)
 		{
 			using var _db = GetReadOnlyDbContext();
-			var ingList = await _db.RawFoodUsda
-				.Take(pageSize)
-				.Where(l => (string.IsNullOrEmpty(filter) || l.Name.Contains(filter))
+
+			var finishedList = await _db.RawFoodUsda.Where(l => (l.Name.Contains(filter))
 					&& (foodGroupId == 0 || l.FoodGroup.Id == foodGroupId))
-				.Select(p => new { p.Id, p.Name })
-				.OrderByMemberDescending("Name")
-				.ToListAsync();
-			var suggestionList = new List<SuggestedIngredientDto>();
-			foreach (var suggestion in ingList)
+										.Take(pageSize)
+										.Include(x => x.FoodGroup)
+										//.Select(p => new { p.Id, p.Name })
+										.OrderByMemberDescending("Name")
+										.ToListAsync();
+			var suggestionList = new List<SuggestedRawFoodDto>();
+			foreach (var suggestion in finishedList)
 			{
-				suggestionList.Add(new SuggestedIngredientDto
+				suggestionList.Add(new SuggestedRawFoodDto
 				{
 					Id = suggestion.Id,
-					Name = suggestion.Name
+					Name = suggestion.Name,
+					FoodGroup = suggestion.FoodGroup.Title
 				});
 			}
 			return suggestionList;

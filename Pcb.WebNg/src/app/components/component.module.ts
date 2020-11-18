@@ -77,7 +77,7 @@ import { IngredientEditFormService } from '@services/ingredient-edit-form.servic
 	EditCommonVitaminsComponent,
 	EditIngredientNutritionComponent,
 	FormAutocompleteDirective,
-	MatInputAutoCompleteDirective
+	MatInputAutoCompleteDirective,
   ],
   exports: [
 	DragNDropComponent,

@@ -78,11 +78,11 @@ namespace Pcb.Api.Controllers
 		/// <param name="foodGroupId">Limits the search to a food group</param>
 		/// <returns></returns>
 		[HttpGet]
-		[ProducesResponseType(200, Type = typeof(List<SuggestedIngredientDto>))]
+		[ProducesResponseType(200, Type = typeof(List<SuggestedRawFoodDto>))]
 		[Route("suggestion")]
 		public IActionResult IngredientSuggestion(string filter = "", int limit = 10, int foodGroupId = 0)
 		{
-			List<SuggestedIngredientDto> suggestions = RawFoodService.SuggestedIngredient(filter, limit, foodGroupId).Result;
+			List<SuggestedRawFoodDto> suggestions = RawFoodService.SuggestedIngredient(filter, limit, foodGroupId).Result;
 			return Ok(suggestions);
 		}
 

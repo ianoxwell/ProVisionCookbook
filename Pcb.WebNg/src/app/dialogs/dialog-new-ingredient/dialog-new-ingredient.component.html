@@ -1,0 +1,39 @@
+<h1 mat-dialog-title> New Ingredient </h1>
+
+<mat-dialog-content>
+	<form [formGroup]="form" class="flex-box flex-column">
+		<mat-form-field class="mr-2 w-50">
+			<input matInput type="text" placeholder="Ingredient Name *" Title="Name" formControlName="name">
+		</mat-form-field>
+		<mat-form-field class="mr-2 w-30">
+			<mat-label id="parent-label">Food Group</mat-label>
+			<mat-select placeholder="Food Group" role="" formControlName="foodGroup" >
+				<div role="listbox" aria-labelledby="parent-label">
+					<mat-option role="option" *ngFor="let parent of data" [value]="parent.id" >{{parent.title}}</mat-option>
+				</div>
+			</mat-select>
+		</mat-form-field>
+		<section>
+			<h2>Match Nutrient Data with USDA database</h2>
+			<mat-list>
+				<mat-list-item *ngFor="let suggestion of filterRawSuggestions$ | async" (click)="selectItem(suggestion)">
+					<span>{{suggestion.name}}</span>
+					<span>{{suggestion.foodGroup.title}}</span>
+				</mat-list-item>
+				<!-- If no matches found -->
+			</mat-list>
+		</section>
+
+
+		<!-- <app-auto-complete-search class="w-50"
+			formControlName="name"
+			[values]="filterRawSuggestions$" placeholder="Food Name"
+			(filterChange)="onFilterChange($event)">
+		</app-auto-complete-search> -->
+
+	</form>
+</mat-dialog-content>
+<mat-dialog-actions class="flex-box flex-end">
+	<button mat-flat-button type="button" mat-dialog-close>Cancel</button>
+	<app-save-button color="accent" [dirty]="form.dirty" [valid]="form.valid" (save)="onSaveItem()"></app-save-button>
+</mat-dialog-actions>

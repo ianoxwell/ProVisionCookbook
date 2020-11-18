@@ -59,6 +59,9 @@ import { LogService } from '@services/log.service';
 import { SecurityService } from '@services/security.service';
 import { UserService } from '@services/user.service';
 import { AccountService } from '@services/account.service';
+import { DialogNewIngredientComponent } from './dialogs/dialog-new-ingredient/dialog-new-ingredient.component';
+import { SharedComponentModule } from '@components/shared-component.module';
+import { AutoCompleteSearchComponent } from '@components/auto-complete-search/auto-complete-search.component';
 
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -86,6 +89,8 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 	MainComponent,
 	WelcomeComponent,
 	ConfirmDialogComponent,
+	DialogNewIngredientComponent,
+	AutoCompleteSearchComponent,
 	SiteLogoComponent,
   ],
   imports: [
@@ -100,6 +105,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 	LayoutModule,
 	ComponentModule,
 	PipesModule,
+	SharedComponentModule,
 	FullCalendarModule,
 	ChartsModule,
 	NgxMaterialTimepickerModule,
