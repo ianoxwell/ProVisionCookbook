@@ -19,24 +19,24 @@ import { IconTextComponent } from './icon-text/icon-text.component';
 import { IngredientFilterComponent } from './ingredient/ingredient-filter/ingredient-filter.component';
 import { PipesModule } from '@pipes/pipes.module';
 import { IngredientTableComponent } from './ingredient/ingredient-table/ingredient-table.component';
-import { IngredientPricesFormComponent } from './ingredient/ingredient-prices-form/ingredient-prices-form.component';
-import { IngredientConversionFormComponent } from './ingredient/ingredient-conversion-form/ingredient-conversion-form.component';
 import { SelectAutoCompleteComponent } from './select-auto-complete/select-auto-complete.component';
 import { ToastItemComponent } from './toast/toast-item/toast-item.component';
 import { ToastComponent } from './toast/toast.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
-import { DropDownComponent } from './drop-down/drop-down.component';
-import { DropdownItemComponent } from './drop-down/drop-down-item.component';
-import { TooltipDirective } from '../directives/tooltip.directive';
 import { ChartsModule } from 'ng2-charts';
 import { PageTitleComponent } from './page-title/page-title.component';
 import { SharedComponentModule } from './shared-component.module';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { NutrientTotalValidator } from '../validators/nutrient-total.validator';
-import { EditIngredientBasicComponent } from './ingredient/edit-ingredient-basic/edit-ingredient-basic.component';
-import { EditCommonMineralsComponent } from './ingredient/edit-common-minerals/edit-common-minerals.component';
-import { EditCommonVitaminsComponent } from './ingredient/edit-common-vitamins/edit-common-vitamins.component';
-import { EditIngredientNutritionComponent } from './ingredient/edit-ingredient-nutrition/edit-ingredient-nutrition.component';
+import { FormAutocompleteDirective } from '../directives/form-autocomplete.directive';
+import { MatInputAutoCompleteDirective } from '../directives/mat-input-autocomplete.directive';
+import { EditCommonMineralsComponent } from './ingredient/edit/edit-common-minerals/edit-common-minerals.component';
+import { EditCommonVitaminsComponent } from './ingredient/edit/edit-common-vitamins/edit-common-vitamins.component';
+import { EditIngredientBasicComponent } from './ingredient/edit/edit-ingredient-basic/edit-ingredient-basic.component';
+import { EditIngredientNutritionComponent } from './ingredient/edit/edit-ingredient-nutrition/edit-ingredient-nutrition.component';
+import { IngredientConversionFormComponent } from './ingredient/edit/ingredient-conversion-form/ingredient-conversion-form.component';
+import { IngredientPricesFormComponent } from './ingredient/edit/ingredient-prices-form/ingredient-prices-form.component';
+import { IngredientEditFormService } from '@services/ingredient-edit-form.service';
 
 @NgModule({
   imports: [
@@ -71,14 +71,13 @@ import { EditIngredientNutritionComponent } from './ingredient/edit-ingredient-n
 	ToastItemComponent,
 	ToastComponent,
 	LoadingIndicatorComponent,
-	DropdownItemComponent,
-	DropDownComponent,
-	TooltipDirective,
 	PageTitleComponent,
 	EditIngredientBasicComponent,
 	EditCommonMineralsComponent,
 	EditCommonVitaminsComponent,
-	EditIngredientNutritionComponent
+	EditIngredientNutritionComponent,
+	FormAutocompleteDirective,
+	MatInputAutoCompleteDirective
   ],
   exports: [
 	DragNDropComponent,
@@ -99,12 +98,11 @@ import { EditIngredientNutritionComponent } from './ingredient/edit-ingredient-n
 	SelectAutoCompleteComponent,
 	ToastComponent,
 	LoadingIndicatorComponent,
-	DropDownComponent,
-	TooltipDirective,
 	PageTitleComponent,
   ],
   providers: [
-	  NutrientTotalValidator
+	  NutrientTotalValidator,
+	  IngredientEditFormService
   ]
 })
 export class ComponentModule { }

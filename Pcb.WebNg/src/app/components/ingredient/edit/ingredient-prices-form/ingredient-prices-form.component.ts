@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MeasurementModel } from '@models/ingredient-model';
+import { DecimalTwoPlaces } from '@models/static-variables';
 
 @Component({
 	selector: 'app-ingredient-prices-form',
@@ -11,8 +12,8 @@ export class IngredientPricesFormComponent {
 	@Input() price: FormGroup;
 	@Input() measurements: MeasurementModel[];
 	@Output() markAsDirty = new EventEmitter<void>();
-	@Output() deleteItem = new EventEmitter<void>();
 
+	decimalTwoPlaces = DecimalTwoPlaces;
 	constructor() { }
 
 }

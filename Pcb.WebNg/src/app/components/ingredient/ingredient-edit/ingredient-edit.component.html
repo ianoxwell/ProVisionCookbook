@@ -82,7 +82,7 @@
       </button>
 	<span class="flex-box flex-align-items-center mr-4">
 		<button type="button" mat-flat-button title="Cancel" (click)="back.emit()" class="mr-2">Cancel</button>
+
 		<app-save-button color="accent" [isSaving]="isSavingResults" [dirty]="ingredientForm.dirty" [valid]="ingredientForm.valid" (save)="onSaveItem()"></app-save-button>
-		<!-- <button type="button" mat-flat-button title="Submit" color="accent" [disabled]="!ingredientForm.valid" (click)="onSaveItem()" class="mr-2">{{(isNew) ? 'New' : 'Save'}}</button> -->
 	</span>
 </div>

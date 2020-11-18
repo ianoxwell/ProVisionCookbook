@@ -4,10 +4,14 @@
 	</mat-form-field>
 	<mat-form-field class="mr-2 max-width7">
 		<mat-icon matPrefix class="pr-1 color-on-primary">attach_money</mat-icon>
-		<input matInput type="number" placeholder="Price" Title="Price" formControlName="price">
+		<input matInput type="text"
+			digitOnly inputmode="numeric" decimal="true" [pattern]="decimalTwoPlaces"
+			placeholder="Price" Title="Price" formControlName="price">
 	</mat-form-field>
 	<mat-form-field class="mr-2 max-width4">
-		<input matInput type="number" placeholder="Qty" Title="Qty" formControlName="quantity">
+		<input matInput type="text"
+			digitOnly inputmode="numeric" decimal="true" [pattern]="decimalTwoPlaces"
+		 	placeholder="Qty" Title="Qty" formControlName="quantity">
 	</mat-form-field>
 	<mat-form-field class="mr-2 max-width7">
 		<mat-select role="" placeholder="Measurement" Title="Measurement" formControlName="measurement">
@@ -20,8 +24,7 @@
 	<div class="flex-box flex-justify-space-between">
 		<!--      todo: Make sure this is only visible to admins -->
 		<mat-form-field class="w-25">
-			<input matInput type="url" placeholder="APILink" Title="APILink" formControlName="apiLink">
+			<input matInput type="url" placeholder="API Link to store" Title="APILink" formControlName="apiLink">
 		</mat-form-field>
-		<button mat-icon-button color="warn" (click)="deleteItem.emit()" type="button" title="delete"><mat-icon>delete</mat-icon></button>
 	</div>
 </form>
