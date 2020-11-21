@@ -168,7 +168,7 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 		console.log('CreateOrEdit', editOrNew, row);
 		this.isNew = (editOrNew === 'new');
 		if (this.isNew) {
-			this.dialogService.newIngredientDialog(this.refData.IngredientFoodGroup).pipe(
+			this.dialogService.newIngredientDialog(this.refData.IngredientFoodGroup, this.measurements).pipe(
 				first(),
 				tap((result: Ingredient) => {
 					console.log('result form dialog', result);

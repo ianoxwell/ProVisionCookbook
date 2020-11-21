@@ -29,18 +29,45 @@ export class EditIngredientNutritionComponent extends ComponentBase implements O
 		backgroundColor: ['rgba(255,0,0,0.8)', 'rgba(0,255,0,0.8)', 'rgba(0,255,255,0.8)', 'rgba(0,0,255,0.8)'],
 	  },
 	];
-	 // Pie
-	 public pieChartOptions: ChartOptions = {
-		responsive: true,
-		legend: {
-		  position: 'bottom',
+	doughnutLabels = {
+		header: 'Macronutrients',
+		internalLabel: 80,
+		internalSubLabel: 'kcal / 100g'
+	};
+	doughnutData = [
+		{
+			label: 'Carbohydrates',
+			value: 32,
+			color: '255,0,0'
 		},
-		animation:{ onProgress: this.debounce(() => {
-			this.updateTextCenterDoughNut();
-		}, 100)},
-		tooltips: {enabled: false},
-		hover: {mode: null},
-	  };
+		{
+			label: 'Fat',
+			value: 12,
+			color: '0,255,0'
+		},
+		{
+			label: 'Protein',
+			value: 12,
+			color: '255,255,0'
+		},
+		{
+			label: 'Water',
+			value: 22,
+			color: '0,0,255'
+		}
+	];
+	 // Pie
+	//  public pieChartOptions: ChartOptions = {
+	// 	responsive: true,
+	// 	legend: {
+	// 	  position: 'bottom',
+	// 	},
+	// 	animation:{ onProgress: this.debounce(() => {
+	// 		this.updateTextCenterDoughNut();
+	// 	}, 100)},
+	// 	tooltips: {enabled: false},
+	// 	hover: {mode: null},
+	//   };
 	constructor() { super(); }
 
 	ngOnInit() {
@@ -104,7 +131,16 @@ export class EditIngredientNutritionComponent extends ComponentBase implements O
 
 	updatePieChartData(): number[] {
 		const pieValues = this.form.getRawValue();
-		this.updateTextCenterDoughNut();
+		const macros = ['totalCarbohydrate', 'totalFat', 'protein', 'water'];
+		const newObj = [...this.doughnutData];
+		macros.forEach((item: string, i: number) => {
+			newObj[i].value = Number(pieValues[item]);
+		});
+		this.doughnutLabels.internalLabel = pieValues.calories;
+		this.doughnutData = Object.assign(newObj);
+		console.log('updated doughnut', this.doughnutData, this.doughnutLabels);
+		// this.updateTextCenterDoughNut();
+		// this.doughnutData[0].value = pieValues.totalCarbohydrate;
 		return [pieValues.totalCarbohydrate, pieValues.totalFat, pieValues.protein, pieValues.water];
 	}
 

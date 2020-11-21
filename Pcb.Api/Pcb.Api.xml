@@ -277,6 +277,14 @@
             <param name="limit">Number of results</param>
             <returns></returns>
         </member>
+        <member name="M:Pcb.Api.Controllers.IngredientController.IsIngredientNameAvailable(System.String,System.Int32)">
+            <summary>
+            Check if a food name is available
+            </summary>
+            <param name="filter">Text to filter name on</param>
+            <param name="foodId">For a name change doesn't check itself</param>
+            <returns></returns>
+        </member>
         <member name="M:Pcb.Api.Controllers.IngredientController.CreateIngredient(Pcb.Dto.Ingredient.IngredientDto)">
             <summary>
             Create a new Ingredient

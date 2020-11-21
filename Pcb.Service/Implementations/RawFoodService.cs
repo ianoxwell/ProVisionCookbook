@@ -102,7 +102,9 @@ namespace Pcb.Service.Implementations
 				{
 					Id = suggestion.Id,
 					Name = suggestion.Name,
-					FoodGroup = suggestion.FoodGroup.Title
+					FoodGroup = suggestion.FoodGroup.Title,
+					UsdaId = suggestion.UsdaFoodId.ToString()
+
 				});
 			}
 			return suggestionList;

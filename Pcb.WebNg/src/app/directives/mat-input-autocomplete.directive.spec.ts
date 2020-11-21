@@ -1,4 +1,4 @@
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { MatInputAutoCompleteDirective } from './mat-input-autocomplete.directive';
 import { Component, DebugElement } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
@@ -19,7 +19,7 @@ describe('Directive: MatInput', () => {
 	let inputDebugElement: DebugElement;
 	let inputElement: HTMLInputElement;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			imports: [
 				MatInputModule

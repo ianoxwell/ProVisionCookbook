@@ -472,6 +472,18 @@ namespace Pcb.Database.Context
 				   Quantity = 1,
 				   CountryCode = CountryCode.ALL
 			   });
+			modelBuilder.Entity<MeasurementUnit>().HasData(
+		   new MeasurementUnit()
+		   {
+			   Id = 15,
+			   Title = "Pieces",
+			   MeasurementType = MeasurementType.Item,
+			   ShortName = "piece",
+			   AltShortName = null,
+			   ConvertsToId = 9,
+			   Quantity = 1,
+			   CountryCode = CountryCode.ALL
+		   });
 
 			// Allergy Warnings
 			modelBuilder.Entity<AllergyWarning>().HasData(

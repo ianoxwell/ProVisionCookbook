@@ -82,6 +82,21 @@ namespace Pcb.Api.Controllers
 			return Ok(suggestions);
 		}
 
+
+		/// <summary>
+		/// Check if a food name is available
+		/// </summary>
+		/// <param name="filter">Text to filter name on</param>
+		/// <param name="foodId">For a name change doesn't check itself</param>
+		/// <returns></returns>
+		[HttpGet]
+		[ProducesResponseType(200, Type = typeof(bool))]
+		[Route("check-name")]
+		public IActionResult IsIngredientNameAvailable(string filter = "", int foodId = 0)
+		{
+			return Ok(IngredientService.IngredientNameExists(filter, foodId));
+		}
+
 		/// <summary>
 		/// Create a new Ingredient
 		/// </summary>

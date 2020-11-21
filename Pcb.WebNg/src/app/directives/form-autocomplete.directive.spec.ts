@@ -1,4 +1,4 @@
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { FormAutocompleteDirective } from './form-autocomplete.directive';
 import { Component, DebugElement } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
@@ -19,7 +19,7 @@ describe('Directive: FormAutocomplete', () => {
 	let formDebugElement: DebugElement;
 	let formElement: HTMLFormElement;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			imports: [
 				MatInputModule

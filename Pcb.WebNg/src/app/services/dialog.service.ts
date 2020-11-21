@@ -10,6 +10,7 @@ import { ConfirmDialogComponent } from '../dialogs/dialog-confirm/confirm.compon
 import { ReferenceItemFull } from '@models/reference.model';
 import { Ingredient } from '@models/ingredient';
 import { DialogNewIngredientComponent } from '../dialogs/dialog-new-ingredient/dialog-new-ingredient.component';
+import { MeasurementModel } from '@models/ingredient-model';
 
 @Injectable()
 export class DialogService extends ComponentBase {
@@ -60,8 +61,8 @@ export class DialogService extends ComponentBase {
 		return this.createDialog<void>(data, ConfirmDialogComponent);
 	}
 
-	newIngredientDialog(foodGroup: ReferenceItemFull[]): Observable<Ingredient> {
-		return this.createDialog<Ingredient>(foodGroup, DialogNewIngredientComponent);
+	newIngredientDialog( foodGroup: ReferenceItemFull[], measurements: MeasurementModel[] ): Observable<Ingredient> {
+		return this.createDialog<Ingredient>({foodGroup, measurements}, DialogNewIngredientComponent);
 	}
 
 	/** Closes all dialogs */

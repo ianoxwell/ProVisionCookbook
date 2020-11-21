@@ -37,6 +37,7 @@ import { EditIngredientNutritionComponent } from './ingredient/edit/edit-ingredi
 import { IngredientConversionFormComponent } from './ingredient/edit/ingredient-conversion-form/ingredient-conversion-form.component';
 import { IngredientPricesFormComponent } from './ingredient/edit/ingredient-prices-form/ingredient-prices-form.component';
 import { IngredientEditFormService } from '@services/ingredient-edit-form.service';
+import { GraphDoughnutComponent } from './graph-doughnut/graph-doughnut.component';
 
 @NgModule({
   imports: [
@@ -78,6 +79,7 @@ import { IngredientEditFormService } from '@services/ingredient-edit-form.servic
 	EditIngredientNutritionComponent,
 	FormAutocompleteDirective,
 	MatInputAutoCompleteDirective,
+	GraphDoughnutComponent,
   ],
   exports: [
 	DragNDropComponent,

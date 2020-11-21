@@ -1,26 +1,22 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {Form, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { ConversionModel, EditedFieldModel, ICommonMinerals, ICommonVitamins, INutritionFacts, MeasurementModel, NutritionModel, PriceModel} from '@models/ingredient-model';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { ConversionModel, EditedFieldModel, MeasurementModel} from '@models/ingredient-model';
 import {DateTimeService} from '@services/date-time.service';
 import {RestService} from '@services/rest-service.service';
-import {catchError, debounceTime, map, takeUntil, tap} from 'rxjs/operators';
+import {catchError, takeUntil, tap} from 'rxjs/operators';
 import {ComponentBase} from '@components/base/base.component.base';
 import {of} from 'rxjs';
 import {DialogService} from '@services/dialog.service';
 import {MessageStatus} from '@models/message.models';
 import {MessageService} from '@services/message.service';
 import {HttpErrorResponse} from '@angular/common/http';
-import {ChartOptions, ChartType} from 'chart.js';
-import {Label} from 'ng2-charts';
+
 import {MatSelect} from '@angular/material/select';
-import {Nutrition} from '@models/nutrition';
-import {ReferenceService} from '@services/reference.service';
+
 import {Ingredient, IngredientNameSpace} from '@models/ingredient';
 import {ReferenceAll, ReferenceItemFull} from '@models/reference.model';
-import {Price} from '@models/price';
 import {Conversion} from '@models/conversion';
 import {ValidationMessages} from '@models/static-variables';
-import { NutrientTotalValidator } from 'src/app/validators/nutrient-total.validator';
 import { IngredientEditFormService } from '@services/ingredient-edit-form.service';
 
 
