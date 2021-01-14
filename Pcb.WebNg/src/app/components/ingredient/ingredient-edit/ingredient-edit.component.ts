@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { ConversionModel, EditedFieldModel, MeasurementModel} from '@models/ingredient-model';
+import { EditedFieldModel, MeasurementModel} from '@models/ingredient-model';
 import {DateTimeService} from '@services/date-time.service';
 import {RestService} from '@services/rest-service.service';
 import {catchError, takeUntil, tap} from 'rxjs/operators';
@@ -227,11 +227,12 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 	addSubDocument(subDocument: string) {
 		// expected either prices, conversions, or nutrition
 		// add a new subDoc to this.selected[subDocument] with an empty model, then create a set of controls based on that
-		switch (subDocument) {
-			case 'conversions': this.ingredientConversions.push(this.ingredientEditFormService.initConversionFormGroup(new ConversionModel(), true)); break;
-			// case 'nutrition': this.nutrition.push(this.initNutritionFormGroup(new NutritionModel(), true)); break;
-			default: this.messageService.add({severity: MessageStatus.Warning, summary: `Unidentified subDocument created, ${subDocument}`})
-		}
+		// switch (subDocument) {
+		// 	case 'conversions': this.ingredientConversions.push(this.ingredientEditFormService.initConversionFormGroup(new ConversionModel(), true));
+		// 		break;
+		// 	// case 'nutrition': this.nutrition.push(this.initNutritionFormGroup(new NutritionModel(), true)); break;
+		// 	default: this.messageService.add({severity: MessageStatus.Warning, summary: `Unidentified subDocument created, ${subDocument}`})
+		// }
 		this[subDocument].markAsDirty();
 		this[subDocument].markAsTouched();
 	}

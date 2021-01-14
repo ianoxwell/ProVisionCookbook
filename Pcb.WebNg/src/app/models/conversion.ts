@@ -10,20 +10,19 @@
  * Do not edit the class manually.
  */
 
+import { MeasurementModel } from './ingredient-model';
+import { ReferenceItemFull } from './reference.model';
+
 export interface Conversion {
-	_id?: string;
-	measureA?: string;
-	stateA?: string;
-	/**
-	 * fractional measurement
-	 */
-	quantityA?: number;
-	measureB?: string;
-	stateB?: string;
-	/**
-	 * fractional measurement
-	 */
-	quantityB?: number;
+	id?: number;
+	baseState?: ReferenceItemFull;
+	baseMeasurementUnit: MeasurementModel;
+	baseQuantity: number;
+
+	convertToState?: ReferenceItemFull;
+	convertToMeasurementUnit: MeasurementModel;
+	convertToQuantity: number;
+	answer: string;
 	/**
 	 * eg flour is usually purchased in kg and used in cups (volume)
 	 */

@@ -17,7 +17,7 @@ import {Recipe} from './recipe';
 import {ReferenceItemFull} from './reference.model';
 
 export interface Ingredient {
-	allergies: Array<ReferenceItemFull>;
+	allergies?: Array<ReferenceItemFull>;
 	commonMinerals: ICommonMinerals;
 	commonVitamins: ICommonVitamins;
 	foodGroup: ReferenceItemFull;
@@ -27,11 +27,11 @@ export interface Ingredient {
 	linkUrl: string;
 	name: string;
 	nutritionFacts: INutritionFacts;
-	parentId: number;
+	parentId?: number;
 	pralScore?: number;
-	price: PriceModel,
+	price?: PriceModel,
 	purchasedBy?: IngredientNameSpace.PurchasedByEnum;
-	recipes: [{
+	recipes?: [{
 		id: number;
 		name: string;
 		teaser: string;

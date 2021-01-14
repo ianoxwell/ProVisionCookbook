@@ -1,31 +1,29 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
-import { combineLatest, Observable, of } from 'rxjs';
-import { takeUntil, tap, catchError, map, switchMap, filter, distinctUntilChanged, first } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
-import { MatPaginator } from '@angular/material/paginator';
-
-// import {ConversionModel, EditedFieldModel, IngredientModel, PriceModel} from '../models/ingredient-model';
-import {RestService} from '@services/rest-service.service';
-import {RecipeRestService} from '@services/recipe-rest.service';
-import { UserProfileService } from '@services/user-profile.service';
-import { DialogService } from '@services/dialog.service';
-
-
-import { Ingredient} from '@models/ingredient';
-
-import * as fromStore from '@store/reducers';
-import { MessageStatus } from '@models/message.models';
-import { IngredientPaginator, IngredientFilterObject, SortPageObj, PagedResult, ISortPageObj } from '@models/common.model';
-
-import { ComponentBase } from '../../components/base/base.component.base';
-import { Store, select } from '@ngrx/store';
-import { User } from '@models/user';
-import { IngredientConstructService } from '@services/ingredient-construct.service';
-import { ReferenceService } from '@services/reference.service';
-import { ReferenceAll } from '@models/reference.model';
-import { MeasurementModel } from '@models/ingredient-model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { IngredientFilterObject, ISortPageObj, PagedResult, SortPageObj } from '@models/common.model';
+import { Ingredient } from '@models/ingredient';
+import { MeasurementModel } from '@models/ingredient-model';
+import { MessageStatus } from '@models/message.models';
+import { ReferenceAll } from '@models/reference.model';
+import { User } from '@models/user';
+import { Store } from '@ngrx/store';
+import { DialogService } from '@services/dialog.service';
+import { RecipeRestService } from '@services/recipe-rest.service';
+import { ReferenceService } from '@services/reference.service';
+// import {ConversionModel, EditedFieldModel, IngredientModel, PriceModel} from '../models/ingredient-model';
+import { RestService } from '@services/rest-service.service';
+import { UserProfileService } from '@services/user-profile.service';
+import * as fromStore from '@store/reducers';
+import { combineLatest, Observable, of } from 'rxjs';
+import { catchError, first, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { ComponentBase } from '../../components/base/base.component.base';
+
+
+
+
+
 
 
 export class EditedFieldModel {
@@ -168,12 +166,15 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 		console.log('CreateOrEdit', editOrNew, row);
 		this.isNew = (editOrNew === 'new');
 		if (this.isNew) {
-			this.dialogService.newIngredientDialog(this.refData.IngredientFoodGroup, this.measurements).pipe(
+			this.dialogService.newIngredientDialog(this.refData.IngredientFoodGroup, this.measurements, this.refData.IngredientState).pipe(
 				first(),
-				tap((result: Ingredient) => {
+				switchMap((result: Ingredient) => {
 					console.log('result form dialog', result);
-					this.selectedIngredient$ = of({} as Ingredient);
-					return this.changeTab(1);
+					return this.restService.createIngredient(result);
+				}),
+				tap((savedResult: Ingredient) => {
+					this.selectedIngredient$ = of(savedResult);
+					this.changeTab(1);
 				}),
 			).subscribe();
 			return;

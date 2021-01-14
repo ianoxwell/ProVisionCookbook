@@ -48,16 +48,17 @@ export interface ISpoonFoodRaw {
 		nutrients: { title: string; amount: number; unit: string; percentOfDailyNeeds: number;}[];
 		properties: {title: string; amount: number; unit: string;}[];
 		flavanoids: {title: string; amount: number; unit: string;}[];
+		caloricBreakdown:{
+			percentProtein: number;
+			percentFat: number;
+			percentCarbs: number;
+		};
+		weightPerServing:{
+			amount: number;
+			unit: string;
+		};
 	};
-	caloricBreakdown:{
-		percentProtein: number;
-		percentFat: number;
-		percentCarbs: number;
-	};
-	weightPerServing:{
-		amount: number;
-		unit: string;
-	};
+
 	categoryPath: string[];
 }
 

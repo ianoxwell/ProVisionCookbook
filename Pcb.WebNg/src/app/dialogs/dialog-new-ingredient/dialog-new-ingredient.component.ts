@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ComponentBase } from '@components/base/base.component.base';
-import { MeasurementType } from '@models/common.model';
 import { Ingredient } from '@models/ingredient';
 import { MeasurementModel } from '@models/ingredient-model';
 import {
@@ -10,9 +9,10 @@ import {
 	IRawFoodSuggestion,
 	ISpoonConversion,
 	ISpoonFoodRaw,
-	ISpoonSuggestions } from '@models/rawFoodIngredient.model';
-import { ReferenceItem, ReferenceItemFull } from '@models/reference.model';
-import { Suggestions } from '@models/suggestion';
+	ISpoonSuggestions
+} from '@models/raw-food-ingredient.model';
+import { ReferenceItemFull } from '@models/reference.model';
+import { IngredientConstructService } from '@services/ingredient-construct.service';
 import { IngredientEditFormService } from '@services/ingredient-edit-form.service';
 import { RestService } from '@services/rest-service.service';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
@@ -44,13 +44,18 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 	usdaFoodMatched: IRawFoodIngredient = null;
 	spoonFoodSuggestions: ISpoonSuggestions[];
 	spoonFoodMatched: ISpoonFoodRaw;
-	spoonConversion: ISpoonConversion;
+	spoonConversion: ISpoonConversion[] = [];
+	newIngredient: Ingredient;
 
 	constructor(
 		public dialogRef: MatDialogRef<DialogNewIngredientComponent>,
-		@Inject(MAT_DIALOG_DATA) public data: { foodGroup: ReferenceItemFull[], measurements: MeasurementModel[] },
+		@Inject(MAT_DIALOG_DATA) public data: {
+			foodGroup: ReferenceItemFull[],
+			ingredientStateRef: ReferenceItemFull[],
+			measurements: MeasurementModel[] },
 		private fb: FormBuilder,
 		private ingredientEditFormService: IngredientEditFormService,
+		private ingredientConstructService: IngredientConstructService,
 		private ingredientRestService: RestService
 	) {
 		super();
@@ -103,7 +108,18 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 		).subscribe();
 	}
 	onSaveItem() {
-		console.log('proceeding with starting a new doc', this.form);
+		console.log('proceeding with starting a new doc', this.form.getRawValue(),
+			this.usdaFoodMatched, this.spoonFoodMatched, this.spoonConversion, this.data);
+		this.newIngredient = this.ingredientConstructService.createNewIngredient(
+			this.form.getRawValue(),
+			this.usdaFoodMatched,
+			this.spoonFoodMatched,
+			this.spoonConversion,
+			this.data.foodGroup,
+			this.data.ingredientStateRef,
+			this.data.measurements);
+		console.log('this.newIngredient', this.newIngredient);
+		this.dialogRef.close(this.newIngredient);
 	}
 
 	checkNameExists(name: string): void {
@@ -131,14 +147,14 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 		this.ingredientRestService.getSpoonacularIngredient(spoonSuggestion.id.toString()).pipe(
 			switchMap((result: ISpoonFoodRaw) => {
 				this.spoonFoodMatched = result;
-				const unitFrom: string = result.shoppingListUnits[0];
-				const unitFromRef = this.data.measurements
-					.find((measure: MeasurementModel)	=> measure.title.toLowerCase() === unitFrom || measure.shortName.toLowerCase() === unitFrom);
-				const unitTo = unitFromRef.measurementType === MeasurementType.Weight ? 'cups' : 'grams';
-				return this.ingredientRestService.getSpoonConversion(result.name, unitFrom, 1, unitTo);
+				// const unitFrom: string = result.shoppingListUnits[0];
+				// const unitFromRef = this.data.measurements
+				// 	.find((measure: MeasurementModel)	=> measure.title.toLowerCase() === unitFrom || measure.shortName.toLowerCase() === unitFrom);
+				const unitFrom = result.possibleUnits.includes('cup') ? 'cup' : 'piece';
+				return this.ingredientRestService.getSpoonConversion(result.name, unitFrom, 1, 'grams');
 			}),
 			tap((convertResult: ISpoonConversion) => {
-				this.spoonConversion = convertResult;
+				this.spoonConversion.push(convertResult);
 				console.log('spoon finished', this.spoonFoodMatched, this.spoonConversion);
 			}),
 			takeUntil(this.ngUnsubscribe)

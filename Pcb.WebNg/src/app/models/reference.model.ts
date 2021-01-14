@@ -22,7 +22,7 @@ export enum ReferenceDetail {
 	Full
 }
 
-export interface ReferenceItem { id: number | string; title: string; }
+export interface ReferenceItem { id: number; title: string; }
 export interface ReferenceItemFull extends ReferenceItem {
 	symbol: string;
 	summary: string;

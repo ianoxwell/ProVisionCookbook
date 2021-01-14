@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormControl, FormBuilder } from '@angular/forms';
 import { Conversion } from '@models/conversion';
 import { Ingredient } from '@models/ingredient';
-import { INutritionFacts, ICommonMinerals, ICommonVitamins, PriceModel, ConversionModel } from '@models/ingredient-model';
+import { INutritionFacts, ICommonMinerals, ICommonVitamins, PriceModel } from '@models/ingredient-model';
 import { Price } from '@models/price';
 import { NutrientTotalValidator } from '../validators/nutrient-total.validator';
 
@@ -35,16 +35,16 @@ private initPricesFormGroup(price: Price, isNew = false): FormGroup {
 
 initConversionFormGroup(convert: Conversion, isNew = false): FormGroup {
 	const fbGroup = this.fb.group({
-		measureA: convert.measureA,
-		stateA: convert.stateA,
-		quantityA: [convert.quantityA, Validators.min(0)],
-		measureB: convert.measureB,
-		stateB: convert.stateB,
-		quantityB: [convert.quantityB, Validators.min(0)],
-		preference: [convert.preference, Validators.min(0)]
+		measureA: convert.baseMeasurementUnit,
+		stateA: convert.baseState,
+		quantityA: [convert.baseQuantity, Validators.min(0)],
+		measureB: convert.convertToMeasurementUnit,
+		stateB: convert.convertToState,
+		quantityB: [convert.convertToQuantity, Validators.min(0)],
+		preference: [convert.preference, Validators.min(0)],
 	});
 	if (!isNew) {
-		fbGroup.addControl('_id', new FormControl(convert._id));
+		fbGroup.addControl('_id', new FormControl(convert.id));
 	}
 	return fbGroup;
 }
@@ -117,7 +117,7 @@ createForm(ingredient: Ingredient, isNew: boolean): FormGroup {
 			ingredient.price = new PriceModel();
 		}
 		if (!ingredient.ingredientConversions) {
-			ingredient.ingredientConversions = [ new ConversionModel() ];
+			ingredient.ingredientConversions = [ {} as Conversion ];
 		}
 		conversionSummary = ingredient.ingredientConversions.map((convert: Conversion) => this.initConversionFormGroup(convert));
 	}

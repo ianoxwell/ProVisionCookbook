@@ -61,8 +61,11 @@ export class DialogService extends ComponentBase {
 		return this.createDialog<void>(data, ConfirmDialogComponent);
 	}
 
-	newIngredientDialog( foodGroup: ReferenceItemFull[], measurements: MeasurementModel[] ): Observable<Ingredient> {
-		return this.createDialog<Ingredient>({foodGroup, measurements}, DialogNewIngredientComponent);
+	newIngredientDialog(
+		foodGroup: ReferenceItemFull[],
+		measurements: MeasurementModel[],
+		ingredientStateRef: ReferenceItemFull[] ): Observable<Ingredient> {
+			return this.createDialog<Ingredient>({foodGroup, measurements, ingredientStateRef}, DialogNewIngredientComponent);
 	}
 
 	/** Closes all dialogs */

@@ -42,9 +42,9 @@
 		</section>
 		<section>
 			<h2>Other online data</h2>
-			<button mat-mat-flat-button (click)="findSpoonSuggestionsOnline()" [disabled]="!!usdaFoodMatched" type="button">Find remaining data</button>
+			<button mat-flat-button (click)="findSpoonSuggestionsOnline()" [disabled]="!usdaFoodMatched" type="button">Find remaining data</button>
 			<mat-list class="list-height">
-					<ng-container *ngIf="spoonFoodSuggestions.length > 0; else showNoSpoonResult">
+					<ng-container *ngIf="spoonFoodSuggestions?.length > 0; else showNoSpoonResult">
 						<mat-list-item *ngFor="let suggestion of spoonFoodSuggestions">
 							<div class="flex-box flex-justify-space-between w-100" [ngClass]="{'selected': spoonFoodMatched?.id === suggestion.id}" (click)="selectSpoonItem(suggestion)">
 								<span>{{suggestion.name}}</span>

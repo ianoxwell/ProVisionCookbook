@@ -14,7 +14,7 @@ import {
 	IRawFoodSuggestion,
 	ISpoonConversion,
 	ISpoonFoodRaw,
-	ISpoonSuggestions } from '@models/rawFoodIngredient.model';
+	ISpoonSuggestions } from '@models/raw-food-ingredient.model';
 
 
 @Injectable({
