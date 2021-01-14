@@ -37,8 +37,6 @@ namespace Pcb.Api
 
         public IConfiguration Configuration { get; }
 
-        private IServiceProvider ServiceProvider { get; set; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -50,7 +48,7 @@ namespace Pcb.Api
             services.AddPcbDatabase(Configuration);
 
             services.AddCptSecurityServices();
-           
+
             // Add Pcb Configuration
             services.AddPcbServices();
 
@@ -155,7 +153,7 @@ namespace Pcb.Api
                 foreach (var desc in provider.ApiVersionDescriptions)
                     options.SwaggerEndpoint($"/swagger/{desc.GroupName}/swagger.json",
                         desc.GroupName.ToUpperInvariant());
-            options.RoutePrefix = "swagger";
+                options.RoutePrefix = "swagger";
             });
 
             app.UseRouting();

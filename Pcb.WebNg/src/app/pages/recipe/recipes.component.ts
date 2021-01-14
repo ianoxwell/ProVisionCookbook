@@ -1,23 +1,20 @@
-import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Store, select } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
-import { filter, takeUntil, catchError, tap, switchMap } from 'rxjs/operators';
-
-import { Recipe, Recipes } from '@models/recipe';
-import { RecipeRestService} from '@services/recipe-rest.service';
-import { RestService} from '@services/rest-service.service';
-import { FilterQuery } from '@models/filterQuery';
-import * as fromStore from '@store/reducers';
-import * as filterPayloadActions from '../../store/action/filter-payload.actions';
 import { ComponentBase } from '@components/base/base.component.base';
-import { User } from '@models/user';
-import { UserProfileService } from '@services/user-profile.service';
-import { ToTitleCasePipe } from '@pipes/title-case.pipe';
-import { MessageService } from '@services/message.service';
+import { FilterQuery } from '@models/filterQuery';
 import { MessageStatus } from '@models/message.models';
+import { Recipe, Recipes } from '@models/recipe';
+import { User } from '@models/user';
+import { ToTitleCasePipe } from '@pipes/title-case.pipe';
 import { DialogService } from '@services/dialog.service';
+import { MessageService } from '@services/message.service';
+import { RecipeRestService } from '@services/recipe-rest.service';
+import { RestService } from '@services/rest-service.service';
+import { UserProfileService } from '@services/user-profile.service';
+import { Observable, of } from 'rxjs';
+import { catchError, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
+
 
 
 @Component({
@@ -44,7 +41,6 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 			private route: ActivatedRoute,
 			private restService: RestService,
 			private location: Location,
-			private store: Store<fromStore.State>,
 			private userProfileService: UserProfileService,
 			private toTitleCase: ToTitleCasePipe,
 			private messageService: MessageService,
@@ -54,16 +50,6 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 	ngOnInit(): void {
 		this.userProfileService.currentData.subscribe(profile => this.cookBookUserProfile = profile);
 		this.routeParamSubscribe();
-		this.store.pipe(
-			select(fromStore.getFilterQuery),
-			filter(val => val !== undefined),
-			tap((filterQ: FilterQuery) => {
-				this.filterQuery = { ...filterQ};
-				console.log('hopefully this does not loop', this.filterQuery);
-			}),
-			switchMap(() => this.getRecipes()),
-			takeUntil(this.ngUnsubscribe)
-		).subscribe();
 	}
 	showToast() {
 		this.messageService.add({
@@ -118,7 +104,6 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 
 	onFilterChange(ev: FilterQuery) {
 		console.log('here is the filter change', ev);
-		this.store.dispatch({type: filterPayloadActions.FilterPayloadActionTypes.SetFilterPayLoad, payload: ev});
 	}
 
 	getRecipes(): Observable<Recipes> {

@@ -1,27 +1,25 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { SharedComponentModule } from '@components/shared-component.module';
+import { SvgIconsModule } from '@ngneat/svg-icon';
+import { AccountService } from '@services/account.service';
+import icons from '../../../assets/svg/svg-icons';
 import { AccountRoutingModule } from './account-routing.module';
-import { LoginComponent } from './login.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LoginFormComponent } from './login-form/login-form.component';
+import { LoginComponent } from './login.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { ResetPasswordFormComponent } from './reset-password-form/reset-password-form.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { environment } from 'src/environments/environment';
-import icons from '../../../assets/svg/svg-icons';
-import { SvgIconsModule } from '@ngneat/svg-icon';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { AccountService } from '@services/account.service';
-import { SharedComponentModule } from '@components/shared-component.module';
+
 
 
 @NgModule({
@@ -37,7 +35,7 @@ import { SharedComponentModule } from '@components/shared-component.module';
 		MatButtonModule,
 		MatCheckboxModule,
 		SharedComponentModule,
-		!environment.production ? StoreDevtoolsModule.instrument() : [], SvgIconsModule.forRoot({
+		SvgIconsModule.forRoot({
 			icons
 		}),
 	],

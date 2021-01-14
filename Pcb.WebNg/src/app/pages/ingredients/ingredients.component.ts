@@ -8,22 +8,15 @@ import { MeasurementModel } from '@models/ingredient-model';
 import { MessageStatus } from '@models/message.models';
 import { ReferenceAll } from '@models/reference.model';
 import { User } from '@models/user';
-import { Store } from '@ngrx/store';
 import { DialogService } from '@services/dialog.service';
 import { RecipeRestService } from '@services/recipe-rest.service';
 import { ReferenceService } from '@services/reference.service';
 // import {ConversionModel, EditedFieldModel, IngredientModel, PriceModel} from '../models/ingredient-model';
 import { RestService } from '@services/rest-service.service';
 import { UserProfileService } from '@services/user-profile.service';
-import * as fromStore from '@store/reducers';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, first, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { ComponentBase } from '../../components/base/base.component.base';
-
-
-
-
-
 
 
 export class EditedFieldModel {
@@ -61,7 +54,6 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 	constructor(
 		private restService: RestService,
 		private recipeRestService: RecipeRestService,
-		private store: Store<fromStore.State>,
 		private dialogService: DialogService,
 		private userProfileService: UserProfileService,
 		private location: Location,
@@ -74,17 +66,6 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 		this.cookBookUserProfile$ = this.userProfileService.currentData.pipe(
 			takeUntil(this.ngUnsubscribe)
 		);
-		// this.store.pipe(
-		// 	select(fromStore.getIngredientFilterQuery),
-		// 	distinctUntilChanged(),
-		// 	filter(val => val !== undefined),
-		// 	tap((filterQ: IngredientFilterObject) => {
-		// 		this.filterObject = { ...filterQ};
-		// 		console.log('hopefully this doesnt loop', this.filterObject);
-		// 	}),
-		// 	switchMap(() => this.getIngredientList()),
-		// 	takeUntil(this.ngUnsubscribe)
-		// ).subscribe();
 	}
 
 	// async subscription to data$ in the template

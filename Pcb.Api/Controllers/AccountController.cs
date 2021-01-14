@@ -18,7 +18,7 @@ namespace Pcb.Api.Controllers
 		/// <summary>
 		/// The user service.
 		/// </summary>
-		private IAccountService AccountService;
+		private readonly IAccountService AccountService;
 
 		public AccountController(
 			IAccountService accountService

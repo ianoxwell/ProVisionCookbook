@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Pcb.Database.Migrations
 {
-    public partial class InitialStart : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,6 +21,36 @@ namespace Pcb.Database.Migrations
 
             migrationBuilder.EnsureSchema(
                 name: "sec");
+
+            migrationBuilder.CreateTable(
+                name: "Recipe",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Teaser = table.Column<string>(nullable: true),
+                    NumberOfServings = table.Column<int>(nullable: false),
+                    PriceEstimate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PriceServing = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PrepTime = table.Column<int>(nullable: false),
+                    CookTime = table.Column<int>(nullable: false),
+                    ReadyInMinutes = table.Column<int>(nullable: false),
+                    RawInstructions = table.Column<string>(type: "text", nullable: true),
+                    CreateByUserId = table.Column<int>(nullable: false),
+                    SourceOfRecipeLink = table.Column<string>(nullable: true),
+                    CreditsText = table.Column<string>(nullable: true),
+                    NumberStars = table.Column<int>(nullable: false),
+                    NumberFavourites = table.Column<int>(nullable: false),
+                    NumberOfTimesCooked = table.Column<int>(nullable: false),
+                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Recipe", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "School",
@@ -141,7 +171,7 @@ namespace Pcb.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "IngredientParentType",
+                name: "IngredientFoodGroup",
                 schema: "ref",
                 columns: table => new
                 {
@@ -155,7 +185,7 @@ namespace Pcb.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IngredientParentType", x => x.Id);
+                    table.PrimaryKey("PK_IngredientFoodGroup", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -236,24 +266,6 @@ namespace Pcb.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RefreshToken",
-                schema: "sec",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(nullable: true),
-                    Token = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())"),
-                    ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
-                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RefreshToken", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Role",
                 schema: "sec",
                 columns: table => new
@@ -286,412 +298,30 @@ namespace Pcb.Database.Migrations
                     FamilyName = table.Column<string>(nullable: false),
                     GivenNames = table.Column<string>(nullable: false),
                     EmailAddress = table.Column<string>(nullable: false),
-                    IsEmailVerified = table.Column<bool>(nullable: false),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    FailedLoginAttempt = table.Column<int>(nullable: false, defaultValueSql: "0"),
+                    LastFailedLoginAttempt = table.Column<DateTime>(nullable: false),
+                    VerificationToken = table.Column<string>(nullable: true),
+                    ResetToken = table.Column<string>(nullable: true),
+                    Verified = table.Column<DateTime>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     TimesLoggedIn = table.Column<int>(nullable: false, defaultValueSql: "0"),
                     FirstLogin = table.Column<DateTime>(nullable: false),
                     LastLogin = table.Column<DateTime>(nullable: false),
                     IsStudent = table.Column<bool>(nullable: true),
+                    LoginProvider = table.Column<string>(nullable: true),
+                    LoginProviderId = table.Column<string>(nullable: true),
+                    PhotoUrl = table.Column<string>(nullable: true),
+                    ResetTokenExpires = table.Column<DateTime>(nullable: true),
+                    PasswordReset = table.Column<DateTime>(nullable: true),
+                    Updated = table.Column<DateTime>(nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())"),
                     RowVer = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Ingredient",
-                schema: "dbo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false),
-                    LinkUrl = table.Column<string>(nullable: true),
-                    PurchasedBy = table.Column<int>(nullable: false),
-                    PercentProtein = table.Column<int>(nullable: true),
-                    PercentFat = table.Column<int>(nullable: true),
-                    PercentCarbs = table.Column<int>(nullable: true),
-                    PriceBrandName = table.Column<string>(nullable: true),
-                    PriceDollar = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PriceQuantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PriceMeasurement = table.Column<int>(nullable: false),
-                    PriceStoreName = table.Column<string>(nullable: true),
-                    PriceApiLink = table.Column<string>(nullable: true),
-                    ParentTypeId = table.Column<int>(nullable: true),
-                    IngredientStateId = table.Column<int>(nullable: true),
-                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ingredient", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Ingredient_IngredientState_IngredientStateId",
-                        column: x => x.IngredientStateId,
-                        principalSchema: "ref",
-                        principalTable: "IngredientState",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Ingredient_IngredientParentType_ParentTypeId",
-                        column: x => x.ParentTypeId,
-                        principalSchema: "ref",
-                        principalTable: "IngredientParentType",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Permission",
-                schema: "sec",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(nullable: true),
-                    Summary = table.Column<string>(nullable: true),
-                    PermissionGroupId = table.Column<int>(nullable: true),
-                    StartDate = table.Column<DateTime>(nullable: false),
-                    EndDate = table.Column<DateTime>(nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())"),
-                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Permission", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Permission_PermissionGroup_PermissionGroupId",
-                        column: x => x.PermissionGroupId,
-                        principalSchema: "ref",
-                        principalTable: "PermissionGroup",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EventLog",
-                schema: "logs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(nullable: true),
-                    EventId = table.Column<int>(nullable: true),
-                    LogLevelId = table.Column<int>(nullable: false),
-                    Message = table.Column<string>(nullable: true),
-                    Detail = table.Column<string>(nullable: true),
-                    Machine = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventLog", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EventLog_LogLevel_LogLevelId",
-                        column: x => x.LogLevelId,
-                        principalSchema: "ref",
-                        principalTable: "LogLevel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EventLog_User_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "sec",
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserRole",
-                schema: "sec",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(nullable: false),
-                    RoleId = table.Column<int>(nullable: false),
-                    SchoolId = table.Column<int>(nullable: true),
-                    IsCountryWide = table.Column<bool>(nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())"),
-                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRole", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserRole_Role_RoleId",
-                        column: x => x.RoleId,
-                        principalSchema: "sec",
-                        principalTable: "Role",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserRole_School_SchoolId",
-                        column: x => x.SchoolId,
-                        principalSchema: "dbo",
-                        principalTable: "School",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UserRole_User_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "sec",
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IngredientConversion",
-                schema: "dbo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IngredientId = table.Column<int>(nullable: false),
-                    BaseStateId = table.Column<int>(nullable: true),
-                    BaseMeasurementUnitId = table.Column<int>(nullable: true),
-                    BaseQuantity = table.Column<double>(nullable: false),
-                    ConvertToStateId = table.Column<int>(nullable: true),
-                    ConvertToMeasurementUnitId = table.Column<int>(nullable: true),
-                    ConvertToQuantity = table.Column<double>(nullable: false),
-                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IngredientConversion", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_IngredientConversion_MeasurementUnit_BaseMeasurementUnitId",
-                        column: x => x.BaseMeasurementUnitId,
-                        principalSchema: "ref",
-                        principalTable: "MeasurementUnit",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_IngredientConversion_IngredientState_BaseStateId",
-                        column: x => x.BaseStateId,
-                        principalSchema: "ref",
-                        principalTable: "IngredientState",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_IngredientConversion_MeasurementUnit_ConvertToMeasurementUnitId",
-                        column: x => x.ConvertToMeasurementUnitId,
-                        principalSchema: "ref",
-                        principalTable: "MeasurementUnit",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_IngredientConversion_IngredientState_ConvertToStateId",
-                        column: x => x.ConvertToStateId,
-                        principalSchema: "ref",
-                        principalTable: "IngredientState",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_IngredientConversion_Ingredient_IngredientId",
-                        column: x => x.IngredientId,
-                        principalSchema: "dbo",
-                        principalTable: "Ingredient",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IngredientNutrition",
-                schema: "dbo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IngredientId = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PercentOfDailyNeeds = table.Column<int>(nullable: false),
-                    Unit = table.Column<int>(nullable: false),
-                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IngredientNutrition", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_IngredientNutrition_Ingredient_IngredientId",
-                        column: x => x.IngredientId,
-                        principalSchema: "dbo",
-                        principalTable: "Ingredient",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Recipe",
-                schema: "dbo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Teaser = table.Column<string>(nullable: true),
-                    NumberOfServings = table.Column<int>(nullable: false),
-                    PriceEstimate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PriceServing = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PrepTime = table.Column<int>(nullable: false),
-                    CookTime = table.Column<int>(nullable: false),
-                    ReadyInMinutes = table.Column<int>(nullable: false),
-                    RawInstructions = table.Column<string>(type: "text", nullable: true),
-                    CreateByUserId = table.Column<int>(nullable: false),
-                    SourceOfRecipeLink = table.Column<string>(nullable: true),
-                    CreditsText = table.Column<string>(nullable: true),
-                    NumberStars = table.Column<int>(nullable: false),
-                    NumberFavourites = table.Column<int>(nullable: false),
-                    NumberOfTimesCooked = table.Column<int>(nullable: false),
-                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())"),
-                    IngredientId = table.Column<int>(nullable: true),
-                    IngredientStateId = table.Column<int>(nullable: true),
-                    MeasurementUnitId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Recipe", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Recipe_Ingredient_IngredientId",
-                        column: x => x.IngredientId,
-                        principalSchema: "dbo",
-                        principalTable: "Ingredient",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Recipe_IngredientState_IngredientStateId",
-                        column: x => x.IngredientStateId,
-                        principalSchema: "ref",
-                        principalTable: "IngredientState",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Recipe_MeasurementUnit_MeasurementUnitId",
-                        column: x => x.MeasurementUnitId,
-                        principalSchema: "ref",
-                        principalTable: "MeasurementUnit",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IngredientAllergyWarning",
-                schema: "map",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IngredientId = table.Column<int>(nullable: false),
-                    AllergyWarningId = table.Column<int>(nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())"),
-                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IngredientAllergyWarning", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_IngredientAllergyWarning_AllergyWarning_AllergyWarningId",
-                        column: x => x.AllergyWarningId,
-                        principalSchema: "ref",
-                        principalTable: "AllergyWarning",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_IngredientAllergyWarning_Ingredient_IngredientId",
-                        column: x => x.IngredientId,
-                        principalSchema: "dbo",
-                        principalTable: "Ingredient",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RolePermission",
-                schema: "sec",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<int>(nullable: false),
-                    PermissionId = table.Column<int>(nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())"),
-                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RolePermission", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RolePermission_Permission_PermissionId",
-                        column: x => x.PermissionId,
-                        principalSchema: "sec",
-                        principalTable: "Permission",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RolePermission_Role_RoleId",
-                        column: x => x.RoleId,
-                        principalSchema: "sec",
-                        principalTable: "Role",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RecipeIngredientList",
-                schema: "dbo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RecipeId = table.Column<int>(nullable: false),
-                    IngredientId = table.Column<int>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false),
-                    Preference = table.Column<int>(nullable: false),
-                    IngredientStateId = table.Column<int>(nullable: false),
-                    MeasurementUnitId = table.Column<int>(nullable: false),
-                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RecipeIngredientList", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RecipeIngredientList_Ingredient_IngredientId",
-                        column: x => x.IngredientId,
-                        principalSchema: "dbo",
-                        principalTable: "Ingredient",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RecipeIngredientList_IngredientState_IngredientStateId",
-                        column: x => x.IngredientStateId,
-                        principalSchema: "ref",
-                        principalTable: "IngredientState",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RecipeIngredientList_MeasurementUnit_MeasurementUnitId",
-                        column: x => x.MeasurementUnitId,
-                        principalSchema: "ref",
-                        principalTable: "MeasurementUnit",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RecipeIngredientList_Recipe_RecipeId",
-                        column: x => x.RecipeId,
-                        principalSchema: "dbo",
-                        principalTable: "Recipe",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -706,7 +336,6 @@ namespace Pcb.Database.Migrations
                     FileLink = table.Column<string>(nullable: true),
                     Picture = table.Column<byte[]>(nullable: true),
                     PicturePosition = table.Column<int>(nullable: false),
-                    MeasurementUnitId = table.Column<int>(nullable: false),
                     RowVer = table.Column<byte[]>(rowVersion: true, nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())")
                 },
@@ -718,40 +347,6 @@ namespace Pcb.Database.Migrations
                         column: x => x.RecipeId,
                         principalSchema: "dbo",
                         principalTable: "Recipe",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RecipeReview",
-                schema: "dbo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RecipeId = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
-                    Review = table.Column<string>(nullable: true),
-                    Rating = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RecipeReview", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RecipeReview_Recipe_RecipeId",
-                        column: x => x.RecipeId,
-                        principalSchema: "dbo",
-                        principalTable: "Recipe",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RecipeReview_User_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "sec",
-                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -936,6 +531,538 @@ namespace Pcb.Database.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "RawFoodUsda",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UsdaFoodId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Calories = table.Column<int>(nullable: true),
+                    PralScore = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    Fat = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Protein = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Carbohydrate = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    NetCarbs = table.Column<int>(nullable: true),
+                    Sugars = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Water = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Fiber = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Cholesterol = table.Column<int>(nullable: true),
+                    SaturatedFat = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    Omega3s = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Omega6s = table.Column<int>(nullable: false),
+                    TransFattyAcids = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    FattyAcidsTotalMonounsaturated = table.Column<int>(nullable: true),
+                    FattyAcidsTotalPolyunsaturated = table.Column<int>(nullable: true),
+                    FattyAcidsTotalTransMonoenoic = table.Column<int>(nullable: true),
+                    FattyAcidsTotalTransPolyenoic = table.Column<int>(nullable: true),
+                    Calcium = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    IronFe = table.Column<int>(nullable: true),
+                    PotassiumK = table.Column<int>(nullable: true),
+                    Magnesium = table.Column<int>(nullable: true),
+                    Sodium = table.Column<int>(nullable: true),
+                    ZincZn = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    CopperCu = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Manganese = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    SeleniumSe = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    FluorideF = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    VitaminAIu = table.Column<int>(nullable: true),
+                    VitaminARae = table.Column<int>(nullable: true),
+                    VitaminC = table.Column<decimal>(type: "decimal(18,1)", nullable: true),
+                    VitaminB12 = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    VitaminD = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    VitaminE = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    ThiaminB1 = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    RiboflavinB2 = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    NiacinB3 = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    PantothenicAcidB5 = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    VitaminB6 = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    FolateB9 = table.Column<int>(nullable: true),
+                    FolicAcid = table.Column<int>(nullable: true),
+                    FoodFolate = table.Column<int>(nullable: true),
+                    FolateDfe = table.Column<int>(nullable: true),
+                    VitaminDIu = table.Column<int>(nullable: true),
+                    VitaminK = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Sucrose = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    GlucoseDextrose = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Fructose = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Lactose = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Maltose = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Galactose = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Starch = table.Column<int>(nullable: true),
+                    PhosphorusP = table.Column<int>(nullable: true),
+                    Alcohol = table.Column<int>(nullable: true),
+                    Caffeine = table.Column<int>(nullable: true),
+                    Theobromine = table.Column<int>(nullable: true),
+                    ServingWeight1 = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    ServingDescription1 = table.Column<string>(nullable: true),
+                    ServingWeight2 = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    ServingDescription2 = table.Column<string>(nullable: true),
+                    CalorieWeight200 = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    FoodGroupId = table.Column<int>(nullable: true),
+                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RawFoodUsda", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RawFoodUsda_IngredientFoodGroup_FoodGroupId",
+                        column: x => x.FoodGroupId,
+                        principalSchema: "ref",
+                        principalTable: "IngredientFoodGroup",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ingredient",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UsdaFoodId = table.Column<int>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    LinkUrl = table.Column<string>(nullable: true),
+                    PurchasedBy = table.Column<int>(nullable: true),
+                    Calories = table.Column<int>(nullable: true),
+                    PralScore = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    Fat = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Protein = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Carbohydrate = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    NetCarbs = table.Column<int>(nullable: true),
+                    Sugars = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Water = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Fiber = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Cholesterol = table.Column<int>(nullable: true),
+                    SaturatedFat = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    Omega3s = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Omega6s = table.Column<int>(nullable: false),
+                    TransFattyAcids = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    FattyAcidsTotalMonounsaturated = table.Column<int>(nullable: true),
+                    FattyAcidsTotalPolyunsaturated = table.Column<int>(nullable: true),
+                    FattyAcidsTotalTransMonoenoic = table.Column<int>(nullable: true),
+                    FattyAcidsTotalTransPolyenoic = table.Column<int>(nullable: true),
+                    Calcium = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    IronFe = table.Column<int>(nullable: true),
+                    PotassiumK = table.Column<int>(nullable: true),
+                    Magnesium = table.Column<int>(nullable: true),
+                    Sodium = table.Column<int>(nullable: true),
+                    ZincZn = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    CopperCu = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Manganese = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    SeleniumSe = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    FluorideF = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    VitaminAIu = table.Column<int>(nullable: true),
+                    VitaminARae = table.Column<int>(nullable: true),
+                    VitaminC = table.Column<decimal>(type: "decimal(18,1)", nullable: true),
+                    VitaminB12 = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    VitaminD = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    VitaminE = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    ThiaminB1 = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    RiboflavinB2 = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    NiacinB3 = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    PantothenicAcidB5 = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    VitaminB6 = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    FolateB9 = table.Column<int>(nullable: true),
+                    FolicAcid = table.Column<int>(nullable: true),
+                    FoodFolate = table.Column<int>(nullable: true),
+                    FolateDfe = table.Column<int>(nullable: true),
+                    VitaminDIu = table.Column<int>(nullable: true),
+                    VitaminK = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Sucrose = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    GlucoseDextrose = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Fructose = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Lactose = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Maltose = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Galactose = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Starch = table.Column<int>(nullable: true),
+                    PhosphorusP = table.Column<int>(nullable: true),
+                    Alcohol = table.Column<int>(nullable: true),
+                    Caffeine = table.Column<int>(nullable: true),
+                    Theobromine = table.Column<int>(nullable: true),
+                    ServingWeight1 = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    ServingDescription1 = table.Column<string>(nullable: true),
+                    ServingWeight2 = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    ServingDescription2 = table.Column<string>(nullable: true),
+                    CalorieWeight200 = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    PriceBrandName = table.Column<string>(nullable: true),
+                    PriceDollar = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PriceQuantity = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PriceMeasurement = table.Column<int>(nullable: true),
+                    PriceStoreName = table.Column<string>(nullable: true),
+                    PriceApiLink = table.Column<string>(nullable: true),
+                    FoodGroupId = table.Column<int>(nullable: true),
+                    IngredientStateId = table.Column<int>(nullable: true),
+                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ingredient", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Ingredient_IngredientFoodGroup_FoodGroupId",
+                        column: x => x.FoodGroupId,
+                        principalSchema: "ref",
+                        principalTable: "IngredientFoodGroup",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Ingredient_IngredientState_IngredientStateId",
+                        column: x => x.IngredientStateId,
+                        principalSchema: "ref",
+                        principalTable: "IngredientState",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Permission",
+                schema: "sec",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(nullable: true),
+                    Summary = table.Column<string>(nullable: true),
+                    PermissionGroupId = table.Column<int>(nullable: true),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())"),
+                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Permission", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Permission_PermissionGroup_PermissionGroupId",
+                        column: x => x.PermissionGroupId,
+                        principalSchema: "ref",
+                        principalTable: "PermissionGroup",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecipeReview",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RecipeId = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
+                    Review = table.Column<string>(nullable: true),
+                    Rating = table.Column<int>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeReview", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecipeReview_Recipe_RecipeId",
+                        column: x => x.RecipeId,
+                        principalSchema: "dbo",
+                        principalTable: "Recipe",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecipeReview_User_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "sec",
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EventLog",
+                schema: "logs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(nullable: true),
+                    EventId = table.Column<int>(nullable: true),
+                    LogLevelId = table.Column<int>(nullable: false),
+                    Message = table.Column<string>(nullable: true),
+                    Detail = table.Column<string>(nullable: true),
+                    Machine = table.Column<string>(nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventLog", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EventLog_LogLevel_LogLevelId",
+                        column: x => x.LogLevelId,
+                        principalSchema: "ref",
+                        principalTable: "LogLevel",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EventLog_User_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "sec",
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                schema: "sec",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(nullable: false),
+                    Token = table.Column<string>(nullable: true),
+                    Expires = table.Column<DateTime>(nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false),
+                    ModifiedAt = table.Column<DateTimeOffset>(nullable: false),
+                    CreatedByIp = table.Column<string>(nullable: true),
+                    Revoked = table.Column<DateTime>(nullable: true),
+                    RevokedByIp = table.Column<string>(nullable: true),
+                    ReplacedByToken = table.Column<string>(nullable: true),
+                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => new { x.UserId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_User_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "sec",
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRole",
+                schema: "sec",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(nullable: false),
+                    RoleId = table.Column<int>(nullable: false),
+                    SchoolId = table.Column<int>(nullable: true),
+                    IsCountryWide = table.Column<bool>(nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())"),
+                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRole", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserRole_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalSchema: "sec",
+                        principalTable: "Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRole_School_SchoolId",
+                        column: x => x.SchoolId,
+                        principalSchema: "dbo",
+                        principalTable: "School",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserRole_User_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "sec",
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IngredientConversion",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IngredientId = table.Column<int>(nullable: false),
+                    BaseStateId = table.Column<int>(nullable: true),
+                    BaseMeasurementUnitId = table.Column<int>(nullable: true),
+                    BaseQuantity = table.Column<double>(nullable: false),
+                    ConvertToStateId = table.Column<int>(nullable: true),
+                    ConvertToMeasurementUnitId = table.Column<int>(nullable: true),
+                    ConvertToQuantity = table.Column<double>(nullable: false),
+                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IngredientConversion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IngredientConversion_MeasurementUnit_BaseMeasurementUnitId",
+                        column: x => x.BaseMeasurementUnitId,
+                        principalSchema: "ref",
+                        principalTable: "MeasurementUnit",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_IngredientConversion_IngredientState_BaseStateId",
+                        column: x => x.BaseStateId,
+                        principalSchema: "ref",
+                        principalTable: "IngredientState",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_IngredientConversion_MeasurementUnit_ConvertToMeasurementUnitId",
+                        column: x => x.ConvertToMeasurementUnitId,
+                        principalSchema: "ref",
+                        principalTable: "MeasurementUnit",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_IngredientConversion_IngredientState_ConvertToStateId",
+                        column: x => x.ConvertToStateId,
+                        principalSchema: "ref",
+                        principalTable: "IngredientState",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_IngredientConversion_Ingredient_IngredientId",
+                        column: x => x.IngredientId,
+                        principalSchema: "dbo",
+                        principalTable: "Ingredient",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecipeIngredientList",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RecipeId = table.Column<int>(nullable: false),
+                    IngredientId = table.Column<int>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
+                    Preference = table.Column<int>(nullable: false),
+                    IngredientStateId = table.Column<int>(nullable: false),
+                    MeasurementUnitId = table.Column<int>(nullable: false),
+                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeIngredientList", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecipeIngredientList_Ingredient_IngredientId",
+                        column: x => x.IngredientId,
+                        principalSchema: "dbo",
+                        principalTable: "Ingredient",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecipeIngredientList_IngredientState_IngredientStateId",
+                        column: x => x.IngredientStateId,
+                        principalSchema: "ref",
+                        principalTable: "IngredientState",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecipeIngredientList_MeasurementUnit_MeasurementUnitId",
+                        column: x => x.MeasurementUnitId,
+                        principalSchema: "ref",
+                        principalTable: "MeasurementUnit",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecipeIngredientList_Recipe_RecipeId",
+                        column: x => x.RecipeId,
+                        principalSchema: "dbo",
+                        principalTable: "Recipe",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IngredientAllergyWarning",
+                schema: "map",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IngredientId = table.Column<int>(nullable: false),
+                    AllergyWarningId = table.Column<int>(nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())"),
+                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IngredientAllergyWarning", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IngredientAllergyWarning_AllergyWarning_AllergyWarningId",
+                        column: x => x.AllergyWarningId,
+                        principalSchema: "ref",
+                        principalTable: "AllergyWarning",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IngredientAllergyWarning_Ingredient_IngredientId",
+                        column: x => x.IngredientId,
+                        principalSchema: "dbo",
+                        principalTable: "Ingredient",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RolePermission",
+                schema: "sec",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<int>(nullable: false),
+                    PermissionId = table.Column<int>(nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "(sysdatetimeoffset())"),
+                    RowVer = table.Column<byte[]>(rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RolePermission", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RolePermission_Permission_PermissionId",
+                        column: x => x.PermissionId,
+                        principalSchema: "sec",
+                        principalTable: "Permission",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RolePermission_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalSchema: "sec",
+                        principalTable: "Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                schema: "dbo",
+                table: "School",
+                columns: new[] { "Id", "Address", "BusinessContactName", "Code", "EmailAddress", "EndDate", "PhoneNumber", "PostCode", "ShortName", "SortOrder", "StartDate", "StreetNumber", "Suburb", "Title" },
+                values: new object[,]
+                {
+                    { 1, null, null, "NAS", null, null, null, null, null, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Not a School" },
+                    { 3, "18 Strathmore Parkway", "Paul Murphy", "HCC2020", "paul.murphy@hcc.wa.edu.au", null, null, "6030", "HCC", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Ellenbrook", "Holy Cross College" },
+                    { 2, null, null, "DEFAULT", null, null, null, "0000", null, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Australia", "Default School" }
+                });
+
             migrationBuilder.InsertData(
                 schema: "ref",
                 table: "AllergyWarning",
@@ -945,11 +1072,12 @@ namespace Pcb.Database.Migrations
                     { 1, null, null, "Gluten" },
                     { 2, null, null, "Lactose" },
                     { 3, null, null, "Shellfish" },
-                    { 4, null, null, "Seafood" },
-                    { 5, null, null, "Nut" },
+                    { 4, null, null, "Fish and Seafood" },
+                    { 5, null, null, "Almonds and other Tree Nuts" },
                     { 6, null, null, "Sesame" },
                     { 7, null, null, "Soy" },
-                    { 8, null, null, "Eggs" }
+                    { 8, null, null, "Eggs" },
+                    { 9, null, null, "Peanuts" }
                 });
 
             migrationBuilder.InsertData(
@@ -961,13 +1089,13 @@ namespace Pcb.Database.Migrations
                     { 10, null, null, "Mediterranean" },
                     { 9, null, null, "Indian" },
                     { 8, null, null, "Spannish" },
-                    { 7, null, null, "Thai" },
+                    { 5, null, null, "Japenese" },
                     { 6, null, null, "French" },
-                    { 2, null, null, "Mexican" },
                     { 4, null, null, "Greek" },
                     { 3, null, null, "Italian" },
+                    { 2, null, null, "Mexican" },
                     { 1, null, null, "Chinese" },
-                    { 5, null, null, "Japenese" }
+                    { 7, null, null, "Thai" }
                 });
 
             migrationBuilder.InsertData(
@@ -976,11 +1104,11 @@ namespace Pcb.Database.Migrations
                 columns: new[] { "Id", "Summary", "Symbol", "Title" },
                 values: new object[,]
                 {
-                    { 5, null, null, "Complicated" },
-                    { 4, null, null, "Sustainable" },
-                    { 2, null, null, "Cheap" },
                     { 1, null, null, "Very Healthy" },
-                    { 3, null, null, "Very Popular" }
+                    { 2, null, null, "Cheap" },
+                    { 3, null, null, "Very Popular" },
+                    { 4, null, null, "Sustainable" },
+                    { 5, null, null, "Complicated" }
                 });
 
             migrationBuilder.InsertData(
@@ -989,12 +1117,12 @@ namespace Pcb.Database.Migrations
                 columns: new[] { "Id", "CreatedAt", "Summary", "Symbol", "Title" },
                 values: new object[,]
                 {
+                    { 6, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Salad" },
                     { 1, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Breakfast" },
-                    { 2, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Lunch" },
-                    { 3, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Dinner" },
                     { 4, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Dessert" },
                     { 5, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Snack" },
-                    { 6, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Salad" }
+                    { 3, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Dinner" },
+                    { 2, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, null, "Lunch" }
                 });
 
             migrationBuilder.InsertData(
@@ -1003,30 +1131,43 @@ namespace Pcb.Database.Migrations
                 columns: new[] { "Id", "Summary", "Symbol", "Title" },
                 values: new object[,]
                 {
-                    { 2, "A vegetarian diet focuses on plants for food. These include fruits, vegetables,dried beans and peas, grains, seeds and nuts. Includes both diary products.", null, "Lacto Vegetarian" },
-                    { 1, "A vegetarian diet focuses on plants for food. These include fruits, vegetables,dried beans and peas, grains, seeds and nuts. Includes both diary products and eggs.", null, "Lacto-ovo Vegetarian" },
-                    { 3, "A vegetarian diet focuses on plants for food. These include fruits, vegetables,dried beans and peas, grains, seeds and nuts. Specifically excludes all meat and animal products.", null, "Vegan" },
                     { 4, "On a gluten-free diet, you do not eat wheat, rye, and barley. These foods contain gluten, a type of protein. A gluten-free diet is the main treatment for celiac disease.", null, "Gluten Free" },
                     { 5, "A diet that excludes all lactose based products, generally cows milk, cheeses and yoghurts. A Dairy Free diet is generally used by people with Lactose Intolerance.", null, "Dairy Free" },
                     { 6, "FODMAP stands for Fermentable Oligosaccharides, Disaccharides, Monosaccharides, and Polyols, which are short chain carbohydrates and sugar alcohols that are poorly absorbed by the body, resulting in abdominal pain and bloating.", null, "Low FODMAP" },
-                    { 7, "Keto is a very low-carb diet with less than 20g of carbohydrates per day. Substituting fats and oils for carbs.", null, "Keto" }
+                    { 7, "Keto is a very low-carb diet with less than 20g of carbohydrates per day. Substituting fats and oils for carbs.", null, "Keto" },
+                    { 2, "A vegetarian diet focuses on plants for food. These include fruits, vegetables,dried beans and peas, grains, seeds and nuts. Includes both diary products.", null, "Lacto Vegetarian" },
+                    { 1, "A vegetarian diet focuses on plants for food. These include fruits, vegetables,dried beans and peas, grains, seeds and nuts. Includes both diary products and eggs.", null, "Lacto-ovo Vegetarian" },
+                    { 3, "A vegetarian diet focuses on plants for food. These include fruits, vegetables,dried beans and peas, grains, seeds and nuts. Specifically excludes all meat and animal products.", null, "Vegan" }
                 });
 
             migrationBuilder.InsertData(
                 schema: "ref",
-                table: "IngredientParentType",
+                table: "IngredientFoodGroup",
                 columns: new[] { "Id", "Summary", "Symbol", "Title" },
                 values: new object[,]
                 {
-                    { 8, null, null, "Sauce" },
-                    { 7, null, null, "Meat" },
-                    { 9, null, null, "Condiment" },
-                    { 5, null, null, "Oil" },
-                    { 6, null, null, "Spice" },
-                    { 3, null, null, "Fruit" },
-                    { 2, null, null, "Vegetable" },
-                    { 1, null, null, "Flour" },
-                    { 4, null, null, "Baking" }
+                    { 22, null, null, "Vegetables" },
+                    { 21, null, null, "Sweets" },
+                    { 20, null, null, "Spices and Herbs" },
+                    { 19, null, null, "Soups and Sauces" },
+                    { 18, null, null, "Snacks" },
+                    { 17, null, null, "Restaurant Foods" },
+                    { 16, null, null, "Prepared Meals" },
+                    { 15, null, null, "Nuts and Seeds" },
+                    { 13, null, null, "Meats" },
+                    { 14, null, null, "NULL" },
+                    { 11, null, null, "Fruits" },
+                    { 10, null, null, "Fish" },
+                    { 9, null, null, "Fats and Oils" },
+                    { 8, null, null, "Fast Foods" },
+                    { 7, null, null, "Dairy and Egg Products" },
+                    { 6, null, null, "Breakfast Cereals" },
+                    { 5, null, null, "Beverages" },
+                    { 4, null, null, "Beans and Lentils" },
+                    { 3, null, null, "Baked Foods" },
+                    { 2, null, null, "Baby Foods" },
+                    { 1, null, null, "American Indian" },
+                    { 12, null, null, "Grains and Pasta" }
                 });
 
             migrationBuilder.InsertData(
@@ -1035,17 +1176,17 @@ namespace Pcb.Database.Migrations
                 columns: new[] { "Id", "Summary", "Symbol", "Title" },
                 values: new object[,]
                 {
-                    { 10, null, null, "Solid" },
                     { 11, null, null, "Liquid" },
+                    { 10, null, null, "Solid" },
                     { 9, null, null, "Boiling" },
                     { 8, null, null, "Ground" },
-                    { 7, null, null, "Loose" },
+                    { 3, null, null, "Diced" },
+                    { 6, null, null, "Firmly Packed" },
                     { 5, null, null, "Whole" },
                     { 4, null, null, "Shredded" },
-                    { 3, null, null, "Diced" },
                     { 2, null, null, "Sliced" },
                     { 1, null, null, "Chopped" },
-                    { 6, null, null, "Firmly Packed" }
+                    { 7, null, null, "Loose" }
                 });
 
             migrationBuilder.InsertData(
@@ -1054,12 +1195,12 @@ namespace Pcb.Database.Migrations
                 columns: new[] { "Id", "SortOrder", "Summary", "Symbol", "Title" },
                 values: new object[,]
                 {
-                    { 6, 1, null, null, "Critical" },
-                    { 4, 3, null, null, "Warning" },
                     { 5, 2, null, null, "Error" },
-                    { 2, 5, null, null, "Debug" },
+                    { 6, 1, null, null, "Critical" },
+                    { 3, 4, null, null, "Information" },
                     { 1, 6, null, null, "Trace" },
-                    { 3, 4, null, null, "Information" }
+                    { 2, 5, null, null, "Debug" },
+                    { 4, 3, null, null, "Warning" }
                 });
 
             migrationBuilder.InsertData(
@@ -1068,20 +1209,21 @@ namespace Pcb.Database.Migrations
                 columns: new[] { "Id", "AltShortName", "ConvertsToId", "CountryCode", "MeasurementType", "Quantity", "ShortName", "Title" },
                 values: new object[,]
                 {
+                    { 15, null, 9, 2, 2, 1.0, "piece", "Pieces" },
                     { 14, null, 9, 2, 2, 1.0, "bch", "Bunch" },
-                    { 9, null, 9, 2, 2, 1.0, "ea", "Each" },
-                    { 13, null, 9, 2, 2, 1.0, "serving", "Servings" },
                     { 12, null, 9, 2, 2, 1.0, "lg", "Large" },
                     { 11, null, 9, 2, 2, 1.0, "med", "Medium" },
                     { 10, null, 9, 2, 2, 1.0, "sml", "Small" },
+                    { 13, null, 9, 2, 2, 1.0, "serving", "Servings" },
                     { 8, "kgs", 7, 0, 1, 1000.0, "kg", "Kilograms" },
-                    { 1, null, 5, 0, 0, 1.0, "Pinch", "Pinch" },
+                    { 7, "gr", 8, 0, 1, 0.001, "g", "Grams" },
                     { 6, null, 5, 0, 0, 1000.0, "L", "Litres" },
                     { 5, "mls", 6, 0, 0, 0.001, "ml", "Millilitres" },
                     { 4, null, 5, 0, 0, 250.0, "C", "Cup" },
                     { 3, "tsps", 5, 0, 0, 5.0, "tsp", "Teaspoon" },
+                    { 1, null, 5, 0, 0, 1.0, "Pinch", "Pinch" },
                     { 2, "tbsps", 5, 0, 0, 20.0, "tbsp", "Tablespoon" },
-                    { 7, "gr", 8, 0, 1, 0.001, "g", "Grams" }
+                    { 9, null, 9, 2, 2, 1.0, "ea", "Each" }
                 });
 
             migrationBuilder.InsertData(
@@ -1091,8 +1233,8 @@ namespace Pcb.Database.Migrations
                 values: new object[,]
                 {
                     { 3, "", null, "User" },
-                    { 1, "", null, "Administrator" },
-                    { 2, "", null, "Teacher" }
+                    { 2, "", null, "Teacher" },
+                    { 1, "", null, "Administrator" }
                 });
 
             migrationBuilder.InsertData(
@@ -1101,29 +1243,17 @@ namespace Pcb.Database.Migrations
                 columns: new[] { "Id", "EndDate", "IsAdmin", "IsUser", "Rank", "StartDate", "Summary", "Title" },
                 values: new object[,]
                 {
+                    { 2, null, false, true, 2, new DateTime(2020, 4, 15, 0, 0, 0, 999, DateTimeKind.Local).AddTicks(9999), "General User of Cookbook.", "User" },
                     { 3, null, false, true, 3, new DateTime(2020, 4, 15, 0, 0, 0, 999, DateTimeKind.Local).AddTicks(9999), "School Teacher.", "Teacher" },
                     { 4, null, false, true, 4, new DateTime(2020, 4, 15, 0, 0, 0, 999, DateTimeKind.Local).AddTicks(9999), "Student at a school.", "Student" },
-                    { 1, null, true, false, 1, new DateTime(2020, 4, 15, 0, 0, 0, 999, DateTimeKind.Local).AddTicks(9999), "Global administrator with all permissions.", "Administrator" },
-                    { 2, null, false, true, 2, new DateTime(2020, 4, 15, 0, 0, 0, 999, DateTimeKind.Local).AddTicks(9999), "General User of Cookbook.", "User" }
+                    { 1, null, true, false, 1, new DateTime(2020, 4, 15, 0, 0, 0, 999, DateTimeKind.Local).AddTicks(9999), "Global administrator with all permissions.", "Administrator" }
                 });
 
             migrationBuilder.InsertData(
                 schema: "sec",
                 table: "User",
-                columns: new[] { "Id", "EmailAddress", "FamilyName", "FirstLogin", "GivenNames", "IsActive", "IsEmailVerified", "IsStudent", "LastLogin", "PhoneNumber", "Username" },
-                values: new object[] { 1, "Admin@cookbook.com", "Min", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ad", true, true, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "admin" });
-
-            migrationBuilder.InsertData(
-                schema: "dbo",
-                table: "Ingredient",
-                columns: new[] { "Id", "IngredientStateId", "LinkUrl", "Name", "ParentTypeId", "PercentCarbs", "PercentFat", "PercentProtein", "PriceApiLink", "PriceBrandName", "PriceDollar", "PriceMeasurement", "PriceQuantity", "PriceStoreName", "PurchasedBy" },
-                values: new object[] { 1, 8, null, "Wholemeal Flour", 4, 95, 0, 5, null, "Black and Gold", 1.99m, 1, 1m, "Woolworth", 1 });
-
-            migrationBuilder.InsertData(
-                schema: "dbo",
-                table: "Ingredient",
-                columns: new[] { "Id", "IngredientStateId", "LinkUrl", "Name", "ParentTypeId", "PercentCarbs", "PercentFat", "PercentProtein", "PriceApiLink", "PriceBrandName", "PriceDollar", "PriceMeasurement", "PriceQuantity", "PriceStoreName", "PurchasedBy" },
-                values: new object[] { 2, 8, null, "Baby Spinach Leaves", 4, 11, 49, 30, null, "Farmers produce", 5.00m, 1, 400m, "Woolworth", 1 });
+                columns: new[] { "Id", "EmailAddress", "FamilyName", "FirstLogin", "GivenNames", "IsActive", "IsStudent", "LastFailedLoginAttempt", "LastLogin", "LoginProvider", "LoginProviderId", "PasswordHash", "PasswordReset", "PhoneNumber", "PhotoUrl", "ResetToken", "ResetTokenExpires", "Updated", "Username", "VerificationToken", "Verified" },
+                values: new object[] { 1, "Admin@cookbook.com", "Min", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ad", true, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "$2a$11$pheOSS.b.1UvabpTIm7EA.IsMyEViqrTV8lHLKSeei6OBIq81Dz1i", null, null, null, null, null, null, "admin", null, new DateTime(2018, 10, 10, 10, 10, 0, 0, DateTimeKind.Unspecified) });
 
             migrationBuilder.InsertData(
                 schema: "sec",
@@ -1131,41 +1261,17 @@ namespace Pcb.Database.Migrations
                 columns: new[] { "Id", "IsCountryWide", "RoleId", "SchoolId", "UserId" },
                 values: new object[] { 1, true, 1, null, 1 });
 
-            migrationBuilder.InsertData(
+            migrationBuilder.CreateIndex(
+                name: "IX_Ingredient_FoodGroupId",
                 schema: "dbo",
-                table: "IngredientConversion",
-                columns: new[] { "Id", "BaseMeasurementUnitId", "BaseQuantity", "BaseStateId", "ConvertToMeasurementUnitId", "ConvertToQuantity", "ConvertToStateId", "IngredientId" },
-                values: new object[] { 1, 1, 1.0, 6, 2, 120.0, 6, 1 });
-
-            migrationBuilder.InsertData(
-                schema: "dbo",
-                table: "IngredientNutrition",
-                columns: new[] { "Id", "Amount", "IngredientId", "PercentOfDailyNeeds", "Title", "Unit" },
-                values: new object[,]
-                {
-                    { 1, 340m, 1, 0, "Calories", 2 },
-                    { 2, 363m, 1, 10, "Potassium ", 1 },
-                    { 3, 23m, 2, 0, "Calories", 2 },
-                    { 4, 558m, 2, 10, "Potassium ", 1 }
-                });
-
-            migrationBuilder.InsertData(
-                schema: "map",
-                table: "IngredientAllergyWarning",
-                columns: new[] { "Id", "AllergyWarningId", "IngredientId" },
-                values: new object[] { 1, 1, 1 });
+                table: "Ingredient",
+                column: "FoodGroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ingredient_IngredientStateId",
                 schema: "dbo",
                 table: "Ingredient",
                 column: "IngredientStateId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Ingredient_ParentTypeId",
-                schema: "dbo",
-                table: "Ingredient",
-                column: "ParentTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IngredientConversion_BaseMeasurementUnitId",
@@ -1198,28 +1304,10 @@ namespace Pcb.Database.Migrations
                 column: "IngredientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IngredientNutrition_IngredientId",
+                name: "IX_RawFoodUsda_FoodGroupId",
                 schema: "dbo",
-                table: "IngredientNutrition",
-                column: "IngredientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Recipe_IngredientId",
-                schema: "dbo",
-                table: "Recipe",
-                column: "IngredientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Recipe_IngredientStateId",
-                schema: "dbo",
-                table: "Recipe",
-                column: "IngredientStateId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Recipe_MeasurementUnitId",
-                schema: "dbo",
-                table: "Recipe",
-                column: "MeasurementUnitId");
+                table: "RawFoodUsda",
+                column: "FoodGroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RecipeIngredientList_IngredientId",
@@ -1397,7 +1485,7 @@ namespace Pcb.Database.Migrations
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "IngredientNutrition",
+                name: "RawFoodUsda",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
@@ -1457,8 +1545,16 @@ namespace Pcb.Database.Migrations
                 schema: "sec");
 
             migrationBuilder.DropTable(
+                name: "MeasurementUnit",
+                schema: "ref");
+
+            migrationBuilder.DropTable(
                 name: "LogLevel",
                 schema: "ref");
+
+            migrationBuilder.DropTable(
+                name: "Ingredient",
+                schema: "dbo");
 
             migrationBuilder.DropTable(
                 name: "AllergyWarning",
@@ -1501,15 +1597,7 @@ namespace Pcb.Database.Migrations
                 schema: "sec");
 
             migrationBuilder.DropTable(
-                name: "Ingredient",
-                schema: "dbo");
-
-            migrationBuilder.DropTable(
-                name: "MeasurementUnit",
-                schema: "ref");
-
-            migrationBuilder.DropTable(
-                name: "PermissionGroup",
+                name: "IngredientFoodGroup",
                 schema: "ref");
 
             migrationBuilder.DropTable(
@@ -1517,7 +1605,7 @@ namespace Pcb.Database.Migrations
                 schema: "ref");
 
             migrationBuilder.DropTable(
-                name: "IngredientParentType",
+                name: "PermissionGroup",
                 schema: "ref");
         }
     }

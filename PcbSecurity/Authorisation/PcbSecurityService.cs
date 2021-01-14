@@ -19,414 +19,401 @@ using System.Security.Claims;
 
 namespace Pcb.Security.Authorisation
 {
-	/// <summary>
-	/// Primary security service for Cpt. Handles authentication and authorisation
-	/// </summary>
-	internal class PcbSecurityService : IPcbSecurityService
-	{
-		/// <summary>
-		/// Pcb Configuration from appsettings.json
-		/// </summary>
-		private IPcbConfiguration Configuration { get; }
+    /// <summary>
+    /// Primary security service for Pcb. Handles authentication and authorisation
+    /// </summary>
+    internal class PcbSecurityService : IPcbSecurityService
+    {
+        /// <summary>
+        /// Pcb Configuration from appsettings.json
+        /// </summary>
+        private IPcbConfiguration Configuration { get; }
 
-		/// <summary>
-		/// Pcb Logger
-		/// </summary>
-		private ILogger<PcbSecurityService> Logger { get; }
+        /// <summary>
+        /// Pcb Logger
+        /// </summary>
+        private ILogger<PcbSecurityService> Logger { get; }
 
-		/// <summary>
-		/// Repository for accessing security related data
-		/// </summary>
-		private ISecurityDataRepository SecurityRepository { get; }
+        /// <summary>
+        /// Repository for accessing security related data
+        /// </summary>
+        private ISecurityDataRepository SecurityRepository { get; }
 
-		/// <summary>
-		/// Aspnet core http context, used for retrieving the current authenticated user.
-		/// Replaces the old Thread.CurrentPrincipal as that wasn't injectable.
-		/// </summary>
-		private readonly IHttpContextAccessor Context;
+        /// <summary>
+        /// Aspnet core http context, used for retrieving the current authenticated user.
+        /// Replaces the old Thread.CurrentPrincipal as that wasn't injectable.
+        /// </summary>
+        private readonly IHttpContextAccessor Context;
 
-		/// <summary>
-		/// Allows us to cache security information about the logged in user.
-		/// </summary>
-		private IMemoryCache MemoryCache { get; }
-
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PcbSecurityService"/> class.
-		/// </summary>
-		/// <param name="configuration">The configuration.</param>
-		/// <param name="logger">The logger.</param>
-		/// <param name="repository">The repository.</param>
-		/// <param name="context">The context.</param>
-		/// <param name="memoryCache">The memory cache.</param>
-		public PcbSecurityService(
-			IPcbConfiguration configuration,
-			ILogger<PcbSecurityService> logger,
-			ISecurityDataRepository repository,
-			IHttpContextAccessor context,
-			IMemoryCache memoryCache = null)
-		{
-			Configuration = configuration;
-			Logger = logger;
-			SecurityRepository = repository;
-			Context = context;
-			MemoryCache = memoryCache;
-		}
-
-		/// <summary>
-		/// Authenticate a user against the authentication method provided in appsettings.json.
-		/// </summary>
-		/// <param name="username">the user's username</param>
-		/// <param name="password">the user's password</param>
-		/// <returns>
-		/// Empty list of claims if not authenticated
-		/// </returns>
-		public IEnumerable<Claim> Authenticate(string username, string password, bool isSocial)
-		{
-			var user = SecurityRepository.GetUser(username);
-
-			// Can't find the user in the database
-			if (user == null || user.Id <= 0)
-			{
-				Logger.LogInformation($"Authentication: Unable to find user with username '{username}'.");
-				List<Claim> messageList = new List<Claim>();
-				messageList.Add(new Claim("user", "register"));
-				return messageList;
-			}
-
-			// User is deactivated
-			if (!user.IsActive)
-			{
-				Logger.LogInformation($"Authentication: User is currently deactivated '{username}'.");
-
-				// Return claims with no userId to tell the upper level we failed auth.
-				var claims = new List<Claim>
-				{
-					new Claim(JwtRegisteredClaimNames.Sub, "0"),
-				};
-
-				return claims;
-			}
-
-			int maxAttempts = Configuration.PcbAppSettings.DataSettings.MaxLoginAttempts;
-			int waitMin = Configuration.PcbAppSettings.DataSettings.LockOutTime;
-			if (user.FailedLoginAttempt >= maxAttempts && user.LastFailedLoginAttempt.AddMinutes(waitMin) > DateTime.UtcNow)
-			{
-				Logger.LogInformation($"Authentication: User is currently locked out '{username}'.");
-				List<Claim> messageList = new List<Claim>
-				{
-					new Claim("authentication", user.FailedLoginAttempt.ToString())
-				};
-				return messageList;
-			}
-
-			// User is not yet verified
-			if (!user.IsVerified)
-			{
-				Logger.LogInformation($"Authentication: User has not yet verified '{username}'.");
-				List<Claim> messageList = new List<Claim>
-				{
-					new Claim("verify", "notVerified")
-				};
-				return messageList;
-			}
+        /// <summary>
+        /// Allows us to cache security information about the logged in user.
+        /// </summary>
+        private IMemoryCache MemoryCache { get; }
 
 
-			// Can't Authenticate!
-			if (!isSocial && !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-			{
-				Logger.LogInformation($"Authentication: Login failed for user '{username}'.");
-				return new List<Claim>();
-			}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PcbSecurityService"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="repository">The repository.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="memoryCache">The memory cache.</param>
+        public PcbSecurityService(
+            IPcbConfiguration configuration,
+            ILogger<PcbSecurityService> logger,
+            ISecurityDataRepository repository,
+            IHttpContextAccessor context,
+            IMemoryCache memoryCache = null)
+        {
+            Configuration = configuration;
+            Logger = logger;
+            SecurityRepository = repository;
+            Context = context;
+            MemoryCache = memoryCache;
+        }
 
-			// no reason not to log the user in - increment login values
-			bool increment = SecurityRepository.IncrementLoginValues(user.Id).Result;
-			if (increment == false)
-			{
-				Logger.LogInformation($"Error incrementing login values for user '{username}'.");
-				throw new AppException($"Error incrementing login values for user '{username}'.");
-			}
+        /// <summary>
+        /// Authenticate a user against the authentication method provided in appsettings.json.
+        /// </summary>
+        /// <param name="username">the user's username</param>
+        /// <param name="password">the user's password</param>
+        /// <returns>
+        /// Empty list of claims if not authenticated
+        /// </returns>
+        public IEnumerable<Claim> Authenticate(string username, string password, bool isSocial)
+        {
+            var user = SecurityRepository.GetUser(username);
 
-			return GenerateClaims(user, username);
-		}
+            // Can't find the user in the database
+            if (user == null || user.Id <= 0)
+            {
+                Logger.LogInformation($"Authentication: Unable to find user with username '{username}'.");
+                List<Claim> messageList = new List<Claim>
+                {
+                    new Claim("user", "register")
+                };
+                return messageList;
+            }
 
-		/// <summary>
-		/// Creates the user claims.
-		/// </summary>
-		/// <param name="username">The username.</param>
-		/// <returns></returns>
-		public IEnumerable<Claim> CreateUserClaims(string username)
-		{
-			var user = SecurityRepository.GetUser(username);
+            // User is deactivated
+            if (!user.IsActive)
+            {
+                Logger.LogInformation($"Authentication: User is currently deactivated '{username}'.");
 
-			// Can't find the user in the database
-			if (user == null || user.Id <= 0)
-			{
-				Logger.LogInformation($"User Claims: Unable to find user with username '{username}'.");
-				return new List<Claim>();
-			}
+                // Return claims with no userId to tell the upper level we failed auth.
+                var claims = new List<Claim>
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, "0"),
+                };
 
-			return GenerateClaims(user, username);
-		}
+                return claims;
+            }
 
-		public string GetTokenUserIdValue()
-		{
-			// Precondition - Context Exists
-			if (Context.HttpContext == null)
-			{
-				return null;
-			}
+            int maxAttempts = Configuration.PcbAppSettings.DataSettings.MaxLoginAttempts;
+            int waitMin = Configuration.PcbAppSettings.DataSettings.LockOutTime;
+            if (user.FailedLoginAttempt >= maxAttempts && user.LastFailedLoginAttempt.AddMinutes(waitMin) > DateTime.UtcNow)
+            {
+                Logger.LogInformation($"Authentication: User is currently locked out '{username}'.");
+                List<Claim> messageList = new List<Claim>
+                {
+                    new Claim("authentication", user.FailedLoginAttempt.ToString())
+                };
+                return messageList;
+            }
 
-			if (!Context.HttpContext.User.Identity.IsAuthenticated)
-			{
-				return null;
-			}
+            // User is not yet verified
+            if (!user.IsVerified)
+            {
+                Logger.LogInformation($"Authentication: User has not yet verified '{username}'.");
+                List<Claim> messageList = new List<Claim>
+                {
+                    new Claim("verify", "notVerified")
+                };
+                return messageList;
+            }
 
-			var name = Context.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"))?.Value;
-			if (string.IsNullOrEmpty(name))
-			{
-				return null;
-			}
-			return name;
-		}
 
-		/// <summary>
-		/// Returns the authenticated user or null if no user is authenticated
-		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <returns>
-		/// Authenticated User or null if no user is authenticated
-		/// </returns>
-		public IAuthenticatedUser GetAuthenticatedUser(string name = null)
-		{
-			if (string.IsNullOrEmpty(name))
-			{
-				// Precondition - Context Exists
-				if (Context.HttpContext == null)
-				{
-					return null;
-				}
+            // Can't Authenticate!
+            if (!isSocial && !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+            {
+                Logger.LogInformation($"Authentication: Login failed for user '{username}'.");
+                return new List<Claim>();
+            }
 
-				if (!Context.HttpContext.User.Identity.IsAuthenticated)
-				{
-					return null;
-				}
+            // no reason not to log the user in - increment login values
+            bool increment = SecurityRepository.IncrementLoginValues(user.Id).Result;
+            if (increment == false)
+            {
+                Logger.LogInformation($"Error incrementing login values for user '{username}'.");
+                throw new AppException($"Error incrementing login values for user '{username}'.");
+            }
 
-				name = Context.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"))?.Value;
-				if (string.IsNullOrEmpty(name))
-				{
-					return null;
-				}
-			}
+            return GenerateClaims(user);
+        }
 
-			if (MemoryCache == null)
-			{
-				return SecurityRepository.GetAuthenticatedUser(name);
-			}
+        /// <summary>
+        /// Creates the user claims.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <returns></returns>
+        public IEnumerable<Claim> CreateUserClaims(string username)
+        {
+            var user = SecurityRepository.GetUser(username);
 
-			return MemoryCache.GetOrCreate(GetCacheKey(name), f => SecurityRepository.GetAuthenticatedUser(name));
-		}
+            // Can't find the user in the database
+            if (user == null || user.Id <= 0)
+            {
+                Logger.LogInformation($"User Claims: Unable to find user with username '{username}'.");
+                return new List<Claim>();
+            }
 
-		/// <inheritdoc />
-		public bool IsAuthorised(SecurityPermission permission, int? facilityId = null, string username = null)
-		{
-			var authenticatedUser = GetAuthenticatedUser(username);
+            return GenerateClaims(user);
+        }
 
-			if (authenticatedUser == null)
-			{
-				// Log the warning
-				Logger.LogInformation($"Authorisation: Could retrieve the authenticated user '{username}' when checking the users permissions.");
-				return false;
-			}
+        public string GetTokenUserIdValue()
+        {
+            // Precondition - Context Exists
+            if (Context.HttpContext == null)
+            {
+                return null;
+            }
 
-			var isAuthorised = authenticatedUser.Roles
-				.Any(r => (
-					(facilityId.HasValue && r.SchoolId == facilityId.Value) || r.IsFacilityWide)
-					&& r.Permissions.Any(p => p == permission));
+            if (!Context.HttpContext.User.Identity.IsAuthenticated)
+            {
+                return null;
+            }
 
-			if (!isAuthorised)
-			{
-				// Log the warning
-				Logger.LogInformation($"Authorisation: An attempt was made to access a resource protected by the permission '{Enum.GetName(typeof(SecurityPermission), permission)}' by the user '{username}'.");
-			}
+            var name = Context.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"))?.Value;
+            if (string.IsNullOrEmpty(name))
+            {
+                return null;
+            }
+            return name;
+        }
 
-			return isAuthorised;
-		}
+        /// <summary>
+        /// Returns the authenticated user or null if no user is authenticated
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// Authenticated User or null if no user is authenticated
+        /// </returns>
+        public IAuthenticatedUser GetAuthenticatedUser(string name = null)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                // Precondition - Context Exists
+                if (Context.HttpContext == null)
+                {
+                    return null;
+                }
 
-		/// <inheritdoc />
-		public bool IsAuthorisedInAnyFacility(SecurityPermission permission, string username = null)
-		{
-			var user = GetAuthenticatedUser(username);
-			return user.Roles.Any(r => r.Permissions.Any(p => p == permission));
-		}
+                if (!Context.HttpContext.User.Identity.IsAuthenticated)
+                {
+                    return null;
+                }
 
-		/// <inheritdoc />
-		public void CheckAuthorisationInAnyOneFacility(SecurityPermission permission, int?[] facilityIds)
-		{
-			// Get the current logged in user
-			var authenticatedUser = GetAuthenticatedUser();
+                name = Context.HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"))?.Value;
+                if (string.IsNullOrEmpty(name))
+                {
+                    return null;
+                }
+            }
 
-			if (authenticatedUser == null)
-			{
-				// Log the unauthorised access
-				Logger.LogError($"Permission Check: Couldn't retrieve the current authenticated user when checking the users permissions.");
-				throw new UnauthorizedAccessException();
-			}
+            if (MemoryCache == null)
+            {
+                return SecurityRepository.GetAuthenticatedUser(name);
+            }
 
-			// Determine whether the user is permitted
-			var isAuthorised = authenticatedUser.Roles
-				.Any(r => (r.IsFacilityWide || facilityIds.Contains(r.SchoolId))
-					&& r.Permissions.Any(p => p == permission));
+            return MemoryCache.GetOrCreate(GetCacheKey(name), f => SecurityRepository.GetAuthenticatedUser(name));
+        }
 
-			// Unauthorised!
-			if (!isAuthorised)
-			{
-				// Log the unauthorised access
-				Logger.LogError(new EventId(authenticatedUser.Id), $"Permission Check: User '{authenticatedUser.Username}' attempted to access a restricted resource. The user was not in at least one facility in the following list: '{string.Join(",", facilityIds)}'.");
-				throw new UnauthorizedAccessException();
-			}
+        /// <inheritdoc />
+        public bool IsAuthorised(SecurityPermission permission, int? facilityId = null, string username = null)
+        {
+            var authenticatedUser = GetAuthenticatedUser(username);
 
-			// Success!
-			return;
-		}
+            if (authenticatedUser == null)
+            {
+                // Log the warning
+                Logger.LogInformation($"Authorisation: Could retrieve the authenticated user '{username}' when checking the users permissions.");
+                return false;
+            }
 
-		/// <inheritdoc />
-		public IEnumerable<int> GetExplicitlyAuthorisedFacilities(SecurityPermission permission, string username)
-		{
-			var user = GetAuthenticatedUser(username);
-			var roles = user.Roles
-							.Where(r => !r.IsFacilityWide && r.Permissions.Any(p => p == permission))
-							.Select(f => f.SchoolId.Value).ToList();
+            var isAuthorised = authenticatedUser.Roles
+                .Any(r => (
+                    (facilityId.HasValue && r.SchoolId == facilityId.Value) || r.IsFacilityWide)
+                    && r.Permissions.Any(p => p == permission));
 
-			return roles;
-		}
+            if (!isAuthorised)
+            {
+                // Log the warning
+                Logger.LogInformation($"Authorisation: An attempt was made to access a resource protected by the permission '{Enum.GetName(typeof(SecurityPermission), permission)}' by the user '{username}'.");
+            }
 
-		/// <inheritdoc />
-		public bool IsAuthorisedFacilityWide(SecurityPermission permission, string username = null)
-		{
-			var user = GetAuthenticatedUser(username);
-			return user.Roles.Any(r => r.IsFacilityWide && r.Permissions.Any(p => p == permission));
-		}
+            return isAuthorised;
+        }
 
-		private static string GetCacheKey(string username)
-		{
-			return $"Cpt_Security_User_{username}";
-		}
+        /// <inheritdoc />
+        public bool IsAuthorisedInAnyFacility(SecurityPermission permission, string username = null)
+        {
+            var user = GetAuthenticatedUser(username);
+            return user.Roles.Any(r => r.Permissions.Any(p => p == permission));
+        }
 
-		/// <summary>
-		/// Generates the claims.
-		/// </summary>
-		/// <param name="user">The user.</param>
-		/// <param name="username">The username.</param>
-		/// <returns></returns>
-		private IEnumerable<Claim> GenerateClaims(User user, string username)
-		{
-			// Get the user
-			//var authUser = SecurityRepository.GetAuthenticatedUser(username);
+        /// <inheritdoc />
+        public void CheckAuthorisationInAnyOneFacility(SecurityPermission permission, int?[] facilityIds)
+        {
+            // Get the current logged in user
+            var authenticatedUser = GetAuthenticatedUser();
 
-			var expiresIn =
-				new DateTimeOffset(DateTime.Now.AddMinutes(Configuration.PcbAppSettings.DataSettings.JwtLifetime)).ToUnixTimeSeconds().ToString();
+            if (authenticatedUser == null)
+            {
+                // Log the unauthorised access
+                Logger.LogError($"Permission Check: Couldn't retrieve the current authenticated user when checking the users permissions.");
+                throw new UnauthorizedAccessException();
+            }
 
-			// Generate the base claims
-			// TODO: Make the claims JwtRegisteredClaimNames RFC Compliant!!!
-			var claims = new List<Claim>
-			{
-				new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-				new Claim("email", user.EmailAddress),
-				new Claim("givenname", user.GivenNames),
-				new Claim("surname", user.FamilyName),
-				new Claim(JwtRegisteredClaimNames.Exp, expiresIn)
+            // Determine whether the user is permitted
+            var isAuthorised = authenticatedUser.Roles
+                .Any(r => (r.IsFacilityWide || facilityIds.Contains(r.SchoolId))
+                    && r.Permissions.Any(p => p == permission));
 
-				// Include this when you'd like to invalidate roles when you change a users role in the app and want
-				// their cookie to expire.
-				// new Claim("LastChanged", {Database Value})
-			};
+            // Unauthorised!
+            if (!isAuthorised)
+            {
+                // Log the unauthorised access
+                Logger.LogError(new EventId(authenticatedUser.Id), $"Permission Check: User '{authenticatedUser.Username}' attempted to access a restricted resource. The user was not in at least one facility in the following list: '{string.Join(",", facilityIds)}'.");
+                throw new UnauthorizedAccessException();
+            }
 
-			// Add roles, and collect permissions as we go.
-			var permissions = new Dictionary<SecurityPermission, HashSet<int>>();
-			var roles = new List<string>();
-			foreach (var role in user.UserRole)
-			{
-				// Add role name if it doesn't already exist in our list.
-				if (!roles.Any(r => string.Equals(r.ToLower(new CultureInfo("en-AU")), role.Role.Title.ToLower(new CultureInfo("en-AU")), StringComparison.Ordinal)))
-				{
-					roles.Add(role.Role.Title);
-					roles.Add(role.Role.Rank.ToString());
-					roles.Add(role.IsCountryWide.ToString());
-					roles.Add(role.SchoolId.ToString());
-				}
-				// TODO add permissions in later
-				//foreach (var permission in role.)
-				//{
-				//	// Get the permission
-				//	var permissionName = Enum.GetName(typeof(SecurityPermission), permission);
+            // Success!
+            return;
+        }
 
-				//	Debug.Assert(
-				//		!string.IsNullOrEmpty(permissionName),
-				//		"A security permission exists in the database that you haven't added to the enum SecurityPermission.");
+        /// <inheritdoc />
+        public IEnumerable<int> GetExplicitlyAuthorisedFacilities(SecurityPermission permission, string username)
+        {
+            var user = GetAuthenticatedUser(username);
+            var roles = user.Roles
+                            .Where(r => !r.IsFacilityWide && r.Permissions.Any(p => p == permission))
+                            .Select(f => f.SchoolId.Value).ToList();
 
-				//	// The permission has to exist in the Enum!
-				//	if (string.IsNullOrEmpty(permissionName))
-				//	{
-				//		Logger.LogError("Authentication: A security permission exists in the database that you haven't added to the enum SecurityPermission. This permission will be ignored.");
-				//		continue;
-				//	}
+            return roles;
+        }
 
-				//	// If this permission has been initialised by another role, add to it.
-				//	if (permissions.ContainsKey(permission))
-				//	{
-				//		// If already facility wide, loop
-				//		var permissionFacilities = permissions[permission];
-				//		var isFacilityWide = permissionFacilities == null || permissionFacilities.Count == 0;
-				//		if (isFacilityWide)
-				//		{
-				//			continue;
-				//		}
+        /// <inheritdoc />
+        public bool IsAuthorisedFacilityWide(SecurityPermission permission, string username = null)
+        {
+            var user = GetAuthenticatedUser(username);
+            return user.Roles.Any(r => r.IsFacilityWide && r.Permissions.Any(p => p == permission));
+        }
 
-				//		// If this permission is facility wide, clear exists values to mark it as facility wide
-				//		if (role.IsFacilityWide)
-				//		{
-				//			permissionFacilities.Clear();
-				//			continue;
-				//		}
+        private static string GetCacheKey(string username)
+        {
+            return $"Cpt_Security_User_{username}";
+        }
 
-				//		// Add this facility to the list
-				//		permissionFacilities.Add(role.SchoolId.Value);
-				//		continue;
-				//	}
+        /// <summary>
+        /// Generates the claims.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns></returns>
+        private IEnumerable<Claim> GenerateClaims(User user)
+        {
+            // Get the user
+            //var authUser = SecurityRepository.GetAuthenticatedUser(username);
 
-				//	// Add this permission to the list
-				//	permissions.Add(permission, new HashSet<int>(!role.IsFacilityWide ? new[] { role.SchoolId.Value } : Array.Empty<int>()));
-				//}
-			}
+            var expiresIn =
+                new DateTimeOffset(DateTime.Now.AddMinutes(Configuration.PcbAppSettings.DataSettings.JwtLifetime)).ToUnixTimeSeconds().ToString();
 
-			// Add the users role as a claim
-			var rolesJson = Newtonsoft.Json.JsonConvert.SerializeObject(roles);
-			claims.Add(new Claim("roles", rolesJson));
+            // Generate the base claims
+            // TODO: Make the claims JwtRegisteredClaimNames RFC Compliant!!!
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim("email", user.EmailAddress),
+                new Claim("givenname", user.GivenNames),
+                new Claim("surname", user.FamilyName),
+                new Claim(JwtRegisteredClaimNames.Exp, expiresIn)
 
-			// Add the new permissions claims
-			//var permissionsJson = Newtonsoft.Json.JsonConvert.SerializeObject(permissions);
-			//claims.Add(new Claim("permissions", permissionsJson));
+                // Include this when you'd like to invalidate roles when you change a users role in the app and want
+                // their cookie to expire.
+                // new Claim("LastChanged", {Database Value})
+            };
 
-			MemoryCache?.Remove(GetCacheKey(user.EmailAddress));
+            // Add roles, and collect permissions as we go.
+            var permissions = new Dictionary<SecurityPermission, HashSet<int>>();
+            var roles = new List<string>();
+            foreach (var role in user.UserRole)
+            {
+                // Add role name if it doesn't already exist in our list.
+                if (!roles.Any(r => string.Equals(r.ToLower(new CultureInfo("en-AU")), role.Role.Title.ToLower(new CultureInfo("en-AU")), StringComparison.Ordinal)))
+                {
+                    roles.Add(role.Role.Title);
+                    roles.Add(role.Role.Rank.ToString());
+                    roles.Add(role.IsCountryWide.ToString());
+                    roles.Add(role.SchoolId.ToString());
+                }
+                // TODO add permissions in later
+                //foreach (var permission in role.)
+                //{
+                //	// Get the permission
+                //	var permissionName = Enum.GetName(typeof(SecurityPermission), permission);
 
-			// We authenticated!
-			Logger.LogInformation($"Authentication: Login successful for user '{user.EmailAddress}'.");
-			return claims;
-		}
+                //	Debug.Assert(
+                //		!string.IsNullOrEmpty(permissionName),
+                //		"A security permission exists in the database that you haven't added to the enum SecurityPermission.");
 
-		/// <summary>
-		/// Returns the authenticator configured in appsettings.json
-		/// </summary>
-		/// <returns></returns>
-		private IAuthenticator GetAuthenticator()
-		{
-			switch (Configuration.PcbAppSettings.SecuritySettings.UseType)
-			{
-				default:
-					return new NoneAuthenticator(Configuration, Logger);
+                //	// The permission has to exist in the Enum!
+                //	if (string.IsNullOrEmpty(permissionName))
+                //	{
+                //		Logger.LogError("Authentication: A security permission exists in the database that you haven't added to the enum SecurityPermission. This permission will be ignored.");
+                //		continue;
+                //	}
 
-			}
-		}
-	}
+                //	// If this permission has been initialised by another role, add to it.
+                //	if (permissions.ContainsKey(permission))
+                //	{
+                //		// If already facility wide, loop
+                //		var permissionFacilities = permissions[permission];
+                //		var isFacilityWide = permissionFacilities == null || permissionFacilities.Count == 0;
+                //		if (isFacilityWide)
+                //		{
+                //			continue;
+                //		}
+
+                //		// If this permission is facility wide, clear exists values to mark it as facility wide
+                //		if (role.IsFacilityWide)
+                //		{
+                //			permissionFacilities.Clear();
+                //			continue;
+                //		}
+
+                //		// Add this facility to the list
+                //		permissionFacilities.Add(role.SchoolId.Value);
+                //		continue;
+                //	}
+
+                //	// Add this permission to the list
+                //	permissions.Add(permission, new HashSet<int>(!role.IsFacilityWide ? new[] { role.SchoolId.Value } : Array.Empty<int>()));
+                //}
+            }
+
+            // Add the users role as a claim
+            var rolesJson = Newtonsoft.Json.JsonConvert.SerializeObject(roles);
+            claims.Add(new Claim("roles", rolesJson));
+
+            // Add the new permissions claims
+            //var permissionsJson = Newtonsoft.Json.JsonConvert.SerializeObject(permissions);
+            //claims.Add(new Claim("permissions", permissionsJson));
+
+            MemoryCache?.Remove(GetCacheKey(user.EmailAddress));
+
+            // We authenticated!
+            Logger.LogInformation($"Authentication: Login successful for user '{user.EmailAddress}'.");
+            return claims;
+        }
+    }
 }

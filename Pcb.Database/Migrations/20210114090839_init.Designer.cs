@@ -10,8 +10,8 @@ using Pcb.Database.Context;
 namespace Pcb.Database.Migrations
 {
     [DbContext(typeof(PcbDbContext))]
-    [Migration("20201118013732_AllowedIngredientNulls")]
-    partial class AllowedIngredientNulls
+    [Migration("20210114090839_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1334,6 +1334,17 @@ namespace Pcb.Database.Migrations
                             Quantity = 1.0,
                             ShortName = "bch",
                             Title = "Bunch"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            ConvertsToId = 9,
+                            CountryCode = 2,
+                            CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            MeasurementType = 2,
+                            Quantity = 1.0,
+                            ShortName = "piece",
+                            Title = "Pieces"
                         });
                 });
 
@@ -2362,7 +2373,7 @@ namespace Pcb.Database.Migrations
                             IsStudent = false,
                             LastFailedLoginAttempt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PasswordHash = "$2a$11$Y61hWAby0C9UTia5hdtaAOe18d0KqpV9sji1oDUp2wCG1bK6vMyLW",
+                            PasswordHash = "$2a$11$pheOSS.b.1UvabpTIm7EA.IsMyEViqrTV8lHLKSeei6OBIq81Dz1i",
                             TimesLoggedIn = 0,
                             Username = "admin",
                             Verified = new DateTime(2018, 10, 10, 10, 10, 0, 0, DateTimeKind.Unspecified)
@@ -2438,7 +2449,7 @@ namespace Pcb.Database.Migrations
                         .WithMany("Ingredient")
                         .HasForeignKey("FoodGroupId");
 
-                    b.HasOne("Pcb.Database.Context.Models.IngredientState", null)
+                    b.HasOne("Pcb.Database.Context.Models.IngredientState", "IngredientState")
                         .WithMany("Ingredient")
                         .HasForeignKey("IngredientStateId");
                 });

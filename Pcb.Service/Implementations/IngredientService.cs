@@ -16,174 +16,172 @@ using System.Threading.Tasks;
 
 namespace Pcb.Service.Implementations
 {
-	internal class IngredientService : ServiceBase<PcbDbContext>, IIngredientService
-	{
-		private IPcbSecurityService SecurityService { get; }
+    internal class IngredientService : ServiceBase<PcbDbContext>, IIngredientService
+    {
+#pragma warning disable IDE0052 // Remove unread private members
+        private IPcbSecurityService SecurityService { get; }
+#pragma warning restore IDE0052 // Remove unread private members
 
-		private IIngredientMapper IngredientMapper { get; }
-		public IngredientService(
-			IPcbSecurityService securityService,
-			IPcbConfiguration configurationService,
-			IIngredientMapper ingredientMapper,
-			ILogger<IngredientService> logger)
-			: base(configurationService, logger)
-		{
-			SecurityService = securityService;
-			IngredientMapper = ingredientMapper;
-		}
+        private IIngredientMapper IngredientMapper { get; }
+        public IngredientService(
+            IPcbSecurityService securityService,
+            IPcbConfiguration configurationService,
+            IIngredientMapper ingredientMapper,
+            ILogger<IngredientService> logger)
+            : base(configurationService, logger)
+        {
+            SecurityService = securityService;
+            IngredientMapper = ingredientMapper;
+        }
 
-		public async Task<PagedResult<IngredientDto>> SearchIngredients(
-			int pageSize = 25,
-			int page = 1,
-			string sort = "name",
-			string order = "asc",
-			string filter = "")
-		{
-			var p = page > 0 ? page : 0;
-			using (var _db = GetReadOnlyDbContext())
-			{
-				var skip = p * pageSize;
-				var ingredientArray = _db.Ingredient
-					.Skip(skip)
-					.Take(pageSize)
-					.Where(l => string.IsNullOrEmpty(filter) ||
-								l.Name.Contains(filter) ||
-								l.PriceBrandName.Contains(filter) ||
-								l.PriceStoreName.Contains(filter));
+        public async Task<PagedResult<IngredientDto>> SearchIngredients(
+            int pageSize = 25,
+            int page = 1,
+            string sort = "name",
+            string order = "asc",
+            string filter = "")
+        {
+            var p = page > 0 ? page : 0;
+            using var _db = GetReadOnlyDbContext();
+            var skip = p * pageSize;
+            var ingredientArray = _db.Ingredient
+                .Skip(skip)
+                .Take(pageSize)
+                .Where(l => string.IsNullOrEmpty(filter) ||
+                            l.Name.Contains(filter) ||
+                            l.PriceBrandName.Contains(filter) ||
+                            l.PriceStoreName.Contains(filter));
 
-				ingredientArray = order.Equals("asc", StringComparison.OrdinalIgnoreCase)
-					? ingredientArray.OrderByMember(sort)
-					: ingredientArray.OrderByMemberDescending(sort);
+            ingredientArray = order.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                ? ingredientArray.OrderByMember(sort)
+                : ingredientArray.OrderByMemberDescending(sort);
 
-				var finishedIngredientArray = await ingredientArray
-					.Include(x => x.FoodGroup)
-					.Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementBaseUnit)
-					.Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementConvertUnit)
-					.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
-					.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
-					.Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
-					.ToListAsync();
+            var finishedIngredientArray = await ingredientArray
+                .Include(x => x.FoodGroup)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementBaseUnit)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementConvertUnit)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
+                .Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
+                .ToListAsync();
 
-				PagedResult<IngredientDto> pagedIngredientResult = new PagedResult<IngredientDto>
-				{
-					TotalCount = await _db.Ingredient.CountAsync()
-				};
-				foreach (var ingredient in finishedIngredientArray)
-				{
-					pagedIngredientResult.Items.Add(IngredientMapper.MapIngredientToDto(ingredient));
-				}
-				return pagedIngredientResult;
-			}
-		}
+            PagedResult<IngredientDto> pagedIngredientResult = new PagedResult<IngredientDto>
+            {
+                TotalCount = await _db.Ingredient.CountAsync()
+            };
+            foreach (var ingredient in finishedIngredientArray)
+            {
+                pagedIngredientResult.Items.Add(IngredientMapper.MapIngredientToDto(ingredient));
+            }
+            return pagedIngredientResult;
+        }
 
-		public async Task<IngredientDto> CreateIngredient(IngredientDto dto)
-		{
-			using var _db = GetReadWriteDbContext();
-			var mapped = IngredientMapper.MapDtoToIngredient(dto);
-			_db.Ingredient.Add(mapped);
-			await _db.SaveChangesAsync();
-			return await ReadSingleIngredient(mapped.Id);
-		}
+        public async Task<IngredientDto> CreateIngredient(IngredientDto dto)
+        {
+            using var _db = GetReadWriteDbContext();
+            var mapped = IngredientMapper.MapDtoToIngredient(dto);
+            _db.Ingredient.Add(mapped);
+            await _db.SaveChangesAsync();
+            return await ReadSingleIngredient(mapped.Id);
+        }
 
-		public async Task<IngredientDto> ReadSingleIngredient(int ingredientId)
-		{
-			using (var _db = GetReadOnlyDbContext())
-			{
-				Ingredient ingredientObj = await _db.Ingredient
-					.Where(x => x.Id == ingredientId)
-					.Include(x => x.FoodGroup)
-					.Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementBaseUnit)
-					.Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementConvertUnit)
-					.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
-					.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
-					.Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
-					.Include(x => x.RecipeIngredientList).ThenInclude(y => y.Recipe)
-					.FirstOrDefaultAsync();
-
-
-				return IngredientMapper.MapIngredientToDto(ingredientObj);
-			}
-		}
+        public async Task<IngredientDto> ReadSingleIngredient(int ingredientId)
+        {
+            using var _db = GetReadOnlyDbContext();
+            Ingredient ingredientObj = await _db.Ingredient
+                .Where(x => x.Id == ingredientId)
+                .Include(x => x.FoodGroup)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementBaseUnit)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementConvertUnit)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
+                .Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
+                .Include(x => x.RecipeIngredientList).ThenInclude(y => y.Recipe)
+                .FirstOrDefaultAsync();
 
 
-		public async Task<IngredientDto> UpdateIngredient(int ingredientId, IngredientDto dto)
-		{
-			if (dto == null || ingredientId != dto.Id) { return null; }
-			using var _db = GetReadWriteDbContext();
-			// Find the ingredient first
-			var ingredientObj = await _db.Ingredient
-				.Where(x => x.Id == ingredientId)
-				 .Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementBaseUnit)
-				.Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementConvertUnit)
-				.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
-				.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
-				.Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
-				.FirstOrDefaultAsync();
+            return IngredientMapper.MapIngredientToDto(ingredientObj);
+        }
 
-			ingredientObj = IngredientMapper.UpdateIngredientWithDto(ingredientObj, dto);
-			await _db.SaveChangesAsync();
 
-			return await ReadSingleIngredient(ingredientId);
-		}
+        public async Task<IngredientDto> UpdateIngredient(int ingredientId, IngredientDto dto)
+        {
+            if (dto == null || ingredientId != dto.Id) { return null; }
+            using var _db = GetReadWriteDbContext();
+            // Find the ingredient first
+            var ingredientObj = await _db.Ingredient
+                .Where(x => x.Id == ingredientId)
+                 .Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementBaseUnit)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementConvertUnit)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
+                .Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
+                .FirstOrDefaultAsync();
 
-		public async Task<IngredientDto> DeleteIngredient(int ingredientId)
-		{
-			// Get the DB Context
-			using var _db = GetReadWriteDbContext();
-			// Find the ingredient first
-			var ingredientObj = await _db.Ingredient
-				.Where(x => x.Id == ingredientId)
-				.Include(x => x.FoodGroup)
-				.Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementBaseUnit)
-				.Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementConvertUnit)
-				.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
-				.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
-				.Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
-				.FirstOrDefaultAsync();
+            ingredientObj = IngredientMapper.UpdateIngredientWithDto(ingredientObj, dto);
+            await _db.SaveChangesAsync();
 
-			if (ingredientObj == null)
-			{
-				return null;
-			}
+            return await ReadSingleIngredient(ingredientId);
+        }
 
-			// Remove and Save the changes
-			_db.Ingredient.Remove(ingredientObj);
-			await _db.SaveChangesAsync();
+        public async Task<IngredientDto> DeleteIngredient(int ingredientId)
+        {
+            // Get the DB Context
+            using var _db = GetReadWriteDbContext();
+            // Find the ingredient first
+            var ingredientObj = await _db.Ingredient
+                .Where(x => x.Id == ingredientId)
+                .Include(x => x.FoodGroup)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementBaseUnit)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementConvertUnit)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
+                .Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
+                .Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
+                .FirstOrDefaultAsync();
 
-			// return the ingredientObj mapped
-			return IngredientMapper.MapIngredientToDto(ingredientObj);
-		}
+            if (ingredientObj == null)
+            {
+                return null;
+            }
 
-		public async Task<List<SuggestedIngredientDto>> SuggestedIngredient(string filter = "", int pageSize = 10)
-		{
-			using var _db = GetReadOnlyDbContext();
-			var ingList = await _db.Ingredient
-				.Take(pageSize)
-				.Where(l => string.IsNullOrEmpty(filter) ||
-							l.Name.Contains(filter))
-				.Select(p => new { p.Id, p.Name })
-				.OrderByMemberDescending("Name")
-				.ToListAsync();
-			var suggestionList = new List<SuggestedIngredientDto>();
-			foreach (var suggestion in ingList)
-			{
-				suggestionList.Add(new SuggestedIngredientDto
-				{
-					Id = suggestion.Id,
-					Name = suggestion.Name
-				});
-			}
-			return suggestionList;
-		}
+            // Remove and Save the changes
+            _db.Ingredient.Remove(ingredientObj);
+            await _db.SaveChangesAsync();
 
-		public bool IngredientNameExists(string name, int ingredientId = 0)
-		{
-			using var _db = GetReadOnlyDbContext();
-			Ingredient value = _db.Ingredient.FirstOrDefault(a => a.Name.ToLower().Trim() == name.ToLower().Trim());
-			return (value == null || value.Id == ingredientId);
-		}
+            // return the ingredientObj mapped
+            return IngredientMapper.MapIngredientToDto(ingredientObj);
+        }
+
+        public async Task<List<SuggestedIngredientDto>> SuggestedIngredient(string filter = "", int pageSize = 10)
+        {
+            using var _db = GetReadOnlyDbContext();
+            var ingList = await _db.Ingredient
+                .Take(pageSize)
+                .Where(l => string.IsNullOrEmpty(filter) ||
+                            l.Name.Contains(filter))
+                .Select(p => new { p.Id, p.Name })
+                .OrderByMemberDescending("Name")
+                .ToListAsync();
+            var suggestionList = new List<SuggestedIngredientDto>();
+            foreach (var suggestion in ingList)
+            {
+                suggestionList.Add(new SuggestedIngredientDto
+                {
+                    Id = suggestion.Id,
+                    Name = suggestion.Name
+                });
+            }
+            return suggestionList;
+        }
+
+        public bool IngredientNameExists(string name, int ingredientId = 0)
+        {
+            using var _db = GetReadOnlyDbContext();
+            Ingredient value = _db.Ingredient.FirstOrDefault(a => a.Name.ToLower().Trim() == name.ToLower().Trim());
+            return (value == null || value.Id == ingredientId);
+        }
 
 
 
-	}
+    }
 }

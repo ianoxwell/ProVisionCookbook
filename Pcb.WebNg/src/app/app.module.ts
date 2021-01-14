@@ -12,8 +12,6 @@ import { SharedComponentModule } from '@components/shared-component.module';
 import { SiteLogoComponent } from '@components/site-logo/site-logo.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { SvgIconsModule } from '@ngneat/svg-icon';
-import { ActionReducer, MetaReducer } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { PipesModule } from '@pipes/pipes.module';
 import { AccountService } from '@services/account.service';
 import { LogService } from '@services/log.service';
@@ -26,10 +24,8 @@ import { StorageService } from '@services/storage';
 import { UserService } from '@services/user.service';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { ChartsModule } from 'ng2-charts';
-import { localStorageSync } from 'ngrx-store-localstorage';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import icons from '../assets/svg/svg-icons';
-import { environment } from '../environments/environment';
 import { CompleteMaterialModule } from './app-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -58,15 +54,6 @@ import { UserProfileService } from './services/user-profile.service';
 
 
 
-
-
-
-
-export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-  return localStorageSync({keys: ['filterPayload'],
-  rehydrate: true})(reducer);
-}
-const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 
 @NgModule({
   declarations: [
@@ -109,11 +96,10 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 	NgxMaterialTimepickerModule,
 	NgxMaterialTimepickerModule.setLocale('en-au'),
 	SocialLoginModule,
-
 	// https://netbasal.com/elegantly-manage-svg-icons-in-angular-applications-5adde68a5c46
-	!environment.production ? StoreDevtoolsModule.instrument() : [], SvgIconsModule.forRoot({
+	SvgIconsModule.forRoot({
 		icons
-	}),
+	  })
 	],
 	providers: [
 		{provide: MAT_DATE_LOCALE, useValue: 'en-AU'},

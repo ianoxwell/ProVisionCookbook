@@ -464,17 +464,11 @@
             The logger instance from DI.
             </summary>
         </member>
-        <member name="F:Pcb.Api.Controllers.TokenController.UserService">
-            <summary>
-            The user service.
-            </summary>
-        </member>
-        <member name="M:Pcb.Api.Controllers.TokenController.#ctor(Pcb.Service.Interfaces.IUserService,Pcb.Configuration.IPcbConfiguration,Pcb.Security.IPcbSecurityService,Pcb.Service.Interfaces.ISecurityService,Pcb.Api.Auth.IJwtFactory,Microsoft.Extensions.Logging.ILogger{Pcb.Api.Controllers.TokenController})">
+        <member name="M:Pcb.Api.Controllers.TokenController.#ctor(Pcb.Configuration.IPcbConfiguration,Pcb.Security.IPcbSecurityService,Pcb.Service.Interfaces.ISecurityService,Pcb.Api.Auth.IJwtFactory,Microsoft.Extensions.Logging.ILogger{Pcb.Api.Controllers.TokenController})">
             <summary>
             Initialises a new instance of the <see cref="T:Pcb.Api.Controllers.TokenController"/> class.
             Constructor
             </summary>
-            <param name="userService">The user service.</param>
             <param name="config">The configuration.</param>
             <param name="pcbSecurityService">The Pcb security service.</param>
             <param name="securityService">The security service.</param>
@@ -532,7 +526,6 @@
             </summary>
             <param name="refreshToken">The refresh token.</param>
             <param name="email">Name of the user.</param>
-            <param name="ipAddress">IP Address of the request.</param>
             <returns></returns>
         </member>
         <member name="T:Pcb.Api.Helper.InterfaceContractResolver`1">

@@ -9,9 +9,6 @@ export interface BaseDbModel {
 	createdAt: Date;
 }
 
-import { QuestionBase } from './questions/question-base.model';
-
-
 export interface Validations { type: string; message: string; }
 
 export interface HourMin { hours: number; minutes: number; }
@@ -20,14 +17,6 @@ export interface IdValuePair { id: number | string; value: string | number; }
 export interface IdTitlePair { id: number; title: string; }
 
 
-
-export interface QuestionArray {
-	key: string;
-	label: string;
-	order: number;
-	isChild: boolean;
-	questions: QuestionBase<string>[];
-  }
 
 export interface IngredientPaginator {
 	previousPageIndex: number;
