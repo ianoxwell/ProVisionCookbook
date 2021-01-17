@@ -1,0 +1,61 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+name: $(Year:yy).$(Month).$(DayOfMonth).$(BuildID)-$(SourceBranchName)
+
+variables:
+  buildConfiguration: 'Release'
+  agentImage: "windows-latest"
+  buildPlatform: 'Any CPU'
+
+jobs:
+- job: 'WebAPI'
+  pool:
+    vmImage: $(AgentImage)
+  steps:
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet build $(buildConfiguration)'
+    inputs:
+      command: publish
+      publishWebProjects: True
+      projects: '**/Pcb.Api.csproj'
+      arguments: '--configuration $(BuildConfiguration) -r win10-x64 --output "$(build.artifactstagingdirectory)"'
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    inputs:
+      PathtoPublish: '$(build.artifactstagingdirectory)'
+
+- job: Angular
+  pool:
+    vmImage: $(AgentImage)
+  steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '12.x'
+        checkLatest: true
+    - task: Npm@1
+      displayName: 'npm install'
+      inputs:
+        command: install
+        workingDir: Pcb.WebNG
+        verbose: false
+
+    - task: Npm@1
+      displayName: 'npm Build'
+      inputs:
+        command: custom
+        workingDir: Pcb.WebNG
+        verbose: false
+        customCommand: 'run build -- --prod --progress=false'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: Angular'
+      inputs:
+        PathtoPublish: Pcb.WebNG/dist
+        ArtifactName: Angular
+
