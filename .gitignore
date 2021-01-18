@@ -82,8 +82,9 @@ StyleCopReport.xml
 *.tmp
 *.tmp_proj
 # *.log
-!*MET.Context/Models/Logs/
-!*MET.Database/logs/
+!*Pcb.Context/Models/Logs/
+!*Pcb.Database/Context/Models/Logs/
+!*Pcb.Database/logs/
 *.vspscc
 *.vssscc
 .builds
