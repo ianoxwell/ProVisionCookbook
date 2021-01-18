@@ -18,17 +18,24 @@ jobs:
   pool:
     vmImage: $(AgentImage)
   steps:
+  - task: UseDotNet@2
+    displayName: 'Install .NET Core SDK'
+    inputs:
+      version: '5.0.x'
+      performMultiLevelLookup: true
+      includePreviewVersions: true # Required for preview versions
   - task: DotNetCoreCLI@2
     displayName: 'dotnet build $(buildConfiguration)'
     inputs:
       command: publish
       publishWebProjects: True
-      projects: '**/Pcb.Api.csproj'
       arguments: '--configuration $(BuildConfiguration) -r win10-x64 --output "$(build.artifactstagingdirectory)"'
+      zipAfterPublish: True
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'
     inputs:
-      PathtoPublish: '$(build.artifactstagingdirectory)'
+      pathtoPublish: '$(build.artifactstagingdirectory)'
+      artifactName: 'pcbCookBookApi'
 
 - job: Angular
   pool:

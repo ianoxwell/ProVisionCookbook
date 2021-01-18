@@ -2,8 +2,8 @@ declare const require: any;
 
 export const environment = {
   production: true,
-  baseURL: 'https://provisioners-cookbook.herokuapp.com/',
-  apiUrl: 'https://localhost:44303',
+  baseURL: 'https://pcookbook.z8.web.core.windows.net/',
+  apiUrl: 'https://provisioners-cookbook.azurewebsites.net',
   apiVersion: '/api/v1/',
   version: require('../../package.json').version,
 };

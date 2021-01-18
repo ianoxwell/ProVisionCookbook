@@ -35,5 +35,11 @@
     <ProjectReference Include="..\PcbSecurity\Pcb.Security.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Pcb.Api.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
 </Project>
