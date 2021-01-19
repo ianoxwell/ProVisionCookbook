@@ -37,6 +37,20 @@ jobs:
       pathtoPublish: '$(build.artifactstagingdirectory)'
       artifactName: 'pcbCookBookApi'
 
+- job: 'PublishEFCore'
+  steps:
+  - task: CmdLine@2
+    displayName: 'Publish EF Core migration scripts'
+    inputs:
+      script: |
+        dotnet tool install –global dotnet-ef –version 5.0.2
+        dotnet ef migrations script –startup-project $(Build.SourcesDirectory)\Pcb.Database -o $(build.artifactstagingdirectory)\migrations\scripts.sql -i
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish EFCore Migrations'
+    inputs:
+      pathtoPublish: '$(build.artifactstagingdirectory)/migrations'
+      artifactName: 'Migrations'
+
 - job: Angular
   pool:
     vmImage: $(AgentImage)
