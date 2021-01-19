@@ -15,14 +15,16 @@ variables:
 
 jobs:
 - job: 'PublishEFCore'
+  pool:
+    vmImage: $(AgentImage)
   steps:
   - task: CmdLine@2
     displayName: 'Publish EF Core migration scripts'
     inputs:
       workingDirectory: $(Build.SourcesDirectory)/Pcb.Database
       script:
-        dotnet tool install -g dotnet-ef --version 5.0.2 && dotnet-ef --version &&
-        dotnet-ef migrations script –s $(Build.SourcesDirectory)/Pcb.Database -o $(build.artifactstagingdirectory)/migrations/scripts.sql -i
+        dotnet ef --version &&
+        dotnet ef migrations script –s $(Build.SourcesDirectory)/Pcb.Database -o $(build.artifactstagingdirectory)/migrations/scripts.sql -i
   - task: PublishBuildArtifacts@1
     displayName: 'Publish EFCore Migrations'
     inputs:
