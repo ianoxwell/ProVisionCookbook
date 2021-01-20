@@ -14,6 +14,29 @@ variables:
   buildPlatform: 'Any CPU'
 
 jobs:
+- job: 'WebAPI'
+  pool:
+    vmImage: $(AgentImage)
+  steps:
+  - task: UseDotNet@2
+    displayName: 'Install .NET Core SDK'
+    inputs:
+      version: '5.0.x'
+      performMultiLevelLookup: true
+      includePreviewVersions: true # Required for preview versions
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet build $(buildConfiguration)'
+    inputs:
+      command: publish
+      publishWebProjects: True
+      arguments: '--configuration $(BuildConfiguration) -r win10-x64 --output "$(build.artifactstagingdirectory)"'
+      zipAfterPublish: True
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    inputs:
+      pathtoPublish: '$(build.artifactstagingdirectory)'
+      artifactName: 'pcbCookBookApi'
+
 - job: 'PublishEFCore'
   pool:
     vmImage: $(AgentImage)
@@ -29,9 +52,38 @@ jobs:
     inputs:
       workingDirectory: $(Build.SourcesDirectory)/Pcb.Api
       script:
-        dotnet ef migrations script -o $(Build.artifactstagingdirectory)/migrations/scripts.sql -i
+        dotnet ef migrations script -o $(Build.artifactstagingdirectory)\migrations\scripts.sql -i
   - task: PublishBuildArtifacts@1
     displayName: 'Publish EFCore Migrations'
     inputs:
       pathtoPublish: '$(build.artifactstagingdirectory)/migrations'
       artifactName: 'Migrations'
+
+- job: Angular
+  pool:
+    vmImage: $(AgentImage)
+  steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '12.x'
+        checkLatest: true
+    - task: Npm@1
+      displayName: 'npm install'
+      inputs:
+        command: install
+        workingDir: Pcb.WebNG
+        verbose: false
+
+    - task: Npm@1
+      displayName: 'npm Build'
+      inputs:
+        command: custom
+        workingDir: Pcb.WebNG
+        verbose: false
+        customCommand: 'run build -- --prod --progress=false'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: Angular'
+      inputs:
+        PathtoPublish: Pcb.WebNG/dist
+        ArtifactName: Angular
