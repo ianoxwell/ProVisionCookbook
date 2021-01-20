@@ -29,7 +29,7 @@ jobs:
     inputs:
       workingDirectory: $(Build.SourcesDirectory)/Pcb.Api
       script:
-        dotnet ef migrations script –s $(Build.SourcesDirectory)/Pcb.Api -o $(Build.artifactstagingdirectory)/migrations/scripts.sql -i
+        dotnet ef migrations script -o $(Build.artifactstagingdirectory)/migrations/scripts.sql -i
   - task: PublishBuildArtifacts@1
     displayName: 'Publish EFCore Migrations'
     inputs:
