@@ -178,7 +178,7 @@ namespace Pcb.Service.Implementations
         {
             using var _db = GetReadOnlyDbContext();
             Ingredient value = _db.Ingredient.FirstOrDefault(a => a.Name.ToLower().Trim() == name.ToLower().Trim());
-            return (value == null || value.Id == ingredientId);
+            return !(value == null || value.Id == ingredientId);
         }
 
 

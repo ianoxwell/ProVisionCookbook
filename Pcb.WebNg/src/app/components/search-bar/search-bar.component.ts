@@ -1,14 +1,15 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-
-import { FilterQuery } from '../../models/filterQuery';
-import { take, debounce, debounceTime, takeUntil, tap, map } from 'rxjs/operators';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { ComponentBase } from '@components/base/base.component.base';
 import { ReferenceAll, ReferenceItemFull } from '@models/reference.model';
-import { ReferenceService } from '@services/reference.service';
-import { Observable } from 'rxjs';
 import { OrderRecipesBy } from '@models/static-variables';
+import { ReferenceService } from '@services/reference.service';
+import { StateService } from '@services/state.service';
+import { Observable } from 'rxjs';
+import { debounceTime, map, takeUntil, tap } from 'rxjs/operators';
+import { FilterQuery } from '../../models/filterQuery';
+
 
 @Component({
   selector: 'app-search-bar',
@@ -19,14 +20,13 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 	searchForm: FormGroup;
 	@Input() filterQuery: FilterQuery;
 	@Input() dataLength: number;
-	@Output() filterChanged = new EventEmitter<FilterQuery>();
-
 	orderRecipesBy = OrderRecipesBy;
 	allergyArray$: Observable<ReferenceItemFull[]>;
 
 	constructor(
 		private fb: FormBuilder,
-		private referenceService: ReferenceService
+		private referenceService: ReferenceService,
+		private stateService: StateService,
 		) {
 			super();
 			this.createForm();
@@ -49,7 +49,7 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 				});
 				this.filterQuery.page = 0;
 				console.log('new value', values, this.filterQuery);
-				this.filterChanged.emit(this.filterQuery);
+				this.stateService.setRecipeFilterQuery(this.filterQuery);
 			}),
 			takeUntil(this.ngUnsubscribe)
 		).subscribe();
@@ -70,7 +70,7 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 			this.filterQuery.page = 0;
 			this.filterQuery.perPage = ev.pageSize;
 		}
-		this.filterChanged.emit(this.filterQuery);
+		this.stateService.setRecipeFilterQuery(this.filterQuery);
 	}
 
   patchForm(item: FilterQuery) {
@@ -132,7 +132,7 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 			page: 0
 		});
 		this.filterQuery = this.searchForm.getRawValue();
-		this.filterChanged.emit(this.filterQuery);
+		this.stateService.setRecipeFilterQuery(this.filterQuery);
 	}
 
 }

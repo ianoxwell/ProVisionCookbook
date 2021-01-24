@@ -1,20 +1,20 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
-import {Observable} from 'rxjs';
-
-import { Suggestions } from '../models/suggestion';
-
-import {Ingredient} from '../models/ingredient';
-import { query } from '@angular/animations';
-import { IngredientFilterObject, IngredientPaginator, PagedResult, SortPageObj } from '@models/common.model';
-import { environment } from 'src/environments/environment';
+import { Injectable } from '@angular/core';
+import { IngredientFilterObject, PagedResult, SortPageObj } from '@models/common.model';
 import {
 	IRawFoodIngredient,
 	IRawFoodSuggestion,
 	ISpoonConversion,
 	ISpoonFoodRaw,
-	ISpoonSuggestions } from '@models/raw-food-ingredient.model';
+	ISpoonSuggestions
+} from '@models/raw-food-ingredient.model';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { Ingredient } from '../models/ingredient';
+import { Suggestion } from '../models/suggestion';
+
+
+
 
 
 @Injectable({
@@ -75,8 +75,8 @@ export class RestService {
 			return this.httpClient.get<PagedResult<Ingredient>>(`${this.apiUrl}ingredient/search${queryString}`, {headers: this.defaultHeader});
 		}
 
-	public getIngredientSuggestion(queryString: string): Observable<Suggestions> {
-		return this.httpClient.get<Suggestions>(this.apiUrl + 'ingredient/suggestion' + queryString, {headers: this.defaultHeader});
+	public getIngredientSuggestion(queryString: string): Observable<Suggestion[]> {
+		return this.httpClient.get<Suggestion[]>(this.apiUrl + 'ingredient/suggestion' + queryString, {headers: this.defaultHeader});
 	}
 	public getIngredientById(ingredientId: number): Observable<Ingredient> {
 		return this.httpClient.get<Ingredient>(`${this.apiUrl}ingredient/${ingredientId}`, {headers: this.defaultHeader});
@@ -86,7 +86,7 @@ export class RestService {
 			{headers: this.defaultHeader});
 	}
 	public updateIngredient(ingredientId: number, update: any): Observable<Ingredient> {
-		return this.httpClient.put<Ingredient>(this.apiUrl + 'ingredient/' + ingredientId, update,
+		return this.httpClient.put<Ingredient>(`${this.apiUrl}ingredient/${ingredientId}`, update,
 			{headers: this.defaultHeader});
 	}
 	public deleteItem(itemID: number): Observable<Ingredient> {
@@ -105,7 +105,7 @@ export class RestService {
 		return this.httpClient.get<IRawFoodIngredient>(`${this.apiUrl}rawfooddata/${usdaId}`);
 	}
 
-	public checkFoodNameAvailable(filter: string, foodId: number = 0): Observable<boolean> {
+	public checkFoodNameExists(filter: string, foodId: number = 0): Observable<boolean> {
 		const queryStr = `?filter=${filter}&foodId=${foodId}`;
 		return this.httpClient.get<boolean>(`${this.apiUrl}ingredient/check-name${queryStr}`);
 	}

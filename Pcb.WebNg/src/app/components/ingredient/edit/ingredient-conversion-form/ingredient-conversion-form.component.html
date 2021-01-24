@@ -7,12 +7,12 @@
 			</mat-form-field>
 			<mat-form-field class="pr-2 max-width7">
 				<mat-select placeholder="MeasurementA" Title="MeasurementA" formControlName="measureA">
-					<mat-option *ngFor="let measure of measurements" [value]="measure.shortName">{{measure.name}}</mat-option>
+					<mat-option *ngFor="let measure of measurements" [value]="measure.id">{{measure.title}}</mat-option>
 				</mat-select>
 			</mat-form-field>
 			<mat-form-field class="pr-2 max-width7">
 				<mat-select placeholder="StateA" Title="State of Ingredient" formControlName="stateA">
-					<mat-option *ngFor="let state of ingredientState" [value]="state.value">{{state.value}}</mat-option>
+					<mat-option *ngFor="let state of ingredientState" [value]="state.id">{{state.title}}</mat-option>
 				</mat-select>
 			</mat-form-field>
 		</div>
@@ -23,13 +23,12 @@
 			</mat-form-field>
 			<mat-form-field class="pr-2 max-width">
 				<mat-select placeholder="MeasurementB" Title="MeasurementB" formControlName="measureB">
-					<!-- todo  filterMeasurements(convert._id) -->
-					<mat-option *ngFor="let measure of measurements" [value]="measure.name">{{measure.name}}</mat-option>
+					<mat-option *ngFor="let measure of measurements" [value]="measure.id">{{measure.title}}</mat-option>
 				</mat-select>
 			</mat-form-field>
 			<mat-form-field class="pr-2 max-width">
 				<mat-select placeholder="StateB" Title="State of IngredientB" formControlName="stateB">
-					<mat-option *ngFor="let state of ingredientState" [value]="state.value">{{state.value}}</mat-option>
+					<mat-option *ngFor="let state of ingredientState" [value]="state.id">{{state.title}}</mat-option>
 				</mat-select>
 			</mat-form-field>
 		</div>

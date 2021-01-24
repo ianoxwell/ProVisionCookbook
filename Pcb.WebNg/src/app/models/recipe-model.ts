@@ -1,7 +1,7 @@
 export class IngredientListModel {
   // tslint:disable-next-line:variable-name
-  _id?: string;
-  ingredientId: string;
+  id?: number;
+  ingredientId: number;
   ingredientName: string;
   quantity: number; // if stored as 0.5, 0.75 convert to symbol / fraction when displaying - 0.66 = 1/3
   measure: string; // pinch, cup, kg, grams etc
@@ -17,7 +17,7 @@ export class PictureModel {
 }
 export class HistoryModel {
   // tslint:disable-next-line:variable-name
-  _id?: string;
+  id?: number;
   eventDate: Date;
   event: string; // event that occurred edit, booked, favoured, created
   changeKey: string; // used in an update
@@ -28,7 +28,7 @@ export class HistoryModel {
 
 export class RecipeModel {
   // tslint:disable-next-line:variable-name
-  _id?: string;
+  id?: number;
   name: string; // **
   numberOfServings: number;
   priceEstimate: number; // calculated field

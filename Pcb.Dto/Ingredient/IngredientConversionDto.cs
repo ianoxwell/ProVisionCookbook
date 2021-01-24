@@ -9,6 +9,7 @@ namespace Pcb.Dto.Ingredient
     {
         public int Id { get; set; }
         public int IngredientId { get; set; }
+        public int Preference { get; set; }
 
         public ReferenceItemEx BaseState { get; set; }
         public ReferenceItemMeasurement BaseMeasurementUnit { get; set; }

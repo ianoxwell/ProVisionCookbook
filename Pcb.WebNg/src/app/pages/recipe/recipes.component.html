@@ -10,10 +10,10 @@
 			<button mat-flat-button (click)="showToast()" type="button">Show toast</button>
 		</span>
 		<span *ngIf="selectedTab === 1">
-			<button type="button" mat-flat-button title="Previous" (click)="changeRecipe({direction: 'prev', id: selectedRecipe._id})">
+			<button type="button" mat-flat-button title="Previous" (click)="changeRecipe({direction: 'prev', id: selectedRecipe.id})">
 				<mat-icon class="color-on-primary">chevron_left</mat-icon> Prev
 			</button>
-			<button type="button" mat-flat-button title="Next" (click)="changeRecipe({direction: 'next', id: selectedRecipe._id})" style="margin-left: 1em;">
+			<button type="button" mat-flat-button title="Next" (click)="changeRecipe({direction: 'next', id: selectedRecipe.id})" class="ml-2">
 				Next <mat-icon class="color-on-primary">chevron_right</mat-icon>
 			</button>
 		</span>
@@ -29,9 +29,9 @@
 		<mat-tab>
 			<div class="flex-box flex-row mt-1">
 				<div class="filter-side-bar">
-					<app-search-bar *ngIf="!!filterQuery" [filterQuery]="filterQuery" [dataLength]="dataLength" (filterChanged)="onFilterChange($event)"></app-search-bar>
+					<app-search-bar [filterQuery]="filterQuery" [dataLength]="dataLength"></app-search-bar>
 				</div>
-				<ng-container *ngIf="!isLoading; else loading">
+				<ng-container *ngIf="!isLoading; else showLoading">
 					<div class="container mt-1 grid-parent">  
 						<div *ngFor="let recipe of recipes; let i = index" class="recipeCard">
 							<app-recipe-card [recipeInput]="recipe" (clickedRecipe)="selectThisRecipe($event, i)"></app-recipe-card>
@@ -41,7 +41,7 @@
 						</ng-container>
 					</div>
 				</ng-container>
-				<ng-template #loading>
+				<ng-template #showLoading>
 					<app-loading-indicator></app-loading-indicator>
 				</ng-template>
 			</div>

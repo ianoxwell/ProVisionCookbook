@@ -11,6 +11,7 @@ import { DialogService } from '@services/dialog.service';
 import { MessageService } from '@services/message.service';
 import { RecipeRestService } from '@services/recipe-rest.service';
 import { RestService } from '@services/rest-service.service';
+import { StateService } from '@services/state.service';
 import { UserProfileService } from '@services/user-profile.service';
 import { Observable, of } from 'rxjs';
 import { catchError, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -24,7 +25,7 @@ import { catchError, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
 })
 export class RecipesComponent extends ComponentBase implements OnInit {
 	recipes: Recipe[] = [];
-	isLoading = true;
+	isLoading = false;
 	selectedRecipe: Recipe;
 	selectedIndex = 0;
 	selectedTab = 0; // controls the selectedIndex of the mat-tab-group
@@ -33,7 +34,6 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 	currentPath: string;
 	filterQuery: FilterQuery;
 	dataLength: number;
-	ngrxFilterQuery$: Observable<any>;
 	cookBookUserProfile: User;
 
 	constructor(
@@ -44,12 +44,24 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 			private userProfileService: UserProfileService,
 			private toTitleCase: ToTitleCasePipe,
 			private messageService: MessageService,
-			private dialogService: DialogService
+			private dialogService: DialogService,
+			private stateService: StateService,
 		) { super(); }
 
 	ngOnInit(): void {
 		this.userProfileService.currentData.subscribe(profile => this.cookBookUserProfile = profile);
 		this.routeParamSubscribe();
+		this.listenFilterQueryChanges();
+	}
+
+	listenFilterQueryChanges(): void {
+		this.stateService.getRecipeFilterQuery().pipe(
+			switchMap((result: FilterQuery) => {
+				this.filterQuery = result;
+				return this.getRecipes();
+			}),
+			takeUntil(this.ngUnsubscribe)
+		).subscribe();
 	}
 	showToast() {
 		this.messageService.add({
@@ -99,7 +111,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 			this.selectedIndex++;
 		}
 		this.selectedRecipe = this.recipes[this.selectedIndex];
-		this.location.replaceState(`savoury/recipes/item/${this.selectedRecipe._id}`);
+		this.location.replaceState(`savoury/recipes/item/${this.selectedRecipe.id}`);
 	}
 
 	onFilterChange(ev: FilterQuery) {
@@ -114,13 +126,14 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 				this.dataLength = 0;
 				return of({items: [], total: 0});
 			}),
-			tap(() => this.isLoading = false),
+			tap(() => {
+				this.isLoading = false;
+			}),
 			filter(result => result.total > 0),
 			tap((recipeResults: Recipes) => {
 				this.dataLength = recipeResults.total;
 				this.recipes = recipeResults.items;
 			}),
-			takeUntil(this.ngUnsubscribe),
 		);
 	}
 
@@ -142,7 +155,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 			this.selectedRecipe = null;
 			this.location.replaceState('savoury/recipes/browse');
 		} else {
-			this.location.replaceState(`savoury/recipes/item/${this.selectedRecipe._id}`);
+			this.location.replaceState(`savoury/recipes/item/${this.selectedRecipe.id}`);
 		}
 	}
 

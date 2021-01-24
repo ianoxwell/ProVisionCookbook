@@ -1,24 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { PageTitleService } from '@services/page-title.service';
-import { Observable } from 'rxjs';
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { PageTitleService } from "@services/page-title.service";
+import { Observable } from "rxjs";
 
 @Component({
-  selector: 'app-page-title',
-  templateUrl: './page-title.component.html',
-  styleUrls: ['./page-title.component.scss']
+	selector: "app-page-title",
+	templateUrl: "./page-title.component.html",
+	styleUrls: ["./page-title.component.scss"]
 })
 export class PageTitleComponent implements OnInit {
-
 	pageTitle$: Observable<string>;
 	pageSymbol$: Observable<string>;
+	isLoginPage = false;
 
-  constructor(
-	  private pageTitleService: PageTitleService
-  ) { }
+	constructor(
+		private pageTitleService: PageTitleService,
+		private router: Router
+	) {}
 
-  ngOnInit() {
-	this.pageTitle$ = this.pageTitleService.pageTitle$;
-	this.pageSymbol$ = this.pageTitleService.pageSymbol$;
-  }
-
+	ngOnInit() {
+		this.pageTitle$ = this.pageTitleService.pageTitle$;
+		this.pageSymbol$ = this.pageTitleService.pageSymbol$;
+		const currentUrl: string = this.router.url;
+		this.isLoginPage =
+			currentUrl.includes("account") || this.router.url === "/";
+	}
 }

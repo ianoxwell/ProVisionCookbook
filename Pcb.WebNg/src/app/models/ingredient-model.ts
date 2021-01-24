@@ -102,7 +102,7 @@ export interface ICaloricBreakdown{
 // }
 export class IngredientModel {
 	// tslint:disable-next-line: variable-name
-	_id: string;
+	id: number;
 	name: string; // standard input
 	parent: string; // select dropdown of parent options
 	allergies: string[]; // multiselect dropdown of allergies
@@ -115,11 +115,3 @@ export class IngredientModel {
 	conversions: Conversion[];
 }
 
-export class NutritionModel {
-	_id: string;
-	title: string;
-	amount: number;
-	percentOfDailyNeeds: number;
-	unit: string;
-	constructor() {}
-}

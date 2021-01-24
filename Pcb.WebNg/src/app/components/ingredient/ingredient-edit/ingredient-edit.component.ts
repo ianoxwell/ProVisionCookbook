@@ -1,23 +1,22 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { EditedFieldModel, MeasurementModel} from '@models/ingredient-model';
-import {DateTimeService} from '@services/date-time.service';
-import {RestService} from '@services/rest-service.service';
-import {catchError, takeUntil, tap} from 'rxjs/operators';
-import {ComponentBase} from '@components/base/base.component.base';
-import {of} from 'rxjs';
-import {DialogService} from '@services/dialog.service';
-import {MessageStatus} from '@models/message.models';
-import {MessageService} from '@services/message.service';
-import {HttpErrorResponse} from '@angular/common/http';
-
-import {MatSelect} from '@angular/material/select';
-
-import {Ingredient, IngredientNameSpace} from '@models/ingredient';
-import {ReferenceAll, ReferenceItemFull} from '@models/reference.model';
-import {Conversion} from '@models/conversion';
-import {ValidationMessages} from '@models/static-variables';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { MatSelect } from '@angular/material/select';
+import { ComponentBase } from '@components/base/base.component.base';
+import { Ingredient } from '@models/ingredient';
+import { EditedFieldModel, MeasurementModel } from '@models/ingredient-model';
+import { MessageStatus } from '@models/message.models';
+import { ReferenceAll, ReferenceItemFull } from '@models/reference.model';
+import { ValidationMessages } from '@models/static-variables';
+import { DateTimeService } from '@services/date-time.service';
+import { DialogService } from '@services/dialog.service';
 import { IngredientEditFormService } from '@services/ingredient-edit-form.service';
+import { MessageService } from '@services/message.service';
+import { RestService } from '@services/rest-service.service';
+import { of } from 'rxjs';
+import { catchError, takeUntil, tap } from 'rxjs/operators';
+
+
 
 
 @Component({
@@ -45,7 +44,7 @@ import { IngredientEditFormService } from '@services/ingredient-edit-form.servic
 // the IngredientModel for new or sent through to update
 export class IngredientEditComponent extends ComponentBase implements OnInit, AfterViewInit {
 	@Input() singleIngredient: Ingredient;
-	@Input() isNew: boolean;
+	@Input() isNew = false;
 	@Input() refData: ReferenceAll;
 	@Input() measurements: MeasurementModel[];
 	@Output() deleteItem = new EventEmitter<Ingredient>();
@@ -87,7 +86,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 	ngOnInit() {
 		this.selected = this.singleIngredient;
 		this.ingredientForm = this.ingredientEditFormService.createForm(this.singleIngredient, this.isNew);
-		console.log('raw ingredient form', this.ingredientForm.getRawValue(), this.nutritionFacts.controls);
+		console.log('raw ingredient form', this.ingredientForm.getRawValue(), this.refData);
 	}
 
 	ngAfterViewInit(): void {

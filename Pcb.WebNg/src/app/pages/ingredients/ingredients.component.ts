@@ -154,6 +154,7 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 					return this.restService.createIngredient(result);
 				}),
 				tap((savedResult: Ingredient) => {
+					this.isNew = false; // ingredient is no longer "new"
 					this.selectedIngredient$ = of(savedResult);
 					this.changeTab(1);
 				}),

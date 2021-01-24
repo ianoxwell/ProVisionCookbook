@@ -37,7 +37,7 @@
 				<app-ingredient-conversion-form
 					[convert]="convert"
 					[measurements]="measurements"
-					[ingredientState]="refData.ingredientState"
+					[ingredientState]="refData.IngredientState"
 					(markAsDirty)="ingredientConversions.markAsDirty()"
 					(deleteItem)="deleteSubDocument('conversions', convert.value._id, i)">
 				</app-ingredient-conversion-form>

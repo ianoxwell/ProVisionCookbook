@@ -11,7 +11,7 @@
  */
 
 export interface Picture {
-	_id?: string;
+	id?: number;
 	/**
 	 * if using GridFS - optional field
 	 */

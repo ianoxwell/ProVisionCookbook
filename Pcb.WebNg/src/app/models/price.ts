@@ -11,7 +11,7 @@
  */
 
 export interface Price {
-	_id?: string;
+	id?: number;
 	brandName?: string;
 	price: number;
 	quantity: number;

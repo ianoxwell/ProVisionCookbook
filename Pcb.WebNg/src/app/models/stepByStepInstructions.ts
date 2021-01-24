@@ -11,7 +11,7 @@
  */
 
 export interface StepByStepInstructions {
-	_id?: string;
+	id?: number;
 	/**
 	 * Which step number
 	 */

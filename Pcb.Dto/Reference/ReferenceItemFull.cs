@@ -28,12 +28,6 @@ namespace Pcb.Dto.Reference
         public DateTime StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }
-
-        public int? SortOrder { get; set; }
-
-        public DateTimeOffset CreatedAt { get; set; }
-
-        public long RowVer { get; set; }
     }
 
     public static class ReferenceItemFullExtensions

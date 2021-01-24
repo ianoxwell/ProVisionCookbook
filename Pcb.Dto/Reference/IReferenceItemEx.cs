@@ -7,7 +7,7 @@ namespace Pcb.Dto.Reference
     /// Extended reference item with additional fields.
     /// e.g. Extended summary text, Symbol field.
     /// </summary>
-    public interface IReferenceItemEx: IReferenceItem
+    public interface IReferenceItemEx : IReferenceItem
     {
         /// <summary>
         /// Extended description

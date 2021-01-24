@@ -125,11 +125,11 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 	checkNameExists(name: string): void {
 		this.isCheckingFoodName = true;
 		this.isFoodNameAvailable = null;
-		this.ingredientRestService.checkFoodNameAvailable(name).pipe(
+		this.ingredientRestService.checkFoodNameExists(name).pipe(
 			first(),
 			tap((result: boolean) => {
 				this.isCheckingFoodName = false;
-				this.isFoodNameAvailable = result;
+				this.isFoodNameAvailable = !result;
 			})
 		).subscribe();
 	}

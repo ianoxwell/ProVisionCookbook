@@ -9,5 +9,6 @@ export const environment = {
   baseURL: 'https://localhost:4200/',
   version: require('../../package.json').version,
   apiUrl: 'https://localhost:44303',
-  apiVersion: '/api/v1/'
+  apiVersion: '/api/v1/',
+  resultsPerPage: 10,
 };

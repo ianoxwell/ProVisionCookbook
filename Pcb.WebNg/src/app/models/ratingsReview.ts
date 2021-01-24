@@ -11,7 +11,7 @@
  */
 
 export interface RatingReviews {
-	_id?: string;
+	id?: number;
 	// number 0-10 - which presents 3.5/5 stars
 	rating: number;
 

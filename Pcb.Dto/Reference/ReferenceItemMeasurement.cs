@@ -8,7 +8,7 @@ namespace Pcb.Dto.Reference
 
         public DateTimeOffset CreatedAt { get; set; }
 
-        public long RowVer { get; set; }
+        public byte[] RowVer { get; set; }
 
         public MeasurementType MeasurementType  { get; set; }
 

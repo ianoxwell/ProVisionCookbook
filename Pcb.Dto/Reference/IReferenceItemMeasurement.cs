@@ -29,6 +29,6 @@ namespace Pcb.Dto.Reference
         /// Db-globally-incrementing counter identifying this item's most recent modification with respect to other rows/table data.
         /// From bytes: BitConverter.ToUInt64(byteArray.Reverse().ToArray(), 0);
         /// </summary>
-        long RowVer { get; }
+        byte[] RowVer { get; }
     }
 }

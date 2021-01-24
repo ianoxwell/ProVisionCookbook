@@ -11,6 +11,7 @@ namespace Pcb.Database.Context.Models
     {
         [Key]
         public int Id { get; set; }
+        public int Preference { get; set; }
         public int IngredientId { get; set; }
 
         public int? BaseStateId { get; set; }

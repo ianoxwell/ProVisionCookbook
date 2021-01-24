@@ -20,6 +20,7 @@ import { MessageService } from '@services/message.service';
 import { RefDataService } from '@services/ref-data.service';
 import { ReferenceService } from '@services/reference.service';
 import { SecurityService } from '@services/security.service';
+import { StateService } from '@services/state.service';
 import { StorageService } from '@services/storage';
 import { UserService } from '@services/user.service';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
@@ -115,6 +116,7 @@ import { UserProfileService } from './services/user-profile.service';
 		SecurityService,
 		MessageService,
 		UserService,
+		StateService,
 		{ provide: 'SocialAuthServiceConfig', useValue: {
 			autoLogin: false,
 			providers: [
