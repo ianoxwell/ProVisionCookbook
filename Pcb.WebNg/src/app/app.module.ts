@@ -8,6 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AutoCompleteSearchComponent } from '@components/auto-complete-search/auto-complete-search.component';
 import { ComponentModule } from '@components/component.module';
+import { FooterComponent } from '@components/footer/footer.component';
 import { SharedComponentModule } from '@components/shared-component.module';
 import { SiteLogoComponent } from '@components/site-logo/site-logo.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
@@ -70,7 +71,8 @@ import { UserProfileService } from './services/user-profile.service';
 		ConfirmDialogComponent,
 		DialogNewIngredientComponent,
 		AutoCompleteSearchComponent,
-		SiteLogoComponent
+		SiteLogoComponent,
+		FooterComponent,
 	],
 	imports: [
 		BrowserModule,

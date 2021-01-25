@@ -2,13 +2,13 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { ComponentBase } from '@components/base/base.component.base';
+import { IRecipeFilterQuery, RecipeFilterQuery } from '@models/filter-queries.model';
 import { ReferenceAll, ReferenceItemFull } from '@models/reference.model';
 import { OrderRecipesBy } from '@models/static-variables';
 import { ReferenceService } from '@services/reference.service';
 import { StateService } from '@services/state.service';
 import { Observable } from 'rxjs';
 import { debounceTime, map, takeUntil, tap } from 'rxjs/operators';
-import { IRecipeFilterQuery, RecipeFilterQuery } from '../../models/filter-queries.model';
 
 @Component({
 	selector: 'app-search-bar',

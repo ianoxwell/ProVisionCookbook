@@ -3,6 +3,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChil
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatSelect } from '@angular/material/select';
 import { ComponentBase } from '@components/base/base.component.base';
+import { IScrollPositions } from '@models/common.model';
 import { Conversion } from '@models/conversion';
 import { Ingredient } from '@models/ingredient';
 import { EditedFieldModel, MeasurementModel } from '@models/ingredient-model';
@@ -14,6 +15,7 @@ import { DialogService } from '@services/dialog.service';
 import { IngredientEditFormService } from '@services/ingredient-edit-form.service';
 import { MessageService } from '@services/message.service';
 import { RestIngredientService } from '@services/rest-ingredient.service';
+import { ScrollService } from '@services/scroll.service';
 import { of } from 'rxjs';
 import { catchError, filter, first, switchMap, takeUntil, tap } from 'rxjs/operators';
 
@@ -74,7 +76,8 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 		private restIngredientService: RestIngredientService,
 		private dialogService: DialogService,
 		private messageService: MessageService,
-		private ingredientEditFormService: IngredientEditFormService
+		private ingredientEditFormService: IngredientEditFormService,
+		private scrollService: ScrollService
 	) {
 		super();
 	}
@@ -83,6 +86,10 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 		this.selected = this.singleIngredient;
 		this.ingredientForm = this.ingredientEditFormService.createForm(this.singleIngredient, this.isNew);
 		console.log('raw ingredient form', this.ingredientForm.getRawValue(), this.refData);
+		this.scrollService.getScrollPosition().pipe(
+			tap((scrollPos: IScrollPositions) => console.log('listening to scroll', scrollPos)),
+			takeUntil(this.ngUnsubscribe)
+		).subscribe();
 	}
 
 	ngAfterViewInit(): void {

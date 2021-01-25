@@ -1,0 +1,15 @@
+<form class="flex-box flex-row flex-justify-end flex-align-center mat-paginator-sticky mr-4" [formGroup]="form" autocomplete="off">
+	<mat-form-field class="mr-2" *ngIf="!hidePageSize">
+		<mat-label>Items per page {{perPage.value}}</mat-label>
+		<mat-select role="" formControlName="perPage">
+			<mat-option role="option" *ngFor="let opt of pageSizeOptions" [value]="opt">{{opt}}</mat-option>
+		</mat-select>
+	</mat-form-field>
+	<span class="mr-2">{{pageIndex}} of {{length}}</span>
+	<span>
+		<button type="button" mat-icon-button title="First page" (click)="firstPage()" *ngIf="showFirstLastButtons" [disabled]="!hasPreviousPage()"><mat-icon>first_page</mat-icon></button>
+		<button type="button" mat-icon-button title="Previous page" (click)="previousPage()" [disabled]="!hasPreviousPage()"><mat-icon>chevron_left</mat-icon></button>
+		<button type="button" mat-icon-button title="Next page" (click)="nextPage()" [disabled]="!hasNextPage()"><mat-icon>chevron_right</mat-icon></button>
+		<button type="button" mat-icon-button title="Last page" (click)="lastPage()" *ngIf="showFirstLastButtons" [disabled]="!hasNextPage()"><mat-icon>last_page</mat-icon></button>
+	</span>
+</form>

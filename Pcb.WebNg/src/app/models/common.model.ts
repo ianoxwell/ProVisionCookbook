@@ -91,6 +91,11 @@ export interface IValidationMessages {
 	}[];
 }
 
+export interface IScrollPositions {
+	prev: number;
+	current: number;
+}
+
 /* Section Enums
  */
 

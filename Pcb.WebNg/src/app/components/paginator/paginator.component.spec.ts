@@ -1,0 +1,24 @@
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { PaginatorComponent } from './paginator.component';
+
+describe('PaginatorComponent', () => {
+	let component: PaginatorComponent;
+	let fixture: ComponentFixture<PaginatorComponent>;
+
+	beforeEach(waitForAsync(() => {
+		TestBed.configureTestingModule({
+			declarations: [ PaginatorComponent ]
+		}).compileComponents();
+	}));
+
+	beforeEach(() => {
+		fixture = TestBed.createComponent(EditCommonMineralsComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
+
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
+});

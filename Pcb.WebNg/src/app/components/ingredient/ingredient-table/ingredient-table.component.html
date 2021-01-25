@@ -35,11 +35,11 @@
 			(mouseout)="mouseRow(row, 'out')"></tr>
 	</table>
 
-	<mat-paginator class="bottom-sticky"
+	<app-paginator class="bottom-sticky"
 		(page)="onPageChange($event)"
 		[length]="dataLength"
 		[pageSize]="sortPageObj.perPage"
 		[showFirstLastButtons]="true"
 		[pageIndex]="sortPageObj.page">
-	</mat-paginator>
+	</app-paginator>
 </div>

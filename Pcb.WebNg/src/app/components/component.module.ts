@@ -29,9 +29,10 @@ import { IngredientFilterComponent } from './ingredient/ingredient-filter/ingred
 import { IngredientTableComponent } from './ingredient/ingredient-table/ingredient-table.component';
 import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { PageTitleComponent } from './page-title/page-title.component';
-import { RecipeCardComponent } from './recipe-card/recipe-card.component';
-import { RecipeViewComponent } from './recipe-view/recipe-view.component';
-import { SearchBarComponent } from './search-bar/search-bar.component';
+import { PaginatorComponent } from './paginator/paginator.component';
+import { RecipeCardComponent } from './recipe/recipe-card/recipe-card.component';
+import { RecipeViewComponent } from './recipe/recipe-view/recipe-view.component';
+import { SearchBarComponent } from './recipe/search-bar/search-bar.component';
 import { SelectAutoCompleteComponent } from './select-auto-complete/select-auto-complete.component';
 import { SharedComponentModule } from './shared-component.module';
 import { ToastItemComponent } from './toast/toast-item/toast-item.component';
@@ -78,6 +79,7 @@ import { ToastComponent } from './toast/toast.component';
 	FormAutocompleteDirective,
 	MatInputAutoCompleteDirective,
 	GraphDoughnutComponent,
+	PaginatorComponent,
   ],
   exports: [
 	DragNDropComponent,
@@ -98,6 +100,7 @@ import { ToastComponent } from './toast/toast.component';
 	ToastComponent,
 	LoadingIndicatorComponent,
 	PageTitleComponent,
+	PaginatorComponent,
   ],
   providers: [
 	  NutrientTotalValidator,
