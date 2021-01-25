@@ -8,6 +8,7 @@
 	<button mat-flat-button type="button" [ngClass]="data.status" *ngIf="data.isAlert" (click)="onOkClick()">Ok</button>
 
 	<!-- Can optionally provide a result for the closing dialog. -->
-	<button mat-button *ngIf="!data.isAlert" class="delete" [ngClass]="data.status" (click)="onOkClick()">
-		{{ data.buttonText }} </button>
+	<button mat-flat-button *ngIf="!data.isAlert" [ngClass]="data.status" (click)="onOkClick()">
+		{{ data.buttonText }}
+	</button>
 </mat-dialog-actions>

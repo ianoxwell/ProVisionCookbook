@@ -1,3 +1,5 @@
+@import '../styles/variables.scss';
+
 h1 {
     padding: 13px 10px;
     padding-left: 20px;
@@ -34,4 +36,14 @@ mat-dialog-actions {
 mat-form-field {
     width: 100%;
     margin: 10px 0px;
+}
+
+.mat-flat-button.warning {
+	background-color: $warn;
+	color: $colour-text-on-success;
+}
+
+.mat-flat-button.success {
+	background-color: $success;
+	color: $colour-text-on-success;
 }

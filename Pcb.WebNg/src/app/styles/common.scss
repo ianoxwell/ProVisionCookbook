@@ -66,6 +66,20 @@ $widthsPercent: (5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100);
 	}
   }
 
+  @mixin margin-padding-dialog-box-header() {
+	margin: -1.5rem -1.5rem 1rem -1.5rem;
+	padding: 0.5rem 1.5rem;
+}
+
+.mat-dialog-title.warning {
+	background: $warn;
+	@include margin-padding-dialog-box-header();
+}
+.mat-dialog-title.success {
+	background: $success;
+	@include margin-padding-dialog-box-header();
+}
+
   .selected {
 	  background: $accent;
 	  padding: 1rem;

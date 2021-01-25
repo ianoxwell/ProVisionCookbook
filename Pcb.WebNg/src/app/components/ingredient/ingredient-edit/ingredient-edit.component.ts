@@ -15,7 +15,7 @@ import { IngredientEditFormService } from '@services/ingredient-edit-form.servic
 import { MessageService } from '@services/message.service';
 import { RestService } from '@services/rest-service.service';
 import { of } from 'rxjs';
-import { catchError, takeUntil, tap } from 'rxjs/operators';
+import { catchError, filter, first, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 
 
@@ -49,7 +49,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 	@Input() refData: ReferenceAll;
 	@Input() measurements: MeasurementModel[];
 	@Output() deleteItem = new EventEmitter<Ingredient>();
-	@Output() back = new EventEmitter<number>();
+	@Output() back = new EventEmitter<void>();
 
 	@ViewChild('constanceId', { static: true }) constanceSelect: MatSelect;
 
@@ -262,7 +262,16 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 	// }
 
 	deleteIngredient() {
-		this.deleteItem.emit(this.selected);
+		this.dialogService.confirm(MessageStatus.Warning, 'Delete Ingredient', `Are you sure you want to delete the ingredient ${this.selected.name}?`, 'Delete').pipe(
+			first(),
+			filter((result: boolean) => !!result),
+			switchMap(() => this.restService.deleteItem(this.selected.id)),
+			tap((deletedIngredient: Ingredient) => {
+				console.log('Deleted Ingredient', deletedIngredient);
+				// is there anyway to make this refresh the list?
+				this.back.emit();
+			})
+		).subscribe();
 	}
 
 	dragNDrop(event: any) {
