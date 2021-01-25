@@ -13,9 +13,10 @@ import { RecipeRestService } from '@services/recipe-rest.service';
 import { ReferenceService } from '@services/reference.service';
 // import {ConversionModel, EditedFieldModel, IngredientModel, PriceModel} from '../models/ingredient-model';
 import { RestService } from '@services/rest-service.service';
+import { StateService } from '@services/state.service';
 import { UserProfileService } from '@services/user-profile.service';
 import { combineLatest, Observable, of } from 'rxjs';
-import { catchError, first, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { catchError, first, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { ComponentBase } from '../../components/base/base.component.base';
 
 
@@ -39,11 +40,7 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 	cookBookUserProfile$: Observable<User>;
 	currentPath: string;
 	filterObject: IngredientFilterObject = {
-		name: '',
-		type: [],
-		parent: '',
-		allergies: [],
-		purchasedBy: ''
+		name: ''
 	};
 	sortPageObj = new SortPageObj();
 	data$: Observable<PagedResult<Ingredient>>;
@@ -58,46 +55,62 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 		private userProfileService: UserProfileService,
 		private location: Location,
 		private route: ActivatedRoute,
-		private referenceService: ReferenceService
+		private referenceService: ReferenceService,
+		private stateService: StateService,
 	) { super(); }
 
 	ngOnInit() {
-		this.routeParamSubscribe();
+		this.getAllReferences();
 		this.cookBookUserProfile$ = this.userProfileService.currentData.pipe(
 			takeUntil(this.ngUnsubscribe)
 		);
 	}
 
-	// async subscription to data$ in the template
-	routeParamSubscribe(): void {
-		this.data$ = combineLatest([
-				this.referenceService.getAllReferences(),
-				this.referenceService.getMeasurements()
-			]).pipe(
+
+	getAllReferences(): void {
+		combineLatest([
+			this.referenceService.getAllReferences(),
+			this.referenceService.getMeasurements()
+		]).pipe(
+			first(),
 			catchError((err: HttpErrorResponse) => this.dialogService.alert('Http error while attempting to getting references', err)),
 			switchMap(([refData, measurements]: [ReferenceAll, MeasurementModel[]]) => {
 					this.refData = refData;
 					this.measurements = measurements;
-					return this.route.params;
-				}),
-			switchMap(params => {
+					return this.routeParamSubscribe();
+			})
+		).subscribe();
+	}
+
+	routeParamSubscribe(): Observable<number> {
+		return this.route.params.pipe(
+			first(),
+			map(params => {
 				this.currentPath = this.route.snapshot.routeConfig.path;
 				if (params.ingredientId) {
 					this.selectedIngredient$ = this.getSingleIngredient(params.ingredientId);
 				}
+				this.listenStateService();
+				return params.ingredientId || 0;
+			})
+		);
+	}
+
+	listenStateService(): void {
+		this.data$ = this.stateService.getIngredientFilterQuery().pipe(
+			switchMap((ingFilterObj:IngredientFilterObject) => {
+				console.log('listen state Service', ingFilterObj);
+				this.filterObject = ingFilterObj;
 				return this.getIngredientList();
-			}),
-			takeUntil(this.ngUnsubscribe)
+			})
 		);
 	}
 
 	getSingleIngredient(itemId: number): Observable<Ingredient> {
 		this.isNew = false;
-		console.log('start of the method get single ingredient');
 		return this.restService.getIngredientById(itemId).pipe(
 			tap((test) => {
 				this.selectedTab = 1;
-				console.log('setting the tab to 1', test);
 			}),
 			catchError(err => {
 				this.dialogService.confirm(MessageStatus.Critical, 'Error getting ingredient', err);

@@ -29,7 +29,7 @@
 </ng-template>
 <mat-tab-group dynamicHeight="true" [selectedIndex]="selectedTab" class="ingredients-list-tabs" *ngIf="data$ | async as data; else loading">
 	<mat-tab>
-		<app-ingredient-filter [filterQuery]="filterObject" (filterChanged)="onFilterChanged($event)"></app-ingredient-filter>
+		<app-ingredient-filter [refData]="refData"></app-ingredient-filter>
 		<app-ingredient-table [data]="data"
 			[sortPageObj]="sortPageObj"
 			(sortingPageChange)="sortPageChange($event)"

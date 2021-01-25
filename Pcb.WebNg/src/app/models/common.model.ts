@@ -42,10 +42,10 @@ export class MessageResult {
 
 export interface IngredientFilterObject {
 	name: string;
-	type: string[];
-	parent: string;
-	allergies: string[];
-	purchasedBy: string;
+	type?: string[];
+	parent?: string;
+	allergies?: string[];
+	purchasedBy?: string;
 }
 export interface ISortPageObj {
 	sort: string;

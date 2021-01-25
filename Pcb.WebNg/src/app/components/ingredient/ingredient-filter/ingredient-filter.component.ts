@@ -1,60 +1,80 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-
-import { IngredientFilterObject } from '@models/common.model';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ComponentBase } from '@components/base/base.component.base';
-
-
-import { debounceTime, tap, takeUntil } from 'rxjs/operators';
-import { AllergyArray, ParentTypes } from '@models/static-variables';
+import { IngredientFilterObject } from '@models/common.model';
+import { ReferenceAll } from '@models/reference.model';
+import { StateService } from '@services/state.service';
+import { Observable, of } from 'rxjs';
+import { debounceTime, first, map, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-ingredient-filter',
-  templateUrl: './ingredient-filter.component.html',
-  styleUrls: ['./ingredient-filter.component.scss']
+	selector: 'app-ingredient-filter',
+	templateUrl: './ingredient-filter.component.html',
+	styleUrls: ['./ingredient-filter.component.scss']
 })
 export class IngredientFilterComponent extends ComponentBase implements OnInit {
 	searchForm: FormGroup;
-	@Input() filterQuery: IngredientFilterObject;
-	@Output() filterChanged = new EventEmitter<IngredientFilterObject>();
+	@Input() refData: ReferenceAll = {};
+	filterQuery: IngredientFilterObject = { name: '' };
+	isFormReady$: Observable<boolean> = of(false);
 
-	allergyArray = AllergyArray;
-	parentTypes = ParentTypes;
-
-	constructor(private fb: FormBuilder) {
+	constructor(private fb: FormBuilder, private stateService: StateService) {
 		super();
-		this.createForm();
 	}
 
 	ngOnInit() {
-		this.searchForm.valueChanges.pipe(
-			debounceTime(500),
-			tap((values: IngredientFilterObject) => {
-				Object.keys(this.searchForm.getRawValue()).forEach(key => {
-					if (values[key]) {
-						this.filterQuery[key] = values[key];
-					}
-				});
-				this.filterChanged.emit(this.filterQuery);
-			}),
-			takeUntil(this.ngUnsubscribe)
-		).subscribe();
+		this.isFormReady$ = this.listenStateService();
 	}
 
-	createForm(): void {
-		this.searchForm = this.fb.group({
-			name: '',
-			type: [],
-			parent: '',
-			allergies: [],
-			purchasedBy: ''
+	/**
+	 * On init check that the stateService does not hold existing filter items
+	 */
+	listenStateService(): Observable<boolean> {
+		return this.stateService.getIngredientFilterQuery().pipe(
+			first(),
+			map((filterObj: IngredientFilterObject) => {
+				this.filterQuery = filterObj;
+				this.searchForm = this.createForm();
+				this.listenFormChanges();
+				return true;
+			})
+		);
+	}
+
+	/**
+	 * Listens for form changes and sets the stateService ingredientFilter object appropriately, disposed of with the component
+	 */
+	listenFormChanges(): void {
+		this.searchForm.valueChanges
+			.pipe(
+				debounceTime(500),
+				tap(() => {
+					this.stateService.setIngredientFilterQuery(this.searchForm.getRawValue());
+				}),
+				takeUntil(this.ngUnsubscribe)
+			)
+			.subscribe();
+	}
+
+	/**
+	 * Creates the form after the stateService IngredientFilterQuery returns.
+	 * @returns FormGroup for searchForm.
+	 */
+	createForm(): FormGroup {
+		return this.fb.group({
+			name: this.filterQuery.name,
+			type: this.filterQuery.type,
+			parent: this.filterQuery.parent,
+			allergies: this.filterQuery.allergies,
+			purchasedBy: this.filterQuery.purchasedBy
 		});
 	}
 
-	clearFilterTerms() {
+	/**
+	 * Called from the template, resets the form and sets the ingredientFilter state.
+	 */
+	clearFilterTerms(): void {
 		this.searchForm.reset();
-		this.filterQuery = this.searchForm.getRawValue();
-		this.filterChanged.emit(this.filterQuery);
+		this.stateService.setIngredientFilterQuery({ name: '' });
 	}
-
 }
