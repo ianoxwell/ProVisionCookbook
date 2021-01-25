@@ -15,6 +15,7 @@ import { ReferenceItemFull } from './reference.model';
 
 export interface Conversion {
 	id?: number;
+	ingredientId?: number;
 	baseState?: ReferenceItemFull;
 	baseMeasurementUnit: MeasurementModel;
 	baseQuantity: number;

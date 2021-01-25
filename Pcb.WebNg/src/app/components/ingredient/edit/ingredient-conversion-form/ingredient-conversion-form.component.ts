@@ -18,7 +18,6 @@ export class IngredientConversionFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-	  console.log('convert form', this.convert.getRawValue(), this.ingredientState);
   }
 
 }

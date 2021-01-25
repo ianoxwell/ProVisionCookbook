@@ -31,6 +31,17 @@ export interface ReferenceItemFull extends ReferenceItem {
 	rowVer: string;
 }
 
+/**
+ * Note in alphabetical order - add to when references change
+ */
 export interface ReferenceAll {
-	[key: string]: ReferenceItemFull[];
+	AllergyWarning: ReferenceItemFull[];
+	CuisineType: ReferenceItemFull[];
+	DishTag: ReferenceItemFull[];
+	DishType: ReferenceItemFull[];
+	HealthLabel: ReferenceItemFull[];
+	IngredientFoodGroup: ReferenceItemFull[];
+	IngredientState: ReferenceItemFull[];
+	LogLevel: ReferenceItemFull[];
+	PermissionGroup: ReferenceItemFull[];
 }

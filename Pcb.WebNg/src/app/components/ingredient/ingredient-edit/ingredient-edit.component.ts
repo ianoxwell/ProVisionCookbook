@@ -3,6 +3,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChil
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatSelect } from '@angular/material/select';
 import { ComponentBase } from '@components/base/base.component.base';
+import { Conversion } from '@models/conversion';
 import { Ingredient } from '@models/ingredient';
 import { EditedFieldModel, MeasurementModel } from '@models/ingredient-model';
 import { MessageStatus } from '@models/message.models';
@@ -165,15 +166,25 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 	}
 
 	onSaveItem(): void {
+		const findReference = (id: number, refKey: keyof ReferenceAll) => this.refData[refKey].find((item: ReferenceItemFull) => item.id === id);
+		const findMeasurement = (id: number) => this.measurements.find((item: MeasurementModel) => item.id === id);
 		this.isSavingResults = true;
 		const formRaw = this.ingredientForm.getRawValue();
 		const saveObject: Ingredient = {
 			id: this.selected.id,
 			...formRaw,
 		};
-		saveObject.allergies = formRaw.allergies.map((id: number) =>
-			this.refData.AllergyWarning.find((item: ReferenceItemFull) => item.id === id));
-		saveObject.foodGroup = this.refData.IngredientFoodGroup.find((item: ReferenceItemFull) => item.id === formRaw.foodGroup);
+		saveObject.allergies = formRaw.allergies.map((id: number) => findReference(id, 'AllergyWarning'));
+		saveObject.foodGroup = findReference(formRaw.foodGroup, 'IngredientFoodGroup');
+		saveObject.ingredientConversions = saveObject.ingredientConversions.map((convert: Conversion) => {
+			return {
+				...convert,
+				baseMeasurementUnit: findMeasurement(Number(convert.baseMeasurementUnit)),
+				baseState: findReference(Number(convert.baseState), 'IngredientState'),
+				convertToMeasurementUnit: findMeasurement(Number(convert.convertToMeasurementUnit)),
+				convertToState: findReference(Number(convert.convertToState), 'IngredientState')
+			};
+		})
 		console.log('ingredient form', this.ingredientForm.getRawValue(), this.selected, saveObject);
 		// getRawValue evaluates arrays as null if the array is empty
 		if (!saveObject.allergies) {
@@ -250,7 +261,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 	// 	).subscribe();
 	// }
 
-	deleteIngredient(docId: string) {
+	deleteIngredient() {
 		this.deleteItem.emit(this.selected);
 	}
 

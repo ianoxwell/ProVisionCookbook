@@ -1,4 +1,4 @@
-<button mat-flat-button class="save-button" type="button" (click)="save.emit()" [attr.aria-label]="label" [color]="color" [disabled]="!valid || !dirty || isSaving">
+<button mat-flat-button class="save-button" type="button" (click)="save.emit()" [title]="label" [attr.aria-label]="label" [color]="color" [disabled]="!valid || !dirty || isSaving">
 	<span *ngIf="!isSaving; else savingSpinner" class="save-logo">
 		<mat-icon class="mr-1" [attr.aria-label]="label + ' icon'" *ngIf="iconPosition==='left'">{{iconName}}</mat-icon>
 		{{label}}

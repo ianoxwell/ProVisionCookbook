@@ -75,11 +75,14 @@
 		<span class="ml-2">Last Modified: {{selected.updatedAt | date}}</span>
 	</div>
 </form>
-<div class="mb-2 flex-box flex-justify-space-between">
-	<button mat-flat-button color="warn" class="ml-2" *ngIf="!isNew" type="button" title="delete" (click)="deleteIngredient(selected)">
-        <mat-icon>delete</mat-icon>
-        Delete Ingredient
-      </button>
+<div class="mb-4 flex-box flex-justify-space-between">
+	<span class="ml-4">
+		<app-save-button color="warn" *ngIf="!isNew" [isSaving]="isSavingResults" (save)="deleteIngredient()" label="Delete Ingredient" iconName="delete" iconPosition="left"></app-save-button>
+	</span>
+	<!-- <button mat-flat-button color="warn" class="ml-2" *ngIf="!isNew" type="button" title="delete" (click)="deleteIngredient(selected)">
+        <mat-icon class="mr-1">delete</mat-icon>
+        <span>Delete Ingredient</span>
+    </button> -->
 	<span class="flex-box flex-align-items-center mr-4">
 		<button type="button" mat-flat-button title="Cancel" (click)="back.emit()" class="mr-2">Cancel</button>
 

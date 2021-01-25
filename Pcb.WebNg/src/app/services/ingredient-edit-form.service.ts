@@ -35,16 +35,17 @@ private initPricesFormGroup(price: Price, isNew = false): FormGroup {
 
 initConversionFormGroup(convert: Conversion, isNew = false): FormGroup {
 	const fbGroup = this.fb.group({
-		measureA: convert.baseMeasurementUnit.id,
-		stateA: convert.baseState.id,
-		quantityA: [convert.baseQuantity, Validators.min(0)],
-		measureB: convert.convertToMeasurementUnit.id,
-		stateB: convert.convertToState.id,
-		quantityB: [convert.convertToQuantity, Validators.min(0)],
+		baseMeasurementUnit: convert.baseMeasurementUnit.id,
+		baseState: convert.baseState.id,
+		baseQuantity: [convert.baseQuantity, Validators.min(0)],
+		convertToMeasurementUnit: convert.convertToMeasurementUnit.id,
+		convertToState: convert.convertToState.id,
+		convertToQuantity: [convert.convertToQuantity, Validators.min(0)],
 		preference: [convert.preference, Validators.min(0)],
 	});
 	if (!isNew) {
 		fbGroup.addControl('id', new FormControl(convert.id));
+		fbGroup.addControl('ingredientId', new FormControl(convert.ingredientId));
 	}
 	return fbGroup;
 }
