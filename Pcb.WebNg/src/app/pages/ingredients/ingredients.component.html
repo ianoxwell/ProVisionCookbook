@@ -7,15 +7,21 @@
 					<button mat-flat-button color="primary" (click)="cleanRecipeIngredients()"><mat-icon>add</mat-icon> Clean Ingredients</button>
 				</span> -->
 				<span class="ml-12">
-					<button mat-flat-button color="accent"  (click)="getRecipeList()"><mat-icon>add</mat-icon> Search Spoonacular</button>
+					<button mat-flat-button color="accent"  (click)="getRecipeList()"><mat-icon class="mr-1 color-on-primary">add</mat-icon> Search Spoonacular</button>
 				</span>
 			</span>
 			
 		</ng-container>
 	</span>
-	<span class="mr-2">
-		<button mat-flat-button type="button" color="accent" *ngIf="selectedTab === 1" (click)="changeTab(0)"><mat-icon>keyboard_return</mat-icon> Back</button>
-		<button mat-flat-button type="button" color="accent" *ngIf="selectedTab === 0" (click)="createOrEdit('new')"><mat-icon>add</mat-icon> New</button>
+	<span class="mr-2" [ngSwitch]="selectedTab">
+		<button mat-flat-button type="button" color="accent" title="Back to Ingredient List" *ngSwitchCase="1" (click)="changeTab(0)">
+			<mat-icon class="mr-1 color-on-primary">keyboard_return</mat-icon>
+			<span>Back to Ingredient List</span>
+		</button>
+		<button mat-flat-button type="button" color="accent" title="New Ingredient" *ngSwitchDefault (click)="createOrEdit('new')">
+			<mat-icon class="mr-1 color-on-primary">add</mat-icon>
+			<span>New Ingredient</span>
+		</button>
 	</span>
 </div>
 <ng-template #loading>

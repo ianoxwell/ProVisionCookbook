@@ -5,16 +5,16 @@
 		</mat-form-field>
 		<mat-form-field class="mr-2 w-14em">
 			<mat-label>Parent Type</mat-label>
-			<mat-select formControlName="parent" >
-				<mat-option *ngFor="let item of parentTypes" [value]="item.value">
+			<mat-select role="" formControlName="parent" >
+				<mat-option role="option" *ngFor="let item of parentTypes" [value]="item.value">
 				{{item.value}}
 				</mat-option>
 			</mat-select>
 		</mat-form-field>
 		<mat-form-field class="mr-2 w-14em">
 			<mat-label>Allergies</mat-label>
-			<mat-select formControlName="allergies" multiple>
-				<mat-option *ngFor="let item of allergyArray" [value]="item.name">
+			<mat-select role="" formControlName="allergies" multiple>
+				<mat-option role="option" *ngFor="let item of allergyArray" [value]="item.name">
 					{{item.name}}
 				</mat-option>
 			</mat-select>

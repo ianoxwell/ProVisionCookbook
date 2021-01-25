@@ -78,13 +78,11 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 			switchMap(([refData, measurements]: [ReferenceAll, MeasurementModel[]]) => {
 					this.refData = refData;
 					this.measurements = measurements;
-					console.log('we have the ref data', refData, measurements);
 					return this.route.params;
 				}),
 			switchMap(params => {
 				this.currentPath = this.route.snapshot.routeConfig.path;
 				if (params.ingredientId) {
-					console.log('Attempting to get single ingredient', params.ingredientId)
 					this.selectedIngredient$ = this.getSingleIngredient(params.ingredientId);
 				}
 				return this.getIngredientList();
@@ -132,6 +130,7 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 		this.selectedTab = event;
 		if (this.selectedTab === 0) {
 			this.selectedIngredient$ = null;
+			this.data$ = this.getIngredientList();
 			this.location.replaceState('/savoury/ingredients');
 		}
 	}

@@ -5,10 +5,10 @@
 </mat-dialog-content>
 <mat-dialog-actions class="flex-box flex-end">
 	<button mat-flat-button type="button" *ngIf="!data.isAlert" mat-dialog-close>Cancel</button>
-	<button mat-flat-button type="button" [ngClass]="data.status" *ngIf="data.isAlert" (click)="onOkClick()">Ok</button>
+	<button mat-flat-button type="button" [ngClass]="data.status" *ngIf="data.isAlert" (click)="onOkClick()" cdkFocusInitial>Ok</button>
 
 	<!-- Can optionally provide a result for the closing dialog. -->
-	<button mat-flat-button *ngIf="!data.isAlert" [ngClass]="data.status" (click)="onOkClick()">
+	<button mat-flat-button *ngIf="!data.isAlert" [ngClass]="data.status" (click)="onOkClick()" cdkFocusInitial>
 		{{ data.buttonText }}
 	</button>
 </mat-dialog-actions>
