@@ -35,13 +35,13 @@ export interface ReferenceItemFull extends ReferenceItem {
  * Note in alphabetical order - add to when references change
  */
 export interface ReferenceAll {
-	AllergyWarning: ReferenceItemFull[];
-	CuisineType: ReferenceItemFull[];
-	DishTag: ReferenceItemFull[];
-	DishType: ReferenceItemFull[];
-	HealthLabel: ReferenceItemFull[];
-	IngredientFoodGroup: ReferenceItemFull[];
-	IngredientState: ReferenceItemFull[];
-	LogLevel: ReferenceItemFull[];
-	PermissionGroup: ReferenceItemFull[];
+	AllergyWarning?: ReferenceItemFull[];
+	CuisineType?: ReferenceItemFull[];
+	DishTag?: ReferenceItemFull[];
+	DishType?: ReferenceItemFull[];
+	HealthLabel?: ReferenceItemFull[];
+	IngredientFoodGroup?: ReferenceItemFull[];
+	IngredientState?: ReferenceItemFull[];
+	LogLevel?: ReferenceItemFull[];
+	PermissionGroup?: ReferenceItemFull[];
 }
