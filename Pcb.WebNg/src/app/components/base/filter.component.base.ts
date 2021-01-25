@@ -1,14 +1,13 @@
-import { Input, OnInit, EventEmitter, Output, Component } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { debounce, tap, takeUntil, debounceTime, distinctUntilChanged, map, filter } from 'rxjs/operators';
-import { interval } from 'rxjs';
-
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { ComponentBase } from './base.component.base';
+
 
 @Component({template: ''})
 export abstract class BaseFilterComponent<T = any> extends ComponentBase implements OnInit {
 	@Output() filterChange = new EventEmitter<T>();
-	// example: IFilterQuery = { keywords: '' }
+	// example: IRecipeFilterQuery = { keywords: '' }
 	@Input() filterGroup: T;
 
 	group: FormGroup;

@@ -8,51 +8,48 @@ import { ReferenceService } from '@services/reference.service';
 import { StateService } from '@services/state.service';
 import { Observable } from 'rxjs';
 import { debounceTime, map, takeUntil, tap } from 'rxjs/operators';
-import { FilterQuery } from '../../models/filterQuery';
-
+import { IRecipeFilterQuery, RecipeFilterQuery } from '../../models/filter-queries.model';
 
 @Component({
-  selector: 'app-search-bar',
-  templateUrl: './search-bar.component.html',
-  styleUrls: ['./search-bar.component.scss']
+	selector: 'app-search-bar',
+	templateUrl: './search-bar.component.html',
+	styleUrls: ['./search-bar.component.scss']
 })
 export class SearchBarComponent extends ComponentBase implements OnInit, OnChanges {
 	searchForm: FormGroup;
-	@Input() filterQuery: FilterQuery;
+	@Input() filterQuery: RecipeFilterQuery;
 	@Input() dataLength: number;
 	orderRecipesBy = OrderRecipesBy;
 	allergyArray$: Observable<ReferenceItemFull[]>;
 
-	constructor(
-		private fb: FormBuilder,
-		private referenceService: ReferenceService,
-		private stateService: StateService,
-		) {
-			super();
-			this.createForm();
-		}
+	constructor(private fb: FormBuilder, private referenceService: ReferenceService, private stateService: StateService) {
+		super();
+		this.createForm();
+	}
 
 	ngOnInit() {
 		this.allergyArray$ = this.referenceService.getAllReferences().pipe(
 			map((allRef: ReferenceAll) => {
-				return allRef.AllergyWarning
+				return allRef.AllergyWarning;
 			}),
 			takeUntil(this.ngUnsubscribe)
-		)
-		this.searchForm.valueChanges.pipe(
-			debounceTime(500),
-			tap((values: FilterQuery) => {
-				Object.keys(this.searchForm.getRawValue()).forEach(key => {
-					if (values[key]) {
-						this.filterQuery[key] = values[key];
-					}
-				});
-				this.filterQuery.page = 0;
-				console.log('new value', values, this.filterQuery);
-				this.stateService.setRecipeFilterQuery(this.filterQuery);
-			}),
-			takeUntil(this.ngUnsubscribe)
-		).subscribe();
+		);
+		this.searchForm.valueChanges
+			.pipe(
+				debounceTime(500),
+				tap((values: RecipeFilterQuery) => {
+					Object.keys(this.searchForm.getRawValue()).forEach(key => {
+						if (values[key]) {
+							this.filterQuery[key] = values[key];
+						}
+					});
+					this.filterQuery.page = 0;
+					console.log('new value', values, this.filterQuery);
+					this.stateService.setRecipeFilterQuery(this.filterQuery);
+				}),
+				takeUntil(this.ngUnsubscribe)
+			)
+			.subscribe();
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -73,36 +70,34 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 		this.stateService.setRecipeFilterQuery(this.filterQuery);
 	}
 
-  patchForm(item: FilterQuery) {
-	console.log('patching form', item);
-	if (!item) {
-		item = {
-		orderby: 'name',
-		perPage: 10,
-		page: 0
-		};
+	patchForm(item: IRecipeFilterQuery) {
+		if (!item) {
+			item = new RecipeFilterQuery();
+		}
+		this.searchForm.patchValue({
+			name: item.name,
+			ingredient: item.ingredient,
+			author: item.author,
+			totalTime: item.totalTime,
+			servingPrice: item.servingPrice, // search priceServing {$le: servingTime}
+			recipeCreated: item.recipeCreated, // date number greater than the number set ie today - 7 days
+			equipment: item.equipment, // {favouriteFoods: {"$in": ["sushi", "hotdog"]}}
+			recipeType: item.recipeType,
+			healthLabels: item.healthLabels,
+			cuisineType: item.cuisineType,
+			allergyWarning: item.allergyWarning, // { "allergyWarnings": { "$not": { "$all": [allergyWarning] } } }
+			orderby: item.orderby || 'name',
+			perPage: item.perPage || 10,
+			page: item.page || 0
+		});
 	}
-	console.log('item', item.orderby);
-	this.searchForm.patchValue({
-		name: item.name,
-		ingredient: item.ingredient,
-		author: item.author,
-		totalTime: item.totalTime,
-		servingPrice: item.servingPrice, // search priceServing {$le: servingTime}
-		recipeCreated: item.recipeCreated, // date number greater than the number set ie today - 7 days
-		equipment: item.equipment, // {favouriteFoods: {"$in": ["sushi", "hotdog"]}}
-		recipeType: item.recipeType,
-		healthLabels: item.healthLabels,
-		cuisineType: item.cuisineType,
-		allergyWarning: item.allergyWarning, // { "allergyWarnings": { "$not": { "$all": [allergyWarning] } } }
-		orderby: item.orderby || 'name',
-		perPage: item.perPage || 10,
-		page: item.page || 0
-	});
-  }
 
-	get totalTime() { return this.searchForm.get('totalTime'); }
-	get servingPrice() { return this.searchForm.get('servingPrice'); }
+	get totalTime() {
+		return this.searchForm.get('totalTime');
+	}
+	get servingPrice() {
+		return this.searchForm.get('servingPrice');
+	}
 
 	createForm() {
 		this.searchForm = this.fb.group({
@@ -123,7 +118,6 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 		});
 	}
 
-
 	clearFilterTerms() {
 		this.searchForm.reset();
 		this.searchForm.patchValue({
@@ -134,5 +128,4 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 		this.filterQuery = this.searchForm.getRawValue();
 		this.stateService.setRecipeFilterQuery(this.filterQuery);
 	}
-
 }

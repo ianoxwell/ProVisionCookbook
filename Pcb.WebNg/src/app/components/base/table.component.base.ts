@@ -1,16 +1,14 @@
-import { ComponentBase } from './base.component.base';
-import { Component, OnChanges, EventEmitter, Input, Output, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { PagedResult, SortPageObj, ISortPageObj } from '@models/common.model';
-import { Observable } from 'rxjs';
+import { ISortPageObj, PagedResult, SortPageObj } from '@models/common.model';
+import { ComponentBase } from './base.component.base';
 
 @Component({ template: '' })
 export abstract class BaseTableComponent<T = any> extends ComponentBase implements OnChanges {
 	@Input() data: PagedResult<T>;
-	@Input() sortPageObj: SortPageObj;
-
+	@Input() sortPageObj: ISortPageObj = new SortPageObj();
 	@Output() sortingPageChange = new EventEmitter<ISortPageObj>();
 	@Output() updateTableRequest = new EventEmitter();
 
@@ -21,7 +19,7 @@ export abstract class BaseTableComponent<T = any> extends ComponentBase implemen
 	dataSource: MatTableDataSource<T>;
 	dataLength: number;
 
-	constructor() { super(); }
+	constructor( ) { super(); }
 
 	ngOnChanges(change: SimpleChanges): void {
 		console.log('table base change', change);
@@ -34,18 +32,18 @@ export abstract class BaseTableComponent<T = any> extends ComponentBase implemen
 	abstract goto(row: any);
 
 	onSortChange(ev: MatSort): void {
-		this.sortPageObj.sort = ev.active;
+		this.sortPageObj.orderby = ev.active;
 		this.sortPageObj.order = ev.direction;
-		this.sortPageObj.pageIndex = 0;
+		this.sortPageObj.page = 0;
 		this.sortingPageChange.emit(this.sortPageObj);
 	}
 
 	onPageChange(pageEvent: PageEvent): void {
-		if (pageEvent.pageSize !== this.sortPageObj.pageSize) {
-			this.sortPageObj.pageIndex = 0;
-			this.sortPageObj.pageSize = pageEvent.pageSize;
+		if (pageEvent.pageSize !== this.sortPageObj.perPage) {
+			this.sortPageObj.page = 0;
+			this.sortPageObj.perPage = pageEvent.pageSize;
 		} else {
-			this.sortPageObj.pageIndex = pageEvent.pageIndex;
+			this.sortPageObj.page = pageEvent.pageIndex;
 		}
 		this.sortingPageChange.emit(this.sortPageObj);
 	}

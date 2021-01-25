@@ -1,3 +1,6 @@
+import { environment } from 'src/environments/environment';
+import { IIngredientFilterObject, IRecipeFilterQuery } from './filter-queries.model';
+
 /** Generic key/values */
 export interface IDictionary<T> {
 	[Key: string]: T;
@@ -9,14 +12,24 @@ export interface BaseDbModel {
 	createdAt: Date;
 }
 
-export interface Validations { type: string; message: string; }
+export interface Validations {
+	type: string;
+	message: string;
+}
 
-export interface HourMin { hours: number; minutes: number; }
+export interface HourMin {
+	hours: number;
+	minutes: number;
+}
 
-export interface IdValuePair { id: number | string; value: string | number; }
-export interface IdTitlePair { id: number; title: string; }
-
-
+export interface IdValuePair {
+	id: number | string;
+	value: string | number;
+}
+export interface IdTitlePair {
+	id: number;
+	title: string;
+}
 
 export interface IngredientPaginator {
 	previousPageIndex: number;
@@ -40,27 +53,30 @@ export class MessageResult {
 	}
 }
 
-export interface IngredientFilterObject {
-	name: string;
-	type?: string[];
-	parent?: string;
-	allergies?: string[];
-	purchasedBy?: string;
-}
 export interface ISortPageObj {
-	sort: string;
-	order: string;
-	filter?: string;
-	pageIndex: number;
-	pageSize: number;
+	orderby: string;
+	order?: string;
+	perPage: number;
+	page: number;
 }
 
 export class SortPageObj implements ISortPageObj {
-	sort = 'name';
+	orderby = 'name';
 	order = 'asc';
-	pageIndex = 0;
-	pageSize = 25;
+	page = 0;
+	perPage = environment.resultsPerPage;
 	constructor() {}
+
+	public update(filterObj: IIngredientFilterObject | IRecipeFilterQuery) {
+		console.log('update for sortpage', filterObj);
+		if (filterObj) {
+			this.orderby = filterObj.name;
+			this.order = filterObj.order;
+			this.page = filterObj.page;
+			this.perPage = filterObj.perPage;
+		}
+		return this;
+	}
 }
 
 export interface AdminRights {
@@ -78,29 +94,25 @@ export interface IValidationMessages {
 /* Section Enums
  */
 
-export enum CountryCode
-{
+export enum CountryCode {
 	AU,
 	US,
 	ALL
 }
 
-export enum MeasurementType
-{
+export enum MeasurementType {
 	Volume,
 	Weight,
 	Item
 }
 
-export enum NutritionUnit
-{
+export enum NutritionUnit {
 	g,
 	mg,
 	cal
 }
 
-export enum PicturePosition
-{
+export enum PicturePosition {
 	top,
 	left,
 	right

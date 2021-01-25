@@ -2,15 +2,15 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ComponentBase } from '@components/base/base.component.base';
-import { FilterQuery } from '@models/filterQuery';
+import { IRecipeFilterQuery, RecipeFilterQuery } from '@models/filter-queries.model';
 import { MessageStatus } from '@models/message.models';
 import { Recipe, Recipes } from '@models/recipe';
 import { User } from '@models/user';
 import { ToTitleCasePipe } from '@pipes/title-case.pipe';
 import { DialogService } from '@services/dialog.service';
 import { MessageService } from '@services/message.service';
-import { RecipeRestService } from '@services/recipe-rest.service';
-import { RestService } from '@services/rest-service.service';
+import { RestIngredientService } from '@services/rest-ingredient.service';
+import { RestRecipeService } from '@services/rest-recipe.service';
 import { StateService } from '@services/state.service';
 import { UserProfileService } from '@services/user-profile.service';
 import { Observable, of } from 'rxjs';
@@ -32,14 +32,14 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 	isNew = true; // edit or new ingredient;
 
 	currentPath: string;
-	filterQuery: FilterQuery;
+	filterQuery: IRecipeFilterQuery;
 	dataLength: number;
 	cookBookUserProfile: User;
 
 	constructor(
-			private recipeRestService: RecipeRestService,
+			private restRecipeService: RestRecipeService,
 			private route: ActivatedRoute,
-			private restService: RestService,
+			private restIngredientService: RestIngredientService,
 			private location: Location,
 			private userProfileService: UserProfileService,
 			private toTitleCase: ToTitleCasePipe,
@@ -56,7 +56,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 
 	listenFilterQueryChanges(): void {
 		this.stateService.getRecipeFilterQuery().pipe(
-			switchMap((result: FilterQuery) => {
+			switchMap((result: IRecipeFilterQuery) => {
 				this.filterQuery = result;
 				return this.getRecipes();
 			}),
@@ -85,7 +85,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 	}
 
 	loadRecipeSelect(itemId: string) {
-		this.recipeRestService.getRecipeById(itemId).pipe(
+		this.restRecipeService.getRecipeById(itemId).pipe(
 			switchMap(singleRecipe => {
 				this.selectedTab = 1;
 				this.selectedRecipe = singleRecipe;
@@ -114,13 +114,13 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 		this.location.replaceState(`savoury/recipes/item/${this.selectedRecipe.id}`);
 	}
 
-	onFilterChange(ev: FilterQuery) {
+	onFilterChange(ev: RecipeFilterQuery) {
 		console.log('here is the filter change', ev);
 	}
 
 	getRecipes(): Observable<Recipes> {
 		this.isLoading = true;
-		return this.recipeRestService.getRecipe(this.filterQuery).pipe(
+		return this.restRecipeService.getRecipe(this.filterQuery).pipe(
 			catchError(err => {
 				this.dialogService.alert('Error getting recipes', err);
 				this.dataLength = 0;
@@ -161,7 +161,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 
 	// todo temp - remove shortly
 	getSpoonAcularRecipe() {
-		this.restService.getRandomSpoonacularRecipe()
+		this.restIngredientService.getRandomSpoonacularRecipe()
 		.subscribe(recipeResult => {
 			console.log('a result', recipeResult);
 			recipeResult.recipes.map(recipe => {
@@ -228,7 +228,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 				}
 			});
 			console.log('newRecipe to be written', newRecipe);
-			this.recipeRestService.createRecipe(newRecipe)
+			this.restRecipeService.createRecipe(newRecipe)
 				.subscribe(returnedRecipe => {
 				console.log('New Recipe has been written', returnedRecipe);
 				});

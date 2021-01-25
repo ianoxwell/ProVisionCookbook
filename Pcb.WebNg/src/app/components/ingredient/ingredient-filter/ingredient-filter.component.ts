@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ComponentBase } from '@components/base/base.component.base';
-import { IngredientFilterObject } from '@models/common.model';
+import { IIngredientFilterObject, IngredientFilterObject } from '@models/filter-queries.model';
 import { ReferenceAll } from '@models/reference.model';
 import { StateService } from '@services/state.service';
 import { Observable, of } from 'rxjs';
@@ -15,7 +15,7 @@ import { debounceTime, first, map, takeUntil, tap } from 'rxjs/operators';
 export class IngredientFilterComponent extends ComponentBase implements OnInit {
 	searchForm: FormGroup;
 	@Input() refData: ReferenceAll = {};
-	filterQuery: IngredientFilterObject = { name: '' };
+	filterQuery: IIngredientFilterObject = new IngredientFilterObject();
 	isFormReady$: Observable<boolean> = of(false);
 
 	constructor(private fb: FormBuilder, private stateService: StateService) {
@@ -49,7 +49,11 @@ export class IngredientFilterComponent extends ComponentBase implements OnInit {
 			.pipe(
 				debounceTime(500),
 				tap(() => {
-					this.stateService.setIngredientFilterQuery(this.searchForm.getRawValue());
+					this.filterQuery = {
+						...this.filterQuery,
+						...this.searchForm.getRawValue()
+					}
+					this.stateService.setIngredientFilterQuery(this.filterQuery);
 				}),
 				takeUntil(this.ngUnsubscribe)
 			)
@@ -75,6 +79,6 @@ export class IngredientFilterComponent extends ComponentBase implements OnInit {
 	 */
 	clearFilterTerms(): void {
 		this.searchForm.reset();
-		this.stateService.setIngredientFilterQuery({ name: '' });
+		this.stateService.setIngredientFilterQuery(new IngredientFilterObject());
 	}
 }

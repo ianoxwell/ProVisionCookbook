@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
-import { of, Observable } from 'rxjs';
-
+import { Injectable } from '@angular/core';
 // import * as StackTrace from 'stacktrace-js';
 import { ISortPageObj, PagedResult } from '@models/common.model';
-import { environment } from 'src/environments/environment';
 import { IEventLogDetail, ILogSearchCriteria } from '@models/log.models';
+import { Observable, of } from 'rxjs';
+import { environment } from 'src/environments/environment';
+
+
 
 
 @Injectable()
@@ -23,14 +23,14 @@ export class LogService {
 		let params:any = logSearchCriteria;
 		if (sortingCriteria) {
 			params = {
-				pageIndex: sortingCriteria.pageIndex,
-				pageSize: sortingCriteria.pageSize,
+				pageIndex: sortingCriteria.page,
+				pageSize: sortingCriteria.perPage,
 				...params
 			}
 
-			if (sortingCriteria.sort && sortingCriteria.order) {
+			if (sortingCriteria.orderby && sortingCriteria.order) {
 				params = {
-					sort: sortingCriteria.sort,
+					sort: sortingCriteria.orderby,
 					order: sortingCriteria.order,
 					... params
 				}

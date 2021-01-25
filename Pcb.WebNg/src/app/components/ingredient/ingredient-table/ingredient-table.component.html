@@ -38,8 +38,8 @@
 	<mat-paginator class="bottom-sticky"
 		(page)="onPageChange($event)"
 		[length]="dataLength"
-		[pageSize]="sortPageObj.pageSize"
+		[pageSize]="sortPageObj.perPage"
 		[showFirstLastButtons]="true"
-		[pageIndex]="sortPageObj.pageIndex">
+		[pageIndex]="sortPageObj.page">
 	</mat-paginator>
 </div>

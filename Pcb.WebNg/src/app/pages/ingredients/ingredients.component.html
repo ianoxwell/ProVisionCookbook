@@ -30,9 +30,10 @@
 <mat-tab-group dynamicHeight="true" [selectedIndex]="selectedTab" class="ingredients-list-tabs" *ngIf="data$ | async as data; else loading">
 	<mat-tab>
 		<app-ingredient-filter [refData]="refData"></app-ingredient-filter>
-		<app-ingredient-table [data]="data"
-			[sortPageObj]="sortPageObj"
-			(sortingPageChange)="sortPageChange($event)"
+		<app-ingredient-table 
+			[data]="data"
+			[sortPageObj]="filterObject"
+			(sortingPageChange)="sortPageChange($event)"	
 			(editRow)="createOrEdit('edit', $event)">
 		</app-ingredient-table>
 	</mat-tab>

@@ -19,6 +19,7 @@ import { LoginService } from '@services/login.service';
 import { MessageService } from '@services/message.service';
 import { RefDataService } from '@services/ref-data.service';
 import { ReferenceService } from '@services/reference.service';
+import { RestIngredientService } from '@services/rest-ingredient.service';
 import { SecurityService } from '@services/security.service';
 import { StateService } from '@services/state.service';
 import { StorageService } from '@services/storage';
@@ -47,65 +48,57 @@ import { UserRecipesComponent } from './pages/user/user-recipes/user-recipes.com
 import { UserSettingsComponent } from './pages/user/user-settings/user-settings.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { DialogService } from './services/dialog.service';
-import { RestService } from './services/rest-service.service';
 import { UserProfileService } from './services/user-profile.service';
 
-
-
-
-
-
-
 @NgModule({
-  declarations: [
-	AppComponent,
-
-	FavouritesComponent,
-	RecipesComponent,
-	CalendarComponent,
-	ShoppingComponent,
-	IngredientsComponent,
-	UserSettingsComponent,
-	UserRecipesComponent,
-	HomeComponent,
-	HomeDashboardComponent,
-	DialogErrorComponent,
-	DialogDeleteIngredientComponent,
-	DialogRecipeComponent,
-	MainComponent,
-	WelcomeComponent,
-	ConfirmDialogComponent,
-	DialogNewIngredientComponent,
-	AutoCompleteSearchComponent,
-	SiteLogoComponent,
-  ],
-  imports: [
-	BrowserModule,
-	BrowserAnimationsModule,
-	CommonModule,
-	FormsModule,
-	AppRoutingModule,
-	CompleteMaterialModule,
-	HttpClientModule,
-	ReactiveFormsModule,
-	LayoutModule,
-	ComponentModule,
-	PipesModule,
-	SharedComponentModule,
-	FullCalendarModule,
-	ChartsModule,
-	NgxMaterialTimepickerModule,
-	NgxMaterialTimepickerModule.setLocale('en-au'),
-	SocialLoginModule,
-	// https://netbasal.com/elegantly-manage-svg-icons-in-angular-applications-5adde68a5c46
-	SvgIconsModule.forRoot({
-		icons
-	  })
+	declarations: [
+		AppComponent,
+		FavouritesComponent,
+		RecipesComponent,
+		CalendarComponent,
+		ShoppingComponent,
+		IngredientsComponent,
+		UserSettingsComponent,
+		UserRecipesComponent,
+		HomeComponent,
+		HomeDashboardComponent,
+		DialogErrorComponent,
+		DialogDeleteIngredientComponent,
+		DialogRecipeComponent,
+		MainComponent,
+		WelcomeComponent,
+		ConfirmDialogComponent,
+		DialogNewIngredientComponent,
+		AutoCompleteSearchComponent,
+		SiteLogoComponent
+	],
+	imports: [
+		BrowserModule,
+		BrowserAnimationsModule,
+		CommonModule,
+		FormsModule,
+		AppRoutingModule,
+		CompleteMaterialModule,
+		HttpClientModule,
+		ReactiveFormsModule,
+		LayoutModule,
+		ComponentModule,
+		PipesModule,
+		SharedComponentModule,
+		FullCalendarModule,
+		ChartsModule,
+		NgxMaterialTimepickerModule,
+		NgxMaterialTimepickerModule.setLocale('en-au'),
+		SocialLoginModule,
+		// https://netbasal.com/elegantly-manage-svg-icons-in-angular-applications-5adde68a5c46
+		SvgIconsModule.forRoot({
+			icons
+		})
 	],
 	providers: [
-		{provide: MAT_DATE_LOCALE, useValue: 'en-AU'},
+		{ provide: MAT_DATE_LOCALE, useValue: 'en-AU' },
 		AccountService,
-		RestService,
+		RestIngredientService,
 		UserProfileService,
 		ReferenceService,
 		RefDataService,
@@ -117,20 +110,19 @@ import { UserProfileService } from './services/user-profile.service';
 		MessageService,
 		UserService,
 		StateService,
-		{ provide: 'SocialAuthServiceConfig', useValue: {
-			autoLogin: false,
-			providers: [
-				{
-					id: GoogleLoginProvider.PROVIDER_ID,
-					provider: new GoogleLoginProvider(
-					'74967204697-o4tb5b59r1ou0vig4eoks4lst8c4i7vc.apps.googleusercontent.com'
-					),
-				}
-			]
-		} as SocialAuthServiceConfig,
-	}
+		{
+			provide: 'SocialAuthServiceConfig',
+			useValue: {
+				autoLogin: false,
+				providers: [
+					{
+						id: GoogleLoginProvider.PROVIDER_ID,
+						provider: new GoogleLoginProvider('74967204697-o4tb5b59r1ou0vig4eoks4lst8c4i7vc.apps.googleusercontent.com')
+					}
+				]
+			} as SocialAuthServiceConfig
+		}
 	],
-  bootstrap: [AppComponent]
+	bootstrap: [AppComponent]
 })
-export class AppModule { }
-
+export class AppModule {}

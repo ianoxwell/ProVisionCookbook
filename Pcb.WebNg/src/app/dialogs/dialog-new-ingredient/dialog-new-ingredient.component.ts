@@ -14,7 +14,7 @@ import {
 import { ReferenceItemFull } from '@models/reference.model';
 import { IngredientConstructService } from '@services/ingredient-construct.service';
 import { IngredientEditFormService } from '@services/ingredient-edit-form.service';
-import { RestService } from '@services/rest-service.service';
+import { RestIngredientService } from '@services/rest-ingredient.service';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { debounceTime, filter, first, switchMap, takeUntil, tap } from 'rxjs/operators';
 
@@ -56,7 +56,7 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 		private fb: FormBuilder,
 		private ingredientEditFormService: IngredientEditFormService,
 		private ingredientConstructService: IngredientConstructService,
-		private ingredientRestService: RestService
+		private ingredientRestIngredientService: RestIngredientService
 	) {
 		super();
 		dialogRef.disableClose = true;
@@ -79,7 +79,7 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 					this.isFoodNameAvailable = null;
 				}
 				const formRaw = this.form.getRawValue();
-				return this.ingredientRestService.getRawFoodSuggestion(rawFood, 20, foodGroupId);
+				return this.ingredientRestIngredientService.getRawFoodSuggestion(rawFood, 20, foodGroupId);
 			}),
 		);
 	}
@@ -99,7 +99,7 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 
 	selectItem(item: IRawFoodSuggestion): void {
 		console.log('selected this item', item);
-		this.ingredientRestService.getRawFoodById(item.usdaId).pipe(
+		this.ingredientRestIngredientService.getRawFoodById(item.usdaId).pipe(
 			first(),
 			tap((result: IRawFoodIngredient) => {
 				console.log('raw food matched', result);
@@ -125,7 +125,7 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 	checkNameExists(name: string): void {
 		this.isCheckingFoodName = true;
 		this.isFoodNameAvailable = null;
-		this.ingredientRestService.checkFoodNameExists(name).pipe(
+		this.ingredientRestIngredientService.checkFoodNameExists(name).pipe(
 			first(),
 			tap((result: boolean) => {
 				this.isCheckingFoodName = false;
@@ -135,7 +135,7 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 	}
 
 	findSpoonSuggestionsOnline(): void {
-		this.ingredientRestService.getSpoonacularSuggestions(this.rawName.value).pipe(
+		this.ingredientRestIngredientService.getSpoonacularSuggestions(this.rawName.value).pipe(
 			first(),
 			tap((result: ISpoonSuggestions[]) => {
 				this.spoonFoodSuggestions = result;
@@ -144,14 +144,14 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 	}
 
 	selectSpoonItem(spoonSuggestion: ISpoonSuggestions): void {
-		this.ingredientRestService.getSpoonacularIngredient(spoonSuggestion.id.toString()).pipe(
+		this.ingredientRestIngredientService.getSpoonacularIngredient(spoonSuggestion.id.toString()).pipe(
 			switchMap((result: ISpoonFoodRaw) => {
 				this.spoonFoodMatched = result;
 				// const unitFrom: string = result.shoppingListUnits[0];
 				// const unitFromRef = this.data.measurements
 				// 	.find((measure: MeasurementModel)	=> measure.title.toLowerCase() === unitFrom || measure.shortName.toLowerCase() === unitFrom);
 				const unitFrom = result.possibleUnits.includes('cup') ? 'cup' : 'piece';
-				return this.ingredientRestService.getSpoonConversion(result.name, unitFrom, 1, 'grams');
+				return this.ingredientRestIngredientService.getSpoonConversion(result.name, unitFrom, 1, 'grams');
 			}),
 			tap((convertResult: ISpoonConversion) => {
 				this.spoonConversion.push(convertResult);

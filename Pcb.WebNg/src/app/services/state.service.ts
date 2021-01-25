@@ -1,34 +1,27 @@
 import { Injectable } from '@angular/core';
-import { IngredientFilterObject } from '@models/common.model';
-import { FilterQuery } from '@models/filterQuery';
+import { IIngredientFilterObject, IngredientFilterObject, IRecipeFilterQuery, RecipeFilterQuery } from '@models/filter-queries.model';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class StateService {
-	private recipeFilterQuery$ = new BehaviorSubject<FilterQuery>({
-		orderby: 'name',
-		order: 'asc',
-		perPage: environment.resultsPerPage,
-		page: 0
-	});
-	private ingredientFilterQuery$ = new BehaviorSubject<IngredientFilterObject>({ name: '' });
+	private recipeFilterQuery$ = new BehaviorSubject<IRecipeFilterQuery>(new RecipeFilterQuery());
+	private ingredientFilterQuery$ = new BehaviorSubject<IIngredientFilterObject>(new IngredientFilterObject());
 
-	getRecipeFilterQuery(): Observable<FilterQuery> {
+	getRecipeFilterQuery(): Observable<IRecipeFilterQuery> {
 		return this.recipeFilterQuery$.asObservable();
 	}
 
-	setRecipeFilterQuery(query: FilterQuery): void {
+	setRecipeFilterQuery(query: IRecipeFilterQuery): void {
 		this.recipeFilterQuery$.next(query);
 	}
 
-	getIngredientFilterQuery(): Observable<IngredientFilterObject> {
+	getIngredientFilterQuery(): Observable<IIngredientFilterObject> {
 		return this.ingredientFilterQuery$.asObservable();
 	}
 
-	setIngredientFilterQuery(query: IngredientFilterObject): void {
+	setIngredientFilterQuery(query: IIngredientFilterObject): void {
 		this.ingredientFilterQuery$.next(query);
 	}
 }
