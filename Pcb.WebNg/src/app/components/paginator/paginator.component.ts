@@ -71,6 +71,13 @@ export class PaginatorComponent implements OnInit {
 		return this.pageSize > 0 ? Math.ceil(this.length / this.pageSize) : 0;
 	};
 
+	/** Calculate the page size or length for the statement item 1 - 25 of 52 */
+	getMaxOfItemOnCurrentPage(): number {
+		const maxPage = this.pageSize * (this.pageIndex + 1);
+		return Math.min(maxPage, this.length);
+	};
+
+	/** Organises the variables to emit */
 	emitChanges() {
 		this.page.emit({
 			pageIndex: this.pageIndex,

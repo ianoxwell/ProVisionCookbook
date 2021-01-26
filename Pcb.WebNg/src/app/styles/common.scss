@@ -59,10 +59,10 @@ $widthsPercent: (5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100);
 	  color: $success;
 	}
 	&red {
-	  color: $danger;
+	  color: $warn;
 	}
 	&warning {
-	  color: $warning;
+	  color: $alert;
 	}
   }
 
@@ -294,7 +294,7 @@ $widthsPercent: (5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100);
 // 	color: $colour-text-on-success;
 //   }
   body .ui-toast .ui-toast-message.ui-toast-message-warn {
-	background-color: $warning;
+	background-color: $alert;
 	border: 0 none;
 	color: $colour-text-on-success;
   }

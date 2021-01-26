@@ -1,4 +1,12 @@
+@import '../../styles/variables.scss';
 
 .narrow-select {
 	width: 4rem;
+}
+
+button:disabled, .mat-icon-button.mat-button-disabled {
+	background-color: $default-background;
+    color: $primary-lighter;
+    font-size: 16px;
+    cursor: not-allowed;
 }

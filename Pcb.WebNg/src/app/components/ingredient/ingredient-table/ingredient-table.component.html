@@ -42,15 +42,4 @@
 		[showFirstLastButtons]="true"
 		[pageIndex]="sortPageObj.page">
 	</app-paginator>
-	<div>
-		&nbsp;
-	</div>
-	<mat-paginator class="bottom-sticky"
-		(page)="onPageChange($event)"
-		[length]="dataLength"
-		[pageSizeOptions]="[5,10,15,25]"
-		[pageSize]="sortPageObj.perPage"
-		[showFirstLastButtons]="true"
-		[pageIndex]="sortPageObj.page">
-	</mat-paginator>
 </div>
