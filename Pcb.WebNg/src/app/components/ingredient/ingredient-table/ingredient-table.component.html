@@ -38,6 +38,7 @@
 	<app-paginator class="bottom-sticky"
 		(page)="onPageChange($event)"
 		[length]="dataLength"
+		[count]="dataCount"
 		[pageSize]="sortPageObj.perPage"
 		[showFirstLastButtons]="true"
 		[pageIndex]="sortPageObj.page">

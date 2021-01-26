@@ -1,8 +1,8 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { BaseTableComponent } from '@components/base/table.component.base';
+import { Ingredient, PurchasedBy } from '@models/ingredient';
 
-import {MatTableDataSource} from '@angular/material/table';
-import {Ingredient, PurchasedBy} from '@models/ingredient';
-import {BaseTableComponent} from '@components/base/table.component.base';
 
 @Component({
   selector: 'app-ingredient-table',
@@ -21,6 +21,7 @@ export class IngredientTableComponent extends BaseTableComponent implements OnIn
   ngOnInit(): void {
 	this.dataSource = new MatTableDataSource(this.data.items);
 	this.dataLength = this.data.totalCount;
+	this.dataCount = this.data.items.length;
   }
 
   // on row / ingredient clicked emit to parent the row

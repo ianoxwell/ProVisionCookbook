@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 
@@ -7,13 +7,15 @@ import { PageEvent } from '@angular/material/paginator';
 	templateUrl: './paginator.component.html',
 	styleUrls: ['./paginator.component.scss']
 })
-export class PaginatorComponent implements OnInit {
+export class PaginatorComponent {
 	/** The current page index. */
 	@Input() pageIndex = 0;
 	/** Current max number of items to display */
 	@Input() pageSize = 25;
-	/** Total count of all items to be displayed */
+	/** Total length of the database */
 	@Input() length = 0;
+	/** Total count of all items to be displayed */
+	@Input() count = 0;
 	@Input() pageSizeOptions: number[] = [5, 10, 25];
 	@Input() hidePageSize = false;
 	@Input() showFirstLastButtons = true;
@@ -31,8 +33,6 @@ export class PaginatorComponent implements OnInit {
 	get perPage(): FormControl {
 		return this.form.get('perPage') as FormControl;
 	}
-
-	ngOnInit() {}
 
 	/** Advances to the next page if it exists. */
 	nextPage(): void {
@@ -58,6 +58,11 @@ export class PaginatorComponent implements OnInit {
 		this.pageIndex = this.getNumberOfPages();
 		this.emitChanges();
 	}
+	/** When the mat-select selectionChange triggers - call emitChanges */
+	pageSizeChange(): void {
+		this.pageSize = this.perPage.value;
+		this.emitChanges();
+	}
 	/** Whether there is a previous page. */
 	hasPreviousPage(): boolean {
 		return this.pageIndex > 0;
@@ -68,13 +73,13 @@ export class PaginatorComponent implements OnInit {
 	}
 	/** Calculate the number of pages */
 	getNumberOfPages(): number {
-		return this.pageSize > 0 ? Math.ceil(this.length / this.pageSize) : 0;
+		return this.pageSize > 0 ? Math.floor(this.length / this.pageSize) : 0;
 	};
 
 	/** Calculate the page size or length for the statement item 1 - 25 of 52 */
 	getMaxOfItemOnCurrentPage(): number {
 		const maxPage = this.pageSize * (this.pageIndex + 1);
-		return Math.min(maxPage, this.length);
+		return Math.min(maxPage, this.count);
 	};
 
 	/** Organises the variables to emit */

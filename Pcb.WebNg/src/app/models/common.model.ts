@@ -68,7 +68,6 @@ export class SortPageObj implements ISortPageObj {
 	constructor() {}
 
 	public update(filterObj: IIngredientFilterObject | IRecipeFilterQuery) {
-		console.log('update for sortpage', filterObj);
 		if (filterObj) {
 			this.orderby = filterObj.name;
 			this.order = filterObj.order;

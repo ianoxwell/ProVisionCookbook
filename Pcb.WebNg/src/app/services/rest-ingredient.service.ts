@@ -74,7 +74,7 @@ export class RestIngredientService {
 		if (filterQuery.page < 0) {
 			filterQuery.page = 0;
 		}
-		let queryString = `?pageSize=${filterQuery.perPage}&page=${filterQuery.page * filterQuery.perPage}&sort=${filterQuery.orderby}&`;
+		let queryString = `?pageSize=${filterQuery.perPage}&page=${filterQuery.page}&sort=${filterQuery.orderby}&`;
 		if (filterQuery.order) {
 			queryString += `order=${filterQuery.order}&`;
 		}

@@ -3,34 +3,36 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ISortPageObj, PagedResult, SortPageObj } from '@models/common.model';
-import { ComponentBase } from './base.component.base';
 
 @Component({ template: '' })
-export abstract class BaseTableComponent<T = any> extends ComponentBase implements OnChanges {
+export abstract class BaseTableComponent<T = any> implements OnChanges {
 	@Input() data: PagedResult<T>;
 	@Input() sortPageObj: ISortPageObj = new SortPageObj();
 	@Output() sortingPageChange = new EventEmitter<ISortPageObj>();
 	@Output() updateTableRequest = new EventEmitter();
 
 	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-	@ViewChild(MatSort, {static: true}) sort: MatSort;
+	@ViewChild(MatSort, { static: true }) sort: MatSort;
 
 	displayedColumns: string[];
 	dataSource: MatTableDataSource<T>;
 	dataLength: number;
+	dataCount: number;
 
-	constructor( ) { super(); }
+	constructor() {	}
 
 	ngOnChanges(change: SimpleChanges): void {
-		console.log('table base change', change);
 		if (!!change.data && !change.data.firstChange) {
-			this.dataSource.data = change.data.currentValue.items;
-			this.dataLength =  change.data.currentValue.total;
+			const data: PagedResult<T> = change.data.currentValue;
+			this.dataSource.data = data.items;
+			this.dataCount = data.items.length;
+			this.dataLength = data.totalCount;
 		}
 	}
-	// This must be implemented by any subclass
+	/** This MUST be implemented in the extending class */
 	abstract goto(row: any);
 
+	/** Triggers when there is a sorting change in the template, resets page */
 	onSortChange(ev: MatSort): void {
 		this.sortPageObj.orderby = ev.active;
 		this.sortPageObj.order = ev.direction;
@@ -38,6 +40,7 @@ export abstract class BaseTableComponent<T = any> extends ComponentBase implemen
 		this.sortingPageChange.emit(this.sortPageObj);
 	}
 
+	/** Triggers from the paginator, resets page when perPage Changes */
 	onPageChange(pageEvent: PageEvent): void {
 		if (pageEvent.pageSize !== this.sortPageObj.perPage) {
 			this.sortPageObj.page = 0;
@@ -48,7 +51,8 @@ export abstract class BaseTableComponent<T = any> extends ComponentBase implemen
 		this.sortingPageChange.emit(this.sortPageObj);
 	}
 
-	mouseRow(row: any, inOut: string) {
+	/** Sets boolean for mouseRow for the row, for css class rollover effect */
+	mouseRow(row: any, inOut: string): void {
 		if (inOut === 'over') {
 			row.mouseRow = true;
 		} else {

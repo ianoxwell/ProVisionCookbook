@@ -45,16 +45,17 @@ namespace Pcb.Service.Implementations
             using var _db = GetReadOnlyDbContext();
             var skip = p * pageSize;
             var ingredientArray = _db.Ingredient
-                .Skip(skip)
-                .Take(pageSize)
                 .Where(l => string.IsNullOrEmpty(filter) ||
-                            l.Name.Contains(filter) ||
-                            l.PriceBrandName.Contains(filter) ||
-                            l.PriceStoreName.Contains(filter));
+                    l.Name.Contains(filter) ||
+                    l.PriceBrandName.Contains(filter) ||
+                    l.PriceStoreName.Contains(filter));
 
             ingredientArray = order.Equals("asc", StringComparison.OrdinalIgnoreCase)
                 ? ingredientArray.OrderByMember(sort)
                 : ingredientArray.OrderByMemberDescending(sort);
+
+            ingredientArray = ingredientArray.Skip(skip)
+                .Take(pageSize); ;
 
             var finishedIngredientArray = await ingredientArray
                 .Include(x => x.FoodGroup)
