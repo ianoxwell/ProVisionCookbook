@@ -7,7 +7,7 @@
     @include flex-direction(column);
 }
 
-.flex-end {
+.flex-justify-end {
 	@include justify-content(flex-end);
 }
 
@@ -37,7 +37,7 @@
 	@include align-self(center);
 }
 
-.flex-align-items-center {
+.flex-align-center {
 	@include align-items(center);
 }
 .full-width {

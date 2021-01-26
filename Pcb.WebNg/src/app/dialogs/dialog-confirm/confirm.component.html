@@ -3,7 +3,7 @@
 <mat-dialog-content>
 	<p [innerHtml]="data.message"></p>
 </mat-dialog-content>
-<mat-dialog-actions class="flex-box flex-end">
+<mat-dialog-actions class="flex-box flex-justify-end">
 	<button mat-flat-button type="button" *ngIf="!data.isAlert" mat-dialog-close>Cancel</button>
 	<button mat-flat-button type="button" [ngClass]="data.status" *ngIf="data.isAlert" (click)="onOkClick()" cdkFocusInitial>Ok</button>
 

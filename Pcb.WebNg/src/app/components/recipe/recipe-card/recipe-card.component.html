@@ -3,12 +3,12 @@
 	</div> -->
 	<div class="relative-position show-pointer" (click)="clickedRecipe.emit(recipeInput)">
 		<img [src]="recipeInput.picture[0].fileLink"  [alt]="recipeInput.picture[0].title"/>
-		<div class="rating-favourite-position flex-box flex-end">
-			<span class="flex-box flex-align-items-center mr-1" title="ratings">
+		<div class="rating-favourite-position flex-box flex-justify-end">
+			<span class="flex-box flex-align-center mr-1" title="ratings">
 				<mat-icon class="mr-1">star</mat-icon>
 				<span class="line-height-icon-adjust">{{recipeInput.numberStars}}</span>
 			</span>
-			<span class="flex-box flex-align-items-center" title="Number of Favourites">
+			<span class="flex-box flex-align-center" title="Number of Favourites">
 				<mat-icon class="mr-1">favorite</mat-icon>
 				<span class="line-height-icon-adjust">{{recipeInput.numberFavourites}} Favourites</span>
 			</span>
@@ -25,7 +25,7 @@
 				</span>
 			</span>
 		</div>
-		<div class="flex-box flex-align-items-center p-1" title="Number of Servings">
+		<div class="flex-box flex-align-center p-1" title="Number of Servings">
 			<mat-icon class="mr-1">people_outline</mat-icon>serves {{recipeInput.numberOfServings}}
 		</div>
 
@@ -36,7 +36,7 @@
 		</div>
 	</div>
 	<div class="flex-box flex-row flex-justify-space-between pb-2 ml-2 mr-2">
-		<span class="flex-box flex-align-items-center p-1" title="ready in minutes"><mat-icon class="mr-1">timer</mat-icon> {{recipeInput.readyInMinutes}} min</span>
+		<span class="flex-box flex-align-center p-1" title="ready in minutes"><mat-icon class="mr-1">timer</mat-icon> {{recipeInput.readyInMinutes}} min</span>
 		<mat-menu #appMenu="matMenu" xPosition="before">
 			<button mat-menu-item (click)="more()">Favourite (any)</button>
 			<button mat-menu-item (click)="more()">Book (teacher)</button>

@@ -65,7 +65,7 @@
 
 	</form>
 </mat-dialog-content>
-<mat-dialog-actions class="flex-box flex-end">
+<mat-dialog-actions class="flex-box flex-justify-end">
 	<button mat-flat-button type="button" mat-dialog-close>Cancel</button>
 	<app-save-button color="accent" [dirty]="form.dirty" [valid]="form.valid && isFoodNameAvailable === true" (save)="onSaveItem()"></app-save-button>
 </mat-dialog-actions>

@@ -3,7 +3,7 @@
 	[ngClass]="{'ui-toast-message-info': message.severity === messageStatus.Information ,'ui-toast-message-warn': message.severity === messageStatus.Warning,
 	'ui-toast-message-error': message.severity === messageStatus.Error,'ui-toast-message-success': message.severity === messageStatus.Success}"
 	(mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
-	<div class="ui-toast-message-content flex-box flex-align-items-center">
+	<div class="ui-toast-message-content flex-box flex-align-center">
 		<mat-icon class="ui-toast-icon mr-1">
 				{{getIconName(message.severity)}}
 		</mat-icon>

@@ -1,12 +1,12 @@
 <form [formGroup]="ingredientForm" fxLayout="column" class="p-3" style="overflow-y: auto;" *ngIf="!!ingredientForm">
 	<section>
-		<div class="flex-box flex-row flex-align-items-center background-bar-light-grey pt-2 pl-2 accent-left mb-2">
+		<div class="flex-box flex-row flex-align-center background-bar-light-grey pt-2 pl-2 accent-left mb-2">
 			<h3>Basic Details</h3>
 		</div>
 		<app-edit-ingredient-basic [refData]="refData" [ingredientForm]="ingredientForm"></app-edit-ingredient-basic>
 	</section>
 	<section class="mt-2 mb-2">
-		<div class="flex-box flex-row flex-align-items-center background-bar-light-grey pt-2 pl-2 accent-left mb-2">
+		<div class="flex-box flex-row flex-align-center background-bar-light-grey pt-2 pl-2 accent-left mb-2">
 			<h3>Nutrition Facts</h3>
 			<span class="ml-2 text-muted mb-2">Serving Size - 100grams (100g)</span>
 		</div>
@@ -14,7 +14,7 @@
 	</section>
 
     <section class="mt-2 mb-2">
-		<div class="flex-box flex-row flex-align-items-center background-bar-light-grey pt-2 pl-2 accent-left mb-2">
+		<div class="flex-box flex-row flex-align-center background-bar-light-grey pt-2 pl-2 accent-left mb-2">
 			<h3>Price</h3>
 		</div>
 		<app-ingredient-prices-form 
@@ -26,7 +26,7 @@
 	
     <section class="mt-2 mb-2">
 		<div class="flex-box flex-justify-space-between  background-bar-light-grey pt-2 pl-2 accent-left mb-2">
-			<div class="flex-box flex-row flex-align-items-center">
+			<div class="flex-box flex-row flex-align-center">
 				<h3>Conversions</h3>
 				<span class="ml-2 text-muted mb-2">{{selected.ingredientConversions?.length}}</span>
 			</div>
@@ -45,14 +45,14 @@
 		</div>
 	</section>
 	<section class="mt-2 mb-2">
-		<div class="flex-box flex-row flex-align-items-center background-bar-light-grey pt-2 pl-2 accent-left mb-2">
+		<div class="flex-box flex-row flex-align-center background-bar-light-grey pt-2 pl-2 accent-left mb-2">
 			<h3>Common Vitamins</h3>
 			<span class="ml-2 text-muted mb-2">Serving Size - 100grams (100g)</span>
 		</div>
 		<app-edit-common-vitamins [form]="commonVitamins" (markAsDirty)="commonVitamins.markAsDirty()"></app-edit-common-vitamins>
 	</section>
 	<section class="mt-2 mb-2">
-		<div class="flex-box flex-row flex-align-items-center background-bar-light-grey pt-2 pl-2 accent-left mb-2">
+		<div class="flex-box flex-row flex-align-center background-bar-light-grey pt-2 pl-2 accent-left mb-2">
 			<h3>Common Minerals</h3>
 			<span class="ml-2 text-muted mb-2">Serving Size - 100grams (100g)</span>
 		</div>
@@ -83,7 +83,7 @@
         <mat-icon class="mr-1">delete</mat-icon>
         <span>Delete Ingredient</span>
     </button> -->
-	<span class="flex-box flex-align-items-center mr-4">
+	<span class="flex-box flex-align-center mr-4">
 		<button type="button" mat-flat-button title="Cancel" (click)="back.emit()" class="mr-2">Cancel</button>
 
 		<app-save-button color="accent" [isSaving]="isSavingResults" [dirty]="ingredientForm.dirty" [valid]="ingredientForm.valid" (save)="onSaveItem()"></app-save-button>
