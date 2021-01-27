@@ -27,7 +27,6 @@ import { IngredientPricesFormComponent } from './ingredient/edit/ingredient-pric
 import { IngredientEditComponent } from './ingredient/ingredient-edit/ingredient-edit.component';
 import { IngredientFilterComponent } from './ingredient/ingredient-filter/ingredient-filter.component';
 import { IngredientTableComponent } from './ingredient/ingredient-table/ingredient-table.component';
-import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { PageTitleComponent } from './page-title/page-title.component';
 import { PaginatorComponent } from './paginator/paginator.component';
 import { RecipeCardComponent } from './recipe/recipe-card/recipe-card.component';
@@ -70,7 +69,6 @@ import { ToastComponent } from './toast/toast.component';
 	SelectAutoCompleteComponent,
 	ToastItemComponent,
 	ToastComponent,
-	LoadingIndicatorComponent,
 	PageTitleComponent,
 	EditIngredientBasicComponent,
 	EditCommonMineralsComponent,
@@ -98,7 +96,6 @@ import { ToastComponent } from './toast/toast.component';
 	IngredientConversionFormComponent,
 	SelectAutoCompleteComponent,
 	ToastComponent,
-	LoadingIndicatorComponent,
 	PageTitleComponent,
 	PaginatorComponent,
   ],

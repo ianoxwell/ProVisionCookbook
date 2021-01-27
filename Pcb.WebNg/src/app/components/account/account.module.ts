@@ -20,8 +20,6 @@ import { RegisterFormComponent } from './register-form/register-form.component';
 import { ResetPasswordFormComponent } from './reset-password-form/reset-password-form.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
-
-
 @NgModule({
 	imports: [
 		CommonModule,
@@ -37,7 +35,7 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 		SharedComponentModule,
 		SvgIconsModule.forRoot({
 			icons
-		}),
+		})
 	],
 	declarations: [
 		LoginFormComponent,
@@ -45,10 +43,8 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 		ResetPasswordFormComponent,
 		ForgotPasswordComponent,
 		LoginComponent,
-		VerifyEmailComponent,
+		VerifyEmailComponent
 	],
-	providers: [
-		AccountService
-	]
+	providers: [AccountService]
 })
-export class AccountModule { }
+export class AccountModule {}

@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { SaveButtonComponent } from './save-button/save-button.component';
+import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
+import { SaveButtonComponent } from './save-button/save-button.component';
 
 
 @NgModule({
@@ -14,10 +15,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 		MatProgressSpinnerModule,
 	],
 	declarations: [
-		SaveButtonComponent
+		SaveButtonComponent,
+		LoadingIndicatorComponent
 	],
 	exports: [
-		SaveButtonComponent
+		SaveButtonComponent,
+		LoadingIndicatorComponent
 	]
 })
 
