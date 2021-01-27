@@ -9,7 +9,7 @@
 	</span>
 	<span class="flex-box flex-align-center" [ngClass]="{'flex-row': horizontalLayout, 'flex-column': !horizontalLayout}">
 		<span class="text-small" [ngClass]="{'mr-4': horizontalLayout, 'mb-1': !horizontalLayout}">{{getMinOfItemOnCurrentPage()}}{{getMaxOfItemOnCurrentPage()}} of {{length}}</span>
-		<span>
+		<span class="page-buttons">
 			<button type="button" mat-icon-button title="First page" (click)="firstPage()" *ngIf="showFirstLastButtons" [disabled]="!hasPreviousPage()">
 				<mat-icon class="color-on-primary">first_page</mat-icon>
 			</button>

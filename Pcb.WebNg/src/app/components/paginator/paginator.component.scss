@@ -12,3 +12,9 @@ button:disabled, .mat-icon-button.mat-button-disabled {
 		filter: invert(1);
 	}
 }
+
+.page-buttons {
+	.mat-icon-button:not(:last-child) {
+		margin-right: 2px;
+	}
+}
