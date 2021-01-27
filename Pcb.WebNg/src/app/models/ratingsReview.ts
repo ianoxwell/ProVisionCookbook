@@ -12,6 +12,7 @@
 
 export interface RatingReviews {
 	id?: number;
+	recipeId: number;
 	// number 0-10 - which presents 3.5/5 stars
 	rating: number;
 
@@ -21,5 +22,5 @@ export interface RatingReviews {
 	// big text field describing improvements to make etc
 	review?: string;
 	// mongoose objectId - so can use populate to expand the information
-	user?: string;
+	userID?: number;
 }

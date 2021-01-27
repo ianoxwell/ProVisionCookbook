@@ -26,12 +26,14 @@ namespace Pcb.Database.Context.Models
         [Column(TypeName = "text")]
         public string RawInstructions { get; set; }
         public int CreateByUserId { get; set; }
+        public string SourceOfRecipeName { get; set; } // used to reference source name
         public string SourceOfRecipeLink { get; set; } // used to reference SpoonAcular or source
+        public string SpoonacularId { get; set; }
         public string CreditsText { get; set; }
         public int NumberStars { get; set; }
         public int NumberFavourites { get; set; }
         public int NumberOfTimesCooked { get; set; }
-  
+
         [Timestamp]
         public byte[] RowVer { get; set; }
 

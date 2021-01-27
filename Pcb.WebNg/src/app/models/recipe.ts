@@ -26,12 +26,6 @@ export interface Recipe {
 	 */
 	priceEstimate?: number;
 	/**
-	 * calculated field of price / number of servings
-	 */
-	priceServing?: number;
-	ingredientLists?: Array<IngredientList>;
-	equipmentRequired?: Array<string>;
-	/**
 	 * amount of time in minutes to prepare everything estimate
 	 */
 	prepTime?: number;
@@ -44,43 +38,61 @@ export interface Recipe {
 	 */
 	readyInMinutes?: number;
 	/**
+	 * calculated field of price / number of servings
+	 */
+	priceServing?: number;
+	/**
 	 * string can be very long it appears
 	 */
-	instructions: string;
-	steppedInstructions?: Array<StepByStepInstructions>;
-	/**
-	 * more than one type possible - breakfast, lunch, dinner snack, sauce, base
-	 */
-	recipeType?: Array<string>;
-	tags?: Array<string>;
-	/**
-	 * low sugar, paleo, sugar free
-	 */
-	healthLabels?: Array<string>;
-	/**
-	 * mexican, chinese, european, tudor, etc
-	 */
-	cuisineType?: Array<string>;
-	allergyWarnings?: Array<string>;
-	createdByUser?: RecipeCreatedByUser;
+	rawInstructions: string;
+	createByUserId: number;
 	/**
 	 * eg CWA Cookbook 2015 or student/teacher/import created or website url
 	 */
-	sourceOfRecipe?: string;
+	sourceOfRecipeName?: string;
+	sourceOfRecipeLink?: string;
+	spoonacularId?: string;
 	creditsText?: string;
 	numberStars?: number;
 	numberReviews?: number;
 	numberFavourites?: number;
 	numberOfTimesCooked?: number;
-	picture?: Array<Picture>;
+
+
+	equipmentRequired?: Array<string>;
+
+	recipeAllergyWarning?: Array<string>;
+	/**
+	 * mexican, chinese, european, tudor, etc
+	 */
+	recipeCuisineType?: Array<string>;
+
+	/** Very healthy, cheap, popular, sustainable, etc */
+	recipeDishTags?: Array<string>;
+	/**
+	 * more than one type possible - breakfast, lunch, dinner snack, sauce, base
+	 */
+	recipeDishType?: Array<string>;
+	/**
+	 * low sugar, paleo, sugar free
+	 */
+	recipeHealthLabels?: Array<string>;
+	/** analysed Instructions broken down to steps */
+	steppedInstructions?: Array<StepByStepInstructions>;
+	recipeIngredientLists?: Array<IngredientList>;
+	recipePicture?: Array<Picture>;
+	recipeReview?: Array<RatingReviews>;
+
+	createdByUser?: RecipeCreatedByUser;
+
+
 	/**
 	 * all the events that occur for the recipe - ie created, edited, booked etc
 	 */
 	history?: Array<History>;
-	ratings?: Array<RatingReviews>;
 	links?: ApiLinks;
 	updatedAt?: string | Date;
 	createdAt?: string | Date;
-	__v?: number; // mongodb equivalent of rowVer
+	rowVer?: string;
 }
 

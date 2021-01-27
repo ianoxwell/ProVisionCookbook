@@ -261,20 +261,22 @@ namespace Pcb.Mapping.Implementation
                 ReadyInMinutes = dto.ReadyInMinutes,
                 RawInstructions = dto.RawInstructions,
                 CreateByUserId = dto.CreateByUserId,
+                SourceOfRecipeName = dto.SourceOfRecipeName,
                 SourceOfRecipeLink = dto.SourceOfRecipeLink,
+                SpoonacularId = dto.SpoonacularId,
                 CreditsText = dto.CreditsText,
                 NumberStars = dto.NumberStars,
                 NumberFavourites = dto.NumberFavourites,
                 NumberOfTimesCooked = dto.NumberOfTimesCooked,
-                RecipeAllergyWarning = dto.AllergyWarnings.Select(x => MapDtoToRecipeAllergyWarningMapping(x, dto.Id)).ToList(),
-                RecipeCuisineType = dto.RecipeCuisineTypes.Select(x => MapDtoToRecipeCuisineTypeMapping(x, dto.Id)).ToList(),
-                RecipeDishTag = dto.RecipeDishTags.Select(x => MapDtoToRecipeDishTagMapping(x, dto.Id)).ToList(),
-                RecipeDishType = dto.RecipeDishTypes.Select(x => MapDtoToRecipeDishTypeMapping(x, dto.Id)).ToList(),
-                RecipeHealthLabel = dto.RecipeHealthLabels.Select(x => MapDtoToRecipeHealthLabelMapping(x, dto.Id)).ToList(),
-                SteppedInstruction = dto.SteppedInstructions.Select(x => MapDtoToSteppedInstructionMapping(x, dto.Id)).ToList(),
-                RecipeIngredientList = dto.RecipeIngredientLists.Select(x => MapDtoToRecipeIngredientMapping(x, dto.Id)).ToList(),
-                RecipeReview = dto.RecipeReviews.Select(x => MapDtoToRecipeReviewMapping(x, dto.Id)).ToList(),
-                RecipePicture = dto.RecipePictures.Select(x => MapDtoToRecipePictureMapping(x, dto.Id)).ToList()
+                RecipeAllergyWarning = dto.AllergyWarnings?.Select(x => MapDtoToRecipeAllergyWarningMapping(x, dto.Id)).ToList(),
+                RecipeCuisineType = dto.RecipeCuisineTypes?.Select(x => MapDtoToRecipeCuisineTypeMapping(x, dto.Id)).ToList(),
+                RecipeDishTag = dto.RecipeDishTags?.Select(x => MapDtoToRecipeDishTagMapping(x, dto.Id)).ToList(),
+                RecipeDishType = dto.RecipeDishTypes?.Select(x => MapDtoToRecipeDishTypeMapping(x, dto.Id)).ToList(),
+                RecipeHealthLabel = dto.RecipeHealthLabels?.Select(x => MapDtoToRecipeHealthLabelMapping(x, dto.Id)).ToList(),
+                SteppedInstruction = dto.SteppedInstructions?.Select(x => MapDtoToSteppedInstructionMapping(x, dto.Id)).ToList(),
+                RecipeIngredientList = dto.RecipeIngredientLists?.Select(x => MapDtoToRecipeIngredientMapping(x, dto.Id)).ToList(),
+                RecipeReview = dto.RecipeReviews?.Select(x => MapDtoToRecipeReviewMapping(x, dto.Id)).ToList(),
+                RecipePicture = dto.RecipePictures?.Select(x => MapDtoToRecipePictureMapping(x, dto.Id)).ToList()
             };
         }
 
