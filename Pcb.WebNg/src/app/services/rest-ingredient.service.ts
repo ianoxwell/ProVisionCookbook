@@ -30,9 +30,8 @@ export class RestIngredientService {
 	}
 	constructor(private httpClient: HttpClient) {}
 
-	public getRandomSpoonacularRecipe(): Observable<any> {
-		console.log('get spoon random', `${this.foodUrl}/recipes/random?limitLicense=true&number=3&apiKey=${this.foodApiKey}`);
-		return this.httpClient.get<any>(`${this.foodUrl}/recipes/random?limitLicense=true&number=3&apiKey=${this.foodApiKey}`, {
+	public getRandomSpoonacularRecipe(count: number): Observable<any> {
+		return this.httpClient.get<any>(`${this.foodUrl}/recipes/random?limitLicense=true&number=${count}&apiKey=${this.foodApiKey}`, {
 			headers: this.defaultHeader
 		});
 	}

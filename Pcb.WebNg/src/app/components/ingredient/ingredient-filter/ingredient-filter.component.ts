@@ -18,7 +18,7 @@ export class IngredientFilterComponent extends ComponentBase implements OnInit {
 	filterQuery: IIngredientFilterObject = new IngredientFilterObject();
 	isFormReady$: Observable<boolean> = of(false);
 
-	constructor(private fb: FormBuilder, private stateService: StateService) {
+	constructor( private fb: FormBuilder, private stateService: StateService) {
 		super();
 	}
 
@@ -26,9 +26,7 @@ export class IngredientFilterComponent extends ComponentBase implements OnInit {
 		this.isFormReady$ = this.listenStateService();
 	}
 
-	/**
-	 * On init check that the stateService does not hold existing filter items
-	 */
+	/** On init get filter items from the stateService. */
 	listenStateService(): Observable<boolean> {
 		return this.stateService.getIngredientFilterQuery().pipe(
 			first(),

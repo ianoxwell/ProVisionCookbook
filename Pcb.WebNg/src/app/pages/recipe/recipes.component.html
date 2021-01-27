@@ -6,7 +6,8 @@
 		<span class="ml-12"></span>
 		<span *ngIf="!!cookBookUserProfile && cookBookUserProfile.lastName==='Oxwell' && selectedTab === 0">
 			<span class="mr-1">Index: {{selectedIndex}}</span>
-			<button mat-flat-button (click)="getSpoonAcularRecipe()" type="button">Get 3 random recipes</button>
+			<button mat-flat-button (click)="getSpoonAcularRecipe(1)" type="button">Get 1 random recipes</button>
+			<button mat-flat-button (click)="getSpoonAcularRecipe(3)" type="button">Get 3 random recipes</button>
 			<button mat-flat-button (click)="showToast()" type="button">Show toast</button>
 		</span>
 		<span *ngIf="selectedTab === 1">

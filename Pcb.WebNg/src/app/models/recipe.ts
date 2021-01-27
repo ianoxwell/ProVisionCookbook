@@ -84,7 +84,3 @@ export interface Recipe {
 	__v?: number; // mongodb equivalent of rowVer
 }
 
-export interface Recipes {
-	items: Recipe[];
-	total: number;
-}

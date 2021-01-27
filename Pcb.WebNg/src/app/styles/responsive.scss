@@ -29,6 +29,10 @@
 	@include flex-direction(column);
 }
 
+.flex-column-reverse {
+	@include flex-direction(column-reverse);
+}
+
 .flex-grow-1 {
 	@include flex-grow(1);
 }

@@ -76,10 +76,15 @@ export class PaginatorComponent {
 		return this.pageSize > 0 ? Math.floor(this.length / this.pageSize) : 0;
 	};
 
-	/** Calculate the page size or length for the statement item 1 - 25 of 52 */
-	getMaxOfItemOnCurrentPage(): number {
-		const maxPage = this.pageSize * (this.pageIndex + 1);
-		return Math.min(maxPage, this.count);
+	/** Calculate the page size or min for the statement item x - 25 of 52 */
+	getMinOfItemOnCurrentPage(): number {
+		const minPage = this.pageIndex * this.pageSize + 1;
+		return Math.min(minPage, this.count);
+	};
+	/** Calculate the page size or length for the statement item 1 - x of 52 */
+	getMaxOfItemOnCurrentPage(): string {
+		const maxPage = Math.min(this.pageSize * (this.pageIndex + 1), this.count);
+		return maxPage > 0 ? ` - ${maxPage}` : ``;
 	};
 
 	/** Organises the variables to emit */

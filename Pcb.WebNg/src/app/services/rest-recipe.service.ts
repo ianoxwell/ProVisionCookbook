@@ -1,10 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { PagedResult } from '@models/common.model';
 import { IRecipeFilterQuery, RecipeFilterQuery } from '@models/filter-queries.model';
 import { Suggestion } from '@models/suggestion';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Recipe, Recipes } from '../models/recipe';
+import { Recipe } from '../models/recipe';
 
 @Injectable({
 	providedIn: 'root'
@@ -16,7 +17,7 @@ export class RestRecipeService {
 	private apiURL = environment.apiUrl + environment.apiVersion;
 
 	constructor(private httpClient: HttpClient) {}
-	public getRecipe(filterQuery: IRecipeFilterQuery): Observable<Recipes> {
+	public getRecipe(filterQuery: IRecipeFilterQuery): Observable<PagedResult<Recipe>> {
 		if (!filterQuery) {
 			filterQuery = new RecipeFilterQuery();
 		}
@@ -36,7 +37,7 @@ export class RestRecipeService {
 		}
 		queryString = queryString.slice(0, -1);
 		console.log('ready the query', `${this.apiURL}recipe/search${queryString}`);
-		return this.httpClient.get<Recipes>(`${this.apiURL}recipe/search${queryString}`, { headers: this.defaultHeader });
+		return this.httpClient.get<PagedResult<Recipe>>(`${this.apiURL}recipe/search${queryString}`, { headers: this.defaultHeader });
 	}
 
 	// don't currently have this - but good idea

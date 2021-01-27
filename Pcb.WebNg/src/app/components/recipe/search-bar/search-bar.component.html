@@ -52,15 +52,17 @@
 			</mat-option>
 			</mat-select>
 		</mat-form-field> -->
-		<mat-paginator class="bottom-sticky"
+		<app-paginator class="bottom-sticky"
 			class="recipe-filter-paginator"
 			[length]="dataLength"
+			[horizontalLayout]="false"
 			[pageSize]="filterQuery.perPage"
 			[pageIndex]="filterQuery.page"
 			[showFirstLastButtons]="true"
 			[pageSizeOptions]="[5, 10, 25, 100]"
 			(page)="pageChange($event)">
-		</mat-paginator>
+		</app-paginator>
+		<div>&nbsp;</div>
 	</div>
 </form>
 <!-- 

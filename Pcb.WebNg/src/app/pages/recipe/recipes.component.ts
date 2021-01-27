@@ -2,9 +2,10 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ComponentBase } from '@components/base/base.component.base';
+import { PagedResult } from '@models/common.model';
 import { IRecipeFilterQuery, RecipeFilterQuery } from '@models/filter-queries.model';
 import { MessageStatus } from '@models/message.models';
-import { Recipe, Recipes } from '@models/recipe';
+import { Recipe } from '@models/recipe';
 import { User } from '@models/user';
 import { ToTitleCasePipe } from '@pipes/title-case.pipe';
 import { DialogService } from '@services/dialog.service';
@@ -118,20 +119,20 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 		console.log('here is the filter change', ev);
 	}
 
-	getRecipes(): Observable<Recipes> {
+	getRecipes(): Observable<PagedResult<Recipe>> {
 		this.isLoading = true;
+		this.dataLength = 0;
 		return this.restRecipeService.getRecipe(this.filterQuery).pipe(
 			catchError(err => {
 				this.dialogService.alert('Error getting recipes', err);
-				this.dataLength = 0;
-				return of({items: [], total: 0});
+				return of({items: [], totalCount: 0});
 			}),
 			tap(() => {
 				this.isLoading = false;
 			}),
-			filter(result => result.total > 0),
-			tap((recipeResults: Recipes) => {
-				this.dataLength = recipeResults.total;
+			filter((result: PagedResult<Recipe>) => result.totalCount > 0),
+			tap((recipeResults: PagedResult<Recipe>) => {
+				this.dataLength = recipeResults.totalCount;
 				this.recipes = recipeResults.items;
 			}),
 		);
@@ -160,8 +161,8 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 	}
 
 	// todo temp - remove shortly
-	getSpoonAcularRecipe() {
-		this.restIngredientService.getRandomSpoonacularRecipe()
+	getSpoonAcularRecipe(count: number) {
+		this.restIngredientService.getRandomSpoonacularRecipe(count)
 		.subscribe(recipeResult => {
 			console.log('a result', recipeResult);
 			recipeResult.recipes.map(recipe => {
