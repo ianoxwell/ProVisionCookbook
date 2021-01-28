@@ -575,7 +575,7 @@ namespace Pcb.Database.Context
                 new CuisineType()
                 {
                     Id = 5,
-                    Title = "Japenese"
+                    Title = "Japanese"
                 });
             modelBuilder.Entity<CuisineType>().HasData(
                 new CuisineType()
@@ -593,7 +593,7 @@ namespace Pcb.Database.Context
                 new CuisineType()
                 {
                     Id = 8,
-                    Title = "Spannish"
+                    Title = "Spanish"
                 });
             modelBuilder.Entity<CuisineType>().HasData(
                 new CuisineType()
@@ -607,6 +607,19 @@ namespace Pcb.Database.Context
                     Id = 10,
                     Title = "Mediterranean"
                 });
+            modelBuilder.Entity<CuisineType>().HasData(
+                new CuisineType()
+                {
+                    Id = 11,
+                    Title = "South American"
+                });
+            modelBuilder.Entity<CuisineType>().HasData(
+                new CuisineType()
+                {
+                    Id = 12,
+                    Title = "Latin American"
+                });
+
 
             // Dish Tags
             modelBuilder.Entity<DishTag>().HasData(
@@ -681,6 +694,20 @@ namespace Pcb.Database.Context
                 {
                     Id = 6,
                     Title = "Salad"
+                });
+            modelBuilder.Entity<DishType>().HasData(
+                new DishType()
+                {
+                    Id = 7,
+                    Title = "Main Course",
+                    AltTitle = "mainCourse"
+                });
+            modelBuilder.Entity<DishType>().HasData(
+                new DishType()
+                {
+                    Id = 8,
+                    Title = "Main Dish",
+                    AltTitle = "mainDish"
                 });
             // Equipment
             modelBuilder.Entity<Equipment>().HasData(
@@ -767,18 +794,18 @@ namespace Pcb.Database.Context
                 new IngredientFoodGroup() { Id = 6, Title = "Breakfast Cereals" },
                 new IngredientFoodGroup() { Id = 7, Title = "Dairy and Egg Products" },
                 new IngredientFoodGroup() { Id = 8, Title = "Fast Foods" },
-                new IngredientFoodGroup() { Id = 9, Title = "Fats and Oils", AltTitle = "Oil, Vinegar, Salad Dressing"  },
+                new IngredientFoodGroup() { Id = 9, Title = "Fats and Oils", AltTitle = "Oil, Vinegar, Salad Dressing" },
                 new IngredientFoodGroup() { Id = 10, Title = "Fish" },
                 new IngredientFoodGroup() { Id = 11, Title = "Fruits" },
-                new IngredientFoodGroup() { Id = 12, Title = "Grains and Pasta", AltTitle= "Pasta and Rice" },
-                new IngredientFoodGroup() { Id = 13, Title = "Meats" },
+                new IngredientFoodGroup() { Id = 12, Title = "Grains and Pasta", AltTitle = "Pasta and Rice" },
+                new IngredientFoodGroup() { Id = 13, Title = "Meats", AltTitle = "Meat" },
                 new IngredientFoodGroup() { Id = 14, Title = "NULL" },
                 new IngredientFoodGroup() { Id = 15, Title = "Nuts and Seeds" },
                 new IngredientFoodGroup() { Id = 16, Title = "Prepared Meals" },
                 new IngredientFoodGroup() { Id = 17, Title = "Restaurant Foods" },
                 new IngredientFoodGroup() { Id = 18, Title = "Snacks" },
-                new IngredientFoodGroup() { Id = 19, Title = "Soups and Sauces", AltTitle= "Condiments" },
-                new IngredientFoodGroup() { Id = 20, Title = "Spices and Herbs", AltTitle= "Spices and Seasonings" },
+                new IngredientFoodGroup() { Id = 19, Title = "Soups and Sauces", AltTitle = "Condiments" },
+                new IngredientFoodGroup() { Id = 20, Title = "Spices and Herbs", AltTitle = "Spices and Seasonings" },
                 new IngredientFoodGroup() { Id = 21, Title = "Sweets" },
                 new IngredientFoodGroup() { Id = 22, Title = "Vegetables", AltTitle = "Produce" }
             );

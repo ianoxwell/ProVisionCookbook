@@ -58,14 +58,24 @@ namespace Pcb.Service.Implementations
                 : recipeArray.OrderByMemberDescending(sort);
 
             var finishedRecipeArray = await recipeArray
-                //.Include(x => x.ParentType)
-                //.Include(x => x.IngredientState)
-                //.Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementBaseUnit)
-                //.Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementConvertUnit)
-                //.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
-                //.Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
-                //.Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
-                //.Include(x => x.IngredientNutrition)
+                .Include(x => x.RecipeAllergyWarning).ThenInclude(y => y.AllergyWarning)
+                .Include(x => x.RecipeCuisineType).ThenInclude(y => y.CuisineType)
+                .Include(x => x.RecipeDishTag).ThenInclude(y => y.DishTag)
+                .Include(x => x.RecipeDishType).ThenInclude(y => y.DishType)
+                .Include(x => x.RecipeHealthLabel).ThenInclude(y => y.HealthLabel)
+                .Include(x => x.SteppedInstruction)
+                .Include(x => x.RecipeIngredientList).ThenInclude(y => y.Ingredient)
+                    .ThenInclude(x => x.IngredientConversions).ThenInclude(x => x.MeasurementBaseUnit)
+                .Include(x => x.RecipeIngredientList).ThenInclude(y => y.Ingredient)
+                    .ThenInclude(x => x.IngredientConversions).ThenInclude(x => x.MeasurementConvertUnit)
+                .Include(x => x.RecipeIngredientList).ThenInclude(y => y.Ingredient)
+                    .ThenInclude(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
+                .Include(x => x.RecipeIngredientList).ThenInclude(y => y.Ingredient)
+                    .ThenInclude(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
+                .Include(x => x.RecipeIngredientList).ThenInclude(y => y.Ingredient)
+                    .ThenInclude(x => x.IngredientAllergyWarning)
+                .Include(x => x.RecipeReview)
+                .Include(x => x.RecipePicture)
                 .ToListAsync();
 
             PagedResult<RecipeDto> pagedResult = new PagedResult<RecipeDto>

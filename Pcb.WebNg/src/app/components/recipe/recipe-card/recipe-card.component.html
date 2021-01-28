@@ -2,7 +2,7 @@
 	<!-- <div class="image" [style.backgroundImage]="'url('+recipeInput.picture[0].fileLink+')'" (click)="clickedRecipe.emit(recipeInput)" [title]="recipeInput.picture[0].title">
 	</div> -->
 	<div class="relative-position show-pointer" (click)="clickedRecipe.emit(recipeInput)">
-		<img [src]="recipeInput.recipePicture[0].fileLink" [alt]="recipeInput.recipePicture[0].title" />
+		<img *ngIf="!!recipeInput.recipePictures && recipeInput.recipePictures.length > 0" [src]="recipeInput.recipePictures[0].fileLink" [alt]="recipeInput.recipePictures[0].title" />
 		<div class="rating-favourite-position flex-box flex-justify-end">
 			<span class="flex-box flex-align-center mr-1" title="ratings">
 				<mat-icon class="mr-1">star</mat-icon>
@@ -20,8 +20,8 @@
 			<h3 class="recipe-title">{{recipeInput.name}}</h3>
 
 			<span class="text-really-small text-muted">
-				<span *ngFor="let item of recipeInput.recipeDishType">
-					{{item | sentenceCase}}
+				<span *ngFor="let item of recipeInput.recipeDishTypes">
+					{{item.title | sentenceCase}}
 				</span>
 			</span>
 		</div>
@@ -29,9 +29,9 @@
 			<mat-icon class="mr-1">people_outline</mat-icon>serves {{recipeInput.numberOfServings}}
 		</div>
 
-		<div *ngIf="recipeInput.recipeAllergyWarning && recipeInput.recipeAllergyWarning.length > 0" title="Allergy Warnings">
-			<span *ngFor="let allergy of recipeInput.recipeAllergyWarning">
-				{{allergy}}
+		<div *ngIf="recipeInput.allergyWarnings && recipeInput.allergyWarnings.length > 0" title="Allergy Warnings">
+			<span *ngFor="let allergy of recipeInput.allergyWarnings">
+				{{allergy.title}}
 			</span>
 		</div>
 	</div>

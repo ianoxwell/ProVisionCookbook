@@ -21,7 +21,7 @@ export interface Recipe {
 	/**
 	 * Number of people or servings the recipe will make
 	 */
-	numberOfServings: number;
+	numberOfServings?: number;
 	/**
 	 * calculated field from average prices
 	 */
@@ -45,7 +45,7 @@ export interface Recipe {
 	/**
 	 * string can be very long it appears
 	 */
-	rawInstructions: string;
+	rawInstructions?: string;
 	createByUserId: number;
 	/**
 	 * eg CWA Cookbook 2015 or student/teacher/import created or website url
@@ -60,20 +60,20 @@ export interface Recipe {
 	numberOfTimesCooked?: number;
 
 
-	equipmentRequired?: Array<string>;
+	equipmentRequired?: Array<ReferenceItemFull>;
 
-	recipeAllergyWarning?: Array<string>;
+	allergyWarnings?: Array<ReferenceItemFull>;
 	/**
 	 * mexican, chinese, european, tudor, etc
 	 */
-	recipeCuisineType?: Array<ReferenceItemFull>;
+	recipeCuisineTypes?: Array<ReferenceItemFull>;
 
 	/** Very healthy, cheap, popular, sustainable, etc */
 	recipeDishTags?: Array<ReferenceItemFull>;
 	/**
 	 * more than one type possible - breakfast, lunch, dinner snack, sauce, base
 	 */
-	recipeDishType?: Array<ReferenceItemFull>;
+	recipeDishTypes?: Array<ReferenceItemFull>;
 	/**
 	 * low sugar, paleo, sugar free
 	 */
@@ -81,8 +81,8 @@ export interface Recipe {
 	/** analysed Instructions broken down to steps */
 	steppedInstructions?: Array<StepByStepInstructions>;
 	recipeIngredientLists?: Array<IngredientList>;
-	recipePicture?: Array<Picture>;
-	recipeReview?: Array<RatingReviews>;
+	recipePictures?: Array<Picture>;
+	recipeReviews?: Array<RatingReviews>;
 
 	createdByUser?: RecipeCreatedByUser;
 

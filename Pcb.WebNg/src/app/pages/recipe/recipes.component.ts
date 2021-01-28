@@ -225,15 +225,15 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 			numberOfServings: recipe.servings,
 			readyInMinutes: recipe.readyInMinutes,
 			rawInstructions: recipe.instructions,
-			recipeDishType: recipe.dishTypes.map((dish: string) => findReferenceItem(dish, this.refDataAll.DishType)),
-			recipeCuisineType: recipe.cuisines.map((type: string) => findReferenceItem(type, this.refDataAll.CuisineType)),
+			recipeDishTypes: [],
+			recipeCuisineTypes: [],
 			sourceOfRecipeName: recipe.sourceName,
 			sourceOfRecipeLink: recipe.sourceUrl,
 			spoonacularId: recipe.id,
 			creditsText: recipe.creditsText,
 			teaser: recipe.summary,
 			createByUserId: this.cookBookUserProfile.id, // logged in user.
-			recipePicture: [
+			recipePictures: [
 				{
 					title: recipe.title,
 					fileLink: recipe.image,
@@ -307,6 +307,22 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 			if (!!tag.altTitle && recipe[tag.altTitle] && recipe[tag.altTitle] === true) {
 				console.log('this is a dishTag');
 				newRecipe.recipeDishTags.push(tag);
+			}
+		});
+		recipe.dishTypes.forEach((dish: string) => {
+			const dishType = findReferenceItem(dish, this.refDataAll.DishType);
+			if (!!dishType) {
+				newRecipe.recipeDishTypes.push(dishType);
+			} else {
+				console.log('could not find this dish type', dish, this.refDataAll.DishType);
+			}
+		})
+		recipe.cuisines.forEach((type: string) => {
+			const cuisineType = findReferenceItem(type, this.refDataAll.CuisineType);
+			if (!!cuisineType) {
+				newRecipe.recipeCuisineTypes.push(cuisineType);
+			} else {
+				console.log('could not find this cuisine', type, this.refDataAll.CuisineType);
 			}
 		});
 		this.refDataAll.HealthLabel.forEach((diet: ReferenceItemFull) => {

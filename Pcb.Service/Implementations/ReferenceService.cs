@@ -55,8 +55,8 @@ namespace Pcb.Service.Implementations
 
         public async Task<ReferenceItemEx> Save(IReferenceItemEx item, ReferenceType type)
         {
-           using (var _db = GetReadOnlyDbContext())
-           {
+            using (var _db = GetReadOnlyDbContext())
+            {
 
                 var tableName = $"ref.{type.ToString()}";
                 // var testThing = _db.GetType().GetMethod(type.ToString()).ReturnType;
@@ -69,13 +69,13 @@ namespace Pcb.Service.Implementations
                 // check 
                 await _db.SaveChangesAsync();
                 return (ReferenceItemEx)item;
-           }
+            }
         }
 
         public bool ReferenceItemExists(string name, ReferenceType type)
         {
-           using (var _db = GetReadOnlyDbContext())
-           {
+            using (var _db = GetReadOnlyDbContext())
+            {
                 IEnumerable<dynamic> dbEntity = _db.FindEntity(type.ToString());
                 bool value = dbEntity.Any(a => a?.Title.ToLower().Trim() == name.ToLower().Trim());
                 return value;
@@ -100,6 +100,8 @@ namespace Pcb.Service.Implementations
                         Title = row.Title,
                         Symbol = row.Symbol,
                         Summary = row.Summary,
+                        AltTitle = row.AltTitle,
+                        OnlineId = row.OnlineId,
                         CreatedAt = row.CreatedAt,
                         RowVer = row.RowVer
                     };

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pcb.Database.Context;
 
 namespace Pcb.Database.Migrations
 {
     [DbContext(typeof(PcbDbContext))]
-    partial class PcbDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210128044428_AltTitleAllReferences")]
+    partial class AltTitleAllReferences
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -969,9 +971,6 @@ namespace Pcb.Database.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasDefaultValueSql("(sysdatetimeoffset())");
 
-                    b.Property<int>("OnlineId")
-                        .HasColumnType("int");
-
                     b.Property<byte[]>("RowVer")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -996,56 +995,48 @@ namespace Pcb.Database.Migrations
                         {
                             Id = 1,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "American Indian"
                         },
                         new
                         {
                             Id = 2,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Baby Foods"
                         },
                         new
                         {
                             Id = 3,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Baked Foods"
                         },
                         new
                         {
                             Id = 4,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Beans and Lentils"
                         },
                         new
                         {
                             Id = 5,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Beverages"
                         },
                         new
                         {
                             Id = 6,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Breakfast Cereals"
                         },
                         new
                         {
                             Id = 7,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Dairy and Egg Products"
                         },
                         new
                         {
                             Id = 8,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Fast Foods"
                         },
                         new
@@ -1053,21 +1044,18 @@ namespace Pcb.Database.Migrations
                             Id = 9,
                             AltTitle = "Oil, Vinegar, Salad Dressing",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Fats and Oils"
                         },
                         new
                         {
                             Id = 10,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Fish"
                         },
                         new
                         {
                             Id = 11,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Fruits"
                         },
                         new
@@ -1075,49 +1063,42 @@ namespace Pcb.Database.Migrations
                             Id = 12,
                             AltTitle = "Pasta and Rice",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Grains and Pasta"
                         },
                         new
                         {
                             Id = 13,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Meats"
                         },
                         new
                         {
                             Id = 14,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "NULL"
                         },
                         new
                         {
                             Id = 15,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Nuts and Seeds"
                         },
                         new
                         {
                             Id = 16,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Prepared Meals"
                         },
                         new
                         {
                             Id = 17,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Restaurant Foods"
                         },
                         new
                         {
                             Id = 18,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Snacks"
                         },
                         new
@@ -1125,7 +1106,6 @@ namespace Pcb.Database.Migrations
                             Id = 19,
                             AltTitle = "Condiments",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Soups and Sauces"
                         },
                         new
@@ -1133,14 +1113,12 @@ namespace Pcb.Database.Migrations
                             Id = 20,
                             AltTitle = "Spices and Seasonings",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Spices and Herbs"
                         },
                         new
                         {
                             Id = 21,
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Sweets"
                         },
                         new
@@ -1148,7 +1126,6 @@ namespace Pcb.Database.Migrations
                             Id = 22,
                             AltTitle = "Produce",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            OnlineId = 0,
                             Title = "Vegetables"
                         });
                 });
@@ -2622,7 +2599,7 @@ namespace Pcb.Database.Migrations
                             IsStudent = false,
                             LastFailedLoginAttempt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PasswordHash = "$2a$11$S4dxbyF50IGHihuLuY5WIuvkWZTnHLJhrGOEOhhrzqFbYYeCtdKai",
+                            PasswordHash = "$2a$11$TS8dKgDnLbQ8f8768.JwVediNbIbU00vWaoAaCIpdVFzC/Ve2eLTa",
                             TimesLoggedIn = 0,
                             Username = "admin",
                             Verified = new DateTime(2018, 10, 10, 10, 10, 0, 0, DateTimeKind.Unspecified)
