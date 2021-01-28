@@ -104,6 +104,28 @@ namespace Pcb.Service.Implementations
             return IngredientMapper.MapIngredientToDto(ingredientObj);
         }
 
+        public async Task<IngredientDto> ReadFirstIngredient(int id, string searchField)
+        {
+            if (searchField.ToLower() == "linkurl" || searchField.ToLower() == "usdafoodid")
+            {
+                using var _db = GetReadOnlyDbContext();
+                var ingredientQuery = searchField.ToLower() == "linkurl" ? _db.Ingredient.Where(x => x.LinkUrl == id) : _db.Ingredient.Where(x => x.UsdaFoodId == id);
+
+
+                Ingredient ingredientObj = await ingredientQuery.Include(x => x.FoodGroup)
+                    .Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementBaseUnit)
+                    .Include(x => x.IngredientConversions).ThenInclude(x => x.MeasurementConvertUnit)
+                    .Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientBaseConversionState)
+                    .Include(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
+                    .Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
+                    .Include(x => x.RecipeIngredientList).ThenInclude(y => y.Recipe)
+                    .FirstOrDefaultAsync();
+
+                return IngredientMapper.MapIngredientToDto(ingredientObj);
+            }
+            return null;
+
+        }
 
         public async Task<IngredientDto> UpdateIngredient(int ingredientId, IngredientDto dto)
         {

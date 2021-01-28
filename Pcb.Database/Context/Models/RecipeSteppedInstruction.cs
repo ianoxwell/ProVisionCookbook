@@ -19,5 +19,8 @@ namespace Pcb.Database.Context.Models
 
         public Recipe Recipe { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
+
+        public ICollection<Equipment> Equipment { get; set; }
+        public ICollection<RecipeIngredientList> RecipeIngredientList { get; set; }
     }
 }

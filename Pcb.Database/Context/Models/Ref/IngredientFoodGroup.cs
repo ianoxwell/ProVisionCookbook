@@ -14,6 +14,8 @@ namespace Pcb.Database.Context.Models
 		public string Title { get; set; }
 		[AllowNull]
 		public string Summary { get; set; }
+        [AllowNull]
+        public string AltTitle { get; set; }
 		[AllowNull]
 		public string Symbol { get; set; }
 		public DateTimeOffset CreatedAt { get; set; }

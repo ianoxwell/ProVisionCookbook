@@ -1,9 +1,10 @@
 import { ApiLinks } from './apiLinks';
 import { History } from './history';
-import { IngredientList } from './ingredientList';
+import { IngredientList } from './ingredient-list.model';
 import { Picture } from './picture';
 import { RatingReviews } from './ratingsReview';
 import { RecipeCreatedByUser } from './recipeCreatedByUser';
+import { ReferenceItemFull } from './reference.model';
 import { StepByStepInstructions } from './stepByStepInstructions';
 
 
@@ -51,7 +52,7 @@ export interface Recipe {
 	 */
 	sourceOfRecipeName?: string;
 	sourceOfRecipeLink?: string;
-	spoonacularId?: string;
+	spoonacularId?: number;
 	creditsText?: string;
 	numberStars?: number;
 	numberReviews?: number;
@@ -65,18 +66,18 @@ export interface Recipe {
 	/**
 	 * mexican, chinese, european, tudor, etc
 	 */
-	recipeCuisineType?: Array<string>;
+	recipeCuisineType?: Array<ReferenceItemFull>;
 
 	/** Very healthy, cheap, popular, sustainable, etc */
-	recipeDishTags?: Array<string>;
+	recipeDishTags?: Array<ReferenceItemFull>;
 	/**
 	 * more than one type possible - breakfast, lunch, dinner snack, sauce, base
 	 */
-	recipeDishType?: Array<string>;
+	recipeDishType?: Array<ReferenceItemFull>;
 	/**
 	 * low sugar, paleo, sugar free
 	 */
-	recipeHealthLabels?: Array<string>;
+	recipeHealthLabels?: Array<ReferenceItemFull>;
 	/** analysed Instructions broken down to steps */
 	steppedInstructions?: Array<StepByStepInstructions>;
 	recipeIngredientLists?: Array<IngredientList>;

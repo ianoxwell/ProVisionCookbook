@@ -45,6 +45,21 @@ namespace Pcb.Api.Controllers
         }
 
         /// <summary>
+        /// Get a single Ingredient by UsdaFoodId or SpoonacularId.
+        /// </summary>
+        /// <param name="id">Ingredient Identifier.</param>
+        /// <param name="searchField">The field to use for lookup e.g. UsdaFoodId || LinkUrl.</param>
+        /// <returns>IngredientDto</returns>
+        [HttpGet]
+        [Route("find")]
+        [ProducesResponseType(200, Type = typeof(IngredientDto))]
+        public IActionResult GetFirstIngredient(int id, string searchField)
+        {
+            IngredientDto ingredient = IngredientService.ReadFirstIngredient(id, searchField).Result;
+            return Ok(ingredient);
+        }
+
+        /// <summary>
         /// Search for ingredients with paged results
         /// </summary>
         /// <param name="pageSize">Number of results per page</param>

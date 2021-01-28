@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pcb.Database.Context;
 
 namespace Pcb.Database.Migrations
 {
     [DbContext(typeof(PcbDbContext))]
-    partial class PcbDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210128023618_ExpandedReferences")]
+    partial class ExpandedReferences
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -899,9 +901,6 @@ namespace Pcb.Database.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("AltTitle")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
@@ -978,7 +977,6 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 9,
-                            AltTitle = "Oil, Vinegar, Salad Dressing",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Fats and Oils"
                         },
@@ -997,7 +995,6 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 12,
-                            AltTitle = "Pasta and Rice",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Grains and Pasta"
                         },
@@ -1040,14 +1037,12 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 19,
-                            AltTitle = "Condiments",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Soups and Sauces"
                         },
                         new
                         {
                             Id = 20,
-                            AltTitle = "Spices and Seasonings",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Spices and Herbs"
                         },
@@ -1060,7 +1055,6 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 22,
-                            AltTitle = "Produce",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Vegetables"
                         });
@@ -2497,7 +2491,7 @@ namespace Pcb.Database.Migrations
                             IsStudent = false,
                             LastFailedLoginAttempt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PasswordHash = "$2a$11$mp.ed40Nt4LTHqj9J12xyementoLs4m08dYSMin297Ecg6OFEvvdi",
+                            PasswordHash = "$2a$11$0gkWApUZYpUIRI/EyOHWa.lQBH/tK0Ij4t3pmOQAX1IDUGm0I7eaG",
                             TimesLoggedIn = 0,
                             Username = "admin",
                             Verified = new DateTime(2018, 10, 10, 10, 10, 0, 0, DateTimeKind.Unspecified)

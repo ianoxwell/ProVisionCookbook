@@ -16,8 +16,10 @@ namespace Pcb.Database.Context.Models
         public string Summary { get; set; }
         [AllowNull]
         public string Symbol { get; set; }
+        [AllowNull]
+        public string AltTitle { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
-        
+
         [Timestamp]
         public byte[] RowVer { get; set; }
 

@@ -1,5 +1,4 @@
 import { CountryCode, MeasurementType } from './common.model';
-import { Conversion } from './conversion';
 
 export class MeasurementModel {
 	id: number;
@@ -86,32 +85,5 @@ export interface ICaloricBreakdown{
 	fat?: number;
 	protein?: number;
 	water?: number;
-}
-
-// export class ConversionModel {
-// 	// tslint:disable-next-line: variable-name
-// 	id?: number;
-// 	measureA: string;
-// 	stateA: string;
-// 	quantityA: number;
-// 	measureB: string;
-// 	stateB: string;
-// 	quantityB: number;
-// 	preference: number;
-// 	constructor() {}
-// }
-export class IngredientModel {
-	// tslint:disable-next-line: variable-name
-	id: number;
-	name: string; // standard input
-	parent: string; // select dropdown of parent options
-	allergies: string[]; // multiselect dropdown of allergies
-	purchasedBy: string;
-	linkId: string;
-	createdOn: number;
-	modifiedOn: number;
-	averagePrice: number;
-	prices: PriceModel[];
-	conversions: Conversion[];
 }
 

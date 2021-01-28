@@ -10,6 +10,7 @@ export enum ReferenceType {
 	CuisineType,
 	DishTag,
 	DishType,
+	Equipment,
 	HealthLabel,
 	IngredientFoodGroup,
 	IngredientState,
@@ -26,6 +27,8 @@ export interface ReferenceItem { id: number; title: string; }
 export interface ReferenceItemFull extends ReferenceItem {
 	symbol: string;
 	summary: string;
+	altTitle?: string;
+	onlineId?: number; // equipment has a spoonacular reference
 	sortOrder: number;
 	createdAt: Date;
 	rowVer: string;
@@ -39,6 +42,7 @@ export interface ReferenceAll {
 	CuisineType?: ReferenceItemFull[];
 	DishTag?: ReferenceItemFull[];
 	DishType?: ReferenceItemFull[];
+	Equipment?: ReferenceItemFull[];
 	HealthLabel?: ReferenceItemFull[];
 	IngredientFoodGroup?: ReferenceItemFull[];
 	IngredientState?: ReferenceItemFull[];

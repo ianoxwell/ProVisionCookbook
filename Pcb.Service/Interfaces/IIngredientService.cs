@@ -31,20 +31,27 @@ namespace Pcb.Service.Interfaces
         /// <summary>
         /// Get a Single Ingredient
         /// </summary>
-        /// <param name="ingredientId"></param>
-        /// <returns></returns>
+        /// <param name="ingredientId">The database id number.</param>
+        /// <returns>Ingredient mapped to DTO.</returns>
         Task<IngredientDto> ReadSingleIngredient(int ingredientId);
+        /// <summary>
+        /// Gets first matching Ingredient
+        /// </summary>
+        /// <param name="id">UsdaFoodId or SpoonacularId int.</param>
+        /// <param name="searchField">The field to use for lookup e.g. [UsdaFoodId] [LinkUrl]</param>
+        /// <returns>Ingredient mapped to DTO.</returns>
+        Task<IngredientDto> ReadFirstIngredient(int id, string searchField);
         /// <summary>
         /// Update a single ingredient
         /// </summary>
-        /// <param name="ingredientId"></param>
+        /// <param name="ingredientId">The database id number.</param>
         /// <param name="dto"></param>
         /// <returns></returns>
         Task<IngredientDto> UpdateIngredient(int ingredientId, IngredientDto dto);
         /// <summary>
         /// Delete a single ingredient
         /// </summary>
-        /// <param name="ingredientId"></param>
+        /// <param name="ingredientId">The database id number.</param>
         /// <returns></returns>
         Task<IngredientDto> DeleteIngredient(int ingredientId);
         /// <summary>

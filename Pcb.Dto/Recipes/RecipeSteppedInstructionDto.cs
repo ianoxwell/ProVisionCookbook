@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Pcb.Database.Context.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Pcb.Dto.Recipes
 {
@@ -11,5 +13,8 @@ namespace Pcb.Dto.Recipes
 
         public byte[] RowVer { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
+
+        public List<Equipment> Equipment { get; set; }
+        public List<RecipeIngredientList> RecipeIngredientList { get; set; }
     }
 }

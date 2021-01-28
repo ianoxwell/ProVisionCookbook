@@ -1,8 +1,13 @@
 import { ApiLinks } from './apiLinks';
+import { MeasurementModel } from './ingredient-model';
+import { ReferenceItemFull } from './reference.model';
 
 export interface IngredientList {
 	id?: number;
+	recipeId?: number;
 	ingredientId?: number;
+	spoonacularId?: number;
+	ingredientState?: ReferenceItemFull;
 	ingredientName: string;
 	/**
 	 * if stored as 0.5, 0.75 convert to symbol / fraction when displaying - 0.66 = 1/3
@@ -11,7 +16,7 @@ export interface IngredientList {
 	/**
 	 * pinch, cup, kg, grams etc
 	 */
-	unit?: string;
+	measurementUnit?: MeasurementModel;
 	/**
 	 * each or whole, sliced, shredded, blank
 	 */

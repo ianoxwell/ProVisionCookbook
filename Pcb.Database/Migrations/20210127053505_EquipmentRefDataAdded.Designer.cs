@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pcb.Database.Context;
 
 namespace Pcb.Database.Migrations
 {
     [DbContext(typeof(PcbDbContext))]
-    partial class PcbDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210127053505_EquipmentRefDataAdded")]
+    partial class EquipmentRefDataAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,9 +225,6 @@ namespace Pcb.Database.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("AltTitle")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
@@ -254,35 +253,30 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 1,
-                            AltTitle = "veryHealthy",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Very Healthy"
                         },
                         new
                         {
                             Id = 2,
-                            AltTitle = "cheap",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Cheap"
                         },
                         new
                         {
                             Id = 3,
-                            AltTitle = "veryPopular",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Very Popular"
                         },
                         new
                         {
                             Id = 4,
-                            AltTitle = "sustainable",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Sustainable"
                         },
                         new
                         {
                             Id = 5,
-                            AltTitle = "complicated",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Complicated"
                         });
@@ -464,9 +458,6 @@ namespace Pcb.Database.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("AltTitle")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
@@ -495,7 +486,6 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 1,
-                            AltTitle = "vegetarian",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Summary = "A vegetarian diet focuses on plants for food. These include fruits, vegetables,dried beans and peas, grains, seeds and nuts. Includes both diary products and eggs.",
                             Title = "Lacto-ovo Vegetarian"
@@ -510,7 +500,6 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 3,
-                            AltTitle = "vegan",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Summary = "A vegetarian diet focuses on plants for food. These include fruits, vegetables,dried beans and peas, grains, seeds and nuts. Specifically excludes all meat and animal products.",
                             Title = "Vegan"
@@ -518,7 +507,6 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 4,
-                            AltTitle = "glutenFree",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Summary = "On a gluten-free diet, you do not eat wheat, rye, and barley. These foods contain gluten, a type of protein. A gluten-free diet is the main treatment for celiac disease.",
                             Title = "Gluten Free"
@@ -526,7 +514,6 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 5,
-                            AltTitle = "dairyFree",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Summary = "A diet that excludes all lactose based products, generally cows milk, cheeses and yoghurts. A Dairy Free diet is generally used by people with Lactose Intolerance.",
                             Title = "Dairy Free"
@@ -534,7 +521,6 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 6,
-                            AltTitle = "lowFodmap",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Summary = "FODMAP stands for Fermentable Oligosaccharides, Disaccharides, Monosaccharides, and Polyols, which are short chain carbohydrates and sugar alcohols that are poorly absorbed by the body, resulting in abdominal pain and bloating.",
                             Title = "Low FODMAP"
@@ -542,18 +528,9 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 7,
-                            AltTitle = "ketogenic",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Summary = "Keto is a very low-carb diet with less than 20g of carbohydrates per day. Substituting fats and oils for carbs.",
                             Title = "Keto"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            AltTitle = "whole30",
-                            CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Summary = "The Whole30 is a 30-day fad diet that emphasizes whole foods and the elimination of sugar, alcohol, grains, legumes, soy, and dairy. The Whole30 is similar to but more restrictive than the paleo diet, as adherents may not eat natural sweeteners like honey or maple syrup.",
-                            Title = "Whole 30"
                         });
                 });
 
@@ -647,8 +624,8 @@ namespace Pcb.Database.Migrations
                     b.Property<decimal?>("Lactose")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("LinkUrl")
-                        .HasColumnType("int");
+                    b.Property<string>("LinkUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Magnesium")
                         .HasColumnType("int");
@@ -899,9 +876,6 @@ namespace Pcb.Database.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("AltTitle")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
@@ -978,7 +952,6 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 9,
-                            AltTitle = "Oil, Vinegar, Salad Dressing",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Fats and Oils"
                         },
@@ -997,7 +970,6 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 12,
-                            AltTitle = "Pasta and Rice",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Grains and Pasta"
                         },
@@ -1040,14 +1012,12 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 19,
-                            AltTitle = "Condiments",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Soups and Sauces"
                         },
                         new
                         {
                             Id = 20,
-                            AltTitle = "Spices and Seasonings",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Spices and Herbs"
                         },
@@ -1060,7 +1030,6 @@ namespace Pcb.Database.Migrations
                         new
                         {
                             Id = 22,
-                            AltTitle = "Produce",
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Title = "Vegetables"
                         });
@@ -2029,8 +1998,8 @@ namespace Pcb.Database.Migrations
                     b.Property<int>("Preference")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("RecipeId")
                         .HasColumnType("int");
@@ -2497,7 +2466,7 @@ namespace Pcb.Database.Migrations
                             IsStudent = false,
                             LastFailedLoginAttempt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PasswordHash = "$2a$11$mp.ed40Nt4LTHqj9J12xyementoLs4m08dYSMin297Ecg6OFEvvdi",
+                            PasswordHash = "$2a$11$rw75abeYG/CNFdjBqDrDquEh2ggQNrFgHtxpPC3n3IRATyB01sUC6",
                             TimesLoggedIn = 0,
                             Username = "admin",
                             Verified = new DateTime(2018, 10, 10, 10, 10, 0, 0, DateTimeKind.Unspecified)

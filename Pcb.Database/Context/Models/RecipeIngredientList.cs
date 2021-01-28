@@ -12,7 +12,8 @@ namespace Pcb.Database.Context.Models
         public int Id { get; set; }
         public int RecipeId { get; set; }
         public int IngredientId { get; set; }
-        public int Quantity { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public float Quantity { get; set; }
         public int Preference { get; set; }
         public int IngredientStateId { get; set; }
         public int MeasurementUnitId { get; set; }

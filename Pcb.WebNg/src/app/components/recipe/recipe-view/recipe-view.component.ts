@@ -1,8 +1,8 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {Recipe} from '@models/recipe';
-import { SentenceCasePipe } from '@pipes/sentence-case.pipe';
+import { Component, Input, OnInit } from '@angular/core';
+import { IngredientList } from '@models/ingredient-list.model';
 import { MeasurementModel } from '@models/ingredient-model';
-import { IngredientList } from '@models/ingredientList';
+import { Recipe } from '@models/recipe';
+import { SentenceCasePipe } from '@pipes/sentence-case.pipe';
 
 @Component({
   selector: 'app-recipe-view',
@@ -26,13 +26,14 @@ export class RecipeViewComponent implements OnInit {
 	}
 
 	englishIngredientItem(ingredient: IngredientList): string {
-		let unit = ingredient.unit;
-		if (unit.length < 5 || unit === 'tbsps') {
-			const newUnit = this.measurements.find(measure => (measure.shortName === unit || measure.altShortName === unit));
-			if (!!newUnit) {
-				unit = newUnit.title;
-			}
-		}
+		const unit = ingredient.measurementUnit.title;
+		// TODO re-establish the below
+		// if (unit.length < 5 || unit === 'tbsps') {
+		// 	const newUnit = this.measurements.find(measure => (measure.shortName === unit || measure.altShortName === unit));
+		// 	if (!!newUnit) {
+		// 		unit = newUnit.title;
+		// 	}
+		// }
 		return `${ingredient.quantity} ${unit} ${this.sentenceCase.transform(ingredient.ingredientName)}`;
 	}
 

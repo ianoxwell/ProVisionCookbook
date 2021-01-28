@@ -368,7 +368,7 @@ namespace Pcb.Mapping.Implementation
                 IngredientId = map.IngredientId,
                 Quantity = map.Quantity,
                 Preference = map.Preference,
-                IngredientStateId = map.IngredientState.Id,
+                IngredientStateId = map.IngredientState?.Id == null ? 0 : map.IngredientState.Id,
                 MeasurementUnitId = map.MeasurementUnit.Id
             };
         }

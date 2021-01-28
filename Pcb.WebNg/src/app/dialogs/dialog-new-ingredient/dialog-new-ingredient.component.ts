@@ -112,12 +112,12 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 			this.usdaFoodMatched, this.spoonFoodMatched, this.spoonConversion, this.data);
 		this.newIngredient = this.ingredientConstructService.createNewIngredient(
 			this.form.getRawValue(),
-			this.usdaFoodMatched,
 			this.spoonFoodMatched,
 			this.spoonConversion,
 			this.data.foodGroup,
 			this.data.ingredientStateRef,
-			this.data.measurements);
+			this.data.measurements,
+			this.usdaFoodMatched,);
 		console.log('this.newIngredient', this.newIngredient);
 		this.dialogRef.close(this.newIngredient);
 	}

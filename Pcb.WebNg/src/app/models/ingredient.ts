@@ -4,15 +4,15 @@ import { ReferenceItemFull } from './reference.model';
 
 export interface Ingredient {
 	allergies?: Array<ReferenceItemFull>;
-	commonMinerals: ICommonMinerals;
-	commonVitamins: ICommonVitamins;
-	foodGroup: ReferenceItemFull;
-	id: number;
+	commonMinerals?: ICommonMinerals;
+	commonVitamins?: ICommonVitamins;
+	foodGroup?: ReferenceItemFull;
+	id?: number;
 	ingredientConversions?: Array<Conversion>;
 	ingredientStateId?: number;
-	linkUrl: string;
+	linkUrl?: number; // spoonacular id number
 	name: string;
-	nutritionFacts: INutritionFacts;
+	nutritionFacts?: INutritionFacts;
 	parentId?: number;
 	pralScore?: number;
 	price?: PriceModel,
@@ -22,7 +22,7 @@ export interface Ingredient {
 		name: string;
 		teaser: string;
 	}]
-	usdaFoodId: string;
+	usdaFoodId?: number;
 	image?: string;
 	updatedAt?: string | Date;
 	createdAt?: string | Date;

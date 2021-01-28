@@ -9,6 +9,7 @@ import {
 	ISpoonFoodRaw,
 	ISpoonSuggestions
 } from '@models/raw-food-ingredient.model';
+import { IRawReturnedRecipes } from '@models/spoonacular-recipe.model';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Ingredient } from '../models/ingredient';
@@ -30,12 +31,15 @@ export class RestIngredientService {
 	}
 	constructor(private httpClient: HttpClient) {}
 
-	public getRandomSpoonacularRecipe(count: number): Observable<any> {
-		return this.httpClient.get<any>(`${this.foodUrl}/recipes/random?limitLicense=true&number=${count}&apiKey=${this.foodApiKey}`, {
-			headers: this.defaultHeader
-		});
+	public getRandomSpoonacularRecipe(count: number): Observable<IRawReturnedRecipes> {
+		return this.httpClient.get<IRawReturnedRecipes>(
+			`${this.foodUrl}/recipes/random?limitLicense=true&number=${count}&apiKey=${this.foodApiKey}`,
+			{
+				headers: this.defaultHeader
+			}
+		);
 	}
-	public getSpoonacularIngredient(ingredientID: string): Observable<ISpoonFoodRaw> {
+	public getSpoonacularIngredient(ingredientID: string | number): Observable<ISpoonFoodRaw> {
 		return this.httpClient.get<ISpoonFoodRaw>(
 			`${this.foodUrl}/food/ingredients/${ingredientID}/information?amount=100&unit=grams&apiKey=${this.foodApiKey}`,
 			{ headers: this.defaultHeader }
@@ -92,6 +96,12 @@ export class RestIngredientService {
 	}
 	public getIngredientById(ingredientId: number): Observable<Ingredient> {
 		return this.httpClient.get<Ingredient>(`${this.apiUrl}ingredient/${ingredientId}`, { headers: this.defaultHeader });
+	}
+
+	public getIngredientByOtherId(id: number, searchField: 'linkUrl' | 'usdaFoodId'): Observable<Ingredient> {
+		return this.httpClient.get<Ingredient>(`${this.apiUrl}ingredient/find?id=${id}&searchField=${searchField}`, {
+			headers: this.defaultHeader
+		});
 	}
 	public createIngredient(ingredient: Ingredient): Observable<Ingredient> {
 		return this.httpClient.post<Ingredient>(this.apiUrl + 'ingredient', ingredient, { headers: this.defaultHeader });

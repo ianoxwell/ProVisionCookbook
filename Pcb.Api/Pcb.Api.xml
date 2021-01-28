@@ -258,6 +258,14 @@
             <param name="ingredientId">Ingredient Identifier</param>
             <returns>IngredientDto</returns>
         </member>
+        <member name="M:Pcb.Api.Controllers.IngredientController.GetFirstIngredient(System.Int32,System.String)">
+            <summary>
+            Get a single Ingredient by UsdaFoodId or SpoonacularId.
+            </summary>
+            <param name="id">Ingredient Identifier.</param>
+            <param name="searchField">The field to use for lookup e.g. UsdaFoodId || LinkUrl.</param>
+            <returns>IngredientDto</returns>
+        </member>
         <member name="M:Pcb.Api.Controllers.IngredientController.SearchIngredient(System.Int32,System.Int32,System.String,System.String,System.String)">
             <summary>
             Search for ingredients with paged results

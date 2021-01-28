@@ -20,6 +20,5 @@ namespace Pcb.Dto.School
 
 
         public DateTimeOffset CreatedAt { get; set; }
-        public byte[] RowVer { get; set; }
     }
 }

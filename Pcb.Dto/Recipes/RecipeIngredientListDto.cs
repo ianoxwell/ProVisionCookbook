@@ -12,7 +12,7 @@ namespace Pcb.Dto.Recipes
         public int RecipeId { get; set; }
         public int IngredientId { get; set; }
         public IngredientDto Ingredient { get; set; }
-        public int Quantity { get; set; }
+        public float Quantity { get; set; }
         public int Preference { get; set; }
         public ReferenceItemEx IngredientState { get; set; }
         public ReferenceItemMeasurement MeasurementUnit { get; set; }

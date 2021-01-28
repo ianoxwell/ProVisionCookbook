@@ -16,7 +16,7 @@ namespace Pcb.Database.Context.Models
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public string Name { get; set; }
 		[AllowNull]
-		public string LinkUrl { get; set; }
+		public int? LinkUrl { get; set; }
 		public MeasurementType? PurchasedBy { get; set; }
 		public int? Calories { get; set; }
 		[Column(TypeName = "decimal(18,3)")]

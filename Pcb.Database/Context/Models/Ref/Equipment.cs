@@ -13,6 +13,9 @@ namespace Pcb.Database.Context.Models
         [Required]
         public string Title { get; set; }
         [AllowNull]
+        public string AltTitle { get; set; }
+        public int OnlineId { get; set; }
+        [AllowNull]
         public string Summary { get; set; }
         [AllowNull]
         public string Symbol { get; set; }
