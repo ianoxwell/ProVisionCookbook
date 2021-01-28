@@ -30,12 +30,12 @@ import { catchError, filter, first, switchMap, takeUntil, tap } from 'rxjs/opera
 // done: Add in nutrition editor
 // done: Add in the recipes this is used in with links
 // TODO: Price Calculation
-// TODO: New select item component - https://github.com/primefaces/primeng/tree/master/src/app/components/dropdown
 // TODO: confirm warning header not working?
 // done: Add caloricBreakdown editor
 // done: Add matched item id for spoontacular
 // TODO: do something with matched item
 // TODO: Search / filter is triggering the spinny wheel and shouldn't
+// TODO add a match ingredient to USDA method to ingredients page
 // use flatMap - https://medium.com/swlh/cant-tell-your-flatmaps-from-your-switchmaps-a1f0f497b61a
 
 // Behaviour - edited fields either update or add to array of editedItem, on save this array is then iterated to create

@@ -9,7 +9,7 @@ import { ReferenceItemFull } from '@models/reference.model';
 @Injectable({
 	providedIn: 'root'
 })
-export class IngredientConstructService {
+export class ConstructIngredientService {
 	constructor() {}
 	public createNewIngredient(
 		basicInfo: { name: string; foodGroup: number },

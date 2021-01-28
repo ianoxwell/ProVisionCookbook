@@ -12,7 +12,7 @@ import {
 	ISpoonSuggestions
 } from '@models/raw-food-ingredient.model';
 import { ReferenceItemFull } from '@models/reference.model';
-import { IngredientConstructService } from '@services/ingredient-construct.service';
+import { ConstructIngredientService } from '@services/construct-ingredient.service';
 import { IngredientEditFormService } from '@services/ingredient-edit-form.service';
 import { RestIngredientService } from '@services/rest-ingredient.service';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
@@ -55,7 +55,7 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 			measurements: MeasurementModel[] },
 		private fb: FormBuilder,
 		private ingredientEditFormService: IngredientEditFormService,
-		private ingredientConstructService: IngredientConstructService,
+		private ConstructIngredientService: ConstructIngredientService,
 		private ingredientRestIngredientService: RestIngredientService
 	) {
 		super();
@@ -110,7 +110,7 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 	onSaveItem() {
 		console.log('proceeding with starting a new doc', this.form.getRawValue(),
 			this.usdaFoodMatched, this.spoonFoodMatched, this.spoonConversion, this.data);
-		this.newIngredient = this.ingredientConstructService.createNewIngredient(
+		this.newIngredient = this.ConstructIngredientService.createNewIngredient(
 			this.form.getRawValue(),
 			this.spoonFoodMatched,
 			this.spoonConversion,
