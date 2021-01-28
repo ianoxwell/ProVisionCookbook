@@ -3,7 +3,7 @@ import { Ingredient } from '@models/ingredient';
 import { IngredientList } from '@models/ingredient-list.model';
 import { MeasurementModel } from '@models/ingredient-model';
 import { ISpoonConversion, ISpoonFoodRaw } from '@models/raw-food-ingredient.model';
-import { Recipe } from '@models/recipe';
+import { Recipe } from '@models/recipe.model';
 import { ReferenceAll, ReferenceItemFull } from '@models/reference.model';
 import { IEquipmentIngredient, IExtendedIngredients, IRawReturnedRecipes, ISpoonacularRecipeModel } from '@models/spoonacular-recipe.model';
 import { ToTitleCasePipe } from '@pipes/title-case.pipe';

@@ -5,7 +5,7 @@ import { IRecipeFilterQuery, RecipeFilterQuery } from '@models/filter-queries.mo
 import { Suggestion } from '@models/suggestion';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Recipe } from '../models/recipe';
+import { Recipe } from '../models/recipe.model';
 
 @Injectable({
 	providedIn: 'root'

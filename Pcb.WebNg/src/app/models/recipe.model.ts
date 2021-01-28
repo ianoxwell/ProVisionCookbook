@@ -46,7 +46,7 @@ export interface Recipe {
 	 * string can be very long it appears
 	 */
 	rawInstructions?: string;
-	createByUserId: number;
+	createByUserId?: number;
 	/**
 	 * eg CWA Cookbook 2015 or student/teacher/import created or website url
 	 */

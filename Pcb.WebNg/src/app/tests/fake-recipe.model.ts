@@ -1,4 +1,5 @@
-import { Recipe, Recipes } from '@models/recipe';
+import { PagedResult } from '@models/common.model';
+import { Recipe } from '@models/recipe.model';
 
 
 
@@ -6,22 +7,9 @@ export const fakeRecipe1: Recipe =  {
 	'numberOfServings': 8,
 	'priceEstimate': 0,
 	'priceServing': 0,
-	'equipmentRequired': [
-	  'Sauce Pan',
-	  'Blender'
-	],
-	'recipeType': [
-	  'side dish'
-	],
-	'tags': [],
-	'healthLabels': [
-	  'vegetarian',
-	  'vegan',
-	  'glutenFree',
-	  'dairyFree',
-	  'lowFodmap'
-	],
-	'cuisineType': [],
+	'recipeDishTags': [],
+	'recipeHealthLabels': [],
+	'recipeCuisineTypes': [],
 	'allergyWarnings': [],
 	'numberStars': 0,
 	'numberReviews': 0,
@@ -31,10 +19,10 @@ export const fakeRecipe1: Recipe =  {
 	'name': 'Fresh Strawberry Lemonade',
 	'readyInMinutes': 10,
 	// tslint:disable-next-line: max-line-length
-	'instructions': 'Add  cup sugar and 1 cup water in a small saucepan.\nHeat over medium high heat until sugar is dissolved. Stir occasionally.\nBlend strawberries in a blender with 2 cups of water.\nPour into a large pitcher. Add lemon juice to pitcher.\nAdd 1 cup of water and simple syrup.\nStir to blend.',
-	'sourceOfRecipe': 'https://pickfreshfoods.com/fresh-strawberry-lemonade/',
+	'rawInstructions': 'Add  cup sugar and 1 cup water in a small saucepan.\nHeat over medium high heat until sugar is dissolved. Stir occasionally.\nBlend strawberries in a blender with 2 cups of water.\nPour into a large pitcher. Add lemon juice to pitcher.\nAdd 1 cup of water and simple syrup.\nStir to blend.',
+	'sourceOfRecipeName': 'https://pickfreshfoods.com/fresh-strawberry-lemonade/',
 	'creditsText': 'Pick Fresh Foods',
-	'picture': [
+	'recipePictures': [
 	  {
 		'id': 1,
 		'title': 'Fresh Strawberry Lemonade',
@@ -42,7 +30,7 @@ export const fakeRecipe1: Recipe =  {
 		'positionPic': 'left'
 	  }
 	],
-	'ingredientLists': [
+	'recipeIngredientLists': [
 	  {
 		'allergies': [],
 		'preference': 0,
@@ -51,7 +39,6 @@ export const fakeRecipe1: Recipe =  {
 		'ingredientName': 'Lemon Juice',
 		'text': 'fresh lemon juice',
 		'quantity': 157.725,
-		'unit': 'ml'
 	  },
 	  {
 		'allergies': [],
@@ -61,7 +48,6 @@ export const fakeRecipe1: Recipe =  {
 		'ingredientName': 'Strawberries',
 		'text': 'fresh strawberries',
 		'quantity': 453.592,
-		'unit': 'g'
 	  },
 	  {
 		'allergies': [],
@@ -71,7 +57,6 @@ export const fakeRecipe1: Recipe =  {
 		'ingredientName': 'Sugar',
 		'text': 'sugar',
 		'quantity': 78.863,
-		'unit': 'ml'
 	  },
 	  {
 		'allergies': [],
@@ -81,7 +66,6 @@ export const fakeRecipe1: Recipe =  {
 		'ingredientName': 'Water',
 		'text': 'water',
 		'quantity': 236.588,
-		'unit': 'ml'
 	  },
 	  {
 		'allergies': [],
@@ -91,105 +75,75 @@ export const fakeRecipe1: Recipe =  {
 		'ingredientName': 'Water',
 		'text': 'water',
 		'quantity': 709.764,
-		'unit': 'ml'
 	  }
 	],
 	'steppedInstructions': [
 	  {
-		'ingredients': [
-		  'Sugar',
-		  'Water'
-		],
+		'ingredients': [],
 		'equipment': [
 		  'Sauce Pan'
 		],
 		'id': 1,
-		'number': 1,
-		'step': 'Add  cup sugar and 1 cup water in a small saucepan.'
+		'stepNumber': 1,
+		'stepDescription': 'Add  cup sugar and 1 cup water in a small saucepan.'
 	  },
 	  {
-		'ingredients': [
-		  'Sugar'
-		],
+		'ingredients': [],
 		'equipment': [],
 		'id': 2,
-		'number': 2,
-		'step': 'Heat over medium high heat until sugar is dissolved. Stir occasionally.'
+		'stepNumber': 2,
+		'stepDescription': 'Heat over medium high heat until sugar is dissolved. Stir occasionally.'
 	  },
 	  {
-		'ingredients': [
-		  'Strawberries',
-		  'Water'
-		],
+		'ingredients': [],
 		'equipment': [
 		  'Blender'
 		],
 		'id': 3,
-		'number': 3,
-		'step': 'Blend strawberries in a blender with 2 cups of water.'
+		'stepNumber': 3,
+		'stepDescription': 'Blend strawberries in a blender with 2 cups of water.'
 	  },
 	  {
 		'ingredients': [],
 		'equipment': [],
 		'id': 4,
-		'number': 4,
-		'step': 'Pour into a large pitcher.'
+		'stepNumber': 4,
+		'stepDescription': 'Pour into a large pitcher.'
 	  },
 	  {
-		'ingredients': [
-		  'Lemon Juice'
-		],
+		'ingredients': [],
 		'equipment': [],
 		'id': 5,
-		'number': 5,
-		'step': 'Add lemon juice to pitcher.'
+		'stepNumber': 5,
+		'stepDescription': 'Add lemon juice to pitcher.'
 	  },
 	  {
-		'ingredients': [
-		  'Water'
-		],
+		'ingredients': [],
 		'equipment': [],
 		'id': 6,
-		'number': 6,
-		'step': 'Add 1 cup of water and simple syrup.'
+		'stepNumber': 6,
+		'stepDescription': 'Add 1 cup of water and simple syrup.'
 	  },
 	  {
 		'ingredients': [],
 		'equipment': [],
 		'id': 7,
-		'number': 7,
-		'step': 'Stir to blend.'
+		'stepNumber': 7,
+		'stepDescription': 'Stir to blend.'
 	  }
 	],
 	'history': [],
 	'createdAt': '2019-12-08T06:53:28.495Z',
 	'updatedAt': '2019-12-09T05:36:06.938Z',
-	'__v': 0,
-	'ratings': []
   };
 
 export const fakeRecipe2: Recipe = {
 	'numberOfServings': 22,
 	'priceEstimate': 0,
 	'priceServing': 0,
-	'equipmentRequired': [
-	  'Spatula',
-	  'Bowl',
-	  'Oven',
-	  'Palette Knife',
-	  'Oven'
-	],
-	'recipeType': [
-	  'antipasti',
-	  'starter',
-	  'snack',
-	  'appetizer',
-	  'antipasto',
-	  'hor d\'oeuvre'
-	],
-	'tags': [],
-	'healthLabels': [],
-	'cuisineType': [],
+	'recipeCuisineTypes': [],
+	'recipeDishTags': [],
+	'recipeHealthLabels': [],
 	'allergyWarnings': [],
 	'numberStars': 0,
 	'numberReviews': 0,
@@ -199,10 +153,10 @@ export const fakeRecipe2: Recipe = {
 	'name': 'Almond Cookie Bar',
 	'readyInMinutes': 45,
 	// tslint:disable-next-line: max-line-length
-	'instructions': '<ol><li>Beat butter and sugar until light and fluffy.</li><li>In a bowl combine wholemeal flour and plain flour together, then mix in the butter mixture with a rubber spatula and knead gently to a soft dough.</li><li>Turn out the dough on to a flour surface or line with a plastic sheet below and with another plastic sheet on top. Then roll to a square. Chill for at least 1 hour.</li><li>Transfer the dough on a non grease paper and cover with a plastic sheet on top, then roll to dough to about 3mm thick.</li><li>Prick the dough with a fork and bake for about 15-18 minutes until brown at preheated oven 180C and leave biscuit to cool.</li><li>Spread the apricot jam over the top of the biscuit, set aside.</li><li>Mix topping ingredients and spread evenly on the biscuit with a palette knife.</li><li>Bake for 15 minutes until golden.</li><li>Remove cooked biscuit from the oven and leave to cool completely, then cut into bars.</li></ol>',
-	'sourceOfRecipe': 'http://www.foodista.com/recipe/F3QRLC6D/almond-cookie-bar',
+	'rawInstructions': '<ol><li>Beat butter and sugar until light and fluffy.</li><li>In a bowl combine wholemeal flour and plain flour together, then mix in the butter mixture with a rubber spatula and knead gently to a soft dough.</li><li>Turn out the dough on to a flour surface or line with a plastic sheet below and with another plastic sheet on top. Then roll to a square. Chill for at least 1 hour.</li><li>Transfer the dough on a non grease paper and cover with a plastic sheet on top, then roll to dough to about 3mm thick.</li><li>Prick the dough with a fork and bake for about 15-18 minutes until brown at preheated oven 180C and leave biscuit to cool.</li><li>Spread the apricot jam over the top of the biscuit, set aside.</li><li>Mix topping ingredients and spread evenly on the biscuit with a palette knife.</li><li>Bake for 15 minutes until golden.</li><li>Remove cooked biscuit from the oven and leave to cool completely, then cut into bars.</li></ol>',
+	'sourceOfRecipeName': 'http://www.foodista.com/recipe/F3QRLC6D/almond-cookie-bar',
 	'creditsText': 'Foodista.com – The Cooking Encyclopedia Everyone Can Edit',
-	'picture': [
+	'recipePictures': [
 	  {
 		'id': 1,
 		'title': 'Almond Cookie Bar',
@@ -210,7 +164,7 @@ export const fakeRecipe2: Recipe = {
 		'positionPic': 'left'
 	  }
 	],
-	'ingredientLists': [
+	'recipeIngredientLists': [
 	  {
 		'allergies': [],
 		'preference': 0,
@@ -219,7 +173,6 @@ export const fakeRecipe2: Recipe = {
 		'ingredientName': 'Almond',
 		'text': 'Almond flakes',
 		'quantity': 35,
-		'unit': 'g'
 	  },
 	  {
 		'allergies': [],
@@ -229,7 +182,6 @@ export const fakeRecipe2: Recipe = {
 		'ingredientName': 'Apricot Jam',
 		'text': 'Apricot Gel/Jam, as needed',
 		'quantity': 22,
-		'unit': 'servings'
 	  },
 	  {
 		'allergies': [],
@@ -239,7 +191,6 @@ export const fakeRecipe2: Recipe = {
 		'ingredientName': 'Brown Sugar',
 		'text': 'Brown sugar',
 		'quantity': 25,
-		'unit': 'g'
 	  },
 	  {
 		'allergies': [],
@@ -249,7 +200,6 @@ export const fakeRecipe2: Recipe = {
 		'ingredientName': 'Butter',
 		'text': 'Cold butter, cut to cubes',
 		'quantity': 50,
-		'unit': 'g'
 	  },
 	  {
 		'allergies': [],
@@ -259,7 +209,6 @@ export const fakeRecipe2: Recipe = {
 		'ingredientName': 'Cookie',
 		'text': 'Cookie Base',
 		'quantity': 22,
-		'unit': 'servings'
 	  },
 	  {
 		'allergies': [],
@@ -269,7 +218,6 @@ export const fakeRecipe2: Recipe = {
 		'ingredientName': 'Milk',
 		'text': 'Fresh milk',
 		'quantity': 1,
-		'unit': 'Tbsp'
 	  },
 	  {
 		'allergies': [],
@@ -279,7 +227,6 @@ export const fakeRecipe2: Recipe = {
 		'ingredientName': 'Oatmeal',
 		'text': 'Oatmeal Crushed cornflakes',
 		'quantity': 20,
-		'unit': 'g'
 	  },
 	  {
 		'allergies': [],
@@ -289,7 +236,6 @@ export const fakeRecipe2: Recipe = {
 		'ingredientName': 'Plain Flour',
 		'text': 'Plain flour',
 		'quantity': 100,
-		'unit': 'g'
 	  },
 	  {
 		'allergies': [],
@@ -299,24 +245,19 @@ export const fakeRecipe2: Recipe = {
 		'ingredientName': 'Wholemeal Flour',
 		'text': 'Wholemeal flour',
 		'quantity': 80,
-		'unit': 'g'
 	  }
 	],
 	'steppedInstructions': [
 	  {
-		'ingredients': [
-		  'Whole Wheat Flour',
-		  'All Purpose Flour',
-		  'Butter'
-		],
+		'ingredients': [],
 		'equipment': [
 		  'Spatula',
 		  'Bowl'
 		],
 		'id': 7,
-		'number': 1,
+		'stepNumber': 1,
 		// tslint:disable-next-line: max-line-length
-		'step': 'Beat butter and sugar until light and fluffy.In a bowl combine wholemeal flour and plain flour together, then mix in the butter mixture with a rubber spatula and knead gently to a soft dough.Turn out the dough on to a flour surface or line with a plastic sheet below and with another plastic sheet on top. Then roll to a square. Chill for at least 1 hour.'
+		'stepDescription': 'Beat butter and sugar until light and fluffy.In a bowl combine wholemeal flour and plain flour together, then mix in the butter mixture with a rubber spatula and knead gently to a soft dough.Turn out the dough on to a flour surface or line with a plastic sheet below and with another plastic sheet on top. Then roll to a square. Chill for at least 1 hour.'
 	  },
 	  {
 		'ingredients': [],
@@ -324,18 +265,16 @@ export const fakeRecipe2: Recipe = {
 		  'Oven'
 		],
 		'id': 7,
-		'number': 2,
+		'stepNumber': 2,
 		// tslint:disable-next-line: max-line-length
-		'step': 'Transfer the dough on a non grease paper and cover with a plastic sheet on top, then roll to dough to about 3mm thick.Prick the dough with a fork and bake for about 15-18 minutes until brown at preheated oven 180C and leave biscuit to cool.'
+		'stepDescription': 'Transfer the dough on a non grease paper and cover with a plastic sheet on top, then roll to dough to about 3mm thick.Prick the dough with a fork and bake for about 15-18 minutes until brown at preheated oven 180C and leave biscuit to cool.'
 	  },
 	  {
-		'ingredients': [
-		  'Apricot Jam'
-		],
+		'ingredients': [],
 		'equipment': [],
 		'id': 7,
-		'number': 3,
-		'step': 'Spread the apricot jam over the top of the biscuit, set aside.'
+		'stepNumber': 3,
+		'stepDescription': 'Spread the apricot jam over the top of the biscuit, set aside.'
 	  },
 	  {
 		'ingredients': [],
@@ -343,15 +282,15 @@ export const fakeRecipe2: Recipe = {
 		  'Palette Knife'
 		],
 		'id': 7,
-		'number': 4,
-		'step': 'Mix topping ingredients and spread evenly on the biscuit with a palette knife.'
+		'stepNumber': 4,
+		'stepDescription': 'Mix topping ingredients and spread evenly on the biscuit with a palette knife.'
 	  },
 	  {
 		'ingredients': [],
 		'equipment': [],
 		'id': 7,
-		'number': 5,
-		'step': 'Bake for 15 minutes until golden.'
+		'stepNumber': 5,
+		'stepDescription': 'Bake for 15 minutes until golden.'
 	  },
 	  {
 		'ingredients': [],
@@ -359,19 +298,17 @@ export const fakeRecipe2: Recipe = {
 		  'Oven'
 		],
 		'id': 7,
-		'number': 6,
-		'step': 'Remove cooked biscuit from the oven and leave to cool completely, then cut into bars.'
+		'stepNumber': 6,
+		'stepDescription': 'Remove cooked biscuit from the oven and leave to cool completely, then cut into bars.'
 	  }
 	],
 	'history': [],
 	'createdAt': '2019-12-08T06:53:28.523Z',
 	'updatedAt': '2019-12-09T05:55:59.710Z',
-	'__v': 0,
-	'ratings': []
   };
 
-export const fakeRecipeReturn: Recipes = {
+export const fakeRecipeReturn: PagedResult<Recipe> = {
 	items: [fakeRecipe1, fakeRecipe2],
-	total: 2
+	totalCount: 2
 };
 

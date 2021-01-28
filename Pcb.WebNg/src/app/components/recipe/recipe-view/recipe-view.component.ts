@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IngredientList } from '@models/ingredient-list.model';
 import { MeasurementModel } from '@models/ingredient-model';
-import { Recipe } from '@models/recipe';
+import { Recipe } from '@models/recipe.model';
 import { SentenceCasePipe } from '@pipes/sentence-case.pipe';
 
 @Component({

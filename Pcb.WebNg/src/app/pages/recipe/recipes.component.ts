@@ -5,7 +5,7 @@ import { ComponentBase } from '@components/base/base.component.base';
 import { PagedResult } from '@models/common.model';
 import { IRecipeFilterQuery, RecipeFilterQuery } from '@models/filter-queries.model';
 import { MeasurementModel } from '@models/ingredient-model';
-import { Recipe } from '@models/recipe';
+import { Recipe } from '@models/recipe.model';
 import { ReferenceAll } from '@models/reference.model';
 import { User } from '@models/user';
 import { ConstructRecipeService } from '@services/construct-recipe.service';
