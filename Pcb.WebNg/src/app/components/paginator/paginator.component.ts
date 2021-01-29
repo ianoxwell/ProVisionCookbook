@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+import { environment } from 'src/environments/environment';
 
 @Component({
 	selector: 'app-paginator',
@@ -11,7 +12,7 @@ export class PaginatorComponent {
 	/** The current page index. */
 	@Input() pageIndex = 0;
 	/** Current max number of items to display */
-	@Input() pageSize = 25;
+	@Input() pageSize = environment.resultsPerPage;
 	/** Total length of the database */
 	@Input() length = 0;
 	/** Total count of all items to be displayed */
@@ -78,12 +79,14 @@ export class PaginatorComponent {
 
 	/** Calculate the page size or min for the statement item x - 25 of 52 */
 	getMinOfItemOnCurrentPage(): number {
-		const minPage = this.pageIndex * this.pageSize + 1;
-		return Math.min(minPage, this.count);
+		return this.pageIndex * this.pageSize + 1;
 	};
 	/** Calculate the page size or length for the statement item 1 - x of 52 */
 	getMaxOfItemOnCurrentPage(): string {
-		const maxPage = Math.min(this.pageSize * (this.pageIndex + 1), this.count);
+		let maxPage = this.pageSize * (this.pageIndex + 1);
+		if (this.pageIndex === 0 && this.count < maxPage) {
+			maxPage = this.count;
+		}
 		return maxPage > 0 ? ` - ${maxPage}` : ``;
 	};
 

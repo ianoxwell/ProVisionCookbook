@@ -1,4 +1,4 @@
-<form class="flex-box flex-justify-end flex-align-center mat-paginator-sticky mr-4" [ngClass]="{'flex-row': horizontalLayout, 'flex-column-reverse': !horizontalLayout}" [formGroup]="form" autocomplete="off">
+<form class="flex-box flex-justify-end flex-align-center mat-paginator-sticky pr-4 mat-table" [ngClass]="{'flex-row': horizontalLayout, 'flex-column-reverse': !horizontalLayout}" [formGroup]="form" autocomplete="off">
 	<span *ngIf="!hidePageSize" class="flex-box flex-row flex-align-center">
 		<mat-label for="pageSizeSelect" class="text-small mr-2">Items per page:</mat-label>
 		<mat-form-field class="narrow-select" [ngClass]="{'mr-4' : horizontalLayout}">
