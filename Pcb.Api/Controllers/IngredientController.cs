@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Pcb.Common;
 using Pcb.Dto.Ingredient;
 using Pcb.Service.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace Pcb.Api.Controllers
@@ -67,6 +68,7 @@ namespace Pcb.Api.Controllers
         /// <param name="sort">Sort field name - default is name</param>
         /// <param name="order">Direction of sort - default is asc</param>
         /// <param name="filter">Searches a number of fields to contain text</param>
+        /// <param name="usdaFoodIdNull">Searches for ingredients with the usdaFoodId is null</param>
         /// <returns></returns>
         [HttpGet]
         [Route("search")]
@@ -76,9 +78,10 @@ namespace Pcb.Api.Controllers
             int page = 0,
             string sort = "name",
             string order = "asc",
-            string filter = "")
+            string filter = "",
+            Boolean usdaFoodIdNull = false)
         {
-            PagedResult<IngredientDto> ingredient = IngredientService.SearchIngredients(pageSize, page, sort, order, filter).Result;
+            PagedResult<IngredientDto> ingredient = IngredientService.SearchIngredients(pageSize, page, sort, order, filter, usdaFoodIdNull).Result;
             return Ok(ingredient);
         }
 

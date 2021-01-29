@@ -39,7 +39,8 @@ namespace Pcb.Service.Implementations
             int page = 1,
             string sort = "name",
             string order = "asc",
-            string filter = "")
+            string filter = "",
+            Boolean usdaFoodIdNull = false)
         {
             var p = page > 0 ? page : 0;
             using var _db = GetReadOnlyDbContext();
@@ -50,12 +51,22 @@ namespace Pcb.Service.Implementations
                     l.PriceBrandName.Contains(filter) ||
                     l.PriceStoreName.Contains(filter));
 
+            if (usdaFoodIdNull == true)
+            {
+                ingredientArray = ingredientArray.Where(l => l.UsdaFoodId == null);
+            }
+
             ingredientArray = order.Equals("asc", StringComparison.OrdinalIgnoreCase)
                 ? ingredientArray.OrderByMember(sort)
                 : ingredientArray.OrderByMemberDescending(sort);
 
+            PagedResult<IngredientDto> pagedIngredientResult = new PagedResult<IngredientDto>
+            {
+                TotalCount = await ingredientArray.CountAsync()
+            };
+
             ingredientArray = ingredientArray.Skip(skip)
-                .Take(pageSize); ;
+                .Take(pageSize);
 
             var finishedIngredientArray = await ingredientArray
                 .Include(x => x.FoodGroup)
@@ -66,10 +77,7 @@ namespace Pcb.Service.Implementations
                 .Include(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
                 .ToListAsync();
 
-            PagedResult<IngredientDto> pagedIngredientResult = new PagedResult<IngredientDto>
-            {
-                TotalCount = await _db.Ingredient.CountAsync()
-            };
+
             foreach (var ingredient in finishedIngredientArray)
             {
                 pagedIngredientResult.Items.Add(IngredientMapper.MapIngredientToDto(ingredient));

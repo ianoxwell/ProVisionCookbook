@@ -266,7 +266,7 @@
             <param name="searchField">The field to use for lookup e.g. UsdaFoodId || LinkUrl.</param>
             <returns>IngredientDto</returns>
         </member>
-        <member name="M:Pcb.Api.Controllers.IngredientController.SearchIngredient(System.Int32,System.Int32,System.String,System.String,System.String)">
+        <member name="M:Pcb.Api.Controllers.IngredientController.SearchIngredient(System.Int32,System.Int32,System.String,System.String,System.String,System.Boolean)">
             <summary>
             Search for ingredients with paged results
             </summary>
@@ -275,6 +275,7 @@
             <param name="sort">Sort field name - default is name</param>
             <param name="order">Direction of sort - default is asc</param>
             <param name="filter">Searches a number of fields to contain text</param>
+            <param name="usdaFoodIdNull">Searches for ingredients with the usdaFoodId is null</param>
             <returns></returns>
         </member>
         <member name="M:Pcb.Api.Controllers.IngredientController.IngredientSuggestion(System.String,System.Int32)">

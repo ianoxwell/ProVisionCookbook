@@ -1,5 +1,6 @@
 ﻿using Pcb.Common;
 using Pcb.Dto.Ingredient;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -21,7 +22,8 @@ namespace Pcb.Service.Interfaces
             int page = 1,
             string sort = "name",
             string order = "asc",
-            string filter = "");
+            string filter = "",
+            Boolean usdaFoodIdNull = false);
         /// <summary>
         /// Create a new Ingredient
         /// </summary>
