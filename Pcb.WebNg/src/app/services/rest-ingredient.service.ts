@@ -85,6 +85,9 @@ export class RestIngredientService {
 		if (filterQuery.name) {
 			queryString += `filter=${filterQuery.name}&`;
 		}
+		if (filterQuery.isUsdaFoodIdNull) {
+			queryString += `usdaFoodIdNull=true&`;
+		}
 		queryString = queryString.slice(0, -1);
 		return this.httpClient.get<PagedResult<Ingredient>>(`${this.apiUrl}ingredient/search${queryString}`, {
 			headers: this.defaultHeader

@@ -68,7 +68,8 @@ export class IngredientFilterComponent extends ComponentBase implements OnInit {
 			type: this.filterQuery.type,
 			parent: this.filterQuery.parent,
 			allergies: this.filterQuery.allergies,
-			purchasedBy: this.filterQuery.purchasedBy
+			purchasedBy: this.filterQuery.purchasedBy,
+			isUsdaFoodIdNull: this.filterQuery.isUsdaFoodIdNull
 		});
 	}
 

@@ -14,6 +14,7 @@ export interface IIngredientFilterObject extends IBaseFilterObject {
 	parent?: string;
 	allergies?: string[];
 	purchasedBy?: string;
+	isUsdaFoodIdNull?: boolean;
 }
 
 export class IngredientFilterObject implements IIngredientFilterObject {
@@ -22,12 +23,14 @@ export class IngredientFilterObject implements IIngredientFilterObject {
 	public orderby: string;
 	public order: string;
 	public name: string;
+	public isUsdaFoodIdNull?: boolean;
 	constructor() {
 		this.page = 0;
 		this.perPage = environment.resultsPerPage;
 		this.orderby = 'name';
 		this.order = 'asc';
 		this.name = '';
+		this.isUsdaFoodIdNull = false;
 	}
 
 }

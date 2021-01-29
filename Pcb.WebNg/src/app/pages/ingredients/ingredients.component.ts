@@ -84,6 +84,9 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 		);
 	}
 
+	/**
+	 * Listens to the stateService ingredient filter and updates the data in the table on change.
+	 */
 	listenStateService(): void {
 		this.data$ = this.stateService.getIngredientFilterQuery().pipe(
 			switchMap((ingredientFilterObj: IIngredientFilterObject) => {
