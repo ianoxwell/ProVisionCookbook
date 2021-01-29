@@ -86,10 +86,13 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 		this.selected = this.singleIngredient;
 		this.ingredientForm = this.ingredientEditFormService.createForm(this.singleIngredient, this.isNew);
 		console.log('raw ingredient form', this.ingredientForm.getRawValue(), this.refData);
-		this.scrollService.getScrollPosition().pipe(
-			tap((scrollPos: IScrollPositions) => console.log('listening to scroll', scrollPos)),
-			takeUntil(this.ngUnsubscribe)
-		).subscribe();
+		this.scrollService
+			.getScrollPosition()
+			.pipe(
+				tap((scrollPos: IScrollPositions) => console.log('listening to scroll', scrollPos)),
+				takeUntil(this.ngUnsubscribe)
+			)
+			.subscribe();
 	}
 
 	ngAfterViewInit(): void {
@@ -259,6 +262,16 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 			summary: `Removed ${subDocument}`,
 			life: 8000
 		});
+	}
+
+	/**
+	 * Triggered by the output event of app-edit-ingredient-basic
+	 * Recreates the form - possibly should write a service to patch the form instead...
+	 * @param ev event containing updated Ingredient from the dialog-ingredient-match
+	 */
+	updateIngredient(ev: Ingredient): void {
+		this.ingredientForm = this.ingredientEditFormService.createForm(ev, this.isNew);
+		this.ingredientForm.markAsDirty();
 	}
 
 	addSubDocument(subDocument: string) {

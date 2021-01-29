@@ -18,7 +18,7 @@ export class ConstructIngredientService {
 		foodGroupRef: ReferenceItemFull[],
 		ingredientStateRef: ReferenceItemFull[],
 		measurementRef: MeasurementModel[],
-		usda?: IRawFoodIngredient,
+		usda?: IRawFoodIngredient
 	): Ingredient {
 		const ingredientState: ReferenceItemFull = ingredientStateRef.find(
 			(state: ReferenceItemFull) => state.title.toLowerCase() === spoon.consistency.toLowerCase()
@@ -33,18 +33,28 @@ export class ConstructIngredientService {
 			ingredientConversions: this.conversions(spoonConversions, ingredientState, measurementRef)
 		};
 		if (usda) {
-			newIngredient = {
-				...newIngredient,
-				usdaFoodId: usda.id,
-				pralScore: usda.pralScore,
-				commonMinerals: usda.commonMinerals,
-				commonVitamins: usda.commonVitamins,
-				nutritionFacts: usda.nutritionFacts,
-			}
-
+			newIngredient = this.mixinUsdaResults(newIngredient, usda);
 		}
 
 		return newIngredient;
+	}
+	/**
+	 * Mixes in the new ingredient with data from the UsdaFood table.
+	 * @param newIngredient The new Ingredient to mix with.
+	 * @param usda The raw result from the Usda food db.
+	 * @returns Ingredient.
+	 */
+	mixinUsdaResults(newIngredient: Ingredient, usda: IRawFoodIngredient): Ingredient {
+		const mixedResult = {
+			...newIngredient,
+			usdaFoodId: usda.id,
+			pralScore: usda.pralScore,
+			commonMinerals: usda.commonMinerals,
+			commonVitamins: usda.commonVitamins,
+			nutritionFacts: usda.nutritionFacts
+		};
+		console.log('mixin', newIngredient, usda, mixedResult);
+		return mixedResult;
 	}
 
 	findMeasureModel(title: string, measure: MeasurementModel[]): MeasurementModel {
@@ -57,10 +67,10 @@ export class ConstructIngredientService {
 		});
 		// if not matched then default to each
 		if (!measurement) {
-			measurement = measure.find((m: MeasurementModel) => m.title.toLowerCase() === 'each')
+			measurement = measure.find((m: MeasurementModel) => m.title.toLowerCase() === 'each');
 		}
 		return measurement;
-	};
+	}
 
 	private conversions(convert: ISpoonConversion[], ingredientState: ReferenceItemFull, measure: MeasurementModel[]): Conversion[] {
 		// expect convert to be an array returned from dialog-ingredient.component or a partial object

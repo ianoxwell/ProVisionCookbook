@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Ingredient, IngredientNameSpace } from '@models/ingredient';
 import { ReferenceAll } from '@models/reference.model';
@@ -15,6 +15,7 @@ export class EditIngredientBasicComponent implements OnInit {
 	@Input() refData: ReferenceAll;
 	@Input() ingredientForm: FormGroup;
 	@Input() selectedIngredient: Ingredient;
+	@Output() updatedIngredient = new EventEmitter<Ingredient>();
 	validationMessages = ValidationMessages;
 	purchasedByEnum = Object.values(IngredientNameSpace.PurchasedByEnum).map((item: string, id: number) => ({ id, item }));
 	constructor(private dialogService: DialogService) {}
@@ -33,7 +34,7 @@ export class EditIngredientBasicComponent implements OnInit {
 			.matchIngredientDialog(this.selectedIngredient, this.refData.IngredientFoodGroup)
 			.pipe(
 				first(),
-				tap((result: any) => console.log('we got a dialog result', result))
+				tap((result: Ingredient) => this.updatedIngredient.emit(result))
 			)
 			.subscribe();
 	}

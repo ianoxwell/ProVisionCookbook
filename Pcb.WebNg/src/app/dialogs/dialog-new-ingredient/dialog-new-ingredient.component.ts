@@ -1,9 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ComponentBase } from '@components/base/base.component.base';
 import { Ingredient } from '@models/ingredient';
 import { MeasurementModel } from '@models/ingredient-model';
+import { MessageStatus } from '@models/message.models';
 import {
 	IRawFoodIngredient,
 	IRawFoodSuggestion,
@@ -13,10 +15,10 @@ import {
 } from '@models/raw-food-ingredient.model';
 import { ReferenceItemFull } from '@models/reference.model';
 import { ConstructIngredientService } from '@services/construct-ingredient.service';
-import { IngredientEditFormService } from '@services/ingredient-edit-form.service';
+import { MessageService } from '@services/message.service';
 import { RestIngredientService } from '@services/rest-ingredient.service';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { debounceTime, filter, first, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { catchError, debounceTime, filter, first, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dialog-new-ingredient',
@@ -54,9 +56,9 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 			ingredientStateRef: ReferenceItemFull[],
 			measurements: MeasurementModel[] },
 		private fb: FormBuilder,
-		private ingredientEditFormService: IngredientEditFormService,
-		private ConstructIngredientService: ConstructIngredientService,
-		private ingredientRestIngredientService: RestIngredientService
+		private messageService: MessageService,
+		private constructIngredientService: ConstructIngredientService,
+		private restIngredientService: RestIngredientService
 	) {
 		super();
 		dialogRef.disableClose = true;
@@ -65,7 +67,15 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 
 	ngOnInit() {
 		this.form = this.createForm();
-		this.filterRawSuggestions$ = combineLatest([
+		this.filterRawSuggestions$ = this.listenFormChanges();
+	}
+
+	/**
+	 * Listens for changes in rawName and foodGroup in the form.
+	 * @returns observable Food suggestions from the raw USDA food db.
+	 */
+	listenFormChanges(): Observable<IRawFoodSuggestion[]> {
+		return combineLatest([
 			this.rawName.valueChanges,
 			this.foodGroup.valueChanges
 		])
@@ -79,13 +89,16 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 					this.isFoodNameAvailable = null;
 				}
 				const formRaw = this.form.getRawValue();
-				return this.ingredientRestIngredientService.getRawFoodSuggestion(rawFood, 20, foodGroupId);
+				return this.restIngredientService.getRawFoodSuggestion(rawFood, 20, foodGroupId);
 			}),
 		);
 	}
-
 	get rawName(): FormControl { return this.form.get('name') as FormControl; }
 	get foodGroup(): FormControl { return this.form.get('foodGroup') as FormControl; }
+	/**
+	 * Creates the initial form
+	 * @returns Form Group containing the form
+	 */
 	createForm(): FormGroup {
 		return this.fb.group({
 			name: ['', [Validators.required]],
@@ -94,23 +107,35 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 	}
 	onFilterChange(ev: string): void {
 		this.rawFoodFilter$.next(ev);
-
 	}
 
+	/**
+	 * Triggered from the template, uses rest service to populate the usdaFoodMatched.
+	 * @param item The Usda food item to be selected.
+	 */
 	selectItem(item: IRawFoodSuggestion): void {
 		console.log('selected this item', item);
-		this.ingredientRestIngredientService.getRawFoodById(item.usdaId).pipe(
+		this.restIngredientService.getRawFoodById(item.usdaId).pipe(
 			first(),
 			tap((result: IRawFoodIngredient) => {
 				console.log('raw food matched', result);
 				this.usdaFoodMatched = result;
+			}),
+			catchError((err: HttpErrorResponse) => {
+				this.messageService.add({
+					severity: MessageStatus.Warning,
+					summary: 'Error getting details about the Usda Food item',
+					detail: err.message
+				});
+				return of();
 			})
 		).subscribe();
 	}
+	/**
+	 * Triggered from the template - creates new ingredient and closes the dialog
+	 */
 	onSaveItem() {
-		console.log('proceeding with starting a new doc', this.form.getRawValue(),
-			this.usdaFoodMatched, this.spoonFoodMatched, this.spoonConversion, this.data);
-		this.newIngredient = this.ConstructIngredientService.createNewIngredient(
+		this.newIngredient = this.constructIngredientService.createNewIngredient(
 			this.form.getRawValue(),
 			this.spoonFoodMatched,
 			this.spoonConversion,
@@ -118,14 +143,13 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 			this.data.ingredientStateRef,
 			this.data.measurements,
 			this.usdaFoodMatched,);
-		console.log('this.newIngredient', this.newIngredient);
 		this.dialogRef.close(this.newIngredient);
 	}
 
 	checkNameExists(name: string): void {
 		this.isCheckingFoodName = true;
 		this.isFoodNameAvailable = null;
-		this.ingredientRestIngredientService.checkFoodNameExists(name).pipe(
+		this.restIngredientService.checkFoodNameExists(name).pipe(
 			first(),
 			tap((result: boolean) => {
 				this.isCheckingFoodName = false;
@@ -135,7 +159,7 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 	}
 
 	findSpoonSuggestionsOnline(): void {
-		this.ingredientRestIngredientService.getSpoonacularSuggestions(this.rawName.value).pipe(
+		this.restIngredientService.getSpoonacularSuggestions(this.rawName.value).pipe(
 			first(),
 			tap((result: ISpoonSuggestions[]) => {
 				this.spoonFoodSuggestions = result;
@@ -144,14 +168,14 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 	}
 
 	selectSpoonItem(spoonSuggestion: ISpoonSuggestions): void {
-		this.ingredientRestIngredientService.getSpoonacularIngredient(spoonSuggestion.id.toString()).pipe(
+		this.restIngredientService.getSpoonacularIngredient(spoonSuggestion.id.toString()).pipe(
 			switchMap((result: ISpoonFoodRaw) => {
 				this.spoonFoodMatched = result;
 				// const unitFrom: string = result.shoppingListUnits[0];
 				// const unitFromRef = this.data.measurements
 				// 	.find((measure: MeasurementModel)	=> measure.title.toLowerCase() === unitFrom || measure.shortName.toLowerCase() === unitFrom);
 				const unitFrom = result.possibleUnits.includes('cup') ? 'cup' : 'piece';
-				return this.ingredientRestIngredientService.getSpoonConversion(result.name, unitFrom, 1, 'grams');
+				return this.restIngredientService.getSpoonConversion(result.name, unitFrom, 1, 'grams');
 			}),
 			tap((convertResult: ISpoonConversion) => {
 				this.spoonConversion.push(convertResult);
