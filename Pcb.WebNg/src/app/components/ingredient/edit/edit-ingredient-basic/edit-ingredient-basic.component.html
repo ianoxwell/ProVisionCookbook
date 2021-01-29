@@ -63,5 +63,6 @@
 			<mat-label>Usda Food Id</mat-label>
 			<input type="text" matInput digitOnly inputmode="numeric" decimal="false" formControlName="usdaFoodId"/>
 		</mat-form-field>
+		<button mat-flat-button aria-label="Attempt to match with Usda Food Id" (click)="matchUsda()" *ngIf="usdaFoodId.value === null">Match Usda Food Id</button>
 	</div>
 </form>

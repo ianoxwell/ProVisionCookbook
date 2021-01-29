@@ -32,11 +32,7 @@ import icons from '../assets/svg/svg-icons';
 import { CompleteMaterialModule } from './app-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ConfirmDialogComponent } from './dialogs/dialog-confirm/confirm.component';
-import { DialogDeleteIngredientComponent } from './dialogs/dialog-delete-ingredient/dialog-delete-ingredient.component';
-import { DialogErrorComponent } from './dialogs/dialog-error/dialog-error.component';
-import { DialogNewIngredientComponent } from './dialogs/dialog-new-ingredient/dialog-new-ingredient.component';
-import { DialogRecipeComponent } from './dialogs/dialog-recipe/dialog-recipe.component';
+import { DialogModule } from './dialogs/dialogs.module';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { HomeDashboardComponent } from './pages/home/home-dashboard/home-dashboard.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -63,13 +59,8 @@ import { UserProfileService } from './services/user-profile.service';
 		UserRecipesComponent,
 		HomeComponent,
 		HomeDashboardComponent,
-		DialogErrorComponent,
-		DialogDeleteIngredientComponent,
-		DialogRecipeComponent,
 		MainComponent,
 		WelcomeComponent,
-		ConfirmDialogComponent,
-		DialogNewIngredientComponent,
 		AutoCompleteSearchComponent,
 		SiteLogoComponent,
 		FooterComponent,
@@ -85,6 +76,7 @@ import { UserProfileService } from './services/user-profile.service';
 		ReactiveFormsModule,
 		LayoutModule,
 		ComponentModule,
+		DialogModule,
 		PipesModule,
 		SharedComponentModule,
 		FullCalendarModule,
