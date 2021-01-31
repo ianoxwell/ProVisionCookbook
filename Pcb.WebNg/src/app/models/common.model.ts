@@ -69,7 +69,7 @@ export class SortPageObj implements ISortPageObj {
 
 	public update(filterObj: IIngredientFilterObject | IRecipeFilterQuery) {
 		if (filterObj) {
-			this.orderby = filterObj.name;
+			this.orderby = filterObj.orderby;
 			this.order = filterObj.order;
 			this.page = filterObj.page;
 			this.perPage = filterObj.perPage;

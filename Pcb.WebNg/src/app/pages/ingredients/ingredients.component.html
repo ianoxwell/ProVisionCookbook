@@ -32,7 +32,7 @@
 		<app-ingredient-filter [refData]="refData"></app-ingredient-filter>
 		<app-ingredient-table 
 			[data]="data"
-			[sortPageObj]="filterObject"
+			[sortPageObj]="sortPageObj"
 			(sortingPageChange)="sortPageChange($event)"	
 			(editRow)="createOrEdit('edit', $event)">
 		</app-ingredient-table>
