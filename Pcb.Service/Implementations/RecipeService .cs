@@ -46,8 +46,6 @@ namespace Pcb.Service.Implementations
             using var _db = GetReadOnlyDbContext();
             var skip = p * pageSize;
             var recipeArray = _db.Recipe
-                .Skip(skip)
-                .Take(pageSize)
                 .Where(l => string.IsNullOrEmpty(filter) ||
                             l.Name.Contains(filter) ||
                             l.RawInstructions.Contains(filter) ||
@@ -56,6 +54,14 @@ namespace Pcb.Service.Implementations
             recipeArray = order.Equals("asc", StringComparison.OrdinalIgnoreCase)
                 ? recipeArray.OrderByMember(sort)
                 : recipeArray.OrderByMemberDescending(sort);
+
+            PagedResult<RecipeDto> pagedResult = new PagedResult<RecipeDto>
+            {
+                TotalCount = await recipeArray.CountAsync()
+            };
+
+            recipeArray = recipeArray.Skip(skip)
+                .Take(pageSize);
 
             var finishedRecipeArray = await recipeArray
                 .Include(x => x.RecipeAllergyWarning).ThenInclude(y => y.AllergyWarning)
@@ -78,10 +84,6 @@ namespace Pcb.Service.Implementations
                 .Include(x => x.RecipePicture)
                 .ToListAsync();
 
-            PagedResult<RecipeDto> pagedResult = new PagedResult<RecipeDto>
-            {
-                TotalCount = await _db.Recipe.CountAsync()
-            };
             foreach (var recipe in finishedRecipeArray)
             {
                 pagedResult.Items.Add(RecipeMapper.MapRecipeToDto(recipe));

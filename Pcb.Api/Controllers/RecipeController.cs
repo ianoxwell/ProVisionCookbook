@@ -63,6 +63,11 @@ namespace Pcb.Api.Controllers
             string filter = "")
         {
             PagedResult<RecipeDto> recipe = RecipeService.SearchRecipes(pageSize, page, sort, order, filter).Result;
+            if (recipe == null)
+            {
+                ModelState.AddModelError("", $"Something went wrong trying to search the recipes {filter}");
+                return StatusCode(500, ModelState);
+            }
             return Ok(recipe);
         }
 
