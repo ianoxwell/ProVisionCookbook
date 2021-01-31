@@ -45,25 +45,22 @@ namespace Pcb.Service.Implementations
             var p = page > 0 ? page : 0;
             using var _db = GetReadOnlyDbContext();
             var skip = p * pageSize;
-            var recipeArray = _db.Recipe
-                .Where(l => string.IsNullOrEmpty(filter) ||
-                            l.Name.Contains(filter) ||
-                            l.RawInstructions.Contains(filter) ||
-                            l.Teaser.Contains(filter));
+            //var recipeArray = _db.Recipe
+            //    .Where(l => string.IsNullOrEmpty(filter) ||
+            //                l.Name.Contains(filter) ||
+            //                l.RawInstructions.Contains(filter) ||
+            //                l.Teaser.Contains(filter));
 
-            recipeArray = order.Equals("asc", StringComparison.OrdinalIgnoreCase)
-                ? recipeArray.OrderByMember(sort)
-                : recipeArray.OrderByMemberDescending(sort);
+            //recipeArray = order.Equals("asc", StringComparison.OrdinalIgnoreCase)
+            //    ? recipeArray.OrderByMember(sort)
+            //    : recipeArray.OrderByMemberDescending(sort);
 
-            PagedResult<RecipeDto> pagedResult = new PagedResult<RecipeDto>
-            {
-                TotalCount = await recipeArray.CountAsync()
-            };
 
-            recipeArray = recipeArray.Skip(skip)
-                .Take(pageSize);
 
-            var finishedRecipeArray = await recipeArray
+            //recipeArray = recipeArray.Skip(skip)
+            //    .Take(pageSize);
+
+            var finishedRecipeArray = await _db.Recipe
                 .Include(x => x.RecipeAllergyWarning).ThenInclude(y => y.AllergyWarning)
                 .Include(x => x.RecipeCuisineType).ThenInclude(y => y.CuisineType)
                 .Include(x => x.RecipeDishTag).ThenInclude(y => y.DishTag)
@@ -83,6 +80,11 @@ namespace Pcb.Service.Implementations
                 .Include(x => x.RecipeReview)
                 .Include(x => x.RecipePicture)
                 .ToListAsync();
+
+            PagedResult<RecipeDto> pagedResult = new PagedResult<RecipeDto>
+            {
+                TotalCount = await _db.Recipe.CountAsync()
+            };
 
             foreach (var recipe in finishedRecipeArray)
             {
