@@ -79,7 +79,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 				tap(params => {
 					this.currentPath = this.route.snapshot.routeConfig.path;
 					if (params.recipeId) {
-						this.loadRecipeSelect(params.recipeId);
+						this.loadRecipeSelect(Number(params.recipeId));
 					}
 				}),
 				takeUntil(this.ngUnsubscribe)
@@ -100,14 +100,13 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 			.subscribe();
 	}
 
-	loadRecipeSelect(itemId: string) {
+	loadRecipeSelect(itemId: number) {
 		this.restRecipeService
 			.getRecipeById(itemId)
 			.pipe(
-				switchMap(singleRecipe => {
-					this.selectedTab = 1;
+				tap(singleRecipe => {
 					this.selectedRecipe = singleRecipe;
-					console.log('the recipe', this.selectedRecipe);
+					this.changeTab(1);
 					return this.getRecipes();
 				}),
 				catchError(err => {
@@ -162,10 +161,10 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 
 	selectThisRecipe(recipe: Recipe, i: number) {
 		// set the selectedRecipe and the selectedIndex
-		this.selectedRecipe = recipe;
+		this.loadRecipeSelect(recipe.id);
 		this.selectedIndex = i;
 		// change the tab to the recipe
-		this.changeTab(1);
+		// this.changeTab(1);
 	}
 
 	changeTab(event: any) {

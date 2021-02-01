@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {  debounceTime, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { ComponentBase } from '../base/base.component.base';
-import { UserProfileService } from '../../services/user-profile.service';
-import { LoginService } from '@services/login.service';
-import { User } from '@models/user';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
 import { AdminRights } from '@models/common.model';
+import { User } from '@models/user';
+import { LoginService } from '@services/login.service';
+import { of } from 'rxjs';
+import { debounceTime, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { UserProfileService } from '../../services/user-profile.service';
+import { ComponentBase } from '../base/base.component.base';
 
 
 @Component({
@@ -18,8 +18,9 @@ export class AppHeaderComponent extends ComponentBase implements OnInit {
 	profile: any = null;
 
 	mainMenuItems = [
-		{ link: '/savoury/shopping', icon: 'shopping_cart', text: 'Shopping List' },
-		{ link: '/savoury/calendar', icon: 'book', text: 'Recipe Calendar' },
+		// commented out to improve completeness in the short term - add back in as features become available.
+		// { link: '/savoury/shopping', icon: 'shopping_cart', text: 'Shopping List' },
+		// { link: '/savoury/calendar', icon: 'book', text: 'Recipe Calendar' },
 		{ link: '/savoury/recipes/browse', icon: 'assignment', text: 'Recipes' },
 		{ link: '/savoury/ingredients', icon: 'list_alt', text: 'Ingredients' },
 	];

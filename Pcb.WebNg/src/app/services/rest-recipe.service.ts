@@ -56,7 +56,7 @@ export class RestRecipeService {
 		return this.httpClient.get<boolean>(`${this.apiUrl}recipe/check-name${queryStr}`);
 	}
 
-	public getRecipeById(itemId: string): Observable<Recipe> {
+	public getRecipeById(itemId: number): Observable<Recipe> {
 		return this.httpClient.get<Recipe>(`${this.apiUrl}recipe/${itemId}`, {
 			headers: this.defaultHeader
 		});

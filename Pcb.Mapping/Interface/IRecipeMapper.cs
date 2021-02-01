@@ -18,6 +18,7 @@ namespace Pcb.Mapping.Interface
         List<RecipeReviewDto> MapRecipeReviewsDtoList(IEnumerable<RecipeReview> map);
         List<RecipePictureDto> MapRecipePicturesDtoList(IEnumerable<RecipePicture> map);
         RecipeDto MapRecipeToDto(Recipe dbObj);
+        RecipeDto MapRecipeToShortDto(Recipe dbObj);
         Recipe MapDtoToRecipe(RecipeDto dto);
         Recipe UpdateRecipeWithDto(Recipe updateObj, RecipeDto dto);
     }

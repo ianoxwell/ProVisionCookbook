@@ -129,6 +129,7 @@ namespace Pcb.Mapping.Implementation
         {
             if (map == null) { return null; }
             List<RecipeSteppedInstructionDto> itemList = new List<RecipeSteppedInstructionDto>();
+            map = map.OrderBy(x => x.StepNumber);
             foreach (var item in map.ToList())
             {
                 itemList.Add(new RecipeSteppedInstructionDto
@@ -242,6 +243,35 @@ namespace Pcb.Mapping.Implementation
                 RecipeHealthLabels = MapRecipeHealthLabelsToList(dbObj.RecipeHealthLabel),
                 SteppedInstructions = MapSteppedInstructionsToDtoList(dbObj.SteppedInstruction),
                 RecipeIngredientLists = MapRecipeIngredientsDtoList(dbObj.RecipeIngredientList),
+                RecipeReviews = MapRecipeReviewsDtoList(dbObj.RecipeReview),
+                RecipePictures = MapRecipePicturesDtoList(dbObj.RecipePicture),
+                RowVer = dbObj.RowVer,
+                CreatedAt = dbObj.CreatedAt
+            };
+        }
+
+        public RecipeDto MapRecipeToShortDto(Recipe dbObj)
+        {
+            if (dbObj == null) { return null; }
+            return new RecipeDto
+            {
+                Id = dbObj.Id,
+                Name = dbObj.Name,
+                Teaser = dbObj.Teaser,
+                NumberOfServings = dbObj.NumberOfServings,
+                PriceEstimate = dbObj.PriceEstimate,
+                PrepTime = dbObj.PrepTime,
+                CookTime = dbObj.CookTime,
+                ReadyInMinutes = dbObj.ReadyInMinutes,
+                RawInstructions = dbObj.RawInstructions,
+                CreateByUserId = dbObj.CreateByUserId,
+                SourceOfRecipeLink = dbObj.SourceOfRecipeLink,
+                SourceOfRecipeName = dbObj.SourceOfRecipeName,
+                SpoonacularId = dbObj.SpoonacularId,
+                CreditsText = dbObj.CreditsText,
+                NumberStars = dbObj.NumberStars,
+                NumberFavourites = dbObj.NumberFavourites,
+                NumberOfTimesCooked = dbObj.NumberOfTimesCooked,
                 RecipeReviews = MapRecipeReviewsDtoList(dbObj.RecipeReview),
                 RecipePictures = MapRecipePicturesDtoList(dbObj.RecipePicture),
                 RowVer = dbObj.RowVer,

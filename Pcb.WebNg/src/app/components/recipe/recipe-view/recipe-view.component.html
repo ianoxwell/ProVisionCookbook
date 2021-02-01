@@ -4,7 +4,7 @@
 	<!-- Additional details -->
 	<section class="flex-box flex-column mt-2">
 		<mat-chip-list aria-label="Recipe Types" horizontal>
-			<mat-chip *ngFor="let tag of selectedRecipe.recipeDishTypes">{{tag}}</mat-chip>
+			<mat-chip *ngFor="let tag of selectedRecipe.recipeDishTypes">{{tag.title}}</mat-chip>
 		</mat-chip-list>
 	</section>
 	<section class="mt-2">
