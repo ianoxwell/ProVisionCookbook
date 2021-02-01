@@ -14,7 +14,7 @@ namespace Pcb.Database.Context.Models
         public string Title { get; set; }
         [AllowNull]
         public string AltTitle { get; set; }
-        public int OnlineId { get; set; }
+        public int? OnlineId { get; set; }
         [AllowNull]
         public string Summary { get; set; }
         [AllowNull]

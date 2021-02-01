@@ -190,7 +190,7 @@ namespace Pcb.Mapping.Implementation
             };
         }
 
-        private List<ShortRecipeDto> MapRecipeToShortDto(IEnumerable<RecipeIngredientList> map)
+        private static List<ShortRecipeDto> MapRecipeToShortDto(IEnumerable<RecipeIngredientList> map)
         {
             if (map == null) { return null; }
             List<ShortRecipeDto> convertList = new List<ShortRecipeDto>();
@@ -359,7 +359,7 @@ namespace Pcb.Mapping.Implementation
             return updateObj;
         }
 
-        private IngredientAllergyWarning MapDtoToIngredientAllergyWarningMapping(IReferenceItemEx map, int ingredientId)
+        private static IngredientAllergyWarning MapDtoToIngredientAllergyWarningMapping(IReferenceItemEx map, int ingredientId)
         {
             if (map == null) { return null; }
             return new IngredientAllergyWarning
@@ -369,7 +369,7 @@ namespace Pcb.Mapping.Implementation
             };
         }
 
-        private IngredientConversion MapDtoToIngredientConversionMapping(IngredientConversionDto map, int ingredientId)
+        private static IngredientConversion MapDtoToIngredientConversionMapping(IngredientConversionDto map, int ingredientId)
         {
             if (map == null) { return null; }
             return new IngredientConversion

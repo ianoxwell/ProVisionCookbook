@@ -32,7 +32,14 @@ namespace Pcb.Service.Interfaces
         /// <param name="item">The item.</param>
         /// <param name="type">The Reference Type.</param>
         /// <returns></returns>
-        Task<ReferenceItemEx> Save(IReferenceItemEx item, ReferenceType type);
+        Task<bool> Save(ReferenceItemEx item, ReferenceType type);
+
+        /// <summary>
+        /// Creates a measurement reference item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        Task<bool> CreateMeasurement(ReferenceItemMeasurement item);
 
         /// <summary>
         /// 
@@ -40,6 +47,6 @@ namespace Pcb.Service.Interfaces
         /// <param name="name">The title or name to check</param>
         /// <param name="type">The Reference Type.</param>
         /// <returns></returns>
-        bool ReferenceItemExists(string name, ReferenceType type);
+        int ReferenceItemExists(string name, ReferenceType type);
     }
 }

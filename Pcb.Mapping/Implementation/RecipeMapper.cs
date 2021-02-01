@@ -344,7 +344,7 @@ namespace Pcb.Mapping.Implementation
             return updateObj;
         }
 
-        private RecipeAllergyWarning MapDtoToRecipeAllergyWarningMapping(IReferenceItemEx map, int recipeId)
+        private static RecipeAllergyWarning MapDtoToRecipeAllergyWarningMapping(IReferenceItemEx map, int recipeId)
         {
             if (map == null) { return null; }
             return new RecipeAllergyWarning
@@ -353,7 +353,7 @@ namespace Pcb.Mapping.Implementation
                 AllergyWarningId = map.Id
             };
         }
-        private RecipeCuisineType MapDtoToRecipeCuisineTypeMapping(IReferenceItemEx map, int recipeId)
+        private static RecipeCuisineType MapDtoToRecipeCuisineTypeMapping(IReferenceItemEx map, int recipeId)
         {
             if (map == null) { return null; }
             return new RecipeCuisineType
@@ -362,7 +362,7 @@ namespace Pcb.Mapping.Implementation
                 CuisineTypeId = map.Id
             };
         }
-        private RecipeDishTag MapDtoToRecipeDishTagMapping(IReferenceItemEx map, int recipeId)
+        private static RecipeDishTag MapDtoToRecipeDishTagMapping(IReferenceItemEx map, int recipeId)
         {
             if (map == null) { return null; }
             return new RecipeDishTag
@@ -371,7 +371,7 @@ namespace Pcb.Mapping.Implementation
                 DishTagId = map.Id
             };
         }
-        private RecipeDishType MapDtoToRecipeDishTypeMapping(IReferenceItemEx map, int recipeId)
+        private static RecipeDishType MapDtoToRecipeDishTypeMapping(IReferenceItemEx map, int recipeId)
         {
             if (map == null) { return null; }
             return new RecipeDishType
@@ -381,7 +381,7 @@ namespace Pcb.Mapping.Implementation
 
             };
         }
-        private RecipeHealthLabel MapDtoToRecipeHealthLabelMapping(IReferenceItemEx map, int recipeId)
+        private static RecipeHealthLabel MapDtoToRecipeHealthLabelMapping(IReferenceItemEx map, int recipeId)
         {
             if (map == null) { return null; }
             return new RecipeHealthLabel
@@ -391,7 +391,7 @@ namespace Pcb.Mapping.Implementation
 
             };
         }
-        private RecipeIngredientList MapDtoToRecipeIngredientMapping(RecipeIngredientListDto map, int recipeId)
+        private static RecipeIngredientList MapDtoToRecipeIngredientMapping(RecipeIngredientListDto map, int recipeId)
         {
             if (map == null) { return null; }
             return new RecipeIngredientList
@@ -404,7 +404,7 @@ namespace Pcb.Mapping.Implementation
                 MeasurementUnitId = map.MeasurementUnit.Id
             };
         }
-        private RecipeSteppedInstruction MapDtoToSteppedInstructionMapping(RecipeSteppedInstructionDto map, int recipeId)
+        private static RecipeSteppedInstruction MapDtoToSteppedInstructionMapping(RecipeSteppedInstructionDto map, int recipeId)
         {
             if (map == null) { return null; }
             return new RecipeSteppedInstruction
@@ -414,7 +414,7 @@ namespace Pcb.Mapping.Implementation
                 StepDescription = map.StepDescription
             };
         }
-        private RecipeReview MapDtoToRecipeReviewMapping(RecipeReviewDto map, int recipeId)
+        private static RecipeReview MapDtoToRecipeReviewMapping(RecipeReviewDto map, int recipeId)
         {
             if (map == null) { return null; }
             return new RecipeReview
@@ -426,7 +426,7 @@ namespace Pcb.Mapping.Implementation
                 UserId = map.UserId
             };
         }
-        private RecipePicture MapDtoToRecipePictureMapping(RecipePictureDto map, int recipeId)
+        private static RecipePicture MapDtoToRecipePictureMapping(RecipePictureDto map, int recipeId)
         {
             if (map == null) { return null; }
             return new RecipePicture

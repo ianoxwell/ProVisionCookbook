@@ -138,9 +138,17 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Pcb.Api.Controllers.Admin.AdminReferenceController.Post(Pcb.Dto.Reference.ReferenceItemEx,Pcb.Dto.Reference.ReferenceType)">
+        <member name="M:Pcb.Api.Controllers.Admin.AdminReferenceController.CreateReferenceItem(Pcb.Dto.Reference.ReferenceItemEx,Pcb.Dto.Reference.ReferenceType)">
             <summary>
-            Saves a reference item.
+            Creates a reference item.
+            </summary>
+            <param name="item">The item.</param>
+            /// <param name="type">The type.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Pcb.Api.Controllers.Admin.AdminReferenceController.CreateMeasurementItem(Pcb.Dto.Reference.ReferenceItemMeasurement)">
+            <summary>
+            Creates a reference item.
             </summary>
             <param name="item">The item.</param>
             /// <param name="type">The type.</param>
@@ -447,7 +455,7 @@
             <summary>
             Returns reference items by type.
             </summary>
-            <param name="type">The reference type, e.g. Ward</param>
+            <param name="type">The reference type, e.g. RecipeDishTypes</param>
             <param name="detail">The level of detail to return, defaulting to simply {Id,Title}.</param>
             <returns></returns>
         </member>

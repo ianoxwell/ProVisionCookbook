@@ -12,6 +12,7 @@ namespace Pcb.Mapping
             services.AddScoped<IRecipeMapper, RecipeMapper>();
             services.AddScoped<IUserMapper, UserMapper>();
             services.AddScoped<IRawFoodMapper, RawFoodMapper>();
-		}
+            services.AddScoped<IReferenceMapper, ReferenceMapper>();
+        }
     }
 }
