@@ -46,6 +46,6 @@
 </mat-dialog-content>
 <mat-dialog-actions class="flex-box flex-justify-end">
 	<button mat-flat-button type="button" mat-dialog-close>Cancel</button>
-	<app-save-button color="accent" label="Update" [dirty]="form.dirty" [valid]="form.valid && !!usdaFoodMatched" (save)="onSaveItem()">
+	<app-save-button color="accent" label="Update" [dirty]="true" [valid]="!!usdaFoodMatched" (save)="onSaveItem()">
 	</app-save-button>
 </mat-dialog-actions>
