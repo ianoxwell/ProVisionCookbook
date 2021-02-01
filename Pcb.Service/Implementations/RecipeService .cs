@@ -80,6 +80,8 @@ namespace Pcb.Service.Implementations
                     .ThenInclude(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
                 .Include(x => x.RecipeIngredientList).ThenInclude(y => y.Ingredient)
                     .ThenInclude(x => x.IngredientAllergyWarning).ThenInclude(x => x.AllergyWarning)
+                .Include(x => x.RecipeIngredientList).ThenInclude(y => y.MeasurementUnit)
+                .Include(x => x.RecipeIngredientList).ThenInclude(y => y.IngredientState)
                 .Include(x => x.RecipeReview)
                 .Include(x => x.RecipePicture)
                 .ToListAsync();
@@ -121,6 +123,8 @@ namespace Pcb.Service.Implementations
                     .ThenInclude(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
                 .Include(x => x.RecipeIngredientList).ThenInclude(y => y.Ingredient)
                     .ThenInclude(x => x.IngredientAllergyWarning)
+                .Include(x => x.RecipeIngredientList).ThenInclude(y => y.MeasurementUnit)
+                .Include(x => x.RecipeIngredientList).ThenInclude(y => y.IngredientState)
                 .Include(x => x.RecipeReview)
                 .Include(x => x.RecipePicture)
                 .FirstOrDefaultAsync();
@@ -153,6 +157,8 @@ namespace Pcb.Service.Implementations
                     .ThenInclude(x => x.IngredientConversions).ThenInclude(x => x.IngredientConvertConversionState)
                 .Include(x => x.RecipeIngredientList).ThenInclude(y => y.Ingredient)
                     .ThenInclude(x => x.IngredientAllergyWarning)
+                .Include(x => x.RecipeIngredientList).ThenInclude(y => y.MeasurementUnit)
+                .Include(x => x.RecipeIngredientList).ThenInclude(y => y.IngredientState)
                 .Include(x => x.RecipeReview)
                 .Include(x => x.RecipePicture)
                 .FirstOrDefaultAsync();

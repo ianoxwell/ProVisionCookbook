@@ -4,7 +4,7 @@
 	<!-- Additional details -->
 	<section class="flex-box flex-column mt-2">
 		<mat-chip-list aria-label="Recipe Types" horizontal>
-			<mat-chip *ngFor="let tag of selectedRecipe.recipeType">{{tag}}</mat-chip>
+			<mat-chip *ngFor="let tag of selectedRecipe.recipeDishTypes">{{tag}}</mat-chip>
 		</mat-chip-list>
 	</section>
 	<section class="mt-2">
@@ -17,18 +17,18 @@
 				<blockquote >
 					<p [innerHTML]="selectedRecipe.teaser | safeHtml"></p>
 					<footer>
-						<cite><a [href]="selectedRecipe.sourceOfRecipe" [title]="selectedRecipe.creditsText">{{selectedRecipe.creditsText}}</a></cite>
+						<cite><a [href]="selectedRecipe.sourceOfRecipeLink" [title]="selectedRecipe.creditsText">{{selectedRecipe.creditsText}}</a></cite>
 					</footer>
 				</blockquote>
 			</div>
 			<div class="w-full mt-4">
 				<h4>Ingredients</h4>
 				<mat-list>
-					<mat-list-item *ngFor="let item of selectedRecipe.ingredientLists" class="pb-1">
+					<mat-list-item *ngFor="let item of selectedRecipe.recipeIngredientLists" class="pb-1">
 						<span class="mr-1">{{englishIngredientItem(item)}}</span>
 						<!-- <span class="mr-1">{{item.unit}} -</span> -->
 						<span><a [routerLink]="[routerLinkURL(item)]">{{item.ingredientId}}</a></span>
-						<span *ngIf="item.allergies.length > 0">          
+						<span *ngIf="item.allergies?.length > 0">          
 							<mat-icon class="text-warning">warning</mat-icon>
 						</span>
 					</mat-list-item>
@@ -37,7 +37,7 @@
 		</section>
 		<!-- Image and favourites  -->
 		<div class="w-50">
-			<img [src]="selectedRecipe.picture[0].fileLink" [alt]="selectedRecipe.picture[0].title" class="w-full"/>
+			<img *ngIf="!!selectedRecipe.recipePictures[0]" [src]="selectedRecipe.recipePictures[0].fileLink" [alt]="selectedRecipe.recipePictures[0].title" class="w-full"/>
 			<div class="flex-box flex-row flex-justify-center">
 				<app-icon-text icon="star" [text]="selectedRecipe.numberStars + ' - (' + selectedRecipe.numberReviews + ') Rate it'" titleText="Number Servings"></app-icon-text>
 				<app-icon-text icon="favorite" [text]="selectedRecipe.numberFavourites + ' Favourites'" titleText="Favourites"></app-icon-text>
@@ -84,15 +84,15 @@
           <mat-list>
             <mat-list-item *ngFor="let item of selectedRecipe.steppedInstructions">
               <div class="flex-box flex-row p-1">
-                <span class="text-small text-muted mr-2 w-7 align-self-center">Step {{item.number}}</span>
-                <span [innerHTML]="item.step | safeHtml"></span>
+                <span class="text-small text-muted mr-2 w-7 align-self-center">Step {{item.stepNumber}}</span>
+                <span [innerHTML]="item.stepDescription | safeHtml"></span>
               </div>
               <mat-divider></mat-divider>
           </mat-list-item>
           </mat-list>
         </ng-container>
         <ng-template #blockInstructionsTemplate>
-          <div [innerHTML]="selectedRecipe.instructions"></div>
+          <div [innerHTML]="selectedRecipe.rawInstructions"></div>
         </ng-template>    
       </div>
     </main>

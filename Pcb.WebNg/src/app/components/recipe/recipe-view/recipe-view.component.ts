@@ -18,6 +18,7 @@ export class RecipeViewComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
+		console.log('recipe view', this.selectedRecipe);
 	}
 
 	printView() {
@@ -26,7 +27,10 @@ export class RecipeViewComponent implements OnInit {
 	}
 
 	englishIngredientItem(ingredient: IngredientList): string {
-		const unit = ingredient.measurementUnit.title;
+		const unit = ingredient.measurementUnit?.title;
+		if (!unit) {
+			console.log('no unit', ingredient);
+		}
 		// TODO re-establish the below
 		// if (unit.length < 5 || unit === 'tbsps') {
 		// 	const newUnit = this.measurements.find(measure => (measure.shortName === unit || measure.altShortName === unit));
@@ -34,7 +38,7 @@ export class RecipeViewComponent implements OnInit {
 		// 		unit = newUnit.title;
 		// 	}
 		// }
-		return `${ingredient.quantity} ${unit} ${this.sentenceCase.transform(ingredient.ingredientName)}`;
+		return `${ingredient.quantity} ${unit} ${this.sentenceCase.transform(ingredient.ingredient.name)}`;
 	}
 
 	routerLinkURL(ingredient: IngredientList): string {

@@ -123,8 +123,8 @@ export class ConstructRecipeService {
 		return {
 			ingredientId,
 			spoonacularId: ingredient.id,
-			ingredientName: this.toTitleCase.transform(ingredient.name),
 			text: ingredient.originalName,
+			ingredient,
 			preference: index,
 			quantity,
 			measurementUnit: this.constructIngredientService.findMeasureModel(ingredient.measures.metric.unitShort, measurementRef),

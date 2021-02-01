@@ -229,6 +229,8 @@ namespace Pcb.Mapping.Implementation
                 RawInstructions = dbObj.RawInstructions,
                 CreateByUserId = dbObj.CreateByUserId,
                 SourceOfRecipeLink = dbObj.SourceOfRecipeLink,
+                SourceOfRecipeName = dbObj.SourceOfRecipeName,
+                SpoonacularId = dbObj.SpoonacularId,
                 CreditsText = dbObj.CreditsText,
                 NumberStars = dbObj.NumberStars,
                 NumberFavourites = dbObj.NumberFavourites,

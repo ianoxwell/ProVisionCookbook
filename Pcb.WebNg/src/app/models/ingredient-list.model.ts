@@ -1,4 +1,5 @@
 import { ApiLinks } from './apiLinks';
+import { Ingredient } from './ingredient';
 import { MeasurementModel } from './ingredient-model';
 import { ReferenceItemFull } from './reference.model';
 
@@ -8,7 +9,7 @@ export interface IngredientList {
 	ingredientId?: number;
 	spoonacularId?: number;
 	ingredientState?: ReferenceItemFull;
-	ingredientName: string;
+	ingredient?: Ingredient;
 	/**
 	 * if stored as 0.5, 0.75 convert to symbol / fraction when displaying - 0.66 = 1/3
 	 */

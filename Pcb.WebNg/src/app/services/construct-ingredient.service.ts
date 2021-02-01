@@ -58,7 +58,11 @@ export class ConstructIngredientService {
 	}
 
 	findMeasureModel(title: string, measure: MeasurementModel[]): MeasurementModel {
-		let measurement = measure.find((m: MeasurementModel) => {
+		const measurementEach: MeasurementModel = measure.find((m: MeasurementModel) => m.title.toLowerCase() === 'each');
+		if (!title || title.length === 0) {
+			return measurementEach;
+		}
+		const measurement = measure.find((m: MeasurementModel) => {
 			const success =
 				m.title.toLowerCase() === title.toLowerCase() ||
 				m.shortName?.toLowerCase() === title.toLowerCase() ||
@@ -67,7 +71,7 @@ export class ConstructIngredientService {
 		});
 		// if not matched then default to each
 		if (!measurement) {
-			measurement = measure.find((m: MeasurementModel) => m.title.toLowerCase() === 'each');
+			return measurementEach;
 		}
 		return measurement;
 	}
