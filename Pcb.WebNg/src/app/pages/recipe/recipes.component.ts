@@ -184,6 +184,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 			switchMap(() => this.getRecipes()),
 			catchError((err: HttpErrorResponse) => {
 				this.dialogService.alert('Error getting spoon recipe', err.message);
+				this.isLoading = false;
 				return of();
 			})
 		).subscribe();

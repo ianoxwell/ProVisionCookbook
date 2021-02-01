@@ -1,4 +1,4 @@
-$spaces: (0,1,2,3,4,5,6,7,8,9,10,11,12);
+$spaces: (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
 $sides: (top, right, bottom, left);
 
 // Bootstrap utility classes:
@@ -14,59 +14,101 @@ $sides: (top, right, bottom, left);
 // mr-6 : [ margin-right: 3em ]
 
 @each $space in $spaces {
-  .m-#{$space} {
-    margin: #{$space/2}rem;
-  }
-  .p-#{$space} {
-    padding: #{$space/2}rem;
-  }
-  @each $side in $sides {
-    .m#{str-slice($side, 0, 1)}-#{$space} {
-      margin-#{$side}: #{$space/2}rem !important;
+	.m-#{$space} {
+		margin: #{$space/2}rem;
 	}
-    .p#{str-slice($side, 0, 1)}-#{$space} {
-      padding-#{$side}: #{$space/2}rem !important;
-    }
-  }
+	.p-#{$space} {
+		padding: #{$space/2}rem;
+	}
+	@each $side in $sides {
+		.m#{str-slice($side, 0, 1)}-#{$space} {
+			margin-#{$side}: #{$space/2}rem !important;
+		}
+		.p#{str-slice($side, 0, 1)}-#{$space} {
+			padding-#{$side}: #{$space/2}rem !important;
+		}
+	}
 }
-$widthsEm: (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20);
+$widthsEm: (
+	0,
+	1,
+	2,
+	3,
+	4,
+	5,
+	6,
+	7,
+	8,
+	9,
+	10,
+	11,
+	12,
+	13,
+	14,
+	15,
+	16,
+	17,
+	18,
+	19,
+	20
+);
 @each $width in $widthsEm {
 	.w-#{$width}em {
 		width: #{$width}em;
 	}
 }
-$widthsPercent: (5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100);
+$widthsPercent: (
+	5,
+	10,
+	15,
+	20,
+	25,
+	30,
+	35,
+	40,
+	45,
+	50,
+	60,
+	70,
+	75,
+	80,
+	90,
+	100
+);
 @each $width in $widthsPercent {
 	.w-#{$width} {
 		width: percentage($width / 100);
 	}
 }
 
-  .text- {
+.text- {
 	&small {
-	  font-size: 0.8em;
+		font-size: 0.8em;
 	}
 	&really-small {
-	  font-size: 0.65em;
+		font-size: 0.65em;
 	}
 	&extra-small {
-	  font-size: 0.55em;
+		font-size: 0.55em;
 	}
 	&muted {
-	  color: $muted;
+		color: $muted;
 	}
 	&success {
-	  color: $success;
+		color: $success;
 	}
 	&red {
-	  color: $warn;
+		color: $warn;
 	}
 	&warning {
-	  color: $alert;
+		color: $alert;
 	}
-  }
+}
+b {
+	font-weight: 500;
+}
 
-  @mixin margin-padding-dialog-box-header() {
+@mixin margin-padding-dialog-box-header() {
 	margin: -1.5rem -1.5rem 1rem -1.5rem;
 	padding: 0.5rem 1.5rem;
 }
@@ -80,16 +122,16 @@ $widthsPercent: (5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100);
 	@include margin-padding-dialog-box-header();
 }
 
-  .selected {
-	  background: $accent;
-	  padding: 1rem;
-  }
-  .hover {
-	  background: $light-grey;
-  }
+.selected {
+	background: $accent;
+	padding: 1rem;
+}
+.hover {
+	background: $light-grey;
+}
 
 .ingredients-list-tabs {
-	mat-tab-header{
+	mat-tab-header {
 		display: none;
 	}
 }
@@ -146,125 +188,11 @@ $widthsPercent: (5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100);
 	bottom: 0;
 	z-index: 1;
 }
-.table-footer {	
+.table-footer {
 	margin-bottom: 4em;
 }
 
-// body .ui-message {
-// 	padding: 0.429em;
-// 	margin: 0;
-//   }
-//   body .ui-message.ui-message-info {
-// 	background-color: #7fbcec;
-// 	border: 0 none;
-// 	color: #212121;
-//   }
-//   body .ui-message.ui-message-info .ui-message-icon {
-// 	color: #212121;
-//   }
-//   body .ui-message.ui-message-success {
-// 	background-color: #b7d8b7;
-// 	border: 0 none;
-// 	color: #212121;
-//   }
-//   body .ui-message.ui-message-success .ui-message-icon {
-// 	color: #212121;
-//   }
-//   body .ui-message.ui-message-warn {
-// 	background-color: #ffe399;
-// 	border: 0 none;
-// 	color: #212121;
-//   }
-//   body .ui-message.ui-message-warn .ui-message-icon {
-// 	color: #212121;
-//   }
-//   body .ui-message.ui-message-error {
-// 	background-color: #f8b7bd;
-// 	border: 0 none;
-// 	color: #212121;
-//   }
-//   body .ui-message.ui-message-error .ui-message-icon {
-// 	color: #212121;
-//   }
-//   body .ui-message .ui-message-icon {
-// 	font-size: 1.25em;
-//   }
-//   body .ui-message .ui-message-text {
-// 	font-size: 1em;
-//   }
-//   body .ui-messages {
-// 	padding: 1em;
-// 	margin: 1em 0;
-//   }
-//   body .ui-messages.ui-messages-info {
-// 	background-color: #7fbcec;
-// 	border: 0 none;
-// 	color: #212121;
-//   }
-//   body .ui-messages.ui-messages-info .ui-messages-icon {
-// 	color: #212121;
-//   }
-//   body .ui-messages.ui-messages-info .ui-messages-close {
-// 	color: #212121;
-//   }
-//   body .ui-messages.ui-messages-success {
-// 	background-color: #b7d8b7;
-// 	border: 0 none;
-// 	color: #212121;
-//   }
-//   body .ui-messages.ui-messages-success .ui-messages-icon {
-// 	color: #212121;
-//   }
-//   body .ui-messages.ui-messages-success .ui-messages-close {
-// 	color: #212121;
-//   }
-//   body .ui-messages.ui-messages-warn {
-// 	background-color: #ffe399;
-// 	border: 0 none;
-// 	color: #212121;
-//   }
-//   body .ui-messages.ui-messages-warn .ui-messages-icon {
-// 	color: #212121;
-//   }
-//   body .ui-messages.ui-messages-warn .ui-messages-close {
-// 	color: #212121;
-//   }
-//   body .ui-messages.ui-messages-error {
-// 	background-color: #f8b7bd;
-// 	border: 0 none;
-// 	color: #212121;
-//   }
-//   body .ui-messages.ui-messages-error .ui-messages-icon {
-// 	color: #212121;
-//   }
-//   body .ui-messages.ui-messages-error .ui-messages-close {
-// 	color: #212121;
-//   }
-//   body .ui-messages .ui-messages-close {
-// 	top: 0.25em;
-// 	right: 0.5em;
-// 	font-size: 1.5em;
-// 	overflow: hidden;
-// 	line-height: 1;
-// 	-moz-border-radius: 3px;
-// 	-webkit-border-radius: 3px;
-// 	border-radius: 3px;
-// 	-moz-transition: box-shadow 0.2s;
-// 	-o-transition: box-shadow 0.2s;
-// 	-webkit-transition: box-shadow 0.2s;
-// 	transition: box-shadow 0.2s;
-//   }
-//   body .ui-messages .ui-messages-close:focus {
-// 	outline: 0 none;
-// 	outline-offset: 0;
-// 	-webkit-box-shadow: 0 0 0 0.2em #8dcdff;
-// 	-moz-box-shadow: 0 0 0 0.2em #8dcdff;
-// 	box-shadow: 0 0 0 0.2em #8dcdff;
-//   }
-//   body .ui-messages .ui-messages-icon {
-// 	font-size: 2em;
-//   }
-  body .ui-toast .ui-toast-message {
+body .ui-toast .ui-toast-message {
 	-webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
 	-moz-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
 	box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
@@ -274,39 +202,29 @@ $widthsPercent: (5,10,15,20,25,30,35,40,45,50,60,70,75,80,90,100);
 		margin-top: -2em;
 		margin-right: -0.7em;
 	}
-  }
-  body .ui-toast .ui-toast-message.ui-toast-message-info {
+}
+body .ui-toast .ui-toast-message.ui-toast-message-info {
 	background-color: $accent-lighter;
 	border: 0 none;
 	color: #212121;
-	
-  }
-  body .ui-toast .ui-toast-message.ui-toast-message-info .ui-toast-close-icon {
+}
+body .ui-toast .ui-toast-message.ui-toast-message-info .ui-toast-close-icon {
 	color: #212121;
-
-  }
-  body .ui-toast .ui-toast-message.ui-toast-message-success {
+}
+body .ui-toast .ui-toast-message.ui-toast-message-success {
 	background-color: $success;
 	border: 0 none;
 	color: $colour-text-on-success;
-  }
-//   body .ui-toast .ui-toast-message.ui-toast-message-success .ui-toast-close-icon {
-// 	color: $colour-text-on-success;
-//   }
-  body .ui-toast .ui-toast-message.ui-toast-message-warn {
+}
+
+body .ui-toast .ui-toast-message.ui-toast-message-warn {
 	background-color: $alert;
 	border: 0 none;
 	color: $colour-text-on-success;
-  }
-//   body .ui-toast .ui-toast-message.ui-toast-message-warn .ui-toast-close-icon {
-// 	color: #212121;
-//   }
-  body .ui-toast .ui-toast-message.ui-toast-message-error {
+}
+
+body .ui-toast .ui-toast-message.ui-toast-message-error {
 	background-color: $warn;
 	border: 0 none;
 	color: $colour-text-on-success;
-  }
-//   body .ui-toast .ui-toast-message.ui-toast-message-error .ui-toast-close-icon {
-// 	color: #212121;
-//   }
-
+}
