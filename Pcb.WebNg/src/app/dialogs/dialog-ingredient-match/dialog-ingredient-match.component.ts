@@ -68,11 +68,14 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
 	 * After form creation and listening for changes the form is patched to cause both observables to emit.
 	 * @param ingredient The ingredient to update with.
 	 */
-	patchForm(ingredient: Ingredient): void {
-		this.form.patchValue({
-			usdaFoodName: ingredient.name,
-			foodGroup: ingredient.foodGroup?.id
-		});
+	patchForm(ingredient: Ingredient, emit = true): void {
+		this.form.patchValue(
+			{
+				usdaFoodName: ingredient.name,
+				foodGroup: ingredient.foodGroup?.id
+			},
+			{ emitEvent: emit }
+		);
 	}
 
 	/**
@@ -86,10 +89,11 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
 			debounceTime(200),
 			filter(([item, foodId]: [string, number]) => !!item),
 			switchMap(([rawFood, foodGroupId]: [string, number]) => {
-				console.log('tap');
 				const formRaw = this.form.getRawValue();
 				this.data.ingredient.foodGroup = this.data.foodGroup.find((group: ReferenceItemFull) => group.id === formRaw.foodGroup);
-				return this.restIngredientService.getRawFoodSuggestion(rawFood, 20, foodGroupId);
+				return this.data.ingredient.foodGroup.title === 'NULL'
+					? this.restIngredientService.getRawFoodSuggestion(rawFood, 20)
+					: this.restIngredientService.getRawFoodSuggestion(rawFood, 20, foodGroupId);
 			})
 		);
 	}
@@ -100,6 +104,15 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
 	 */
 	selectItem(item: IRawFoodSuggestion): void {
 		console.log('selected this item', item);
+		const formRaw = this.form.getRawValue();
+		const nullFoodGroup: ReferenceItemFull = this.data.foodGroup.find((group: ReferenceItemFull) => group.title === 'NULL');
+		if (formRaw.foodGroup === nullFoodGroup.id) {
+			this.data.ingredient.foodGroup = this.data.foodGroup.find(
+				(group: ReferenceItemFull) => group.title.toLowerCase() === item.foodGroup.toLowerCase()
+			);
+			this.data.ingredient.name = item.name;
+			this.patchForm(this.data.ingredient, false);
+		}
 		this.restIngredientService
 			.getRawFoodById(item.usdaId)
 			.pipe(
