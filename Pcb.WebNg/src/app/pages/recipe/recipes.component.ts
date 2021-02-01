@@ -1,4 +1,5 @@
 import { Location } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ComponentBase } from '@components/base/base.component.base';
@@ -181,7 +182,11 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 		this.isLoading = true;
 		this.constructRecipeService.getSpoonAcularRecipe(count, this.cookBookUserProfile.id, this.refDataAll, this.measurementRef).pipe(
 			first(),
-			switchMap(() => this.getRecipes())
+			switchMap(() => this.getRecipes()),
+			catchError((err: HttpErrorResponse) => {
+				this.dialogService.alert('Error getting spoon recipe', err.message);
+				return of();
+			})
 		).subscribe();
 	}
 

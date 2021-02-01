@@ -8,7 +8,7 @@ import { ReferenceAll, ReferenceItemFull } from '@models/reference.model';
 import { IEquipmentIngredient, IExtendedIngredients, IRawReturnedRecipes, ISpoonacularRecipeModel } from '@models/spoonacular-recipe.model';
 import { ToTitleCasePipe } from '@pipes/title-case.pipe';
 import { forkJoin, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { filter, switchMap } from 'rxjs/operators';
 import { ConstructIngredientService } from './construct-ingredient.service';
 import { RestIngredientService } from './rest-ingredient.service';
 import { RestRecipeService } from './rest-recipe.service';
@@ -21,7 +21,7 @@ export class ConstructRecipeService {
 		private restIngredientService: RestIngredientService,
 		private constructIngredientService: ConstructIngredientService,
 		private toTitleCase: ToTitleCasePipe,
-		private restRecipeService: RestRecipeService
+		private restRecipeService: RestRecipeService,
 	) {}
 
 	/**
@@ -249,9 +249,20 @@ export class ConstructRecipeService {
 		return this.restIngredientService.getRandomSpoonacularRecipe(count).pipe(
 			switchMap((recipeResults: IRawReturnedRecipes) => {
 				console.log('a result', recipeResults);
+
 				// TODO probably should check if the recipe exists already - I mean what are the chances right???
 				// assign the recipeResults to a locally scoped variable - for use later in the pipe
 				spoonRecipes = [...recipeResults.recipes];
+				const checkRecipeNames$ = spoonRecipes.map((recipe: ISpoonacularRecipeModel) =>
+					this.restRecipeService.checkRecipeNameExists(recipe.title)
+				);
+				return forkJoin(checkRecipeNames$);
+			}),
+			filter((isRecipeNameOkay: boolean[]) => {
+				spoonRecipes = spoonRecipes.filter((item, index) => !isRecipeNameOkay[index]);
+				return spoonRecipes.length > 0;
+			}),
+			switchMap(() => {
 				// forEach through Recipes and create array of unique ingredients
 				spoonRecipes.forEach((recipe: ISpoonacularRecipeModel) => {
 					recipe.extendedIngredients.forEach((ingredient: IExtendedIngredients) => {

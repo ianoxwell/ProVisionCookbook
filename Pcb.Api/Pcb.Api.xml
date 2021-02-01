@@ -416,6 +416,14 @@
             <param name="recipeId">Recipe Identifier</param>
             <returns></returns>
         </member>
+        <member name="M:Pcb.Api.Controllers.RecipeController.IsIngredientNameAvailable(System.String,System.Int32)">
+            <summary>
+            Check if a Recipe name is available
+            </summary>
+            <param name="filter">Text to filter name on</param>
+            <param name="recipeId">For a name change doesn't check itself</param>
+            <returns></returns>
+        </member>
         <member name="T:Pcb.Api.Controllers.ReferenceController">
             <summary>
             Provides access to Pcb reference data.

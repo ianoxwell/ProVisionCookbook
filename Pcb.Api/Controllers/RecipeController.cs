@@ -162,5 +162,19 @@ namespace Pcb.Api.Controllers
             return Ok(dto);
         }
 
+        /// <summary>
+        /// Check if a Recipe name is available
+        /// </summary>
+        /// <param name="filter">Text to filter name on</param>
+        /// <param name="recipeId">For a name change doesn't check itself</param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(200, Type = typeof(bool))]
+        [Route("check-name")]
+        public IActionResult IsIngredientNameAvailable(string filter = "", int recipeId = 0)
+        {
+            return Ok(RecipeService.RecipeNameExists(filter, recipeId));
+        }
+
     }
 }
