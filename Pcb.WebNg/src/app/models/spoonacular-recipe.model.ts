@@ -64,7 +64,7 @@ export interface ISpoonacularRecipeModel {
 	lowFodmap: boolean;
 	occasions: string[];
 	originalId: number;
-	pricePerService: number;
+	pricePerServing: number;
 	readyInMinutes: number;
 	servings: number;
 	sourceName: string;

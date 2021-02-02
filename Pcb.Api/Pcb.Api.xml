@@ -148,10 +148,9 @@
         </member>
         <member name="M:Pcb.Api.Controllers.Admin.AdminReferenceController.CreateMeasurementItem(Pcb.Dto.Reference.ReferenceItemMeasurement)">
             <summary>
-            Creates a reference item.
+            Creates a measurement reference item.
             </summary>
             <param name="item">The item.</param>
-            /// <param name="type">The type.</param>
             <returns></returns>
         </member>
         <member name="T:Pcb.Api.Controllers.Admin.UserController">

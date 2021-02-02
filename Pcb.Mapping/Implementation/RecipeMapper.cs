@@ -231,6 +231,7 @@ namespace Pcb.Mapping.Implementation
                 CreateByUserId = dbObj.CreateByUserId,
                 SourceOfRecipeLink = dbObj.SourceOfRecipeLink,
                 SourceOfRecipeName = dbObj.SourceOfRecipeName,
+                License = dbObj.License,
                 SpoonacularId = dbObj.SpoonacularId,
                 CreditsText = dbObj.CreditsText,
                 NumberStars = dbObj.NumberStars,
@@ -263,7 +264,6 @@ namespace Pcb.Mapping.Implementation
                 PrepTime = dbObj.PrepTime,
                 CookTime = dbObj.CookTime,
                 ReadyInMinutes = dbObj.ReadyInMinutes,
-                RawInstructions = dbObj.RawInstructions,
                 CreateByUserId = dbObj.CreateByUserId,
                 SourceOfRecipeLink = dbObj.SourceOfRecipeLink,
                 SourceOfRecipeName = dbObj.SourceOfRecipeName,
@@ -295,6 +295,7 @@ namespace Pcb.Mapping.Implementation
                 CreateByUserId = dto.CreateByUserId,
                 SourceOfRecipeName = dto.SourceOfRecipeName,
                 SourceOfRecipeLink = dto.SourceOfRecipeLink,
+                License = dto.License,
                 SpoonacularId = dto.SpoonacularId,
                 CreditsText = dto.CreditsText,
                 NumberStars = dto.NumberStars,
@@ -325,6 +326,7 @@ namespace Pcb.Mapping.Implementation
             updateObj.CookTime = dto.CookTime;
             updateObj.ReadyInMinutes = dto.ReadyInMinutes;
             updateObj.RawInstructions = dto.RawInstructions;
+            updateObj.License = dto.License;
             updateObj.CreateByUserId = dto.CreateByUserId;
             updateObj.SourceOfRecipeLink = dto.SourceOfRecipeLink;
             updateObj.CreditsText = dto.CreditsText;

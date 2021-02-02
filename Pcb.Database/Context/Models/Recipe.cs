@@ -25,6 +25,7 @@ namespace Pcb.Database.Context.Models
         public int ReadyInMinutes { get; set; }
         [Column(TypeName = "text")]
         public string RawInstructions { get; set; }
+        public string License { get; set; }
         public int CreateByUserId { get; set; }
         public string SourceOfRecipeName { get; set; } // used to reference source name
         public string SourceOfRecipeLink { get; set; } // used to reference SpoonAcular or source

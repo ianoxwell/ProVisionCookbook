@@ -16,6 +16,7 @@ namespace Pcb.Dto.Recipes
         public int CookTime { get; set; }
         public int ReadyInMinutes { get; set; }
         public string RawInstructions { get; set; }
+        public string License { get; set; }
         public int CreateByUserId { get; set; }
         public string SourceOfRecipeName { get; set; } // used to reference source name
         public string SourceOfRecipeLink { get; set; } // used to reference SpoonAcular or source

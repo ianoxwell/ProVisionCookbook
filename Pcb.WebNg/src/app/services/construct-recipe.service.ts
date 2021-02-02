@@ -79,9 +79,12 @@ export class ConstructRecipeService {
 			recipeCuisineTypes: [],
 			sourceOfRecipeName: recipe.sourceName,
 			sourceOfRecipeLink: recipe.sourceUrl,
+			license: recipe.license,
 			spoonacularId: recipe.id,
 			creditsText: recipe.creditsText,
 			teaser: recipe.summary,
+			numberFavourites: recipe.aggregateLikes,
+			priceServing: recipe.pricePerServing,
 			createByUserId: userId, // logged in user.
 			recipePictures: [
 				{
