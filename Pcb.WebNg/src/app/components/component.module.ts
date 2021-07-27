@@ -13,7 +13,6 @@ import { MatInputAutoCompleteDirective } from '../directives/mat-input-autocompl
 import { ScriptsComponent } from '../settings/scripts/scripts.component';
 import { NutrientTotalValidator } from '../validators/nutrient-total.validator';
 import { AppHeaderComponent } from './app-header/app-header.component';
-import { DateTimeFormComponent } from './date-time-form/date-time-form.component';
 import { DragNDropComponent } from './drag-ndrop/drag-ndrop.component';
 import { DynamicErrorsComponent } from './dynamic-errors/dynamic-errors.component';
 import { GraphDoughnutComponent } from './graph-doughnut/graph-doughnut.component';
@@ -59,7 +58,6 @@ import { ToastComponent } from './toast/toast.component';
 	ScriptsComponent,
 	AppHeaderComponent,
 	DynamicErrorsComponent,
-	DateTimeFormComponent,
 	IngredientEditComponent,
 	IngredientFilterComponent,
 	IconTextComponent,
@@ -87,7 +85,6 @@ import { ToastComponent } from './toast/toast.component';
 	ScriptsComponent,
 	AppHeaderComponent,
 	DynamicErrorsComponent,
-	DateTimeFormComponent,
 	IngredientEditComponent,
 	IngredientFilterComponent,
 	IconTextComponent,
