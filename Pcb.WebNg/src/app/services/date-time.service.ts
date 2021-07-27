@@ -10,7 +10,7 @@ export class DateTimeModel {
 })
 export class DateTimeService {
   static readAbleDate(theDate: Date): string {
-	const options = {  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+	const options: Intl.DateTimeFormatOptions = {  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
 	return theDate.toLocaleTimeString('en-au', options);
   }
   public static addHours(date: Date, h: number): Date {

@@ -110,6 +110,11 @@
             </summary>
             <param name="options"></param>
         </member>
+        <member name="T:Pcb.Api.Controllers.AccountController">
+            <summary>
+            Contains API endpoints to fetch, update and add user accounts.
+            </summary>
+        </member>
         <member name="F:Pcb.Api.Controllers.AccountController.AccountService">
             <summary>
             The user service.
