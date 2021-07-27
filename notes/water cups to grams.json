@@ -1,8 +1,0 @@
-{
-    "sourceAmount": 1,
-    "sourceUnit": "cup",
-    "targetAmount": 236.59,
-    "targetUnit": "grams",
-    "answer": "1 cup water are 236.59 grams.",
-    "type": "CONVERSION"
-}
