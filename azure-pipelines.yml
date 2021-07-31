@@ -41,12 +41,6 @@ jobs:
 - job: 'PublishEFCore'
   pool: $(hostedPool)
   steps:
-  - task: DotNetCoreCLI@2
-    displayName: Install dotnet-ef
-    inputs:
-      command: 'custom'
-      custom: 'tool'
-      arguments: 'install --global dotnet-ef'
   - task: CmdLine@2
     displayName: 'Publish EF Core migration scripts'
     inputs:
