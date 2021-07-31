@@ -1,4 +1,4 @@
-#  ASP.NET Core
+# ASP.NET Core
 # Build and test ASP.NET Core projects targeting .NET Core.
 # Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
@@ -13,11 +13,11 @@ variables:
   agentImage: 'windows-latest'
   linuxImage: 'ubuntu-latest'
   buildPlatform: 'Any CPU'
+  hostedPool: 'pcookbook'
 
 jobs:
 - job: 'WebAPI'
-  pool:
-    vmImage: $(linuxImage)
+  pool: $(hostedPool)
   steps:
   - task: UseDotNet@2
     displayName: 'Install .NET Core SDK'
@@ -30,7 +30,7 @@ jobs:
     inputs:
       command: publish
       publishWebProjects: True
-      arguments: '--configuration $(BuildConfiguration) -r linux-x64 --output "$(build.artifactstagingdirectory)"'
+      arguments: '--configuration $(BuildConfiguration) -r win10-x64 --output "$(build.artifactstagingdirectory)"'
       zipAfterPublish: True
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'
@@ -39,8 +39,7 @@ jobs:
       artifactName: 'pcbCookBookApi'
 
 - job: 'PublishEFCore'
-  pool:
-    vmImage: $(AgentImage)
+  pool: $(hostedPool)
   steps:
   - task: DotNetCoreCLI@2
     displayName: Install dotnet-ef
@@ -61,8 +60,7 @@ jobs:
       artifactName: 'Migrations'
 
 - job: Angular
-  pool:
-    vmImage: $(AgentImage)
+  pool: $(hostedPool)
   steps:
     - task: NodeTool@0
       inputs:
