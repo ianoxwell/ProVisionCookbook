@@ -79,7 +79,7 @@ jobs:
         command: custom
         workingDir: Pcb.WebNG
         verbose: false
-        customCommand: 'run build -- --prod --progress=false'
+        customCommand: 'run build --configuration production'
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: Angular'
