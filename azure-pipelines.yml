@@ -41,12 +41,6 @@ jobs:
 - job: 'PublishEFCore'
   pool: $(hostedPool)
   steps:
-  - task: AzureAppServiceSettings@1
-    inputs:
-      azureSubscription: 'Free Trial(62c92b93-5fa2-44a1-8eb8-556b748a5d27)'
-      appName: 'cookbook-api'
-      resourceGroupName: 'Cookbook'
-      appSettings: 'appsettings.json'
   - task: CmdLine@2
     displayName: 'Publish EF Core migration scripts'
     inputs:
