@@ -1,18 +1,16 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ComponentBase } from '@components/base/base.component.base';
 import { DecimalThreePlaces, DecimalTwoPlaces } from '@models/static-variables';
-import { debounce, first, takeUntil, tap } from 'rxjs/operators';
 import { merge } from 'rxjs';
-import { Label } from 'ng2-charts';
-import { ChartOptions, ChartType } from 'chart.js';
+import { first, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-ingredient-nutrition',
   templateUrl: './edit-ingredient-nutrition.component.html',
   styleUrls: ['./edit-ingredient-nutrition.component.scss']
 })
-export class EditIngredientNutritionComponent extends ComponentBase implements OnInit, AfterViewInit {
+export class EditIngredientNutritionComponent extends ComponentBase implements OnInit {
 	@ViewChild('doughNutCanvas') doughNutCanvas: ElementRef;
 	@Input() form: FormGroup;
 	@Output() markAsDirty = new EventEmitter<void>();
@@ -20,15 +18,7 @@ export class EditIngredientNutritionComponent extends ComponentBase implements O
 	decimalTwoPlaces = DecimalTwoPlaces;
 	decimalThreePlaces = DecimalThreePlaces;
 	O3ToO6Ratio = 0;
-	public pieChartLabels: Label[] = ['Carbohydrates', 'Fat', 'Protein', 'Water'];
-	public pieChartData: number[] = [0,0,0,0];
-	public pieChartType: ChartType = 'doughnut';
-	public pieChartLegend = true;
-	public pieChartColors = [
-	  {
-		backgroundColor: ['rgba(255,0,0,0.8)', 'rgba(0,255,0,0.8)', 'rgba(0,255,255,0.8)', 'rgba(0,0,255,0.8)'],
-	  },
-	];
+
 	doughnutLabels = {
 		header: 'Macronutrients',
 		internalLabel: 80,
@@ -56,30 +46,15 @@ export class EditIngredientNutritionComponent extends ComponentBase implements O
 			color: '0,0,255'
 		}
 	];
-	 // Pie
-	//  public pieChartOptions: ChartOptions = {
-	// 	responsive: true,
-	// 	legend: {
-	// 	  position: 'bottom',
-	// 	},
-	// 	animation:{ onProgress: this.debounce(() => {
-	// 		this.updateTextCenterDoughNut();
-	// 	}, 100)},
-	// 	tooltips: {enabled: false},
-	// 	hover: {mode: null},
-	//   };
+
 	constructor() { super(); }
 
 	ngOnInit() {
 		this.listenAnyFormChanges();
 		this.listenOmegaRatio();
 		this.listenNutrientTotals();
-		this.pieChartData = this.updatePieChartData()
 	}
 
-	ngAfterViewInit(): void {
-		// setTimeout(() => this.pieChartData = this.updatePieChartData(), 500);
-	}
 	// Mark the parent form as Dirty if any form element changes
 	// only listens for the first change (because then it is dirty) - may have to reload on save...
 	listenAnyFormChanges(): void {
@@ -117,7 +92,6 @@ export class EditIngredientNutritionComponent extends ComponentBase implements O
 				fat.markAsTouched();
 				water.markAsTouched();
 				protein.markAsTouched();
-				this.pieChartData = this.updatePieChartData();
 			}),
 			takeUntil(this.ngUnsubscribe)
 		).subscribe();
@@ -139,8 +113,6 @@ export class EditIngredientNutritionComponent extends ComponentBase implements O
 		this.doughnutLabels.internalLabel = pieValues.calories;
 		this.doughnutData = Object.assign(newObj);
 		console.log('updated doughnut', this.doughnutData, this.doughnutLabels);
-		// this.updateTextCenterDoughNut();
-		// this.doughnutData[0].value = pieValues.totalCarbohydrate;
 		return [pieValues.totalCarbohydrate, pieValues.totalFat, pieValues.protein, pieValues.water];
 	}
 

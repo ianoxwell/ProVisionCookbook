@@ -26,7 +26,6 @@ import { StateService } from '@services/state.service';
 import { StorageService } from '@services/storage';
 import { UserService } from '@services/user.service';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
-import { ChartsModule } from 'ng2-charts';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import icons from '../assets/svg/svg-icons';
 import { CompleteMaterialModule } from './app-material.module';
@@ -80,7 +79,6 @@ import { UserProfileService } from './services/user-profile.service';
 		PipesModule,
 		SharedComponentModule,
 		FullCalendarModule,
-		ChartsModule,
 		NgxMaterialTimepickerModule,
 		NgxMaterialTimepickerModule.setLocale('en-au'),
 		SocialLoginModule,

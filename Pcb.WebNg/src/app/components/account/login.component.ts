@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComponentBase } from '@components/base/base.component.base';
-import { MessageStatus } from '@models/message.models';
+import { MessageStatus } from '@models/message.model';
 import { HttpStatusCode } from '@models/security.models';
 import { DialogService } from '@services/dialog.service';
 import { LoginService } from '@services/login.service';

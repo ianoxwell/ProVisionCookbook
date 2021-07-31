@@ -34,13 +34,10 @@
 		"@ngneat/svg-icon": "^1.0.3",
 		"@uiowa/digit-only": "^2.2.3",
 		"angularx-social-login": "^3.5.7",
-		"chart.js": "^2.9.4",
-		"core-js": "^3.15.2",
-		"ng2-charts": "^2.4.3",
 		"ngx-material-timepicker": "^5.5.3",
 		"rxjs": "^6.6.7",
 		"tslib": "^2.3.0",
-		"zone.js": "^0.10.3"
+		"zone.js": "^0.11.4"
 	},
 	"devDependencies": {
 		"@angular-devkit/build-angular": "^12.1.3",

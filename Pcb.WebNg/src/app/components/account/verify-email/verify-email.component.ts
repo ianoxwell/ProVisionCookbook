@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageResult } from '@models/common.model';
-import { MessageStatus } from '@models/message.models';
+import { MessageStatus } from '@models/message.model';
 import { AccountService } from '@services/account.service';
 import { MessageService } from '@services/message.service';
 import { of } from 'rxjs';

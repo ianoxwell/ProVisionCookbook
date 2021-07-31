@@ -1,3 +1,5 @@
+import { ComponentType } from '@angular/cdk/overlay';
+
 /** Validation */
 export enum ValidationMessageType {
 	Info,
@@ -13,7 +15,8 @@ export enum MessageStatus {
 	Error = 'error',
 	Warning = 'warning',
 	Information = 'information',
-	Critical = 'critical'
+	Critical = 'critical',
+	Alert = 'alert'
 }
 
 export interface MessageModel {
@@ -29,13 +32,34 @@ export interface StatusUpdate {
 }
 
 export interface Message {
-	severity?: MessageStatus;
+	severity: MessageStatus;
 	summary?: string;
 	detail?: string;
-	id?: any;
+	id?: number;
 	key?: string;
 	life?: number;
 	sticky?: boolean;
 	closable?: boolean;
-	data?: any;
+	data?: string;
+}
+
+export interface CloseMessage {
+	index: number;
+	message: Message;
+}
+
+export interface DialogMessageData {
+	status: MessageStatus;
+	title: string;
+	message: string;
+	buttonText: string;
+	isAlert: boolean;
+}
+
+export interface CreateDialogInput {
+	/** Add additional data types here | newDialogMessageData */
+	data: DialogMessageData;
+	component: ComponentType<unknown>;
+	width?: string;
+	top?: string;
 }

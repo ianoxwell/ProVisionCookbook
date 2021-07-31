@@ -1,14 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
 import { ComponentBase } from '@components/base/base.component.base';
 import { MessageResult } from '@models/common.model';
-import { MessageStatus } from '@models/message.models';
+import { MessageStatus } from '@models/message.model';
 import { HttpStatusCode } from '@models/security.models';
 import { ValidationMessages } from '@models/static-variables';
-import { User } from '@models/user';
 import { LoginService } from '@services/login.service';
 import { MessageService } from '@services/message.service';
 import { UserProfileService } from '@services/user-profile.service';

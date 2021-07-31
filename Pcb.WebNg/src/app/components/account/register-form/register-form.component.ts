@@ -1,13 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ComponentBase } from '@components/base/base.component.base';
-import { AccurateSocialUser, NewUser } from '@models/accounts.model';
+import { NewUser } from '@models/accounts.model';
 import { MessageResult } from '@models/common.model';
-import { MessageStatus } from '@models/message.models';
+import { MessageStatus } from '@models/message.model';
 import { ValidationMessages } from '@models/static-variables';
-import { User } from '@models/user';
 import { AccountService } from '@services/account.service';
 import { LoginService } from '@services/login.service';
 import { MessageService } from '@services/message.service';

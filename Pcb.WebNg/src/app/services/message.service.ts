@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Message } from '@models/message.models';
+import { Message } from '@models/message.model';
 import { Subject } from 'rxjs';
 
 @Injectable({

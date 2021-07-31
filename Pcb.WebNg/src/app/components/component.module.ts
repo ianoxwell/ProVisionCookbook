@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { PipesModule } from '@pipes/pipes.module';
 import { IngredientEditFormService } from '@services/ingredient-edit-form.service';
 import { DigitOnlyModule } from '@uiowa/digit-only';
-import { ChartsModule } from 'ng2-charts';
 import { CompleteMaterialModule } from '../app-material.module';
 import { FormAutocompleteDirective } from '../directives/form-autocomplete.directive';
 import { MatInputAutoCompleteDirective } from '../directives/mat-input-autocomplete.directive';
@@ -33,8 +32,8 @@ import { RecipeViewComponent } from './recipe/recipe-view/recipe-view.component'
 import { SearchBarComponent } from './recipe/search-bar/search-bar.component';
 import { SelectAutoCompleteComponent } from './select-auto-complete/select-auto-complete.component';
 import { SharedComponentModule } from './shared-component.module';
-import { ToastItemComponent } from './toast/toast-item/toast-item.component';
 import { ToastComponent } from './toast/toast.component';
+import { ToastModule } from './toast/toast.module';
 
 
 @NgModule({
@@ -46,9 +45,9 @@ import { ToastComponent } from './toast/toast.component';
 	RouterModule,
 	HttpClientModule,
 	PipesModule,
-	ChartsModule,
 	SharedComponentModule,
-	DigitOnlyModule
+	DigitOnlyModule,
+	ToastModule
   ],
   declarations: [
 	DragNDropComponent,
@@ -65,8 +64,6 @@ import { ToastComponent } from './toast/toast.component';
 	IngredientPricesFormComponent,
 	IngredientConversionFormComponent,
 	SelectAutoCompleteComponent,
-	ToastItemComponent,
-	ToastComponent,
 	PageTitleComponent,
 	EditIngredientBasicComponent,
 	EditCommonMineralsComponent,

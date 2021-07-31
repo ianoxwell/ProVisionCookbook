@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ComponentBase } from '@components/base/base.component.base';
 import { Ingredient } from '@models/ingredient';
-import { MessageStatus } from '@models/message.models';
+import { MessageStatus } from '@models/message.model';
 import { IRawFoodIngredient, IRawFoodSuggestion } from '@models/raw-food-ingredient.model';
 import { ReferenceItemFull } from '@models/reference.model';
 import { ConstructIngredientService } from '@services/construct-ingredient.service';

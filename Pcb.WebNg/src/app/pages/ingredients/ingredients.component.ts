@@ -6,7 +6,7 @@ import { ISortPageObj, PagedResult, SortPageObj } from '@models/common.model';
 import { IIngredientFilterObject, IngredientFilterObject } from '@models/filter-queries.model';
 import { Ingredient } from '@models/ingredient';
 import { MeasurementModel } from '@models/ingredient-model';
-import { MessageStatus } from '@models/message.models';
+import { MessageStatus } from '@models/message.model';
 import { ReferenceAll } from '@models/reference.model';
 import { User } from '@models/user';
 import { DialogService } from '@services/dialog.service';
