@@ -13,11 +13,11 @@ variables:
   agentImage: 'windows-latest'
   linuxImage: 'ubuntu-latest'
   buildPlatform: 'Any CPU'
+  hostedPool: 'pcookbook'
 
 jobs:
 - job: 'WebAPI'
-  pool:
-    vmImage: $(agentImage)
+  pool: $(hostedPool)
   steps:
   - task: UseDotNet@2
     displayName: 'Install .NET Core SDK'
@@ -39,8 +39,7 @@ jobs:
       artifactName: 'pcbCookBookApi'
 
 - job: 'PublishEFCore'
-  pool:
-    vmImage: $(AgentImage)
+  pool: $(hostedPool)
   steps:
   - task: DotNetCoreCLI@2
     displayName: Install dotnet-ef
@@ -61,8 +60,7 @@ jobs:
       artifactName: 'Migrations'
 
 - job: Angular
-  pool:
-    vmImage: $(AgentImage)
+  pool: $(hostedPool)
   steps:
     - task: NodeTool@0
       inputs:
