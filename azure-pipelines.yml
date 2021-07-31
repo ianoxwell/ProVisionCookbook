@@ -17,7 +17,7 @@ variables:
 jobs:
 - job: 'WebAPI'
   pool:
-    vmImage: $(linuxImage)
+    vmImage: $(agentImage)
   steps:
   - task: UseDotNet@2
     displayName: 'Install .NET Core SDK'
@@ -30,7 +30,7 @@ jobs:
     inputs:
       command: publish
       publishWebProjects: True
-      arguments: '--configuration $(BuildConfiguration) -r linux-x64 --output "$(build.artifactstagingdirectory)"'
+      arguments: '--configuration $(BuildConfiguration) -r win10-x64 --output "$(build.artifactstagingdirectory)"'
       zipAfterPublish: True
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'
