@@ -74,6 +74,7 @@ export class LoginComponent extends ComponentBase implements OnInit {
 			.getTokenUsingGoogleToken(JSON.parse(localStorage.getItem('google-user')))
 			.pipe(
 				tap((response: boolean | string) => {
+					this.isGettingJwt = false;
 					if (!!response && typeof response === 'string') {
 						this.messageService.add({
 							severity: MessageStatus.Information,

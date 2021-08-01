@@ -1,6 +1,9 @@
 # CookBook
 
-This project is designed to assist in stocking up your pantry to enable you to create many meals, converting cups to kg etc. Originally intended for school's Food Science programs it has been adapted for the long term planner / provisioner. 
+This project is designed to assist in stocking up your pantry to enable you to create many meals, converting cups to kg etc. Originally intended for school's Food Science programs it has been adapted for the long term planner / provisioner. <br/>
+[Demo Github](https://ianoxwell.github.io/ProVisionCookbook) - sign in with your Google credentials or use<br/>
+email: gordon@test.com<br/>
+pw: fakePassword
 
 ## Technology used in front end
 Angular 12+<br/>
