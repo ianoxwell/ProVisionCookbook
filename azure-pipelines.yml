@@ -53,30 +53,3 @@ jobs:
       pathtoPublish: '$(build.artifactstagingdirectory)/migrations'
       artifactName: 'Migrations'
 
-- job: Angular
-  pool: $(hostedPool)
-  steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '12.x'
-        checkLatest: true
-    - task: Npm@1
-      displayName: 'npm install'
-      inputs:
-        command: install
-        workingDir: Pcb.WebNG
-        verbose: false
-
-    - task: Npm@1
-      displayName: 'npm Build'
-      inputs:
-        command: custom
-        workingDir: Pcb.WebNG
-        verbose: false
-        customCommand: 'run build --prod'
-
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: Angular'
-      inputs:
-        PathtoPublish: Pcb.WebNG/dist
-        ArtifactName: Angular
