@@ -15,7 +15,7 @@ Deployed to Github pages<br/>
 ## Server side
 API written in .NET 5.0<br/>
 MsSql database updated with Entity First Framework<br/>
-Azure hosted service: App Service, SQL Database, Storage Account and Application Insights<br/>
+Azure hosted services: App Service, SQL Database, Storage Account and Application Insights<br/>
 Auth using Google as a social provider and API provided JWT<br/>
 Recipes and ingredients from Spoonacular api (thank you) - https://spoonacular.com/food-api<br/>
 Raw ingredient / nutritional Data sourced from the Usda Food database<br/>
