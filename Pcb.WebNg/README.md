@@ -3,10 +3,11 @@
 This project is designed to assist in stocking up your pantry to enable you to create many meals, converting cups to kg etc. Originally intended for school's Food Science programs it has been adapted for the long term planner / provisioner. 
 
 ## Technology used in front end
-Angular 11+<br/>
-Angular Material 10+<br/>
+Angular 12+<br/>
+Angular Material 12+<br/>
 rxjs 6.6.x<br/>
 auth0 JWT<br/>
+Deployed to Github pages<br/>
 
 ## Server side
 API written in .NET 5.0<br/>
@@ -19,15 +20,12 @@ Raw ingredient / nutritional Data sourced from the Usda Food database<br/>
 ## Development server
 Run `ng serve --ssl` for a dev server. Navigate to `https://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Build
+## Build/Deploy
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--configuration production` flag for a production build.<br/>
+deploy to github pages `ng deploy --base-href "https://ianoxwell.github.io/ProVisionCookbook/"`
 
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-
-## Further help
-
-To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
