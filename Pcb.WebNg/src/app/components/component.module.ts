@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { PipesModule } from '@pipes/pipes.module';
 import { IngredientEditFormService } from '@services/ingredient-edit-form.service';
+import { ReferenceService } from '@services/reference.service';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { CompleteMaterialModule } from '../app-material.module';
 import { FormAutocompleteDirective } from '../directives/form-autocomplete.directive';
@@ -95,7 +96,8 @@ import { ToastModule } from './toast/toast.module';
   ],
   providers: [
 	  NutrientTotalValidator,
-	  IngredientEditFormService
+	  IngredientEditFormService,
+	  ReferenceService
   ]
 })
 export class ComponentModule { }

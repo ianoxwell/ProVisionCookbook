@@ -9,6 +9,7 @@ import { ReferenceService } from '@services/reference.service';
 import { StateService } from '@services/state.service';
 import { Observable } from 'rxjs';
 import { debounceTime, map, takeUntil, tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Component({
 	selector: 'app-search-bar',
@@ -17,41 +18,63 @@ import { debounceTime, map, takeUntil, tap } from 'rxjs/operators';
 })
 export class SearchBarComponent extends ComponentBase implements OnInit, OnChanges {
 	searchForm: FormGroup;
-	@Input() filterQuery: RecipeFilterQuery;
-	@Input() dataLength: number;
+	@Input() filterQuery: IRecipeFilterQuery = new RecipeFilterQuery();
+	@Input() dataLength: number = 0;
 	orderRecipesBy = OrderRecipesBy;
 	allergyArray$: Observable<ReferenceItemFull[]>;
 
 	constructor(private fb: FormBuilder, private referenceService: ReferenceService, private stateService: StateService) {
 		super();
-		this.createForm();
+		this.searchForm = this.createForm();
 	}
 
 	ngOnInit() {
-		this.allergyArray$ = this.referenceService.getAllReferences().pipe(
+		this.allergyArray$ = this.getAllergyReferences();
+		this.listenToFormChanges();
+	}
+
+	/**
+	 * Gets array of allergy ReferenceItems.
+	 * @returns Observable of only the used Allergy Warnings.
+	 */
+	getAllergyReferences(): Observable<ReferenceItemFull[]> {
+		return this.referenceService.getAllReferences().pipe(
 			map((allRef: ReferenceAll) => {
 				return allRef.AllergyWarning;
 			}),
 			takeUntil(this.ngUnsubscribe)
 		);
+	}
+
+	/**
+	 * Listens to form changes to trigger changes in the recipe Filter State, debounced for keystrokes.
+	 */
+	listenToFormChanges(): void {
 		this.searchForm.valueChanges
 			.pipe(
 				debounceTime(500),
-				tap((values: RecipeFilterQuery) => {
-					Object.keys(this.searchForm.getRawValue()).forEach(key => {
-						if (values[key]) {
-							this.filterQuery[key] = values[key];
-						}
-					});
-					this.filterQuery.page = 0;
-					console.log('new value', values, this.filterQuery);
-					this.stateService.setRecipeFilterQuery(this.filterQuery);
-				}),
+				tap((values: RecipeFilterQuery) => this.changeRecipeFilterState(values)),
 				takeUntil(this.ngUnsubscribe)
 			)
 			.subscribe();
 	}
 
+	/**
+	 * Updates the filterQuery along with the recipeFilterQuery in stateService.
+	 * @param values from the form change.
+	 */
+	changeRecipeFilterState(values: RecipeFilterQuery): void {
+		Object.keys(this.searchForm.getRawValue()).forEach((key) => {
+			if (values[key]) {
+				this.filterQuery[key] = values[key];
+			}
+		});
+		this.filterQuery.page = 0;
+		console.log('new value', values, this.filterQuery);
+		this.stateService.setRecipeFilterQuery(this.filterQuery);
+	}
+
+	// TODO: change to a getter/setter pattern.
 	ngOnChanges(changes: SimpleChanges): void {
 		if (!!changes.filterQuery && changes.filterQuery.firstChange) {
 			this.patchForm(this.filterQuery);
@@ -70,6 +93,10 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 		this.stateService.setRecipeFilterQuery(this.filterQuery);
 	}
 
+	/**
+	 * Patches the form with external values.
+	 * @param item Any external values to hydrate the form.
+	 */
 	patchForm(item: IRecipeFilterQuery) {
 		if (!item) {
 			item = new RecipeFilterQuery();
@@ -99,8 +126,12 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 		return this.searchForm.get('servingPrice');
 	}
 
-	createForm() {
-		this.searchForm = this.fb.group({
+	/**
+	 * Creates the initial form with blank values.
+	 * @returns the initial blank form.
+	 */
+	createForm(): FormGroup {
+		return this.fb.group({
 			name: '',
 			ingredient: '',
 			author: '',
@@ -113,16 +144,19 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 			cuisineType: [],
 			allergyWarning: [], // { "allergyWarnings": { "$not": { "$all": [allergyWarning] } } }
 			orderby: 'name',
-			perPage: 10,
+			perPage: environment.resultsPerPage,
 			page: 0
 		});
 	}
 
-	clearFilterTerms() {
+	/**
+	 * Triggered from the template - clears out the filter terms and resets the form.
+	 */
+	clearFilterTerms(): void {
 		this.searchForm.reset();
 		this.searchForm.patchValue({
 			orderby: 'name',
-			perPage: 10,
+			perPage: environment.resultsPerPage,
 			page: 0
 		});
 		this.filterQuery = this.searchForm.getRawValue();

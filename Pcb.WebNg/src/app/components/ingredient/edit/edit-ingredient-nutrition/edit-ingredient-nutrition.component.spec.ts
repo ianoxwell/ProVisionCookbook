@@ -1,6 +1,6 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { EditIngredientNutritionComponent } from './edit-ingredient-nutrition.component';
+
 
 describe('EditIngredientNutritionComponent', () => {
 	let component: EditIngredientNutritionComponent;
@@ -13,7 +13,7 @@ describe('EditIngredientNutritionComponent', () => {
 	}));
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(EditCommonMineralsComponent);
+		fixture = TestBed.createComponent(EditIngredientNutritionComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

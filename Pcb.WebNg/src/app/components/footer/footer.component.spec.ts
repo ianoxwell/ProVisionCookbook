@@ -1,6 +1,6 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FooterComponent } from './footer.component';
+
 
 describe('FooterComponent', () => {
 	let component: FooterComponent;
@@ -13,7 +13,7 @@ describe('FooterComponent', () => {
 	}));
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(EditCommonMineralsComponent);
+		fixture = TestBed.createComponent(FooterComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

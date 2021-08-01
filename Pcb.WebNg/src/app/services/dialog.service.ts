@@ -12,7 +12,9 @@ import { ConfirmDialogComponent } from '../dialogs/dialog-confirm/confirm.compon
 import { DialogIngredientMatchComponent } from '../dialogs/dialog-ingredient-match/dialog-ingredient-match.component';
 import { DialogNewIngredientComponent } from '../dialogs/dialog-new-ingredient/dialog-new-ingredient.component';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class DialogService extends ComponentBase {
 	/** Broadcasting variable */
 	private statusUpdate = new BehaviorSubject<StatusUpdate>({

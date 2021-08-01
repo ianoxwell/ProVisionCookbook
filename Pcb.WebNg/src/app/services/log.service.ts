@@ -6,34 +6,31 @@ import { IEventLogDetail, ILogSearchCriteria } from '@models/log.models';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-
-
-
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class LogService {
-	constructor (
-		private http: HttpClient
-	) {}
+	constructor(private http: HttpClient) {}
 
 	/**
 	 * Gets today's results.
 	 */
-	getTodaysLogs( logSearchCriteria: ILogSearchCriteria, sortingCriteria: ISortPageObj): Observable<PagedResult<IEventLogDetail>> {
+	getTodaysLogs(logSearchCriteria: ILogSearchCriteria, sortingCriteria: ISortPageObj): Observable<PagedResult<IEventLogDetail>> {
 		const url = `${environment.apiUrl}${environment.apiVersion}admin/logs`;
-		let params:any = logSearchCriteria;
+		let params: any = logSearchCriteria;
 		if (sortingCriteria) {
 			params = {
 				pageIndex: sortingCriteria.page,
 				pageSize: sortingCriteria.perPage,
 				...params
-			}
+			};
 
 			if (sortingCriteria.orderby && sortingCriteria.order) {
 				params = {
 					sort: sortingCriteria.orderby,
 					order: sortingCriteria.order,
-					... params
-				}
+					...params
+				};
 			}
 		}
 		return this.http.post<PagedResult<IEventLogDetail>>(url, params);

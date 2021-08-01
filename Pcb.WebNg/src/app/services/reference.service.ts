@@ -6,7 +6,9 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { RefDataService } from './ref-data.service';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class ReferenceService {
 	private refAllSubject$ = new BehaviorSubject<ReferenceAll>(null);
 

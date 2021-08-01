@@ -6,7 +6,9 @@ import { ReferenceAll, ReferenceDetail, ReferenceItem, ReferenceItemFull, Refere
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class RefDataService {
 	private defaultHeader = new HttpHeaders()
 		.set('Content-Type', 'application/json;odata=verbose')

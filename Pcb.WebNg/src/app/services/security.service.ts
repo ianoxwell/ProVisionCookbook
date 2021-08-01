@@ -8,7 +8,9 @@ import { environment } from 'src/environments/environment';
 import { LogService } from './log.service';
 import { LoginService } from './login.service';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class SecurityService {
 
 	publicUrlPaths = [] = ['/token/google', '/account/'];

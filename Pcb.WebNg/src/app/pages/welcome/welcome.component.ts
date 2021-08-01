@@ -17,7 +17,6 @@ export class WelcomeComponent implements OnInit {
 
 	ngOnInit() {
 		this.isLoggedIn = this.loginService.isAuthenticated();
-		console.log('route', this.router.url);
 		if (!this.isLoggedIn && this.router.url.indexOf('account') === -1) {
 			this.router.navigate(['/account/login']);
 		}

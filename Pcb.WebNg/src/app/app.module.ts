@@ -11,7 +11,6 @@ import { ComponentModule } from '@components/component.module';
 import { FooterComponent } from '@components/footer/footer.component';
 import { SharedComponentModule } from '@components/shared-component.module';
 import { SiteLogoComponent } from '@components/site-logo/site-logo.component';
-import { FullCalendarModule } from '@fullcalendar/angular';
 import { SvgIconsModule } from '@ngneat/svg-icon';
 import { PipesModule } from '@pipes/pipes.module';
 import { AccountService } from '@services/account.service';
@@ -32,7 +31,6 @@ import { CompleteMaterialModule } from './app-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DialogModule } from './dialogs/dialogs.module';
-import { CalendarComponent } from './pages/calendar/calendar.component';
 import { HomeDashboardComponent } from './pages/home/home-dashboard/home-dashboard.component';
 import { HomeComponent } from './pages/home/home.component';
 import { IngredientsComponent } from './pages/ingredients/ingredients.component';
@@ -51,7 +49,6 @@ import { UserProfileService } from './services/user-profile.service';
 		AppComponent,
 		FavouritesComponent,
 		RecipesComponent,
-		CalendarComponent,
 		ShoppingComponent,
 		IngredientsComponent,
 		UserSettingsComponent,
@@ -62,7 +59,7 @@ import { UserProfileService } from './services/user-profile.service';
 		WelcomeComponent,
 		AutoCompleteSearchComponent,
 		SiteLogoComponent,
-		FooterComponent,
+		FooterComponent
 	],
 	imports: [
 		BrowserModule,
@@ -78,7 +75,6 @@ import { UserProfileService } from './services/user-profile.service';
 		DialogModule,
 		PipesModule,
 		SharedComponentModule,
-		FullCalendarModule,
 		NgxMaterialTimepickerModule,
 		NgxMaterialTimepickerModule.setLocale('en-au'),
 		SocialLoginModule,

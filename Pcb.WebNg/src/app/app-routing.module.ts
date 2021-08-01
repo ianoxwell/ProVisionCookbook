@@ -2,7 +2,6 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
-import { CalendarComponent } from './pages/calendar/calendar.component';
 import { HomeComponent } from './pages/home/home.component';
 import { IngredientsComponent } from './pages/ingredients/ingredients.component';
 import { MainComponent } from './pages/main/main.component';
@@ -38,26 +37,6 @@ const routes: Routes = [
 				path: '',
 				component: HomeComponent,
 				data: { title: `Provisioner's Cookbook` }
-			},
-			{
-				path: 'calendar/:calView/:calDate/:room',
-				component: CalendarComponent,
-				data: { title: `Book Recipe` }
-			},
-			{
-				path: 'calendar/:calView/:calDate',
-				component: CalendarComponent,
-				data: { title: `Book Recipe` }
-			},
-			{
-				path: 'calendar/:calView',
-				component: CalendarComponent,
-				data: { title: `Book Recipe` }
-			},
-			{
-				path: 'calendar',
-				component: CalendarComponent,
-				data: { title: `Book Recipe` }
 			},
 			{
 				path: 'ingredients',
