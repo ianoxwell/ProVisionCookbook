@@ -19,8 +19,8 @@ namespace Pcb.Security.Data
     /// <inheritdoc cref="ISecurityDataRepository" />
     internal class SecurityDataRepository : ISecurityDataRepository
     {
-        private IPcbConfiguration Configuration;
-        private ILogger<PcbSecurityService> Logger;
+        private readonly IPcbConfiguration Configuration;
+        private readonly ILogger<PcbSecurityService> Logger;
 
         /// <inheritdoc cref="ISecurityDataRepository" />
         public SecurityDataRepository(IPcbConfiguration configuration, ILogger<PcbSecurityService> logger)
