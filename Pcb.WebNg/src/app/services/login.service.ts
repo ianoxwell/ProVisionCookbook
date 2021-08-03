@@ -9,7 +9,7 @@ import { SocialAuthService, SocialUser } from 'angularx-social-login';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, distinctUntilChanged, filter, first, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { StorageService } from './storage';
+import { StorageService } from './storage.service';
 import { UserProfileService } from './user-profile.service';
 
 @Injectable({

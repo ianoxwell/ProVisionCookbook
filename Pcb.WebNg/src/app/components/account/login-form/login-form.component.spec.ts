@@ -15,7 +15,7 @@ import { SaveButtonComponent } from '@components/save-button/save-button.compone
 import { SvgIconComponent } from '@ngneat/svg-icon';
 import { LoginService } from '@services/login.service';
 import { MessageService } from '@services/message.service';
-import { StorageService } from '@services/storage';
+import { StorageService } from '@services/storage.service';
 import { autoSpy, Spy } from '@tests/auto-spy';
 import { SocialAuthService } from 'angularx-social-login';
 import { MockComponents } from 'ng-mocks';

@@ -15,7 +15,7 @@ import { autoSpy, Spy } from '@tests/auto-spy';
 import { of, Subject } from 'rxjs';
 import { ResetPasswordFormComponent } from './reset-password-form.component';
 
-fdescribe('ResetPasswordFormComponent', () => {
+describe('ResetPasswordFormComponent', () => {
 	let component: ResetPasswordFormComponent;
 	let fixture: ComponentFixture<ResetPasswordFormComponent>;
 

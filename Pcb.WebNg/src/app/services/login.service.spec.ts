@@ -4,7 +4,7 @@ import { autoSpy, Spy } from '@tests/auto-spy';
 import { SocialAuthService } from 'angularx-social-login';
 import { of } from 'rxjs';
 import { LoginService } from './login.service';
-import { StorageService } from './storage';
+import { StorageService } from './storage.service';
 import { UserProfileService } from './user-profile.service';
 
 describe('LoginService', () => {

@@ -22,7 +22,7 @@ import { ReferenceService } from '@services/reference.service';
 import { RestIngredientService } from '@services/rest-ingredient.service';
 import { SecurityService } from '@services/security.service';
 import { StateService } from '@services/state.service';
-import { StorageService } from '@services/storage';
+import { StorageService } from '@services/storage.service';
 import { UserService } from '@services/user.service';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';

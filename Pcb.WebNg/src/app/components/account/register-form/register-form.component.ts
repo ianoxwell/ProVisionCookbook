@@ -10,6 +10,7 @@ import { ValidationMessages } from '@models/static-variables';
 import { AccountService } from '@services/account.service';
 import { LoginService } from '@services/login.service';
 import { MessageService } from '@services/message.service';
+import { StorageService } from '@services/storage.service';
 import { SocialUser } from 'angularx-social-login';
 import { of } from 'rxjs';
 import { catchError, filter, first, switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -33,14 +34,16 @@ export class RegisterFormComponent extends ComponentBase implements OnInit {
 		private accountService: AccountService,
 		private loginService: LoginService,
 		private messageService: MessageService,
+		private storageService: StorageService,
 		private router: Router,
 	) { super(); }
 
 
 
-	ngOnInit() {
-		if (!!localStorage.getItem('google-user')){
-			const gUser: SocialUser = JSON.parse(localStorage.getItem('google-user'));
+	ngOnInit(): void {
+		const googleUser: string = this.storageService.getItem('google-user');
+		if (!!googleUser){
+			const gUser: SocialUser = JSON.parse(googleUser);
 			this.newUser = (!!gUser && gUser !== null) ? {
 				firstName: gUser.firstName,
 				lastName: gUser.lastName,

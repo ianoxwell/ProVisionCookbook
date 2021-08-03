@@ -8,7 +8,7 @@ import { PageTitleComponent } from '@components/page-title/page-title.component'
 import { SiteLogoComponent } from '@components/site-logo/site-logo.component';
 import { ToastComponent } from '@components/toast/toast.component';
 import { LoginService } from '@services/login.service';
-import { StorageService } from '@services/storage';
+import { StorageService } from '@services/storage.service';
 import { SocialAuthService } from 'angularx-social-login';
 import { autoSpy, Spy } from 'autospy';
 import { MockComponents } from 'ng-mocks';
