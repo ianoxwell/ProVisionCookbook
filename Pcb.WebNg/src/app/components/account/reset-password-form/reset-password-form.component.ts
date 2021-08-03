@@ -1,33 +1,29 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentBase } from '@components/base/base.component.base';
+import { TokenStatus } from '@models/common.enum';
 import { MessageResult } from '@models/common.model';
 import { MessageStatus } from '@models/message.model';
 import { ValidationMessages } from '@models/static-variables';
 import { AccountService } from '@services/account.service';
 import { MessageService } from '@services/message.service';
-import { of } from 'rxjs';
-import { catchError, first, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, first, map, tap } from 'rxjs/operators';
 
-enum TokenStatus {
-	Validating,
-	Valid,
-	Invalid
-}
 @Component({
-  selector: 'app-reset-password-form',
-  templateUrl: './reset-password-form.component.html',
-  styleUrls: ['./reset-password-form.component.scss']
+	selector: 'app-reset-password-form',
+	templateUrl: './reset-password-form.component.html',
+	styleUrls: ['./reset-password-form.component.scss']
 })
 export class ResetPasswordFormComponent extends ComponentBase implements OnInit {
 	form: FormGroup;
 	validationMessages = ValidationMessages;
 
 	TokenStatus = TokenStatus;
-	tokenStatus = TokenStatus.Validating;
-	token = null;
+	currentTokenStatus: Observable<TokenStatus> = of(TokenStatus.Validating);
+	token: string | undefined;
 	isSubmitting = false;
 	isLoading = false;
 
@@ -37,99 +33,127 @@ export class ResetPasswordFormComponent extends ComponentBase implements OnInit 
 		private router: Router,
 		private accountService: AccountService,
 		private messageService: MessageService
-	) { super(); }
+	) {
+		super();
+	}
 
-	ngOnInit() {
+	ngOnInit(): void {
 		this.form = this.createForm();
+
 		// tslint:disable-next-line: no-string-literal
-		const token = this.route.snapshot.queryParams['token'];
+		this.token = this.route.snapshot.queryParams['token'];
 
 		// remove token from url to prevent http referer leakage
 		this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
 
-		if (token === undefined) {
-			this.tokenStatus = TokenStatus.Invalid;
-		} else {
-			this.accountService.validateResetToken(token).pipe(
-				first(),
-				tap((result: MessageResult) => {
-					if (result.message === 'Invalid Token') {
-						this.messageService.add({
-							severity: MessageStatus.Error,
-							summary: 'Invalid Token',
-							detail: 'Please obtain a new password reset token.',
-							life: 8000
-						});
-						this.tokenStatus = TokenStatus.Invalid;
-					} else {
-						this.token = token;
-						this.tokenStatus = TokenStatus.Valid;
-					}
+		this.currentTokenStatus = this.resolveTokenStatus();
+	}
 
-					console.log('returned result', result, this.tokenStatus);
-				}),
-				catchError((err: HttpErrorResponse) => {
-					this.tokenStatus = TokenStatus.Invalid;
-					this.messageService.add({
-						severity: MessageStatus.Error,
-						summary: 'Reset Token Error',
-						detail: 'The server did not receive a correctly formatted token.',
-						life: 8000
-					});
-					return of();
-				})
-			).subscribe();
+	/**
+	 * resolves the token status from the token in the queryParam
+	 * @returns observable of the tokenStatus.
+	 */
+	resolveTokenStatus(): Observable<TokenStatus> {
+		return this.token === undefined
+			? of(TokenStatus.Invalid)
+			: this.accountService.validateResetToken(this.token).pipe(
+					first(),
+					map((result: MessageResult) => this.validateResetTokenResult(result)),
+					catchError((err: HttpErrorResponse) =>
+						this.catchErrorMessage('Reset Token Error', 'The server did not receive a correctly formatted token.')
+					)
+			  );
+	}
+
+	/**
+	 *
+	 * @param result
+	 * @param token string reset token
+	 */
+	validateResetTokenResult(result: MessageResult): TokenStatus {
+		if (result.message === 'Invalid Token') {
+			this.messageService.add({
+				severity: MessageStatus.Error,
+				summary: 'Invalid Token',
+				detail: 'Please obtain a new password reset token.',
+				life: 8000
+			});
+			return TokenStatus.Invalid;
+		} else {
+			return TokenStatus.Valid;
 		}
 	}
 
-  	get f() { return this.form.controls; }
+	get fPassword(): FormControl {
+		return this.form.get('password') as FormControl;
+	}
+
+	/**
+	 * Creates form.
+	 * @returns FormGroup for password required.
+	 */
 	createForm(): FormGroup {
 		// Create the controls for the reactive forms
 		return this.fb.group({
-			password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(120)]]
+			password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]]
 		});
 	}
 
+	/**
+	 * Triggers the password reset pathway.
+	 */
 	resetPassword(): void {
 		if (this.form.invalid) {
 			return;
 		}
 		this.isSubmitting = true;
-		this.accountService.resetPassword(this.token, this.f.password.value, this.f.password.value).pipe(
-			first(),
-			tap((result: MessageResult) => {
-				console.log('Message result from reset password attempt', result);
-				if (result.message === 'Success') {
-					this.messageService.add({
-						severity: MessageStatus.Success,
-						summary: 'Password reset',
-						detail: 'Password reset you can now login with your new password.',
-						life: 8000
-					});
-					this.router.navigate(['/account/login']);
-				} else {
-					this.messageService.add({
-						severity: MessageStatus.Warning,
-						summary: 'Password reset failed',
-						detail: result.message,
-						life: 8000
-					});
-					this.tokenStatus = TokenStatus.Invalid;
-				}
-			}),
-			catchError((err: HttpErrorResponse) => {
-				this.tokenStatus = TokenStatus.Invalid;
-				this.messageService.add({
-					severity: MessageStatus.Error,
-					summary: 'Password reset Error',
-					detail: err.message,
-					life: 8000
-				});
-				return of();
-			})
-		).subscribe(() => {
-			this.isSubmitting = false;
-		});
+		this.accountService
+			.resetPassword(this.token, this.fPassword.value, this.fPassword.value)
+			.pipe(
+				first(),
+				tap((result: MessageResult) => this.resetPasswordResult(result)),
+				catchError((err: HttpErrorResponse) => this.catchErrorMessage('Password reset Error', err.message))
+			)
+			.subscribe();
 	}
 
+	/**
+	 * Processes the result of the password reset.
+	 * @param result returned MessageResult from the resetPassword api endpoint.
+	 */
+	resetPasswordResult(result: MessageResult): void {
+		this.isSubmitting = false;
+		if (result.message === 'Success') {
+			this.messageService.add({
+				severity: MessageStatus.Success,
+				summary: 'Password reset',
+				detail: 'Password reset you can now login with your new password.',
+				life: 8000
+			});
+			this.router.navigate(['/account/login']);
+		} else {
+			this.messageService.add({
+				severity: MessageStatus.Warning,
+				summary: 'Password reset failed',
+				detail: result.message,
+				life: 8000
+			});
+		}
+	}
+
+	/**
+	 * Generic catch Error message.
+	 * @param summary string for the summary in the message.
+	 * @param detail detail in the message.
+	 * @returns observable of the Token Status - in this case invalid.
+	 */
+	catchErrorMessage(summary: string, detail: string): Observable<TokenStatus> {
+		this.messageService.add({
+			severity: MessageStatus.Error,
+			summary,
+			detail,
+			life: 8000
+		});
+		return of(TokenStatus.Invalid);
+	}
 }
