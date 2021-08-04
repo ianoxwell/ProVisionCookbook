@@ -7,6 +7,7 @@ import { HttpStatusCode } from '@models/security.models';
 import { DialogService } from '@services/dialog.service';
 import { LoginService } from '@services/login.service';
 import { MessageService } from '@services/message.service';
+import { StorageService } from '@services/storage.service';
 // import { AuthenticationService } from '../../services/authentication.service';
 import { SocialAuthService, SocialUser } from 'angularx-social-login';
 import { of } from 'rxjs';
@@ -27,17 +28,21 @@ export class LoginComponent extends ComponentBase implements OnInit {
 		private dialogService: DialogService,
 		private loginService: LoginService,
 		private router: Router,
-		private messageService: MessageService
+		private messageService: MessageService,
+		private storageService: StorageService
 	) {
 		super();
 	}
 
-	ngOnInit() {
-		if (localStorage.getItem('google-user')) {
+	ngOnInit(): void {
+		const gUser: string = this.storageService.getItem('google-user');
+		// if GoogleJwtToken checks out then we proceed to authenticate.
+		if (!!gUser && gUser.length > 0 && gUser !== 'null') {
 			// attempt to verify the token against the api
-			this.getGoogleJwtToken();
+			this.getGoogleJwtToken(gUser);
+		} else {
+			this.listenAuthState();
 		}
-		this.listenAuthState();
 	}
 
 	/** Listens to the authService for the Social AuthService from angularx-social-login */
@@ -50,37 +55,39 @@ export class LoginComponent extends ComponentBase implements OnInit {
 						summary: 'Authentication Successful',
 						detail: 'Google Account Authenticated, attempting to logon to app.'
 					});
-					if (user) {
+					if (!!user) {
 						this.googleUserData = user;
-						localStorage.setItem('google-user', JSON.stringify(this.googleUserData));
-						JSON.parse(localStorage.getItem('user'));
-						this.getGoogleJwtToken();
+						this.storageService.setItem('google-user', JSON.stringify(this.googleUserData));
+						JSON.parse(this.storageService.getItem('user'));
+						this.getGoogleJwtToken(this.googleUserData);
 					} else {
 						localStorage.setItem('google-user', null);
 					}
 
 					this.loggedIn = user != null;
 				}),
-				catchError((err: HttpErrorResponse) => this.dialogService.alert('Error on Google login attempt', err)),
+				catchError((err: HttpErrorResponse) =>
+					this.dialogService.confirm(MessageStatus.Alert, 'Error on Google login attempt', err.message)
+				),
 				takeUntil(this.ngUnsubscribe)
 			)
 			.subscribe();
 	}
 
 	/** Gets the JWT from the API using the Google Token for authentication. */
-	getGoogleJwtToken(): void {
+	getGoogleJwtToken(gUser: SocialUser | string): void {
 		this.isGettingJwt = true;
 		this.loginService
-			.getTokenUsingGoogleToken(JSON.parse(localStorage.getItem('google-user')))
+			.getTokenUsingGoogleToken(gUser)
 			.pipe(
 				tap((response: boolean | string) => {
 					this.isGettingJwt = false;
 					if (!!response && typeof response === 'string') {
-						this.messageService.add({
-							severity: MessageStatus.Information,
-							summary: 'Registration required',
-							detail: `We currently don't have an account registered to that address.`
-						});
+						this.dialogService.confirm(
+							MessageStatus.Information,
+							'Registration required',
+							`We currently don't have an account registered to that address.`
+						);
 						this.router.navigate(['/account/register']);
 					} else {
 						this.router.navigate(['/savoury/recipes']);
@@ -88,13 +95,14 @@ export class LoginComponent extends ComponentBase implements OnInit {
 				}),
 				catchError((err: HttpErrorResponse) => {
 					if (err.status === HttpStatusCode.Forbidden && err.statusText === 'OK') {
-						this.dialogService.alert(
+						this.dialogService.confirm(
+							MessageStatus.Alert,
 							'403 response',
 							'Likely the cached google token has expired, try refreshing browser and logging in with your Google account again.'
 						);
 						this.googleClear();
 					}
-					this.dialogService.alert('Login Error', err.message);
+					this.dialogService.alert('Google Login Error', err.message);
 					this.isGettingJwt = false;
 					return of();
 				}),

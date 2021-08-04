@@ -146,13 +146,43 @@ export class LoginService {
 		this.refreshSession();
 	}
 
-	public getTokenUsingGoogleToken(googleUser: SocialUser): Observable<boolean | string> {
+	/**
+	 * Quick try parse string to JSON.
+	 * @param str to check.
+	 * @returns try if able to parse the string.
+	 */
+	private isJsonString(str: string): boolean {
+		try {
+			JSON.parse(str);
+		} catch (e) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Uses the Google User JWK as authorisation to attempt to sign username onto app.
+	 * @param googleUser can be SocialUser or string to parse (from the localStorage)
+	 * @returns boolean if successful or string message of 'register' if fail.
+	 */
+	getTokenUsingGoogleToken(googleUser: SocialUser | string): Observable<boolean | string> {
+		// check for string or Social User. Parse and cast to SocialUser.
+		let gUser: SocialUser;
+		if (typeof googleUser === 'string') {
+			if (!this.isJsonString(googleUser)) {
+				return of(false);
+			} else {
+				gUser = JSON.parse(googleUser) as SocialUser;
+			}
+		} else {
+			gUser = googleUser;
+		}
 		let googleSignInUrl = `${environment.apiUrl}/token/google`;
 		let newHeaders = new HttpHeaders();
 		newHeaders = newHeaders.append('Content-Type', 'application/json');
-		if (googleUser != null) {
-			newHeaders = newHeaders.append('Authorization', 'Bearer ' + googleUser.idToken);
-			googleSignInUrl += `?email=${googleUser.email}`;
+		if (googleUser !== null) {
+			newHeaders = newHeaders.append('Authorization', 'Bearer ' + gUser.idToken);
+			googleSignInUrl += `?email=${gUser.email}`;
 		}
 		return this.http.get<IResponseToken>(googleSignInUrl, { headers: newHeaders }).pipe(
 			map((response: any) => {
