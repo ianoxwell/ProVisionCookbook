@@ -21,7 +21,7 @@ describe('LoginComponent', () => {
 
 	const messageServiceSpy: Spy<MessageService> = autoSpy(MessageService);
 	const dialogServiceSpy: Spy<DialogService> = autoSpy(DialogService);
-	const socialAuthSpy: Spy<SocialAuthService> = jasmine.createSpyObj('SocialAuthService', ['authState']);
+	const socialAuthSpy: Spy<SocialAuthService> = autoSpy(SocialAuthService);
 	const loginServiceSpy: Spy<LoginService> = autoSpy(LoginService);
 	const storageServiceSpy: Spy<StorageService> = autoSpy(StorageService);
 
