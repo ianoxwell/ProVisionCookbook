@@ -18,7 +18,7 @@ import { MockComponent } from 'ng-mocks';
 import { RegisterFormComponent } from './register-form.component';
 
 
-fdescribe('RegisterFormComponent', () => {
+describe('RegisterFormComponent', () => {
 	let component: RegisterFormComponent;
 	let fixture: ComponentFixture<RegisterFormComponent>;
 
