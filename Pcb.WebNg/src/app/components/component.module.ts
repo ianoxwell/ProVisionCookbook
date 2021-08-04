@@ -13,8 +13,6 @@ import { MatInputAutoCompleteDirective } from '../directives/mat-input-autocompl
 import { ScriptsComponent } from '../settings/scripts/scripts.component';
 import { NutrientTotalValidator } from '../validators/nutrient-total.validator';
 import { AppHeaderComponent } from './app-header/app-header.component';
-import { DragNDropComponent } from './drag-ndrop/drag-ndrop.component';
-import { DynamicErrorsComponent } from './dynamic-errors/dynamic-errors.component';
 import { GraphDoughnutComponent } from './graph-doughnut/graph-doughnut.component';
 import { IconTextComponent } from './icon-text/icon-text.component';
 import { EditCommonMineralsComponent } from './ingredient/edit/edit-common-minerals/edit-common-minerals.component';
@@ -51,13 +49,11 @@ import { ToastModule } from './toast/toast.module';
 	ToastModule
   ],
   declarations: [
-	DragNDropComponent,
 	SearchBarComponent,
 	RecipeCardComponent,
 	RecipeViewComponent,
 	ScriptsComponent,
 	AppHeaderComponent,
-	DynamicErrorsComponent,
 	IngredientEditComponent,
 	IngredientFilterComponent,
 	IconTextComponent,
@@ -76,13 +72,11 @@ import { ToastModule } from './toast/toast.module';
 	PaginatorComponent,
   ],
   exports: [
-	DragNDropComponent,
 	SearchBarComponent,
 	RecipeCardComponent,
 	RecipeViewComponent,
 	ScriptsComponent,
 	AppHeaderComponent,
-	DynamicErrorsComponent,
 	IngredientEditComponent,
 	IngredientFilterComponent,
 	IconTextComponent,
