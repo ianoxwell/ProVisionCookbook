@@ -1,4 +1,3 @@
-/* tslint:disable:no-unused-variable */
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
@@ -11,7 +10,7 @@ import { autoSpy, Spy } from '@tests/auto-spy';
 import { Subject } from 'rxjs';
 import { VerifyEmailComponent } from './verify-email.component';
 
-fdescribe('VerifyEmailComponent', () => {
+describe('VerifyEmailComponent', () => {
 	let component: VerifyEmailComponent;
 	let fixture: ComponentFixture<VerifyEmailComponent>;
 

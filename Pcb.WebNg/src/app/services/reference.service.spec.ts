@@ -1,6 +1,6 @@
-/* tslint:disable:no-unused-variable */
 
-import { TestBed, waitForAsync, inject } from '@angular/core/testing';
+
+import { inject, TestBed } from '@angular/core/testing';
 import { ReferenceService } from './reference.service';
 
 	describe('Service: Reference', () => {
