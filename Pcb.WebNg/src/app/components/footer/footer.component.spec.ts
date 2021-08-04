@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material/icon';
 import { FooterComponent } from './footer.component';
 
 
@@ -8,6 +9,7 @@ describe('FooterComponent', () => {
 
 	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
+			imports: [MatIconModule],
 			declarations: [ FooterComponent ]
 		}).compileComponents();
 	}));
