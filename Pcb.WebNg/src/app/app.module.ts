@@ -11,7 +11,6 @@ import { ComponentModule } from '@components/component.module';
 import { FooterComponent } from '@components/footer/footer.component';
 import { SharedComponentModule } from '@components/shared-component.module';
 import { SiteLogoComponent } from '@components/site-logo/site-logo.component';
-import { SvgIconsModule } from '@ngneat/svg-icon';
 import { PipesModule } from '@pipes/pipes.module';
 import { AccountService } from '@services/account.service';
 import { LogService } from '@services/log.service';
@@ -26,7 +25,6 @@ import { StorageService } from '@services/storage.service';
 import { UserService } from '@services/user.service';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import icons from '../assets/svg/svg-icons';
 import { CompleteMaterialModule } from './app-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -78,10 +76,6 @@ import { UserProfileService } from './services/user-profile.service';
 		NgxMaterialTimepickerModule,
 		NgxMaterialTimepickerModule.setLocale('en-au'),
 		SocialLoginModule,
-		// https://netbasal.com/elegantly-manage-svg-icons-in-angular-applications-5adde68a5c46
-		SvgIconsModule.forRoot({
-			icons
-		})
 	],
 	providers: [
 		{ provide: MAT_DATE_LOCALE, useValue: 'en-AU' },

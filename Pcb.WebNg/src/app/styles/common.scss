@@ -136,6 +136,10 @@ b {
 	border-left: 2px $accent solid;
 }
 
+.svg-icon {
+	width: $title;
+}
+
 .recipe-filter-paginator {
 	.mat-paginator-outer-container {
 		.mat-paginator-container {

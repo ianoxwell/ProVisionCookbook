@@ -12,7 +12,6 @@ import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SaveButtonComponent } from '@components/save-button/save-button.component';
-import { SvgIconComponent } from '@ngneat/svg-icon';
 import { LoginService } from '@services/login.service';
 import { MessageService } from '@services/message.service';
 import { StorageService } from '@services/storage.service';
@@ -53,7 +52,7 @@ describe('LoginFormComponent', () => {
 				MatButtonModule,
 				NoopAnimationsModule,
 			],
-			declarations: [LoginFormComponent, MockComponents(SaveButtonComponent, SvgIconComponent)],
+			declarations: [LoginFormComponent, MockComponents(SaveButtonComponent)],
 			providers: [
 				{ provide: LoginService, userValue: loginServiceSpy },
 				{ provide: StorageService, useValue: storageServiceSpy },
