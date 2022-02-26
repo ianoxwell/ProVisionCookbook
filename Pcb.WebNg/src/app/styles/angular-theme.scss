@@ -2,6 +2,7 @@
 * Generated theme by Material Theme Generator
 * https://materialtheme.arcsine.dev
 */
+@use '~@angular/material' as mat;
 
 @import '~@angular/material/theming';
 // Include the common styles for Angular Material. We include this here so that you only
@@ -13,19 +14,19 @@
 @import './variables.scss';
      
 $fontConfig: (
-  display-4: mat-typography-level(112px, 112px, 300, 'Roboto', -0.0134em),
-  display-3: mat-typography-level(56px, 56px, 400, 'Roboto', -0.0089em),
-  display-2: mat-typography-level(45px, 48px, 400, 'Roboto', 0.0000em),
-  display-1: mat-typography-level(34px, 40px, 400, 'Roboto', 0.0074em),
-  headline: mat-typography-level(28px, 36px, 400, 'Roboto', 0.0000em),
-  title: mat-typography-level($title, $title * 1.3, 500, 'Roboto', 0.0075em),
-  subheading-2: mat-typography-level($subheading-2, $subheading-2 * 1.3, 400, 'Roboto', -0.0094em),
-  subheading-1: mat-typography-level($subheading-1, $subheading-1 * 1.3, 500, 'Roboto', 0.0067em),
-  body-2: mat-typography-level($body-2, $body-2 * 1.2, 400, 'Roboto', 0.0179em),
-  body-1: mat-typography-level($body-1, $body-1 * 1.25, 300, 'Roboto', 0.0179em),
-  button: mat-typography-level($button, $button * 1.2, 500, 'Roboto', 0.0893em),
-  caption: mat-typography-level($caption, $caption * 1.2, 400, 'Roboto', 0.0333em),
-  input: mat-typography-level($input, 1.125, 400, 'Roboto', 1.5px)
+  display-4: mat.define-typography-level(112px, 112px, 300, 'Roboto', -0.0134em),
+  display-3: mat.define-typography-level(56px, 56px, 400, 'Roboto', -0.0089em),
+  display-2: mat.define-typography-level(45px, 48px, 400, 'Roboto', 0.0000em),
+  display-1: mat.define-typography-level(34px, 40px, 400, 'Roboto', 0.0074em),
+  headline: mat.define-typography-level(28px, 36px, 400, 'Roboto', 0.0000em),
+  title: mat.define-typography-level($title, $title * 1.3, 500, 'Roboto', 0.0075em),
+  subheading-2: mat.define-typography-level($subheading-2, $subheading-2 * 1.3, 400, 'Roboto', -0.0094em),
+  subheading-1: mat.define-typography-level($subheading-1, $subheading-1 * 1.3, 500, 'Roboto', 0.0067em),
+  body-2: mat.define-typography-level($body-2, $body-2 * 1.2, 400, 'Roboto', 0.0179em),
+  body-1: mat.define-typography-level($body-1, $body-1 * 1.25, 300, 'Roboto', 0.0179em),
+  button: mat.define-typography-level($button, $button * 1.2, 500, 'Roboto', 0.0893em),
+  caption: mat.define-typography-level($caption, $caption * 1.2, 400, 'Roboto', 0.0333em),
+  input: mat.define-typography-level($input, 1.125, 400, 'Roboto', 1.5px)
 );
 
 // Foreground Elements
@@ -38,7 +39,7 @@ $dark-disabled-text: rgba($dark-primary-text, 0.38);
 $dark-dividers: rgba($dark-primary-text, 0.12);
 $dark-focused: rgba($dark-primary-text, 0.12);
 
-$mat-light-theme-foreground: (
+mat.$light-theme-foreground-palette: (
   base:              black,
   divider:           $dark-dividers,
   dividers:          $dark-dividers,
@@ -64,7 +65,7 @@ $light-disabled-text: rgba($light-primary-text, 0.5);
 $light-dividers: rgba($light-primary-text, 0.12);
 $light-focused: rgba($light-primary-text, 0.12);
 
-$mat-dark-theme-foreground: (
+mat.$dark-theme-foreground-palette: (
   base:              $light-text,
   divider:           $light-dividers,
   dividers:          $light-dividers,
@@ -122,7 +123,7 @@ $light-bg-alpha-4:    rgba(#fafafa, 0.04);
 $light-bg-alpha-12:   rgba(#fafafa, 0.12);
 
 // Background palette for dark themes.
-$mat-dark-theme-background: (
+mat.$dark-theme-background-palette: (
   background:               $dark-background,
   status-bar:               $dark-bg-lighter-20,
   app-bar:                  $dark-bg-lighter-5,
@@ -141,7 +142,7 @@ $mat-dark-theme-background: (
 );
 
 // Compute font config
-@include mat-core($fontConfig);
+@include mat.core($fontConfig);
 
 
 
@@ -166,7 +167,7 @@ $mat-primary: (
     darker: $dark-primary-text,
   )
 );
-$theme-primary: mat-palette($mat-primary, main, lighter, darker);
+$theme-primary: mat.define-palette($mat-primary, main, lighter, darker);
 
 body {
   --accent-color: $accent;
@@ -188,7 +189,7 @@ $mat-accent: (
     darker: $dark-primary-text,
   )
 );
-$theme-accent: mat-palette($mat-accent, main, lighter, darker);
+$theme-accent: mat.define-palette($mat-accent, main, lighter, darker);
 
 body {
   --warn-color: $warn;
@@ -210,13 +211,13 @@ $mat-warn: (
     darker: $light-primary-text,
   )
 );
-$theme-warn: mat-palette($mat-warn, main, lighter, darker);;
+$theme-warn: mat.define-palette($mat-warn, main, lighter, darker);;
 
-$theme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
-$altTheme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
+$theme: mat.define-dark-theme($theme-primary, $theme-accent, $theme-warn);
+$altTheme: mat.define-light-theme($theme-primary, $theme-accent, $theme-warn);
 
 // Theme Init
-@include angular-material-theme($theme);
+@include mat.all-component-themes($theme);
 
 // .theme-alternate {
 //   @include angular-material-theme($altTheme);
