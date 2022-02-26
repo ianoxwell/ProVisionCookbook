@@ -2572,7 +2572,7 @@ namespace Pcb.Database.Migrations
                             IsStudent = false,
                             LastFailedLoginAttempt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PasswordHash = "$2a$11$.r1Q7AiDDwi4g1Y1UKB9z.owhasfYN.yj3K6QpuzxZdGzNt84FYf.",
+                            PasswordHash = "$2a$11$c/nDkFT9M.hHuYafrMRqKuDhJLsl5B20F.Re4IYQgQtWj.Zxuiy0C",
                             TimesLoggedIn = 0,
                             Username = "admin",
                             Verified = new DateTime(2018, 10, 10, 10, 10, 0, 0, DateTimeKind.Unspecified)
