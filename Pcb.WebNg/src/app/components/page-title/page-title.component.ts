@@ -13,11 +13,12 @@ export class PageTitleComponent implements OnInit {
 	pageSymbol$: Observable<string>;
 	isLoginPage = false;
 
-	constructor(private pageTitleService: PageTitleService, private router: Router) {}
-
-	ngOnInit() {
+	constructor(private pageTitleService: PageTitleService, private router: Router) {
 		this.pageTitle$ = this.pageTitleService.pageTitle$;
 		this.pageSymbol$ = this.pageTitleService.pageSymbol$;
+	}
+
+	ngOnInit() {
 		const currentUrl: string = this.router.url;
 		this.isLoginPage = currentUrl.includes('account') || this.router.url === '/';
 	}

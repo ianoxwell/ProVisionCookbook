@@ -28,7 +28,7 @@
 						<span class="mr-1">{{englishIngredientItem(item)}}</span>
 						<!-- <span class="mr-1">{{item.unit}} -</span> -->
 						<span><a [routerLink]="[routerLinkURL(item)]">{{item.ingredientId}}</a></span>
-						<span *ngIf="item.allergies?.length > 0">          
+						<span *ngIf="item.allergies?.length">          
 							<mat-icon class="text-warning">warning</mat-icon>
 						</span>
 					</mat-list-item>
@@ -37,7 +37,7 @@
 		</section>
 		<!-- Image and favourites  -->
 		<div class="w-50">
-			<img *ngIf="!!selectedRecipe.recipePictures[0]" [src]="selectedRecipe.recipePictures[0].fileLink" [alt]="selectedRecipe.recipePictures[0].title" class="w-full"/>
+			<img *ngIf="!!selectedRecipe.recipePictures" [src]="selectedRecipe.recipePictures[0].fileLink" [alt]="selectedRecipe.recipePictures[0].title" class="w-full"/>
 			<div class="flex-box flex-row flex-justify-center">
 				<app-icon-text icon="star" [text]="selectedRecipe.numberStars + ' - (' + selectedRecipe.numberReviews + ') Rate it'" titleText="Number Servings"></app-icon-text>
 				<app-icon-text icon="favorite" [text]="selectedRecipe.numberFavourites + ' Favourites'" titleText="Favourites"></app-icon-text>
@@ -51,7 +51,7 @@
 					<span class="pr-1">{{selectedRecipe.cookTime || 0}} Cook</span>
 					<span>{{selectedRecipe.readyInMinutes || 0}} Ready in</span>
 				</span>
-				<ng-template *ngIf="selectedRecipe.allergyWarnings.length > 0">
+				<ng-template *ngIf="selectedRecipe.allergyWarnings?.length">
 					<span *ngFor="let allergy of selectedRecipe.allergyWarnings">
 						{{allergy}}
 					</span>
@@ -65,7 +65,7 @@
 	</section>
 
 	<!-- Allergy Alerts -->
-	<div *ngIf="selectedRecipe.allergyWarnings.length > 0">
+	<div *ngIf="selectedRecipe.allergyWarnings?.length">
 		<h4>Allergy Warnings</h4>
 		<span *ngFor="let warning of selectedRecipe.allergyWarnings">{{warning}}</span>
 	</div>

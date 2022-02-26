@@ -1,12 +1,12 @@
 import { SocialUser } from 'angularx-social-login';
 
-export class NewUser {
+export interface NewUser {
 	firstName: string;
 	lastName: string;
 	email: string;
 	password?: string;
 	photoUrl?: string;
-	loginProvider = 'Local';
+	loginProvider: 'Local' | 'Social';
 	loginProviderId?: string;
 	verified: Date;
 }

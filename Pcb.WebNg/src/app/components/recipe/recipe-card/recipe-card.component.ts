@@ -7,7 +7,7 @@ import { Recipe } from '@models/recipe.model';
 	styleUrls: ['./recipe-card.component.scss']
 })
 export class RecipeCardComponent implements OnInit {
-	@Input() recipeInput: Recipe;
+	@Input() recipeInput: Recipe | undefined;
 	@Output() clickedRecipe = new EventEmitter<Recipe>();
 
 	constructor() {}

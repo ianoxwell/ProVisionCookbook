@@ -35,7 +35,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 	isNew = true; // edit or new ingredient;
 
 	currentPath: string | undefined = '';
-	filterQuery: IRecipeFilterQuery | null = null;
+	filterQuery: IRecipeFilterQuery = new RecipeFilterQuery();
 	dataLength = 0;
 	cookBookUserProfile: User | null = null;
 

@@ -9,9 +9,9 @@ import { take, delay, tap, map, switchMap } from 'rxjs/operators';
   templateUrl: './loading-indicator.component.html',
   styleUrls: ['./loading-indicator.component.scss']
 })
-export class LoadingIndicatorComponent implements OnInit, OnDestroy {
+export class LoadingIndicatorComponent implements OnDestroy {
 	@Input() spinnerClass = 'full-spinner'; // used to determine the spinner class applied
-	@Input() pageLoadedAltText: string;
+	@Input() pageLoadedAltText = '';
 	dataLoadingText = [
 		'Please wait, data loading.',
 		'Please wait, data is still loading.',
@@ -25,9 +25,7 @@ export class LoadingIndicatorComponent implements OnInit, OnDestroy {
 	constructor(
 		private liveAnnouncer: LiveAnnouncer,
 		private pageTitleService: PageTitleService
-	) { }
-
-	ngOnInit() {
+	) { 
 		this.loadingWait$ = timer(500, 3500).pipe(
 			take(this.dataLoadingText.length),
 			map((i: number) => {

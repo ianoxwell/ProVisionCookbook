@@ -20,7 +20,7 @@ import { catchError, debounceTime, filter, first, switchMap, tap } from 'rxjs/op
 })
 export class DialogIngredientMatchComponent extends ComponentBase implements OnInit {
 	form: FormGroup;
-	usdaFoodMatched: IRawFoodIngredient = null;
+	usdaFoodMatched: IRawFoodIngredient | null = null;
 	filterRawSuggestions$: Observable<IRawFoodSuggestion[]> = of([]);
 
 	constructor(
@@ -36,11 +36,11 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
 		private messageService: MessageService
 	) {
 		super();
+		this.form = this.createForm();
 	}
 
 	ngOnInit() {
-		console.log('match dialog', this.data);
-		this.form = this.createForm();
+		console.log('match dialog', this.data);		
 		this.filterRawSuggestions$ = this.listenFormChanges();
 		// wrapped in timeout to allow time for the dom to draw.
 		setTimeout(() => this.patchForm(this.data.ingredient), 50);
@@ -91,7 +91,7 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
 			switchMap(([rawFood, foodGroupId]: [string, number]) => {
 				const formRaw = this.form.getRawValue();
 				this.data.ingredient.foodGroup = this.data.foodGroup.find((group: ReferenceItemFull) => group.id === formRaw.foodGroup);
-				return this.data.ingredient.foodGroup.title === 'NULL'
+				return this.data.ingredient.foodGroup?.title === 'NULL'
 					? this.restIngredientService.getRawFoodSuggestion(rawFood, 20)
 					: this.restIngredientService.getRawFoodSuggestion(rawFood, 20, foodGroupId);
 			})
@@ -105,8 +105,8 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
 	selectItem(item: IRawFoodSuggestion): void {
 		console.log('selected this item', item);
 		const formRaw = this.form.getRawValue();
-		const nullFoodGroup: ReferenceItemFull = this.data.foodGroup.find((group: ReferenceItemFull) => group.title === 'NULL');
-		if (formRaw.foodGroup === nullFoodGroup.id) {
+		const nullFoodGroup: ReferenceItemFull | undefined = this.data.foodGroup.find((group: ReferenceItemFull) => group.title === 'NULL');
+		if (!!nullFoodGroup && formRaw.foodGroup === nullFoodGroup.id) {
 			this.data.ingredient.foodGroup = this.data.foodGroup.find(
 				(group: ReferenceItemFull) => group.title.toLowerCase() === item.foodGroup.toLowerCase()
 			);
@@ -137,7 +137,11 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
 	 * Triggered from the template - updates the ingredient and closes the dialog
 	 */
 	onSaveItem() {
-		const updatedIngredient: Ingredient = this.constructIngredientService.mixinUsdaResults(this.data.ingredient, this.usdaFoodMatched);
-		this.dialogRef.close(updatedIngredient);
+		if (!!this.usdaFoodMatched) {
+			const updatedIngredient: Ingredient = this.constructIngredientService.mixinUsdaResults(this.data.ingredient, this.usdaFoodMatched);
+			this.dialogRef.close(updatedIngredient);
+		} else {
+			this.dialogRef.close(this.data.ingredient);
+		}
 	}
 }

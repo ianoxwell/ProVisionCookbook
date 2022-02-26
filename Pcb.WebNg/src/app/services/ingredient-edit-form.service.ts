@@ -109,13 +109,27 @@ private initCommonVitaminsFormGroup(vita: ICommonVitamins | undefined): FormGrou
 	return fbGroup;
 }
 
+createPriceModel(): PriceModel {
+	const price: PriceModel = {
+		brandName: '',
+		price: 0,
+		quantity: 0,
+		storeName: '',
+		measurement: '',
+		lastChecked: 0,
+		apiLink: ''
+	}
+
+	return price;
+}
+
 createForm(ingredient: Ingredient, isNew: boolean): FormGroup {
 	let conversionSummary: FormGroup[] = [];
 	// let nutritionSummary = [];
 	// if editing the ingredient, then populate the additional controls needed to edit any of the sub-documents
 	if (!isNew && ingredient) {
 		if (!ingredient.price) {
-			ingredient.price = new PriceModel();
+			ingredient.price = this.createPriceModel();
 		}
 		if (!ingredient.ingredientConversions) {
 			ingredient.ingredientConversions = [ {} as Conversion ];

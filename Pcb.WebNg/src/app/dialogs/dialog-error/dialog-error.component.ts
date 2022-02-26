@@ -7,8 +7,8 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog
   styleUrls: ['./dialog-error.component.scss']
 })
 export class DialogErrorComponent implements OnInit {
-	public dialogRef: MatDialogRef<DialogErrorComponent>;
 	constructor(
+		public dialogRef: MatDialogRef<DialogErrorComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any
 		// errorMessage should be send as {title: 'Unknown Error', content: error message}
 		// therefore data.title and data.content

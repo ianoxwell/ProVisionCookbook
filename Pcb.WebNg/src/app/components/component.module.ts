@@ -28,11 +28,9 @@ import { PaginatorComponent } from './paginator/paginator.component';
 import { RecipeCardComponent } from './recipe/recipe-card/recipe-card.component';
 import { RecipeViewComponent } from './recipe/recipe-view/recipe-view.component';
 import { SearchBarComponent } from './recipe/search-bar/search-bar.component';
-import { SelectAutoCompleteComponent } from './select-auto-complete/select-auto-complete.component';
 import { SharedComponentModule } from './shared-component.module';
 import { ToastComponent } from './toast/toast.component';
 import { ToastModule } from './toast/toast.module';
-
 
 @NgModule({
   imports: [
@@ -58,7 +56,6 @@ import { ToastModule } from './toast/toast.module';
 	IngredientTableComponent,
 	IngredientPricesFormComponent,
 	IngredientConversionFormComponent,
-	SelectAutoCompleteComponent,
 	PageTitleComponent,
 	EditIngredientBasicComponent,
 	EditCommonMineralsComponent,
@@ -80,7 +77,6 @@ import { ToastModule } from './toast/toast.module';
 	IngredientTableComponent,
 	IngredientPricesFormComponent,
 	IngredientConversionFormComponent,
-	SelectAutoCompleteComponent,
 	ToastComponent,
 	PageTitleComponent,
 	PaginatorComponent,

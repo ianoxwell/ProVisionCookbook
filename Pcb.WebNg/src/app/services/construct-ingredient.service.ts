@@ -12,13 +12,17 @@ import { ReferenceItemFull } from '@models/reference.model';
 export class ConstructIngredientService {
 	public createNewIngredient(
 		basicInfo: { name: string; foodGroup: number },
-		spoon: ISpoonFoodRaw,
+		spoon: ISpoonFoodRaw | null,
 		spoonConversions: ISpoonConversion[],
 		foodGroupRef: ReferenceItemFull[] | undefined,
 		ingredientStateRef: ReferenceItemFull[] | undefined,
 		measurementRef: MeasurementModel[],
-		usda?: IRawFoodIngredient
+		usda: IRawFoodIngredient | null
 	): Ingredient {
+		if (!spoon) {
+			throw 'SpoonFood Raw not defined';
+		}
+
 		const ingredientState: ReferenceItemFull | undefined = ingredientStateRef?.find(
 			(state: ReferenceItemFull) => state.title.toLowerCase() === spoon.consistency.toLowerCase()
 		);

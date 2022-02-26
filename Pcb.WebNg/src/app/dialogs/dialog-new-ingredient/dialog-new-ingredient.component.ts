@@ -38,16 +38,16 @@ import { catchError, debounceTime, filter, first, switchMap, takeUntil, tap } fr
 export class DialogNewIngredientComponent extends ComponentBase implements OnInit {
 	form: FormGroup;
 	filterRawSuggestions$: Observable<IRawFoodSuggestion[]> = of([]);
-	rawFoodFilter$ = new BehaviorSubject<string>(null);
+	rawFoodFilter$ = new BehaviorSubject<string>('');
 
-	isFoodNameAvailable: boolean = null;
+	isFoodNameAvailable: boolean | null = null;
 	isCheckingFoodName = false;
 
-	usdaFoodMatched: IRawFoodIngredient = null;
-	spoonFoodSuggestions: ISpoonSuggestions[];
-	spoonFoodMatched: ISpoonFoodRaw;
+	usdaFoodMatched: IRawFoodIngredient | null = null;
+	spoonFoodSuggestions: ISpoonSuggestions[] = [];
+	spoonFoodMatched: ISpoonFoodRaw | null = null;
 	spoonConversion: ISpoonConversion[] = [];
-	newIngredient: Ingredient;
+	newIngredient: Ingredient | null = null;
 
 	constructor(
 		public dialogRef: MatDialogRef<DialogNewIngredientComponent>,
@@ -62,11 +62,12 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
 	) {
 		super();
 		dialogRef.disableClose = true;
+		this.form = this.createForm();
 	}
 
 
 	ngOnInit() {
-		this.form = this.createForm();
+		
 		this.filterRawSuggestions$ = this.listenFormChanges();
 	}
 

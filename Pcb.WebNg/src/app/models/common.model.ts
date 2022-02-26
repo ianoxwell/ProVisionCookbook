@@ -26,6 +26,12 @@ export interface IdValuePair {
 	id: number | string;
 	value: string | number;
 }
+
+export interface IIdKeyPair {
+	id: number;
+	key: string;
+}
+
 export interface IdTitlePair {
 	id: number;
 	title: string;
@@ -70,7 +76,7 @@ export class SortPageObj implements ISortPageObj {
 	public update(filterObj: IIngredientFilterObject | IRecipeFilterQuery) {
 		if (filterObj) {
 			this.orderby = filterObj.orderby;
-			this.order = filterObj.order;
+			this.order = filterObj.order as string;
 			this.page = filterObj.page;
 			this.perPage = filterObj.perPage;
 		}

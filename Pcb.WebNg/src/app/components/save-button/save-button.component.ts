@@ -9,8 +9,8 @@ import { FormGroup } from '@angular/forms';
 export class SaveButtonComponent  {
 	@Input() dirty = true;
 	@Input() valid = true;
-	@Input() isSaving: boolean;
-	@Input() color: string;
+	@Input() isSaving = false;
+	@Input() color = 'primary';
 	@Input() label = 'Save';
 
 	@Input() iconName = 'cloud_done';

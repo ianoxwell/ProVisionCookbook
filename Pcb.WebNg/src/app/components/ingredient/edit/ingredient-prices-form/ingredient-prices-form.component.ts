@@ -9,8 +9,8 @@ import { DecimalTwoPlaces } from '@models/static-variables';
 	styleUrls: ['./ingredient-prices-form.component.scss']
 })
 export class IngredientPricesFormComponent {
-	@Input() price: FormGroup;
-	@Input() measurements: MeasurementModel[];
+	@Input() price: FormGroup = new FormGroup({});
+	@Input() measurements: MeasurementModel[] = [];
 	@Output() markAsDirty = new EventEmitter<void>();
 
 	decimalTwoPlaces = DecimalTwoPlaces;
