@@ -26,17 +26,17 @@ import { ComponentBase } from '../../components/base/base.component.base';
 	styleUrls: ['./ingredients.component.scss']
 })
 export class IngredientsComponent extends ComponentBase implements OnInit {
-	selectedIngredient$: Observable<Ingredient>;
+	selectedIngredient$: Observable<Ingredient> | undefined;
 	selectedTab = 0; // controls the selectedIndex of the mat-tab-group
 	isNew = true; // edit or new ingredient;
-	cookBookUserProfile$: Observable<User>;
-	currentPath: string;
+	cookBookUserProfile$: Observable<User | null>;
+	currentPath: string | undefined = '';
 	filterObject: IIngredientFilterObject = new IngredientFilterObject();
 	sortPageObj: SortPageObj = new SortPageObj();
 	data$: Observable<PagedResult<Ingredient>>;
-	isLoading: boolean;
-	refData: ReferenceAll;
-	measurements: MeasurementModel[];
+	isLoading = false;
+	refData: ReferenceAll | undefined;
+	measurements: MeasurementModel[] = [];
 
 	constructor(
 		private restIngredientService: RestIngredientService,
@@ -49,23 +49,26 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 		private stateService: StateService
 	) {
 		super();
+		this.data$ = this.listenStateService();
+		this.cookBookUserProfile$ = this.userProfileService.currentData;
+
 	}
 
 	ngOnInit() {
 		this.getAllReferences();
-		this.cookBookUserProfile$ = this.userProfileService.currentData.pipe(takeUntil(this.ngUnsubscribe));
 	}
 
 	getAllReferences(): void {
 		combineLatest([this.referenceService.getAllReferences(), this.referenceService.getMeasurements()])
 			.pipe(
 				first(),
-				catchError((err: HttpErrorResponse) => this.dialogService.alert('Http error while attempting to getting references', err)),
 				switchMap(([refData, measurements]: [ReferenceAll, MeasurementModel[]]) => {
 					this.refData = refData;
 					this.measurements = measurements;
 					return this.routeParamSubscribe();
-				})
+				}),
+				catchError((err: HttpErrorResponse) => this.dialogService.alert('Http error while attempting to getting references', err)),
+
 			)
 			.subscribe();
 	}
@@ -74,7 +77,7 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 		return this.route.params.pipe(
 			first(),
 			map(params => {
-				this.currentPath = this.route.snapshot.routeConfig.path;
+				this.currentPath = this.route.snapshot.routeConfig?.path;
 				if (params.ingredientId) {
 					this.selectedIngredient$ = this.getSingleIngredient(params.ingredientId);
 				}
@@ -87,8 +90,8 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 	/**
 	 * Listens to the stateService ingredient filter and updates the data in the table on change.
 	 */
-	listenStateService(): void {
-		this.data$ = this.stateService.getIngredientFilterQuery().pipe(
+	listenStateService(): Observable<PagedResult<Ingredient>> {
+		return this.stateService.getIngredientFilterQuery().pipe(
 			switchMap((ingredientFilterObj: IIngredientFilterObject) => {
 				this.filterObject = ingredientFilterObj;
 				this.sortPageObj = this.sortPageObj.update(this.filterObject);
@@ -134,7 +137,7 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 		this.selectedTab = event;
 		this.filterObject.tabNumber = event;
 		if (this.selectedTab === 0) {
-			this.selectedIngredient$ = null;
+			this.selectedIngredient$ = undefined;
 			this.location.replaceState('/savoury/ingredients');
 		}
 		this.stateService.setIngredientFilterQuery(this.filterObject);
@@ -142,7 +145,7 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 	createOrEdit(editOrNew: string, row?: Ingredient) {
 		console.log('CreateOrEdit', editOrNew, row);
 		this.isNew = editOrNew === 'new';
-		if (this.isNew) {
+		if (this.isNew && !!this.refData?.IngredientFoodGroup && !!this.refData.IngredientState) {
 			this.dialogService
 				.newIngredientDialog(this.refData.IngredientFoodGroup, this.measurements, this.refData.IngredientState)
 				.pipe(
@@ -157,8 +160,10 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
 				.subscribe();
 			return;
 		}
-		this.location.replaceState(`/savoury/ingredients/item/${row.id}`);
-		this.selectedIngredient$ = this.getSingleIngredient(row.id);
+		if (!!row && row.id) {
+			this.location.replaceState(`/savoury/ingredients/item/${row.id}`);
+			this.selectedIngredient$ = this.getSingleIngredient(row.id);
+		}
 	}
 
 	// createNewIngredient(result: any): Ingredient {

@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { IDictionary } from '@models/common.model';
 
 @Injectable({ providedIn: 'root' })
 
 export class NutrientTotalValidator {
 	public totalCalc(): ValidatorFn | null {
-		return (group: FormGroup): { [key: string]: any } => {
-			if (!group) {
+		return (formGroup: AbstractControl): IDictionary<IDictionary<string>> | null => {
+			if (!formGroup) {
 				return null;
 			}
+
+			const group: FormGroup = formGroup as FormGroup;
 			const error = { exceeds100: { message: 'Total of protein, fat, carbohydrate and water exceeds 100g'}};
 			// const nutrientGroup: FormGroup = group.get('nutritionFacts') as FormGroup;
 
-			const ctrlGroup = {
+			const ctrlGroup: IDictionary<FormControl> = {
 				protein: group.get('protein') as FormControl,
 				fat: group.get('totalFat') as FormControl,
 				carbs: group.get('totalCarbohydrate') as FormControl,

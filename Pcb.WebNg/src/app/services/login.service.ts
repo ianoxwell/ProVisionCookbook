@@ -16,13 +16,14 @@ import { UserProfileService } from './user-profile.service';
 	providedIn: 'root'
 })
 export class LoginService {
-	private authentication$ = new BehaviorSubject<ITokenState>(null);
+
+	private authentication$ = new BehaviorSubject<ITokenState | null>(null);
 
 	// JWT token string obtained at login.
 	private jwt: IToken = this.initNewJwt();
 
 	// Decoded token containing the authenticated user's claims.
-	private claims: IClaims;
+	private claims: IClaims | null = null;
 
 	// Key used for storing the token in local storage.
 	// Must match token name used in auth.module.ts
@@ -48,15 +49,15 @@ export class LoginService {
 		this.getSetJwtInitial();
 	}
 
-	public getAuthentication(): Observable<ITokenState> {
+	getAuthentication(): Observable<ITokenState | null> {
 		return this.authentication$.asObservable();
 	}
 
-	public getClaims(): IClaims {
+	getClaims(): IClaims | null {
 		return this.claims;
 	}
 
-	public isAuthenticated(): boolean {
+	isAuthenticated(): boolean {
 		const jwtToken = this.getJwt();
 		return !!jwtToken && jwtToken.length > 8 && this.checkJwtExpiry(jwtToken) && !!this.jwt.token && !!this.claims;
 	}
@@ -73,7 +74,7 @@ export class LoginService {
 	}
 
 	// Clears login state.
-	public hardLogout(includeSocial = false): void {
+	hardLogout(includeSocial = false): void {
 		this.jwt = this.initNewJwt();
 		this.claims = null;
 		this.storageService.removeItem(this.token_key);
@@ -120,12 +121,13 @@ export class LoginService {
 		);
 	}
 
-	getSingleUserProfile(): Observable<User> {
+	getSingleUserProfile(): Observable<User | null> {
 		const jwtToken = this.getJwt();
 		if (jwtToken === null) {
 			return of(null);
 		}
-		const userId = this.decode(this.getJwt()).sub;
+		
+		const userId = this.decode(this.getJwt())?.sub;
 		return this.http.get<User>(`${environment.apiUrl}${environment.apiVersion}account/get-account?id=${userId}`).pipe(
 			tap((user: User) => {
 				console.log('logged in user', user);
@@ -228,7 +230,7 @@ export class LoginService {
 	 */
 	private postRefresh(rToken: string): Observable<boolean> {
 		// Construct the http request
-		const username = this.getClaims().name;
+		const username = this.getClaims()?.name;
 		const body = { refreshToken: rToken, username };
 		const loginUrl = `${environment.apiUrl}${environment.apiVersion}token/refresh`;
 
@@ -268,7 +270,7 @@ export class LoginService {
 	}
 
 	/** Decodes the JWT Token */
-	public decode(token: string): IClaims {
+	public decode(token: string): IClaims | null {
 		if (token === null || token.length < 8) {
 			return null;
 		}
@@ -334,13 +336,10 @@ export class LoginService {
 		this.restoreJwt();
 
 		// Observe the session for expiry changes from other tabs.
-		this.storageService
-			.observeItem(this.expiry_key)
-			.pipe(
-				distinctUntilChanged(),
-				tap(() => this.restoreJwt())
-			)
-			.subscribe();
+		this.storageService.observeStorageEventItem(this.expiry_key).pipe(
+			distinctUntilChanged(),
+			tap(() => this.restoreJwt())
+		).subscribe();
 	}
 
 	/** Restores the JWT from session storage. */
@@ -363,16 +362,16 @@ export class LoginService {
 
 	/** Gets the JWT Token from storage */
 	public getJwt(): string {
-		return this.storageService.getItem(this.token_key);
+		return this.storageService.getItem<string>(this.token_key) as string;
 	}
 
 	/** Gets the JWT refresh token from storage */
 	private getJwtRefresh(): string {
-		return this.storageService.getItem(this.refresh_key);
+		return this.storageService.getItem(this.refresh_key) as string;
 	}
 
 	/** Gets the JWT expiry time from storage */
 	private getJwtExpiry(): number {
-		return parseInt(this.storageService.getItem(this.expiry_key), 10);
+		return parseInt(this.storageService.getItem(this.expiry_key) as string, 10);
 	}
 }

@@ -10,8 +10,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class PageTitleService {
 	defaultTitle = `Provisioner's Cookbook`;
-	pageTitleSubject$ = new BehaviorSubject<string>(null);
-	pageSymbolSubject$ = new BehaviorSubject<string>(null);
+	pageTitleSubject$ = new BehaviorSubject<string>('');
+	pageSymbolSubject$ = new BehaviorSubject<string>('');
 
 	pageTitle$ = this.pageTitleSubject$.asObservable();
 	pageSymbol$ = this.pageSymbolSubject$.asObservable();
@@ -36,7 +36,7 @@ export class PageTitleService {
 				}),
 				switchMap(route => route.data),
 				map(data => {
-					(data && data.symbol) ?	this.setSymbol(data.symbol) : this.setSymbol(null);
+					(data && data.symbol) ?	this.setSymbol(data.symbol) : this.setSymbol('');
 					return (data && data.title) ? data.title : this.defaultTitle; }
 					),
 				tap((title: string) => this.setTitle(title))

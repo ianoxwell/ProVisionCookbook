@@ -12,9 +12,6 @@ import { UserRecipesComponent } from './pages/user/user-recipes/user-recipes.com
 import { UserSettingsComponent } from './pages/user/user-settings/user-settings.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { InterceptorService } from './services/interceptor.service';
-import { ScriptsComponent } from './settings/scripts/scripts.component';
-
-
 
 const accountModule = () => import('@components/account/account.module').then(x => x.AccountModule);
 
@@ -79,12 +76,12 @@ const routes: Routes = [
 				path: 'user/settings',
 				component: UserSettingsComponent,
 				data: { title: `My Settings` }
-			},
-			{
-				path: 'app/settings',
-				component: ScriptsComponent,
-				data: { title: `App Settings` }
-			},
+			}
+			// {
+			// 	path: 'app/settings',
+			// 	component: ScriptsComponent,
+			// 	data: { title: `App Settings` }
+			// },
 		],
 		canActivate: [AuthGuard]
 	},

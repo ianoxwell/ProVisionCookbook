@@ -1,14 +1,12 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
-import {Observable, of} from 'rxjs';
-
+import { Injectable } from '@angular/core';
+import { PagedResult } from '@models/common.model';
+import { Observable } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { ComponentBase } from '../components/base/base.component.base';
 import { User } from '../models/user';
 import { UserProfileService } from './user-profile.service';
-import { takeUntil, tap, switchMap } from 'rxjs/operators';
-import { ComponentBase } from '../components/base/base.component.base';
-import { PagedResult } from '@models/common.model';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
 	providedIn: 'root'
@@ -18,10 +16,9 @@ export class UserService extends ComponentBase {
 		.set('Content-Type', 'application/json;odata=verbose')
 		.set('Accept', 'application/json;odata=verbose');
 	private apiURL = environment.apiUrl + environment.apiVersion;
-	cookBookUserProfile: User;
+	cookBookUserProfile: User | null = null;
 
 	constructor(
-		private router: Router,
 		private userProfileService: UserProfileService,
 		private httpClient: HttpClient
 	) {
@@ -32,24 +29,7 @@ export class UserService extends ComponentBase {
 				takeUntil(this.ngUnsubscribe),
 			).subscribe();
 	}
-	newUser(newUser, user: any): User {
-		newUser.email = user.email;
-		newUser.picture = user.picture;
-		newUser.email_verified = user.email_verified;
-		newUser.firstLogon = true;
-		newUser.dateFirstLogon = new Date();
-		newUser.dateLastLogon = new Date();
-		newUser.role = 'Student';
-		// if user has signed onto Auth0 through social provider Google
-		if (user.hasOwnProperty('sub') && user.sub.includes('google')) {
-			newUser.firstName = user.given_name;
-			newUser.lastName = user.family_name;
-			newUser.fullName = user.name;
-		} else {
-			newUser.firstName = user.nickname;
-		}
-		return newUser;
-	}
+
 	// *
 	// User Items - split out?
 	// *

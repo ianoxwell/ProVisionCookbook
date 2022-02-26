@@ -10,8 +10,8 @@ import { SentenceCasePipe } from '@pipes/sentence-case.pipe';
   styleUrls: ['./recipe-view.component.scss']
 })
 export class RecipeViewComponent implements OnInit {
-	@Input() selectedRecipe: Recipe;
-	@Input() measurements: MeasurementModel[];
+	@Input() selectedRecipe: Recipe | null = null;
+	@Input() measurements: MeasurementModel[] = [];
 
 	constructor(
 		private sentenceCase: SentenceCasePipe
@@ -38,7 +38,7 @@ export class RecipeViewComponent implements OnInit {
 		// 		unit = newUnit.title;
 		// 	}
 		// }
-		return `${ingredient.quantity} ${unit} ${this.sentenceCase.transform(ingredient.ingredient.name)}`;
+		return `${ingredient.quantity} ${unit} ${this.sentenceCase.transform(ingredient.ingredient?.name)}`;
 	}
 
 	routerLinkURL(ingredient: IngredientList): string {

@@ -17,11 +17,11 @@ export interface Conversion {
 	id?: number;
 	ingredientId?: number;
 	baseState?: ReferenceItemFull;
-	baseMeasurementUnit: MeasurementModel;
+	baseMeasurementUnit?: MeasurementModel;
 	baseQuantity: number;
 
 	convertToState?: ReferenceItemFull;
-	convertToMeasurementUnit: MeasurementModel;
+	convertToMeasurementUnit?: MeasurementModel;
 	convertToQuantity: number;
 	answer: string;
 	/**

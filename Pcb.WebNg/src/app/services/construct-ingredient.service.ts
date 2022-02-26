@@ -10,23 +10,22 @@ import { ReferenceItemFull } from '@models/reference.model';
 	providedIn: 'root'
 })
 export class ConstructIngredientService {
-	constructor() {}
 	public createNewIngredient(
 		basicInfo: { name: string; foodGroup: number },
 		spoon: ISpoonFoodRaw,
 		spoonConversions: ISpoonConversion[],
-		foodGroupRef: ReferenceItemFull[],
-		ingredientStateRef: ReferenceItemFull[],
+		foodGroupRef: ReferenceItemFull[] | undefined,
+		ingredientStateRef: ReferenceItemFull[] | undefined,
 		measurementRef: MeasurementModel[],
 		usda?: IRawFoodIngredient
 	): Ingredient {
-		const ingredientState: ReferenceItemFull = ingredientStateRef.find(
+		const ingredientState: ReferenceItemFull | undefined = ingredientStateRef?.find(
 			(state: ReferenceItemFull) => state.title.toLowerCase() === spoon.consistency.toLowerCase()
 		);
 		let newIngredient: Ingredient = {
 			id: 0,
 			name: basicInfo.name,
-			foodGroup: foodGroupRef.find((food: ReferenceItemFull) => food.id === basicInfo.foodGroup),
+			foodGroup: foodGroupRef?.find((food: ReferenceItemFull) => food.id === basicInfo.foodGroup),
 
 			linkUrl: spoon.id,
 			ingredientStateId: ingredientState ? ingredientState.id : 0,
@@ -57,12 +56,15 @@ export class ConstructIngredientService {
 		return mixedResult;
 	}
 
-	findMeasureModel(title: string, measure: MeasurementModel[]): MeasurementModel {
-		const measurementEach: MeasurementModel = measure.find((m: MeasurementModel) => m.title.toLowerCase() === 'each');
+	findMeasureModel(title: string, measure: MeasurementModel[]): MeasurementModel | undefined {
+		const measurementEach: MeasurementModel | undefined = measure.find((m: MeasurementModel) => m.title.toLowerCase() === 'each');
+
+
 		if (!title || title.length === 0) {
 			return measurementEach;
 		}
-		const measurement = measure.find((m: MeasurementModel) => {
+
+		const measurement: MeasurementModel | undefined = measure.find((m: MeasurementModel) => {
 			const success =
 				m.title.toLowerCase() === title.toLowerCase() ||
 				m.shortName?.toLowerCase() === title.toLowerCase() ||
@@ -73,13 +75,17 @@ export class ConstructIngredientService {
 		if (!measurement) {
 			return measurementEach;
 		}
+
 		return measurement;
 	}
 
-	private conversions(convert: ISpoonConversion[], ingredientState: ReferenceItemFull, measure: MeasurementModel[]): Conversion[] {
+	private conversions(convert: ISpoonConversion[], ingredientState: ReferenceItemFull | undefined, measure: MeasurementModel[]): Conversion[] {
 		// expect convert to be an array returned from dialog-ingredient.component or a partial object
 		// {key: newKey, value: newValue, changeType: 'sub', subDocName: 'conversions', subId: docSubId}
 		console.log('starting the conversion process', ingredientState, measure);
+		if (!ingredientState) {
+			return [];
+		}
 
 		const returnConvert: Conversion[] = convert.map((item: ISpoonConversion, idx: number) => {
 			if (item.sourceUnit === '') {

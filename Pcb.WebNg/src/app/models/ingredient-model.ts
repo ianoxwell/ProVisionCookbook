@@ -1,6 +1,6 @@
 import { CountryCode, MeasurementType } from './common.model';
 
-export class MeasurementModel {
+export interface MeasurementModel {
 	id: number;
 	rowVer: string;
 	title: string;
@@ -12,14 +12,14 @@ export class MeasurementModel {
 	countryCode: CountryCode;
 	createdAt: Date;
 }
-export class EditedFieldModel {
+export interface EditedFieldModel {
 	key: string;
 	value: any;
 	changeType: string;
 	subDocName?: string;
 	subId?: string;
 }
-export class PriceModel {
+export interface PriceModel {
 
 	brandName: string;
 	price: number;

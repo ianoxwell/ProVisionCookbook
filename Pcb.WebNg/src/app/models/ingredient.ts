@@ -3,12 +3,12 @@ import { ICommonMinerals, ICommonVitamins, INutritionFacts, PriceModel } from '.
 import { ReferenceItemFull } from './reference.model';
 
 export interface Ingredient {
-	allergies?: Array<ReferenceItemFull>;
+	allergies?: ReferenceItemFull[];
 	commonMinerals?: ICommonMinerals;
 	commonVitamins?: ICommonVitamins;
 	foodGroup?: ReferenceItemFull;
 	id?: number;
-	ingredientConversions?: Array<Conversion>;
+	ingredientConversions?: Conversion[];
 	ingredientStateId?: number;
 	linkUrl?: number; // spoonacular id number
 	name: string;

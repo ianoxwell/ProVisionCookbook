@@ -40,7 +40,7 @@ export class LogService {
 	 * Posts a log with varying severities.
 	 * @param error a model of the error
 	 */
-	logMessage(logLevel: string, error: any, message: string, detail: string): Observable<boolean> {
+	logMessage(logLevel: string, error: any, message: string, detail: string | null) : Observable<boolean> {
 		// todo remove the fake retjun
 		return of(true);
 		// Create a neat error message for the server to log

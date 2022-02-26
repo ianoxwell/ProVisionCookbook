@@ -1,9 +1,10 @@
 <app-page-title></app-page-title>
 <!-- action bar -->
-<div class="mt-2 mb-2">
-	<div class="flex-box flex-justify-space-between mt-2 mb-2 pl-2 pr-2">
+<div class="mt-2 mb-2" *ngIf="!!selectedRecipe">
+	<div class="flex-box flex-justify-space-between mt-2 mb-2 pl-2 pr-2" >
 		<span class="ml-12"></span>
-		<span *ngIf="!!cookBookUserProfile && cookBookUserProfile.lastName==='Oxwell' && selectedTab === 0">
+		<!-- Hide section if not admin && cookBookUserProfile.lastName==='Oxwell' -->
+		<span *ngIf="!!cookBookUserProfile && selectedTab === 0">
 			<span class="mr-1">Index: {{selectedIndex}}</span>
 			<button mat-flat-button (click)="getSpoonAcularRecipe(1)" type="button" class="mr-1">Get 1 random recipes</button>
 			<button mat-flat-button (click)="getSpoonAcularRecipe(3)" type="button" class="mr-1">Get 3 random recipes</button>
@@ -18,7 +19,7 @@
 			</button>
 		</span>
 		<span>
-			<h1 *ngIf="!!selectedRecipe">{{selectedRecipe.name}}</h1>
+			<h1 >{{selectedRecipe.name}}</h1>
 		</span>
 		<span>
 			<button mat-flat-button type="button" color="accent" *ngIf="selectedTab === 1" (click)="changeTab(0)">
@@ -51,7 +52,8 @@
 			</div>
 		</mat-tab>
 		<mat-tab>
-			<app-recipe-view [selectedRecipe]="selectedRecipe" (changeRecipe)="changeRecipe($event)"></app-recipe-view>
+			<!-- (changeRecipe)="changeRecipe($event)" -->
+			<app-recipe-view [selectedRecipe]="selectedRecipe" ></app-recipe-view>
 		</mat-tab>
 	</mat-tab-group>
 	<!-- <div *ngIf="selectedRecipe">

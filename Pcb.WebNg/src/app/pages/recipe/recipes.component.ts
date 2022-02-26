@@ -26,18 +26,18 @@ import { catchError, filter, first, switchMap, takeUntil, tap } from 'rxjs/opera
 })
 export class RecipesComponent extends ComponentBase implements OnInit {
 	recipes: Recipe[] = [];
-	refDataAll: ReferenceAll;
-	measurementRef: MeasurementModel[];
+	refDataAll: ReferenceAll | undefined;
+	measurementRef: MeasurementModel[] = [];
 	isLoading = false;
-	selectedRecipe: Recipe;
+	selectedRecipe: Recipe | undefined;
 	selectedIndex = 0;
 	selectedTab = 0; // controls the selectedIndex of the mat-tab-group
 	isNew = true; // edit or new ingredient;
 
-	currentPath: string;
-	filterQuery: IRecipeFilterQuery;
-	dataLength: number;
-	cookBookUserProfile: User;
+	currentPath: string | undefined = '';
+	filterQuery: IRecipeFilterQuery | null = null;
+	dataLength = 0;
+	cookBookUserProfile: User | null = null;
 
 	constructor(
 		private restRecipeService: RestRecipeService,
@@ -77,7 +77,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 		this.route.params
 			.pipe(
 				tap(params => {
-					this.currentPath = this.route.snapshot.routeConfig.path;
+					this.currentPath = this.route.snapshot.routeConfig?.path;
 					if (params.recipeId) {
 						this.loadRecipeSelect(Number(params.recipeId));
 					}
@@ -100,7 +100,11 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 			.subscribe();
 	}
 
-	loadRecipeSelect(itemId: number) {
+	loadRecipeSelect(itemId: number | undefined): void {
+		if (!itemId) {
+			return;
+		}
+
 		this.restRecipeService
 			.getRecipeById(itemId)
 			.pipe(
@@ -118,7 +122,11 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 			.subscribe();
 	}
 
-	changeRecipe(event: { direction: string; id: string }) {
+	changeRecipe(event: { direction: string; id: number | undefined }): void {
+		if (!event.id) {
+			return;
+		}
+
 		if (this.selectedIndex === 0 && event.direction === 'prev') {
 			this.selectedIndex = this.recipes.length - 1;
 		} else if (this.selectedIndex === this.recipes.length - 1 && event.direction === 'next') {
@@ -170,15 +178,19 @@ export class RecipesComponent extends ComponentBase implements OnInit {
 	changeTab(event: any) {
 		this.selectedTab = event;
 		if (this.selectedTab === 0) {
-			this.selectedRecipe = null;
+			this.selectedRecipe = undefined;
 			this.location.replaceState('savoury/recipes/browse');
-		} else {
+		} else if (!!this.selectedRecipe) {
 			this.location.replaceState(`savoury/recipes/item/${this.selectedRecipe.id}`);
 		}
 	}
 
-	getSpoonAcularRecipe(count: number) {
+	getSpoonAcularRecipe(count: number): void {
 		this.isLoading = true;
+		if (!this.cookBookUserProfile || !this.refDataAll) {
+			return;
+		}
+
 		this.constructRecipeService.getSpoonAcularRecipe(count, this.cookBookUserProfile.id, this.refDataAll, this.measurementRef).pipe(
 			first(),
 			switchMap(() => this.getRecipes()),

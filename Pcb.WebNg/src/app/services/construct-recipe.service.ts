@@ -45,13 +45,14 @@ export class ConstructRecipeService {
 				return this.restIngredientService.getSpoonConversion(spoonRaw.name, unitFrom, 1, 'grams');
 			}),
 			switchMap((spoonConversions: ISpoonConversion) => {
-				const foodGroupItem = refDataAll.IngredientFoodGroup.find((fg: ReferenceItemFull) => spoon.aisle.indexOf(fg.altTitle) > 0);
-				let foodGroup: number = refDataAll.IngredientFoodGroup.find((fg: ReferenceItemFull) => fg.title === 'NULL').id;
+				const foodGroupItem: ReferenceItemFull | undefined = refDataAll.IngredientFoodGroup?.find((fg: ReferenceItemFull) => !!fg.altTitle ? spoon.aisle.includes(fg.altTitle) : false);
+				let foodGroup: number | undefined = refDataAll.IngredientFoodGroup?.find((fg: ReferenceItemFull) => fg.title === 'NULL')?.id;
 				if (!!foodGroupItem) {
 					foodGroup = foodGroupItem.id;
 				}
+
 				newIngredient = this.constructIngredientService.createNewIngredient(
-					{ name: this.toTitleCase.transform(spoon.name), foodGroup },
+					{ name: this.toTitleCase.transform(spoon.name), foodGroup: foodGroup || 0 },
 					spoon,
 					[spoonConversions],
 					refDataAll.IngredientFoodGroup,
@@ -140,7 +141,7 @@ export class ConstructRecipeService {
 	 * @param spoonId The spoonacular id of the ingredient to find.
 	 * @returns A single ingredient.
 	 */
-	private findIngredient(allIngredients: Ingredient[], spoonId: number): Ingredient {
+	private findIngredient(allIngredients: Ingredient[], spoonId: number): Ingredient | undefined {
 		return allIngredients.find((ing: Ingredient) => ing.linkUrl === spoonId);
 	}
 	/**
@@ -149,8 +150,8 @@ export class ConstructRecipeService {
 	 * @param refData The reference Data to search through.
 	 * @returns a single Reference Item.
 	 */
-	private findReferenceItem(title: string, refData: ReferenceItemFull[]): ReferenceItemFull {
-		return refData.find((item: ReferenceItemFull) => title.toLowerCase() === item.title.toLowerCase());
+	private findReferenceItem(title: string, refData: ReferenceItemFull[] | undefined): ReferenceItemFull | undefined {
+		return refData?.find((item: ReferenceItemFull) => title.toLowerCase() === item.title.toLowerCase());
 	}
 
 	/**
@@ -171,8 +172,8 @@ export class ConstructRecipeService {
 	): Recipe {
 		const newRecipe: Recipe = this.createNewRecipe(recipe, userId);
 		recipe.extendedIngredients.forEach((ingredient: IExtendedIngredients, index: number) => {
-			const ingredientId: number = this.findIngredient(allIngredients, ingredient.id)?.id;
-			if (ingredientId) {
+			const ingredientId: number | undefined = this.findIngredient(allIngredients, ingredient.id)?.id;
+			if (ingredientId && !!newRecipe.recipeIngredientLists) {
 				newRecipe.recipeIngredientLists.push(
 					this.createIngredientListItem(ingredient, index, ingredientId, refDataAll, measurementRef)
 				);
@@ -181,16 +182,16 @@ export class ConstructRecipeService {
 			}
 		});
 		recipe.analyzedInstructions[0].steps.forEach(steep => {
-			newRecipe.steppedInstructions.push({
+			newRecipe.steppedInstructions?.push({
 				stepNumber: steep.number,
 				stepDescription: steep.step,
 				ingredients: [],
 				equipment: []
 			});
 			steep.ingredients.forEach((item: IEquipmentIngredient) => {
-				const ingredientId: number = this.findIngredient(allIngredients, item.id)?.id;
-				if (!!ingredientId) {
-					newRecipe.steppedInstructions[newRecipe.steppedInstructions.length - 1].ingredients.push(ingredientId);
+				const ingredientId: number | undefined = this.findIngredient(allIngredients, item.id)?.id;
+				if ((ingredientId === 0 || !!ingredientId) && newRecipe.steppedInstructions?.length ) {
+					newRecipe.steppedInstructions[newRecipe.steppedInstructions.length - 1].ingredients?.push(ingredientId);
 				}
 			});
 			// steep.equipment.forEach(item => {
@@ -203,20 +204,23 @@ export class ConstructRecipeService {
 			// 	}
 			// });
 		});
-		refDataAll.DishTag.forEach((tag: ReferenceItemFull) => {
-			if (!!tag.altTitle && recipe[tag.altTitle] && recipe[tag.altTitle] === true) {
-				newRecipe.recipeDishTags.push(tag);
+		refDataAll.DishTag?.forEach((tag: ReferenceItemFull) => {
+			const altTag = tag.altTitle as keyof ISpoonacularRecipeModel;
+			if (!!tag.altTitle && recipe[altTag] && recipe[altTag] === true) {
+				newRecipe.recipeDishTags?.push(tag);
 			}
 		});
-		refDataAll.HealthLabel.forEach((diet: ReferenceItemFull) => {
-			if (!!diet.altTitle && recipe[diet.altTitle] && recipe[diet.altTitle] === true) {
-				newRecipe.recipeHealthLabels.push(diet);
+		refDataAll.HealthLabel?.forEach((diet: ReferenceItemFull) => {
+			const altTag = diet.altTitle as keyof ISpoonacularRecipeModel;
+
+			if (!!diet.altTitle && recipe[altTag] && recipe[altTag] === true) {
+				newRecipe.recipeHealthLabels?.push(diet);
 			}
 		});
 		recipe.dishTypes.forEach((dish: string) => {
 			const dishType = this.findReferenceItem(dish, refDataAll.DishType);
 			if (!!dishType) {
-				newRecipe.recipeDishTypes.push(dishType);
+				newRecipe.recipeDishTypes?.push(dishType);
 			} else {
 				console.log('could not find this dish type', dish, refDataAll.DishType);
 			}
@@ -224,7 +228,7 @@ export class ConstructRecipeService {
 		recipe.cuisines.forEach((type: string) => {
 			const cuisineType = this.findReferenceItem(type, refDataAll.CuisineType);
 			if (!!cuisineType) {
-				newRecipe.recipeCuisineTypes.push(cuisineType);
+				newRecipe.recipeCuisineTypes?.push(cuisineType);
 			} else {
 				console.log('could not find this cuisine', type, refDataAll.CuisineType);
 			}

@@ -44,12 +44,6 @@
 	}
 }
 
-@each $height in $heightsEm {
-	.h-#{$height}em {
-		height: #{$height}em;
-	}
-}
-
 .text- {
 	&small {
 		font-size: 0.8em;

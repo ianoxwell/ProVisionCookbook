@@ -40,7 +40,7 @@ export class SecurityService {
 		const isPublic = !path ? false : true;
 		return isPublic;
 	}
-	private getClaims(): IClaims {
+	private getClaims(): IClaims | null {
 		return this.loginService.getClaims();
 	}
 
@@ -55,7 +55,7 @@ export class SecurityService {
 
 		// If the perms dictionary doesn't have the permission, no dice
 		const permString = SecurityPermission[permission];
-		if (!this.getClaims().permissions.hasOwnProperty(permString)) {
+		if (!this.getClaims()?.permissions.hasOwnProperty(permString)) {
 			return false;
 		}
 
@@ -66,7 +66,7 @@ export class SecurityService {
 
 		// Authorised if no facilities against perm (i.e. user has perm facility-wide),
 		// else if requested facility is there.
-		const facilities = this.getClaims().permissions[permString];
+		const facilities = this.getClaims()?.permissions[permString];
 		const isAuth = !facilities || !facilities.length || facilities.includes(facilityId);
 		return isAuth;
 	}
@@ -79,10 +79,12 @@ export class SecurityService {
 		if (permissions.length <= 0) { return false; }
 
 		// Check if the user is authorised in at least one permission
-		return permissions.some(item => {
+		return permissions.some((item: SecurityPermission) => {
 			if (this.isAuthorised(item, facilityId)) {
 				return true;
 			}
+
+			return false;
 		});
 	}
 
@@ -118,7 +120,7 @@ export class SecurityService {
 	}
 
 	/** Returns an object that contains the family name and given name of the current user */
-	getCurrentUserNameDetail(): { surname: string, givenName: string } {
+	getCurrentUserNameDetail(): { surname: string, givenName: string } | null {
 		const claims = this.getClaims();
 
 		// Check for claims - This fails on the login page
@@ -130,11 +132,11 @@ export class SecurityService {
 
 	/** Gets the current user id */
 	getCurrentUserId(): number {
-		return this.getClaims().sub;
+		return this.getClaims()?.sub || 0;
 	}
 
 	/** Gets the current user id */
-	getUserRole(role: SecurityRole): string {
+	getUserRole(role: SecurityRole): string | undefined {
 		const claims = this.getClaims()
 		return (!!claims) ? claims.roles.find(r => r === role.valueOf()) : '';
 	}
@@ -142,7 +144,7 @@ export class SecurityService {
 	hasPermission(permission: SecurityPermission): boolean {
 		const claims = this.getClaims();
 		const permString = SecurityPermission[permission];
-		if (!claims.permissions.hasOwnProperty(permString)) {
+		if (!claims?.permissions.hasOwnProperty(permString)) {
 			return false;
 		}
 		return true;

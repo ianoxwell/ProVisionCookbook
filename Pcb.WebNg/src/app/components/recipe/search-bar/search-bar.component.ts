@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { ComponentBase } from '@components/base/base.component.base';
 import { IRecipeFilterQuery, RecipeFilterQuery } from '@models/filter-queries.model';
@@ -26,24 +26,15 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 	constructor(private fb: FormBuilder, private referenceService: ReferenceService, private stateService: StateService) {
 		super();
 		this.searchForm = this.createForm();
-	}
-
-	ngOnInit() {
-		this.allergyArray$ = this.getAllergyReferences();
-		this.listenToFormChanges();
-	}
-
-	/**
-	 * Gets array of allergy ReferenceItems.
-	 * @returns Observable of only the used Allergy Warnings.
-	 */
-	getAllergyReferences(): Observable<ReferenceItemFull[]> {
-		return this.referenceService.getAllReferences().pipe(
+		this.allergyArray$ = this.referenceService.getAllReferences().pipe(
 			map((allRef: ReferenceAll) => {
-				return allRef.AllergyWarning;
-			}),
-			takeUntil(this.ngUnsubscribe)
+				return allRef.AllergyWarning || [];
+			})
 		);
+	}
+
+	ngOnInit(): void {
+		this.listenToFormChanges();
 	}
 
 	/**
@@ -64,11 +55,11 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 	 * @param values from the form change.
 	 */
 	changeRecipeFilterState(values: RecipeFilterQuery): void {
-		Object.keys(this.searchForm.getRawValue()).forEach((key) => {
-			if (values[key]) {
-				this.filterQuery[key] = values[key];
-			}
-		});
+		// Object.keys(this.searchForm.getRawValue()).forEach((key) => {
+		// 	if (values[key]) {
+		// 		this.filterQuery[key] = values[key];
+		// 	}
+		// });
 		this.filterQuery.page = 0;
 		console.log('new value', values, this.filterQuery);
 		this.stateService.setRecipeFilterQuery(this.filterQuery);
@@ -76,6 +67,10 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 
 	// TODO: change to a getter/setter pattern.
 	ngOnChanges(changes: SimpleChanges): void {
+		if (!this.filterQuery) {
+			return;
+		}
+
 		if (!!changes.filterQuery && changes.filterQuery.firstChange) {
 			this.patchForm(this.filterQuery);
 		}
@@ -83,6 +78,10 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 
 	// triggers from the MatPaginator - emits the filterQuery object
 	pageChange(ev: PageEvent): void {
+		if (!this.filterQuery) {
+			return;
+		}
+
 		console.log('page event', ev);
 		if (ev.previousPageIndex !== ev.pageIndex) {
 			this.filterQuery.page = ev.pageIndex;
@@ -119,11 +118,11 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 		});
 	}
 
-	get totalTime() {
-		return this.searchForm.get('totalTime');
+	get totalTime(): FormControl {
+		return this.searchForm.get('totalTime') as FormControl;
 	}
-	get servingPrice() {
-		return this.searchForm.get('servingPrice');
+	get servingPrice(): FormControl {
+		return this.searchForm.get('servingPrice') as FormControl;
 	}
 
 	/**
@@ -160,6 +159,8 @@ export class SearchBarComponent extends ComponentBase implements OnInit, OnChang
 			page: 0
 		});
 		this.filterQuery = this.searchForm.getRawValue();
-		this.stateService.setRecipeFilterQuery(this.filterQuery);
+		if (!!this.filterQuery) {
+			this.stateService.setRecipeFilterQuery(this.filterQuery);
+		}
 	}
 }

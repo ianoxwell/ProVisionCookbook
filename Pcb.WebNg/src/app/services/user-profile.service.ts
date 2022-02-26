@@ -14,14 +14,14 @@ import { User, UserRole } from '../models/user';
 // this.userProfileService.setData(usersCookBookProfile[0]);
 
 export class UserProfileService {
-	private userProfile$ = new BehaviorSubject<User>(null);
-	private isLoggedIn$ = new BehaviorSubject<boolean>(null);
+	private userProfile$: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+	private isLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
 
 	currentData = this.userProfile$.asObservable();
 	isLoggedIn = this.isLoggedIn$.asObservable();
 
-	setData(userProfile: User) {
+	setData(userProfile: User | null) {
 		this.userProfile$.next(userProfile);
 	}
 
@@ -32,7 +32,7 @@ export class UserProfileService {
 	checkAdminRights(user: User): AdminRights {
 		const schoolAdmin: IdTitlePair[] = [];
 		let globalAdmin = false;
-		user.userRole.forEach((roleItem: UserRole) => {
+		user.userRole?.forEach((roleItem: UserRole) => {
 			if (roleItem.role.isAdmin && roleItem.isCountryWide) {
 				globalAdmin = true;
 			} else if (roleItem.role.isAdmin && !!roleItem.schoolId && !!roleItem.school) {

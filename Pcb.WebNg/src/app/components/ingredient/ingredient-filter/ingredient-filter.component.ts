@@ -5,7 +5,7 @@ import { IIngredientFilterObject, IngredientFilterObject } from '@models/filter-
 import { ReferenceAll } from '@models/reference.model';
 import { StateService } from '@services/state.service';
 import { Observable, of } from 'rxjs';
-import { debounceTime, first, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, map, take, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-ingredient-filter',
@@ -13,7 +13,7 @@ import { debounceTime, first, map, takeUntil, tap } from 'rxjs/operators';
 	styleUrls: ['./ingredient-filter.component.scss']
 })
 export class IngredientFilterComponent extends ComponentBase implements OnInit {
-	searchForm: FormGroup;
+	searchForm: FormGroup = new FormGroup({});
 	@Input() refData: ReferenceAll = {};
 	filterQuery: IIngredientFilterObject = new IngredientFilterObject();
 	isFormReady$: Observable<boolean> = of(false);
@@ -29,8 +29,8 @@ export class IngredientFilterComponent extends ComponentBase implements OnInit {
 	/** On init get filter items from the stateService. */
 	listenStateService(): Observable<boolean> {
 		return this.stateService.getIngredientFilterQuery().pipe(
-			first(),
-			map((filterObj: IngredientFilterObject) => {
+			take(1),
+			map((filterObj: IIngredientFilterObject) => {
 				this.filterQuery = filterObj;
 				this.searchForm = this.createForm();
 				this.listenFormChanges();

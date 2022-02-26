@@ -17,7 +17,7 @@ export class RestRecipeService {
 	private apiUrl = environment.apiUrl + environment.apiVersion;
 
 	constructor(private httpClient: HttpClient) {}
-	public getRecipe(filterQuery: IRecipeFilterQuery): Observable<PagedResult<Recipe>> {
+	public getRecipe(filterQuery: IRecipeFilterQuery | null): Observable<PagedResult<Recipe>> {
 		if (!filterQuery) {
 			filterQuery = new RecipeFilterQuery();
 		}

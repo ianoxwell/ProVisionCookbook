@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-export class DateTimeModel {
+export interface IDateTimeModel {
   hour: number;
   minute: number;
   meriden: string;
@@ -23,7 +23,7 @@ export class DateTimeService {
 	copiedDate.setMonth(copiedDate.getMonth() + m);
 	return copiedDate;
   }
-  public static formatTime(date: Date): DateTimeModel {
+  public static formatTime(date: Date): IDateTimeModel {
 	let hours = date.getHours();
 	const minutes = Math.round(date.getMinutes() / 5) * 5; // round to closest 5
 	const ampm = hours >= 12 ? 'PM' : 'AM';

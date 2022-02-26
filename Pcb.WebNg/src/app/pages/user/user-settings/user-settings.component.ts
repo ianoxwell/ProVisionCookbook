@@ -8,14 +8,14 @@ import { User } from '../../../models/user';
   styleUrls: ['./user-settings.component.scss']
 })
 export class UserSettingsComponent implements OnInit {
-  cookBookUserProfile: User;
+  cookBookUserProfile: User | null = null;
 
   constructor(
 	public userProfileService: UserProfileService
   ) { }
 
   ngOnInit() {
-	this.userProfileService.currentData.subscribe(profile => this.cookBookUserProfile = profile);
+	  this.userProfileService.currentData.subscribe(profile => this.cookBookUserProfile = profile);
   }
 
 }

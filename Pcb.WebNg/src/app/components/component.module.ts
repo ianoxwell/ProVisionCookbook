@@ -10,7 +10,6 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 import { CompleteMaterialModule } from '../app-material.module';
 import { FormAutocompleteDirective } from '../directives/form-autocomplete.directive';
 import { MatInputAutoCompleteDirective } from '../directives/mat-input-autocomplete.directive';
-import { ScriptsComponent } from '../settings/scripts/scripts.component';
 import { NutrientTotalValidator } from '../validators/nutrient-total.validator';
 import { AppHeaderComponent } from './app-header/app-header.component';
 import { GraphDoughnutComponent } from './graph-doughnut/graph-doughnut.component';
@@ -52,7 +51,6 @@ import { ToastModule } from './toast/toast.module';
 	SearchBarComponent,
 	RecipeCardComponent,
 	RecipeViewComponent,
-	ScriptsComponent,
 	AppHeaderComponent,
 	IngredientEditComponent,
 	IngredientFilterComponent,
@@ -75,7 +73,6 @@ import { ToastModule } from './toast/toast.module';
 	SearchBarComponent,
 	RecipeCardComponent,
 	RecipeViewComponent,
-	ScriptsComponent,
 	AppHeaderComponent,
 	IngredientEditComponent,
 	IngredientFilterComponent,

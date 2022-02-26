@@ -3,23 +3,25 @@ import { Injectable } from '@angular/core';
 import { MeasurementModel } from '@models/ingredient-model';
 import { ReferenceAll } from '@models/reference.model';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { RefDataService } from './ref-data.service';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class ReferenceService {
-	private refAllSubject$ = new BehaviorSubject<ReferenceAll>(null);
+	private refAllSubject$ = new BehaviorSubject<ReferenceAll | undefined>(undefined);
 
-	private measurementSubject$ = new BehaviorSubject<Array<MeasurementModel>>(null);
+	private measurementSubject$ = new BehaviorSubject<MeasurementModel[]>([]);
 
-	constructor(
-		private refDataService: RefDataService
-	) { }
+	constructor(private refDataService: RefDataService) { }
 
 	getAllReferences(): Observable<ReferenceAll> {
-		return (!!this.refAllSubject$.value) ? this.refAllSubject$.asObservable() : this.setRefAll();
+		return this.refAllSubject$.pipe(
+			switchMap((refAll: ReferenceAll | undefined) => {
+				return !!refAll ? of(refAll) : this.setRefAll();
+			})
+		);
 	}
 
 	setRefAll(): Observable<ReferenceAll> {
