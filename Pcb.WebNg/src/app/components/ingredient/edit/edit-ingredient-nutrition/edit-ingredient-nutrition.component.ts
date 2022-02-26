@@ -1,8 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ComponentBase } from '@components/base/base.component.base';
+import { IGraphDonutData } from '@components/graph-doughnut/graph-donut.model';
 import { DecimalThreePlaces, DecimalTwoPlaces } from '@models/static-variables';
-import { merge } from 'rxjs';
+import { combineLatest, merge } from 'rxjs';
 import { first, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
@@ -11,8 +12,8 @@ import { first, takeUntil, tap } from 'rxjs/operators';
   styleUrls: ['./edit-ingredient-nutrition.component.scss']
 })
 export class EditIngredientNutritionComponent extends ComponentBase implements OnInit {
-	@ViewChild('doughNutCanvas') doughNutCanvas: ElementRef;
-	@Input() form: FormGroup;
+	@ViewChild('doughNutCanvas', { static: false }) doughNutCanvas!: ElementRef;
+	@Input() form: FormGroup = new FormGroup({});
 	@Output() markAsDirty = new EventEmitter<void>();
 
 	decimalTwoPlaces = DecimalTwoPlaces;
@@ -21,10 +22,10 @@ export class EditIngredientNutritionComponent extends ComponentBase implements O
 
 	doughnutLabels = {
 		header: 'Macronutrients',
-		internalLabel: 80,
+		internalLabel: '80',
 		internalSubLabel: 'kcal / 100g'
 	};
-	doughnutData = [
+	doughnutData: IGraphDonutData[] = [
 		{
 			label: 'Carbohydrates',
 			value: 32,
@@ -65,8 +66,8 @@ export class EditIngredientNutritionComponent extends ComponentBase implements O
 	}
 	listenOmegaRatio(): void {
 		// recalculate the Omega3 ratio on changes to their respective fields only
-		merge(this.form.get('omega3s').valueChanges,
-			this.form.get('omega6s').valueChanges).pipe(
+		combineLatest([this.form.get('omega3s')?.valueChanges,
+			this.form.get('omega6s')?.valueChanges]).pipe(
 			tap(() => this.O3ToO6Ratio = this.getO3ToO6Ratio()),
 			takeUntil(this.ngUnsubscribe)
 		).subscribe();
@@ -147,14 +148,4 @@ export class EditIngredientNutritionComponent extends ComponentBase implements O
 		console.log('ctxx', caloriesFontSize, ctx.measureText(calories).width, subheadingFontSize, centerX, centerY, ctx.canvas.clientWidth);
 		ctx.restore();
 	}
-
-	debounce(callback: () => void, wait: number) {
-		let timeout;
-		return (...args) => {
-			const context = this;
-			clearTimeout(timeout);
-			timeout = setTimeout(() => callback.apply(context, args), wait);
-		};
-	}
-
 }

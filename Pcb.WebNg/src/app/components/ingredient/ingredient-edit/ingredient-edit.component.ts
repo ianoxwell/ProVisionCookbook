@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSelect } from '@angular/material/select';
 import { ComponentBase } from '@components/base/base.component.base';
 import { IScrollPositions } from '@models/common.model';
@@ -10,7 +10,6 @@ import { EditedFieldModel, MeasurementModel } from '@models/ingredient-model';
 import { MessageStatus } from '@models/message.model';
 import { ReferenceAll, ReferenceItemFull } from '@models/reference.model';
 import { ValidationMessages } from '@models/static-variables';
-import { DateTimeService } from '@services/date-time.service';
 import { DialogService } from '@services/dialog.service';
 import { IngredientEditFormService } from '@services/ingredient-edit-form.service';
 import { MessageService } from '@services/message.service';
@@ -40,18 +39,18 @@ import { catchError, filter, first, switchMap, takeUntil, tap } from 'rxjs/opera
 
 // Behaviour - edited fields either update or add to array of editedItem, on save this array is then iterated to create
 // the IngredientModel for new or sent through to update
-export class IngredientEditComponent extends ComponentBase implements OnInit, AfterViewInit {
-	@Input() singleIngredient: Ingredient;
+export class IngredientEditComponent extends ComponentBase implements OnInit {
+	@Input() singleIngredient!: Ingredient;
 	@Input() isNew = false;
-	@Input() refData: ReferenceAll;
-	@Input() measurements: MeasurementModel[];
+	@Input() refData!: ReferenceAll;
+	@Input() measurements: MeasurementModel[] = [];
 	@Output() deleteItem = new EventEmitter<Ingredient>();
 	@Output() back = new EventEmitter<void>();
 
-	@ViewChild('constanceId', { static: true }) constanceSelect: MatSelect;
+	@ViewChild('constanceId', { static: true }) constanceSelect!: MatSelect;
 
-	selected: Ingredient;
-	ingredientForm: FormGroup;
+	selected: Ingredient | null = null;
+	ingredientForm: FormGroup = new FormGroup({});
 	// priceForm: FormGroup;
 	// conversionsForm: FormGroup;
 	editedItem: EditedFieldModel[] = [];
@@ -95,80 +94,25 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 			.subscribe();
 	}
 
-	ngAfterViewInit(): void {
-		// this.constanceSelect.
+	get foodGroup(): FormControl {
+		return this.ingredientForm.get('foodGroup') as FormControl;
 	}
-
-	whichKeyChanged(oldObject, newObject): any {
-		const objectKeys = Object.keys(newObject);
-		let value = 0;
-		let index = 0;
-		const whichKey = objectKeys.find((key: string, ind: number) => {
-			if (oldObject[ind] - newObject[key] !== 0) {
-				value = oldObject[ind] - newObject[key];
-				index = ind;
-				return true;
-			}
-		});
-		const values = objectKeys.reduce((o, key: string) => ({ ...o, [key]: value / 2 }), {});
-		delete values[whichKey]; // = {[key0]: value / 2, [key1]: value / 2};
-		// if half value can be added to each item
-		// if half value can't be added to item [0]
-		// oldObject, newObject = expected returnObject
-		// [100, 0, 0], [70*, 0, 0] = [70*, 15, 15] 30
-		// [100, 0, 0], [100, 0, 50*] = [50, 0, 50*] -50
-		// [80, 10, 10], [80, 10, 50*] = [50, 0, 50*] -40 (-30, -10) // new
-		// [30, 10, 60], [30, 10, 30*] = [45, 25, 30] 15
-		// [40, 40, 20], [30*, 40, 20] = [30*, 45, 25] 10
-		const valueKeys = Object.keys(values); // expecting 2 items
-		if (value < 0) {
-			if (newObject[valueKeys[0]] + values[valueKeys[0]] < 0) {
-				values[valueKeys[1]] += values[valueKeys[0]] + newObject[valueKeys[0]];
-				values[valueKeys[0]] = newObject[valueKeys[0]] * -1;
-			}
-			if (newObject[valueKeys[1]] + values[valueKeys[1]] < 0) {
-				values[valueKeys[0]] += values[valueKeys[1]] + newObject[valueKeys[1]];
-				values[valueKeys[1]] = newObject[valueKeys[1]] * -1;
-			}
-		}
-		return values;
+	get allergiesControl(): FormControl {
+		return this.ingredientForm.get('allergies') as FormControl;
 	}
-
-	// todo modify for new controls - related to conversion?
-	// filterMeasurements(id: string): MeasurementModel[] {
-	// 	// see static-variables for Measurements
-	// 	// return either all measurements or only the opposing types eg measureA is Weight then measureB must be Volume or Each
-	// 	// first check if the Control is created and has a value
-	// 	if (this.conversionsForm.get('measureAControl_' + id) &&
-	// 		isNotNullOrUndefined(this.conversionsForm.get('measureAControl_' + id).value)) {
-	// 		// find out the type selected
-	// 		const type = this.measurements.filter(measure =>
-	// 		measure.shortName === this.conversionsForm.get('measureAControl_' + id).value)[0].type;
-	// 		// Return the filtered measurements
-	// 		return this.measurements.filter((measure) => measure.type !== type);
-	// 	}
-	// 	return this.measurements;
-	// }
-
-	get foodGroup() {
-		return this.ingredientForm.get('foodGroup');
+	get purchasedByControl(): FormControl {
+		return this.ingredientForm.get('purchasedBy') as FormControl;
 	}
-	get allergiesControl() {
-		return this.ingredientForm.get('allergies');
+	get linkUrl(): FormControl {
+		return this.ingredientForm.get('linkUrl') as FormControl;
 	}
-	get purchasedByControl() {
-		return this.ingredientForm.get('purchasedBy');
-	}
-	get linkUrl() {
-		return this.ingredientForm.get('linkUrl');
-	}
-	get price() {
+	get price(): FormArray {
 		return this.ingredientForm.get('price') as FormArray;
 	}
-	get ingredientConversions() {
+	get ingredientConversions(): FormArray {
 		return this.ingredientForm.get('ingredientConversions') as FormArray;
 	}
-	get nutrition() {
+	get nutrition(): FormArray {
 		return this.ingredientForm.get('nutrition') as FormArray;
 	}
 	get caloricBreakdown(): FormGroup {
@@ -184,15 +128,24 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 		return this.ingredientForm.get('commonMinerals') as FormGroup;
 	}
 
+	getFormGroupOfArray(fArray: FormArray, index: number): FormGroup {
+		return fArray.at(index) as FormGroup;
+	}
+
 	markFormClean(): void {
 		this.ingredientForm.markAsUntouched();
 		this.ingredientForm.markAsPristine();
 	}
 
 	onSaveItem(): void {
+		if (!this.selected) {
+			return;
+		}
+
 		const findReference = (id: number, refKey: keyof ReferenceAll) =>
-			this.refData[refKey].find((item: ReferenceItemFull) => item.id === id);
+			this.refData[refKey]?.find((item: ReferenceItemFull) => item.id === id);
 		const findMeasurement = (id: number) => this.measurements.find((item: MeasurementModel) => item.id === id);
+
 		this.isSavingResults = true;
 		const formRaw = this.ingredientForm.getRawValue();
 		const saveObject: Ingredient = {
@@ -201,7 +154,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 		};
 		saveObject.allergies = formRaw.allergies.map((id: number) => findReference(id, 'AllergyWarning'));
 		saveObject.foodGroup = findReference(formRaw.foodGroup, 'IngredientFoodGroup');
-		saveObject.ingredientConversions = saveObject.ingredientConversions.map((convert: Conversion) => {
+		saveObject.ingredientConversions = saveObject.ingredientConversions?.map((convert: Conversion) => {
 			return {
 				...convert,
 				baseMeasurementUnit: findMeasurement(Number(convert.baseMeasurementUnit)),
@@ -217,7 +170,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 		}
 		const ingredientAPI$ = this.isNew
 			? this.restIngredientService.createIngredient(saveObject)
-			: this.restIngredientService.updateIngredient(this.selected.id, saveObject);
+			: this.restIngredientService.updateIngredient(this.selected.id as number, saveObject);
 		ingredientAPI$
 			.pipe(
 				tap((item: Ingredient) => {
@@ -252,11 +205,12 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 			.subscribe();
 	}
 
+	// Seems like it was trying to remove a formGroup from a formArray - but needs to pass in the array really.
 	deleteSubDocument(subDocument: string, docSubId: string, controlIndex: number) {
 		// only deletes on save - just removes it from the formControls
-		this[subDocument].removeAt(controlIndex);
-		this[subDocument].markAsDirty();
-		this[subDocument].markAsTouched();
+		// this[subDocument].removeAt(controlIndex);
+		// this[subDocument].markAsDirty();
+		// this[subDocument].markAsTouched();
 		this.messageService.add({
 			severity: MessageStatus.Success,
 			summary: `Removed ${subDocument}`,
@@ -274,7 +228,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 		this.ingredientForm.markAsDirty();
 	}
 
-	addSubDocument(subDocument: string) {
+	addSubDocument(subDocument: string): void {
 		// expected either prices, conversions, or nutrition
 		// add a new subDoc to this.selected[subDocument] with an empty model, then create a set of controls based on that
 		// switch (subDocument) {
@@ -285,8 +239,8 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 		// 	// case 'nutrition': this.nutrition.push(this.initNutritionFormGroup(new NutritionModel(), true)); break;
 		// 	default: this.messageService.add({severity: MessageStatus.Warning, summary: `Unidentified subDocument created, ${subDocument}`})
 		// }
-		this[subDocument].markAsDirty();
-		this[subDocument].markAsTouched();
+		// this[subDocument].markAsDirty();
+		// this[subDocument].markAsTouched();
 	}
 
 	// createSubDocument(ingredientId: string, subDocumentName: string, subDocument: Price | Conversion) {
@@ -303,7 +257,11 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 	// 	).subscribe();
 	// }
 
-	deleteIngredient() {
+	deleteIngredient(): void {
+		if (!this.selected) {
+			return;
+		}
+
 		this.dialogService
 			.confirm(
 				MessageStatus.Warning,
@@ -314,7 +272,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 			.pipe(
 				first(),
 				filter((result: boolean) => !!result),
-				switchMap(() => this.restIngredientService.deleteItem(this.selected.id)),
+				switchMap(() => this.restIngredientService.deleteItem(this.selected?.id as number)),
 				tap((deletedIngredient: Ingredient) => {
 					console.log('Deleted Ingredient', deletedIngredient);
 					// is there anyway to make this refresh the list?
@@ -324,25 +282,25 @@ export class IngredientEditComponent extends ComponentBase implements OnInit, Af
 			.subscribe();
 	}
 
-	dragNDrop(event: any) {
-		let min = event.currentIndex;
-		let max = event.previousIndex;
-		let reverse = false;
-		if (event.previousIndex < event.currentIndex) {
-			min = event.previousIndex;
-			max = event.currentIndex;
-			reverse = true;
-		}
-		// quick check to ensure numbers will be in range
-		if (min >= 0 && max < this.selected.ingredientConversions.length) {
-			// todo there has to be a better way of doing this!
-			for (let i = min; i <= max; i++) {
-				reverse ? this.selected.ingredientConversions[i].preference-- : this.selected.ingredientConversions[i].preference++;
-				// check for repeats and add items to editedItem
-				// todo  maybe instead on submit check through the preferences against the original - create change event for each actual change?
-			}
-			this.selected.ingredientConversions[event.previousIndex].preference = event.currentIndex;
-		}
-		this.selected.ingredientConversions = [...this.selected.ingredientConversions].sort(DateTimeService.sortByNumber);
+	dragNDrop(event: any): void {
+		// let min = event.currentIndex;
+		// let max = event.previousIndex;
+		// let reverse = false;
+		// if (event.previousIndex < event.currentIndex) {
+		// 	min = event.previousIndex;
+		// 	max = event.currentIndex;
+		// 	reverse = true;
+		// }
+		// // quick check to ensure numbers will be in range
+		// if (min >= 0 && max < this.selected.ingredientConversions.length) {
+		// 	// todo there has to be a better way of doing this!
+		// 	for (let i = min; i <= max; i++) {
+		// 		reverse ? this.selected.ingredientConversions[i].preference-- : this.selected.ingredientConversions[i].preference++;
+		// 		// check for repeats and add items to editedItem
+		// 		// todo  maybe instead on submit check through the preferences against the original - create change event for each actual change?
+		// 	}
+		// 	this.selected.ingredientConversions[event.previousIndex].preference = event.currentIndex;
+		// }
+		// this.selected.ingredientConversions = [...this.selected.ingredientConversions].sort(DateTimeService.sortByNumber);
 	}
 }

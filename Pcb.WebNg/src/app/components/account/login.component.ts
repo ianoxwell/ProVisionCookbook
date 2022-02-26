@@ -19,8 +19,8 @@ import { catchError, takeUntil, tap } from 'rxjs/operators';
 	styleUrls: ['./login.component.scss']
 })
 export class LoginComponent extends ComponentBase implements OnInit {
-	googleUserData: SocialUser;
-	loggedIn: boolean;
+	googleUserData: SocialUser | undefined;
+	loggedIn = false;
 	isGettingJwt = false;
 
 	constructor(
@@ -35,7 +35,7 @@ export class LoginComponent extends ComponentBase implements OnInit {
 	}
 
 	ngOnInit(): void {
-		const gUser: string = this.storageService.getItem('google-user');
+		const gUser: string = this.storageService.getItem('google-user') as string;
 		// if GoogleJwtToken checks out then we proceed to authenticate.
 		if (!!gUser && gUser.length > 0 && gUser !== 'null') {
 			// attempt to verify the token against the api
@@ -58,10 +58,10 @@ export class LoginComponent extends ComponentBase implements OnInit {
 					if (!!user) {
 						this.googleUserData = user;
 						this.storageService.setItem('google-user', JSON.stringify(this.googleUserData));
-						JSON.parse(this.storageService.getItem('user'));
+						
 						this.getGoogleJwtToken(this.googleUserData);
 					} else {
-						localStorage.setItem('google-user', null);
+						this.storageService.removeItem('google-user');
 					}
 
 					this.loggedIn = user != null;
@@ -112,6 +112,6 @@ export class LoginComponent extends ComponentBase implements OnInit {
 	}
 	/** sets the localStorage cache of the google-user to null */
 	googleClear(): void {
-		localStorage.setItem('google-user', null);
+		this.storageService.removeItem('google-user');
 	}
 }

@@ -13,7 +13,7 @@ export class ComponentBase implements OnDestroy {
 	}
 
 	destroySubscriptions(): void {
-		this.ngUnsubscribe.next();
+		this.ngUnsubscribe.next(undefined);
 		this.ngUnsubscribe.complete();
 	}
 }

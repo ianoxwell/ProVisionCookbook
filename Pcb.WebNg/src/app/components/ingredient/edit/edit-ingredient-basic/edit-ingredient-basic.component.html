@@ -47,7 +47,7 @@
 
 				<mat-form-field class="mr-2 w-30" >
 					<mat-label>Pral Score (0 is neutral)</mat-label>
-					<input type="text" matInput digitOnly inputmode="numeric" decimal="false" formControlName="pralScore"/>
+					<input type="text" matInput digitOnly inputmode="numeric" [decimal]="false" formControlName="pralScore"/>
 				</mat-form-field>
 			</div>
 		</div>
@@ -61,7 +61,7 @@
 		<!-- <button mat-flat-button aria-label="Refresh data online" (click)="refreshData()" [disabled]="!linkUrl.value || linkUrl.value.length === 0">Refresh Data online</button> -->
 		<mat-form-field class="pr-2 w-20">
 			<mat-label>Usda Food Id</mat-label>
-			<input type="text" matInput digitOnly inputmode="numeric" decimal="false" formControlName="usdaFoodId"/>
+			<input type="text" matInput digitOnly inputmode="numeric" [decimal]="false" formControlName="usdaFoodId"/>
 		</mat-form-field>
 		<button mat-flat-button aria-label="Attempt to match with Usda Food Id" (click)="matchUsda()" *ngIf="usdaFoodId.value === null">Match Usda Food Id</button>
 	</div>

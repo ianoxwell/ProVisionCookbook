@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { IGraphDonutData } from './graph-donut.model';
 
 export interface DataRef {
 	label?: string;
@@ -19,16 +20,16 @@ export class GraphDoughnutComponent implements OnInit, OnChanges {
 		borderWidth: string;
 		size: string;
 	} = { spacing: 0, borderWidth: '2rem', size: '300px' };
-	@Input() labels?: {
+	@Input() labels: {
 		header?: string;
 		internalLabel?: string;
 		internalLabelClass?: string;
 		internalSubLabel?: string;
 		internalSubLabelClass?: string;
-	};
-	@Input() data: any;
+	} = {};
+	@Input() data: IGraphDonutData[] = [];
 	numberArray: string[] = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'];
-	sliceStyle: string;
+	sliceStyle = '';
 	styleObject = {};
 	constructor() {}
 

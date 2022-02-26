@@ -9,7 +9,7 @@ import { first, tap } from 'rxjs/operators';
   styleUrls: ['./edit-common-vitamins.component.scss']
 })
 export class EditCommonVitaminsComponent implements OnInit {
-	@Input() form: FormGroup;
+	@Input() form!: FormGroup;
 	@Output() markAsDirty = new EventEmitter<void>();
 
 	decimalTwoPlaces = DecimalTwoPlaces;

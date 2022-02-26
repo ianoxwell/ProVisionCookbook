@@ -5,6 +5,7 @@ import { User } from '@models/user';
 import { LoginService } from '@services/login.service';
 import { of } from 'rxjs';
 import { debounceTime, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { filterNullish } from 'src/app/utils/filter-nullish';
 import { UserProfileService } from '../../services/user-profile.service';
 import { ComponentBase } from '../base/base.component.base';
 
@@ -50,7 +51,7 @@ export class AppHeaderComponent extends ComponentBase implements OnInit {
 				// if not logged in, leave the userProfile alone
 				filter((actuallyLoggedIn: boolean) => actuallyLoggedIn),
 				switchMap(() => this.userProfileService.currentData),
-				switchMap((profile: User) => {
+				switchMap((profile: User | null) => {
 					this.profile = profile;
 					if (profile === null) {
 						return this.loginService.getSingleUserProfile();
@@ -58,8 +59,8 @@ export class AppHeaderComponent extends ComponentBase implements OnInit {
 					return of(profile);
 				}),
 				// On logout - profile is reverted to null - no need to keep going.
-				filter((profile: User) => profile !== null),
-				tap((profile) => {
+				filterNullish(),
+				tap((profile: User) => {
 					this.adminRights = this.userProfileService.checkAdminRights(profile);
 				}),
 				takeUntil(this.ngUnsubscribe)

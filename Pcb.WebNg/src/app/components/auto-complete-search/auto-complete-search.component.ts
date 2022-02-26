@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-empty-function, @typescript-eslint/explicit-module-boundary-types */
 import { AfterContentInit, Component, EventEmitter, Input, OnChanges, Optional, Output, Self, SimpleChanges, ViewChild } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
@@ -15,17 +16,17 @@ import { filter, takeUntil, tap } from 'rxjs/operators';
 export class AutoCompleteSearchComponent extends ComponentBase implements ControlValueAccessor, AfterContentInit, OnChanges  {
 
 	// Important inputs
-	@Input() placeholder: string;
-	@Input() matHint: string;
+	@Input() placeholder = '';
+	@Input() matHint = '';
 
 	// Function to format the display of the ref items.
 	@Input() displayWith: (item: ReferenceItem) => string = ((i: ReferenceItem) => i?.title);
 
-	@Input() values: Observable<ReferenceItem[]> | ReferenceItem[];
+	@Input() values: Observable<ReferenceItem[]> | ReferenceItem[] = [];
 	@Output() filterChange = new EventEmitter<string>();
 
 	// Gets a reference to the MatAutocompleteTrigger.
-	@ViewChild(MatAutocompleteTrigger, { read: MatAutocompleteTrigger, static: true}) auto: MatAutocompleteTrigger;
+	@ViewChild(MatAutocompleteTrigger, { read: MatAutocompleteTrigger, static: true}) auto!: MatAutocompleteTrigger;
 
 	// custom error matcher to link the input to the error state of the control
 	readonly errorStateMatcher: ErrorStateMatcher = {
@@ -33,24 +34,13 @@ export class AutoCompleteSearchComponent extends ComponentBase implements Contro
 	};
 
 	// Copy of '@Input() values' guaranteed to be an actual observable (as opposed to the 'maybe observable maybe sync data' @Input() values)
-	values$: Observable<ReferenceItem[]>;
+	values$: Observable<ReferenceItem[]>= of([]);
 
 	filterControl = new FormControl();
-	control: AbstractControl;
-	// tslint:disable-next-line: no-input-rename
-	@Input('value') _value: ReferenceItem;
+	control: FormControl = new FormControl();
+	value: ReferenceItem | undefined;
 	onChange: any = () => {};
 	onTouched: any = () => {};
-
-	get value() {
-		return this._value;
-	}
-
-	set value(val) {
-		this._value = val;
-		this.onChange(val);
-		this.onTouched();
-	}
 
 	constructor(
 		@Optional() @Self() public ngControl: NgControl
@@ -64,7 +54,7 @@ export class AutoCompleteSearchComponent extends ComponentBase implements Contro
 	}
 
 	ngAfterContentInit(): void {
-		this.control = this.ngControl?.control;
+		this.control = this.ngControl && (this.ngControl.control as FormControl);
 		this.getWatchFilterText(this.filterControl.valueChanges).subscribe();
 		this.resetFilterValue(this.control.valueChanges).subscribe();
 	}
@@ -75,15 +65,15 @@ export class AutoCompleteSearchComponent extends ComponentBase implements Contro
 		}
 	}
 
-	registerOnChange(fn): void {
+	registerOnChange(fn: any): void {
 		this.onChange = fn;
 	}
 
-	writeValue(value): void {
+	writeValue(value: ReferenceItem): void {
 		this.value = value;
 	}
 
-	registerOnTouched(fn): void {
+	registerOnTouched(fn: any): void {
 		this.onTouched = fn;
 	}
 

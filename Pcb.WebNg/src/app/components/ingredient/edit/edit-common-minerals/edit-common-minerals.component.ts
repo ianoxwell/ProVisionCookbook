@@ -10,7 +10,7 @@ import { first, tap } from 'rxjs/operators';
 })
 export class EditCommonMineralsComponent implements OnInit {
 
-	@Input() form: FormGroup;
+	@Input() form!: FormGroup;
 	@Output() markAsDirty = new EventEmitter<void>();
 
 	decimalTwoPlaces = DecimalTwoPlaces;

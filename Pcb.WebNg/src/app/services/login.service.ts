@@ -97,7 +97,7 @@ export class LoginService {
 	 * @param email the provided username
 	 * @param password the provided password
 	 */
-	public login(email: string, password: string, social = false): Observable<MessageResult> {
+	public login(email: string, password: string | null, social = false): Observable<MessageResult> {
 		// Clear and current session
 		this.hardLogout();
 

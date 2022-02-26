@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Ingredient, IngredientNameSpace } from '@models/ingredient';
 import { ReferenceAll } from '@models/reference.model';
 import { ValidationMessages } from '@models/static-variables';
@@ -12,24 +12,28 @@ import { first, tap } from 'rxjs/operators';
 	styleUrls: ['./edit-ingredient-basic.component.scss']
 })
 export class EditIngredientBasicComponent implements OnInit {
-	@Input() refData: ReferenceAll;
-	@Input() ingredientForm: FormGroup;
-	@Input() selectedIngredient: Ingredient;
+	@Input() refData!: ReferenceAll;
+	@Input() ingredientForm!: FormGroup;
+	@Input() selectedIngredient: Ingredient | null = null;
 	@Output() updatedIngredient = new EventEmitter<Ingredient>();
 	validationMessages = ValidationMessages;
 	purchasedByEnum = Object.values(IngredientNameSpace.PurchasedByEnum).map((item: string, id: number) => ({ id, item }));
 	constructor(private dialogService: DialogService) {}
 
 	ngOnInit() {}
-	get nameControl() {
-		return this.ingredientForm.get('name');
+	get nameControl(): FormControl {
+		return this.ingredientForm.get('name') as FormControl;
 	}
-	get usdaFoodId() {
-		return this.ingredientForm.get('usdaFoodId');
+	get usdaFoodId(): FormControl {
+		return this.ingredientForm.get('usdaFoodId') as FormControl;
 	}
 
 	/** Fires a dialog to attempt to match and update ingredient from the rawUsdaFood database */
 	matchUsda(): void {
+		if (!this.refData.IngredientFoodGroup || !this.selectedIngredient) {
+			return;
+		}
+
 		this.dialogService
 			.matchIngredientDialog(this.selectedIngredient, this.refData.IngredientFoodGroup)
 			.pipe(

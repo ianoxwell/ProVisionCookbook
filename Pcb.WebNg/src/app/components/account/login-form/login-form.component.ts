@@ -20,7 +20,7 @@ import { catchError, takeUntil, tap } from 'rxjs/operators';
 	styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent extends ComponentBase implements OnInit {
-	@ViewChild('passwordInput', { static: false }) passwordInput: ElementRef;
+	@ViewChild('passwordInput', { static: false }) passwordInput!: ElementRef;
 	loginForm: FormGroup;
 	validationMessages = ValidationMessages;
 	isSubmitting = false;
@@ -33,18 +33,20 @@ export class LoginFormComponent extends ComponentBase implements OnInit {
 		private cdr: ChangeDetectorRef
 	) {
 		super();
+		this.loginForm = this.createForm();
 	}
 
 	ngOnInit(): void {
-		this.loginForm = this.createForm();
+		
 	}
 
 	// convenience getter for easy access to form fields
 	get f() {
 		return this.loginForm.controls;
 	}
+
+	/** Create the controls for the reactive forms */
 	createForm(): FormGroup {
-		// Create the controls for the reactive forms
 		return this.fb.group({
 			usernameControl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(120), Validators.email]],
 			passwordControl: ['', [Validators.required, Validators.minLength(2)]],
@@ -58,8 +60,9 @@ export class LoginFormComponent extends ComponentBase implements OnInit {
 	login(): void {
 		this.isSubmitting = true;
 		if (this.loginForm.invalid) {
-			return null;
+			return;
 		}
+
 		this.passwordInput.nativeElement.blur();
 		const form = this.loginForm.getRawValue();
 		this.loginService

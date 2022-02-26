@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AdminRights, IdTitlePair } from '@models/common.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { User, UserRole } from '../models/user';
 
 @Injectable({

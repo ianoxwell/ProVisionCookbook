@@ -13,8 +13,7 @@ module.exports = {
         'plugin:@angular-eslint/recommended',
         'plugin:@angular-eslint/template/process-inline-templates',
         'plugin:prettier/recommended',
-        'plugin:rxjs/recommended',
-        'plugin:storybook/recommended'
+        'plugin:rxjs/recommended'
       ],
       rules: {
         'max-len': ['error', { code: 160 }],

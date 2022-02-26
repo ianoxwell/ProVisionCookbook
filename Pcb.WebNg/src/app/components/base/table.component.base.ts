@@ -1,23 +1,23 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ISortPageObj, PagedResult, SortPageObj } from '@models/common.model';
 
 @Component({ template: '' })
 export abstract class BaseTableComponent<T = any> implements OnChanges {
-	@Input() data: PagedResult<T>;
+	@Input() data: PagedResult<T> = { items: [], totalCount: 0 };
 	@Input() sortPageObj: ISortPageObj = new SortPageObj();
 	@Output() sortingPageChange = new EventEmitter<ISortPageObj>();
 	@Output() updateTableRequest = new EventEmitter();
 
-	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-	@ViewChild(MatSort, { static: true }) sort: MatSort;
+	@ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
+	@ViewChild(MatSort, { static: false }) sort!: MatSort;
 
-	displayedColumns: string[];
-	dataSource: MatTableDataSource<T>;
-	dataLength: number;
-	dataCount: number;
+	displayedColumns: string[] = [];
+	dataSource: MatTableDataSource<T> = new MatTableDataSource();
+	dataLength = 0;
+	dataCount = 0;
 
 	constructor() {	}
 
@@ -30,10 +30,10 @@ export abstract class BaseTableComponent<T = any> implements OnChanges {
 		}
 	}
 	/** This MUST be implemented in the extending class */
-	abstract goto(row: any);
+	abstract goto(row: any): void;
 
 	/** Triggers when there is a sorting change in the template, resets page */
-	onSortChange(ev: MatSort): void {
+	onSortChange(ev: Sort): void {
 		this.sortPageObj.orderby = ev.active;
 		this.sortPageObj.order = ev.direction;
 		this.sortPageObj.page = 0;

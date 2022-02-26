@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ComponentBase } from '@components/base/base.component.base';
-import { NewUser } from '@models/accounts.model';
+import { INewUser, NewUser } from '@models/accounts.model';
 import { MessageResult } from '@models/common.model';
 import { MessageStatus } from '@models/message.model';
 import { ValidationMessages } from '@models/static-variables';
@@ -23,8 +23,8 @@ import { catchError, filter, first, switchMap, takeUntil, tap } from 'rxjs/opera
   styleUrls: ['./register-form.component.scss']
 })
 export class RegisterFormComponent extends ComponentBase implements OnInit {
-	form: FormGroup;
-	newUser = new NewUser();
+	form: FormGroup = new FormGroup({});
+	newUser: INewUser = new NewUser();
 	validationMessages = ValidationMessages;
 
 	displayAwaitingVerificationEmail = false;
@@ -41,9 +41,9 @@ export class RegisterFormComponent extends ComponentBase implements OnInit {
 
 
 	ngOnInit(): void {
-		const googleUser: string = this.storageService.getItem('google-user');
+		const googleUser: string = this.storageService.getItem('google-user') as string;
 		if (!!googleUser){
-			const gUser: SocialUser = JSON.parse(googleUser);
+			const gUser: SocialUser = JSON.parse(googleUser) as SocialUser;
 			this.newUser = (!!gUser && gUser !== null) ? {
 				firstName: gUser.firstName,
 				lastName: gUser.lastName,
@@ -58,7 +58,7 @@ export class RegisterFormComponent extends ComponentBase implements OnInit {
 	}
   	get f() { return this.form.controls; }
 
-	createForm(user: NewUser): void {
+	createForm(user: INewUser): void {
 		this.form = this.formBuilder.group({
 			firstName: [user.firstName, Validators.required],
 			lastName: [user.lastName, Validators.required],

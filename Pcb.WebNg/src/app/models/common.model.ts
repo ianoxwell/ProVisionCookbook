@@ -1,3 +1,4 @@
+import { SortDirection } from '@angular/material/sort';
 import { environment } from 'src/environments/environment';
 import { IIngredientFilterObject, IRecipeFilterQuery } from './filter-queries.model';
 
@@ -43,7 +44,7 @@ export interface IngredientPaginator {
 	pageSize: number;
 	length: number;
 	active?: string;
-	direction?: 'asc' | 'desc';
+	direction?: SortDirection;
 	filter?: string;
 }
 
@@ -61,14 +62,14 @@ export class MessageResult {
 
 export interface ISortPageObj {
 	orderby: string;
-	order?: string;
+	order: SortDirection;
 	perPage: number;
 	page: number;
 }
 
 export class SortPageObj implements ISortPageObj {
 	orderby = 'name';
-	order = 'asc';
+	order: SortDirection = 'asc';
 	page = 0;
 	perPage = environment.resultsPerPage;
 	constructor() {}
@@ -76,7 +77,7 @@ export class SortPageObj implements ISortPageObj {
 	public update(filterObj: IIngredientFilterObject | IRecipeFilterQuery) {
 		if (filterObj) {
 			this.orderby = filterObj.orderby;
-			this.order = filterObj.order as string;
+			this.order = filterObj.order;
 			this.page = filterObj.page;
 			this.perPage = filterObj.perPage;
 		}

@@ -6,9 +6,9 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./icon-text.component.scss']
 })
 export class IconTextComponent  {
-	@Input() text: string;
-	@Input() icon: string;
-	@Input() titleText: string;
-	@Input() color: string;
+	@Input() text = '';
+	@Input() icon = '';
+	@Input() titleText = '';
+	@Input() color = '';
 
 }

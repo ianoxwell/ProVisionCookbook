@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { PageTitleService } from '@services/page-title.service';
-import { Observable, of, interval, timer, from } from 'rxjs';
-import { take, delay, tap, map, switchMap } from 'rxjs/operators';
+import { Observable, timer } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-loading-indicator',

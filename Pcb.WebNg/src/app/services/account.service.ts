@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NewUser } from '@models/accounts.model';
+import { INewUser } from '@models/accounts.model';
 import { MessageResult } from '@models/common.model';
 import { User } from '@models/user';
 import { Observable } from 'rxjs';
@@ -16,7 +16,7 @@ export class AccountService {
 		private http: HttpClient
 	) { }
 
-	register(account: NewUser): Observable<MessageResult>  {
+	register(account: INewUser): Observable<MessageResult>  {
 		return this.http.post<MessageResult>(`${this.baseUrl}/register`, account);
 	}
 

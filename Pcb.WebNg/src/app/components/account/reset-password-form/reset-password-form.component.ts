@@ -35,11 +35,10 @@ export class ResetPasswordFormComponent extends ComponentBase implements OnInit 
 		private messageService: MessageService
 	) {
 		super();
+		this.form = this.createForm();
 	}
 
 	ngOnInit(): void {
-		this.form = this.createForm();
-
 		// tslint:disable-next-line: no-string-literal
 		this.token = this.route.snapshot.queryParams['token'];
 
@@ -103,7 +102,7 @@ export class ResetPasswordFormComponent extends ComponentBase implements OnInit 
 	 * Triggers the password reset pathway.
 	 */
 	resetPassword(): void {
-		if (this.form.invalid) {
+		if (this.form.invalid || !this.token) {
 			return;
 		}
 		this.isSubmitting = true;

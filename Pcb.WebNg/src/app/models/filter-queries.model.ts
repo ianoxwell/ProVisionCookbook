@@ -1,9 +1,10 @@
+import { SortDirection } from '@angular/material/sort';
 import { environment } from 'src/environments/environment';
 
 export interface IBaseFilterObject {
 	name: string; // match=name%3D${filterQuery.name}& (indexed search on name)
 	orderby: string;
-	order?: string;
+	order: SortDirection;
 	perPage: number;
 	page: number;
 	tabNumber?: number;
@@ -21,7 +22,7 @@ export class IngredientFilterObject implements IIngredientFilterObject {
 	public page: number;
 	public perPage: number;
 	public orderby: string;
-	public order: string;
+	public order: SortDirection;
 	public name: string;
 	public isUsdaFoodIdNull?: boolean;
 	constructor() {
@@ -53,11 +54,13 @@ export class RecipeFilterQuery implements IRecipeFilterQuery {
 	public perPage: number;
 	public orderby: string;
 	public name: string;
+	order: SortDirection;
 	constructor() {
 		this.page = 0;
 		this.perPage = environment.resultsPerPage;
 		this.orderby = 'name';
 		this.name = '';
+		this.order = 'asc';
 	}
 
 }
