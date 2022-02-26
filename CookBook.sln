@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pcb.Configuration", "Pcb.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pcb.Dto", "Pcb.Dto\Pcb.Dto.csproj", "{A454A456-C342-4803-B2E6-BDE127101EFA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pcb.Security", "PcbSecurity\Pcb.Security.csproj", "{3B4BFB5B-F19F-4C4D-9002-76B182418830}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pcb.Security", "Pcb.Security\Pcb.Security.csproj", "{3B4BFB5B-F19F-4C4D-9002-76B182418830}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pcb.Service", "Pcb.Service\Pcb.Service.csproj", "{87F3327A-C768-49D2-8A78-07DE92017875}"
 EndProject

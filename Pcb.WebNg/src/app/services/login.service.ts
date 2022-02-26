@@ -1,20 +1,21 @@
-import { IToken, IResponseToken, IClaims } from '@models/security.models';
-import { distinctUntilChanged, tap, catchError, map, switchMap, filter, first, takeUntil } from 'rxjs/operators';
-import { of, Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { StorageService } from './storage';
-import { ITokenState } from '@models/logout.models';
-import { environment } from 'src/environments/environment';
-import { SocialAuthService, SocialUser } from 'angularx-social-login';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { UserProfileService } from './user-profile.service';
-import { User } from '@models/user';
 import { MessageResult } from '@models/common.model';
+import { ITokenState } from '@models/logout.models';
+import { IClaims, IResponseToken, IToken } from '@models/security.models';
+import { User } from '@models/user';
+import { SocialAuthService, SocialUser } from 'angularx-social-login';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, distinctUntilChanged, filter, first, map, tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { StorageService } from './storage.service';
+import { UserProfileService } from './user-profile.service';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class LoginService {
-
 	private authentication$ = new BehaviorSubject<ITokenState>(null);
 
 	// JWT token string obtained at login.
@@ -42,8 +43,8 @@ export class LoginService {
 		private http: HttpClient,
 		private storageService: StorageService,
 		private userProfileService: UserProfileService,
-		private authService: SocialAuthService,
-	) {;
+		private authService: SocialAuthService
+	) {
 		this.getSetJwtInitial();
 	}
 
@@ -60,11 +61,13 @@ export class LoginService {
 		return !!jwtToken && jwtToken.length > 8 && this.checkJwtExpiry(jwtToken) && !!this.jwt.token && !!this.claims;
 	}
 
-	  	/** Checks the JWT Token from local storage and compares the expiry to current time */
+	/** Checks the JWT Token from local storage and compares the expiry to current time */
 	public checkJwtExpiry(jwt: any): boolean {
-		if (!jwt) { return false; }
+		if (!jwt) {
+			return false;
+		}
 		jwt = this.decode(jwt);
-		const currentTime = (new Date()).getTime();
+		const currentTime = new Date().getTime();
 		const expiresAt = jwt.exp * 1000;
 		return expiresAt > currentTime;
 	}
@@ -75,11 +78,13 @@ export class LoginService {
 		this.claims = null;
 		this.storageService.removeItem(this.token_key);
 		if (includeSocial) {
-			this.authService.authState.pipe(
-				first(),
-				filter((signedIn: SocialUser) => !!signedIn),
-				tap(() => this.authService.signOut()),
-			).subscribe();
+			this.authService.authState
+				.pipe(
+					first(),
+					filter((signedIn: SocialUser) => !!signedIn),
+					tap(() => this.authService.signOut())
+				)
+				.subscribe();
 			this.storageService.removeItem('google-user');
 		}
 		this.userProfileService.setLoggedIn(false);
@@ -97,7 +102,9 @@ export class LoginService {
 
 		// Construct the http request
 		const body = social ? { email } : { email, password };
-		const loginUrl = social ? `${environment.apiUrl}/token/google?email=${email}` : `${environment.apiUrl}${environment.apiVersion}token/create`;
+		const loginUrl = social
+			? `${environment.apiUrl}/token/google?email=${email}`
+			: `${environment.apiUrl}${environment.apiVersion}token/create`;
 
 		return this.http.post<IResponseToken | MessageResult>(loginUrl, body).pipe(
 			map((response: any) => {
@@ -109,13 +116,15 @@ export class LoginService {
 					const success = this.setJwt(jwt);
 					return new MessageResult(success ? 'Successful login' : 'Login failure');
 				}
-			}),
+			})
 		);
 	}
 
 	getSingleUserProfile(): Observable<User> {
 		const jwtToken = this.getJwt();
-		if (jwtToken === null) { return of(null); }
+		if (jwtToken === null) {
+			return of(null);
+		}
 		const userId = this.decode(this.getJwt()).sub;
 		return this.http.get<User>(`${environment.apiUrl}${environment.apiVersion}account/get-account?id=${userId}`).pipe(
 			tap((user: User) => {
@@ -137,13 +146,43 @@ export class LoginService {
 		this.refreshSession();
 	}
 
-	public getTokenUsingGoogleToken(googleUser: SocialUser): Observable<boolean | string> {
+	/**
+	 * Quick try parse string to JSON.
+	 * @param str to check.
+	 * @returns try if able to parse the string.
+	 */
+	private isJsonString(str: string): boolean {
+		try {
+			JSON.parse(str);
+		} catch (e) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Uses the Google User JWK as authorisation to attempt to sign username onto app.
+	 * @param googleUser can be SocialUser or string to parse (from the localStorage)
+	 * @returns boolean if successful or string message of 'register' if fail.
+	 */
+	getTokenUsingGoogleToken(googleUser: SocialUser | string): Observable<boolean | string> {
+		// check for string or Social User. Parse and cast to SocialUser.
+		let gUser: SocialUser;
+		if (typeof googleUser === 'string') {
+			if (!this.isJsonString(googleUser)) {
+				return of(false);
+			} else {
+				gUser = JSON.parse(googleUser) as SocialUser;
+			}
+		} else {
+			gUser = googleUser;
+		}
 		let googleSignInUrl = `${environment.apiUrl}/token/google`;
 		let newHeaders = new HttpHeaders();
 		newHeaders = newHeaders.append('Content-Type', 'application/json');
-		if (googleUser != null) {
-			newHeaders = newHeaders.append('Authorization', 'Bearer ' + googleUser.idToken);
-			googleSignInUrl += `?email=${googleUser.email}`;
+		if (googleUser !== null) {
+			newHeaders = newHeaders.append('Authorization', 'Bearer ' + gUser.idToken);
+			googleSignInUrl += `?email=${gUser.email}`;
 		}
 		return this.http.get<IResponseToken>(googleSignInUrl, { headers: newHeaders }).pipe(
 			map((response: any) => {
@@ -178,11 +217,10 @@ export class LoginService {
 		}
 
 		// Posts the reissuing request
-		this.postRefresh(this.jwt.refreshToken)
-			.subscribe(
-				() => this.isTokenRefreshInProgress = false,
-				() => this.isTokenRefreshInProgress = false
-			);
+		this.postRefresh(this.jwt.refreshToken).subscribe(
+			() => (this.isTokenRefreshInProgress = false),
+			() => (this.isTokenRefreshInProgress = false)
+		);
 	}
 
 	/**
@@ -195,15 +233,16 @@ export class LoginService {
 		const loginUrl = `${environment.apiUrl}${environment.apiVersion}token/refresh`;
 
 		return this.http.post<IResponseToken>(loginUrl, body).pipe(
-			map(response => {
+			map((response) => {
 				const jwt = this.processJwtResponse(response);
 				this.userProfileService.setLoggedIn(true);
 				return this.setJwt(jwt);
 			}),
-			catchError(err => {
+			catchError((err) => {
 				console.log(err);
 				return of<boolean>(false);
-			}));
+			})
+		);
 	}
 
 	/**
@@ -246,7 +285,6 @@ export class LoginService {
 	private setJwt(newJwt: IToken): boolean {
 		// Default
 		if (!newJwt.token || !newJwt.refreshToken || !newJwt.expiresAt) {
-
 			this.claims = null;
 
 			this.jwt = this.initNewJwt();
@@ -267,8 +305,8 @@ export class LoginService {
 		const expiresAt = newJwt.expiresAt;
 		const lifetime = newJwt.lifetime;
 
-		const refreshesAt = expiresAt - Math.floor((lifetime / 2));
-		const warnsAt = expiresAt - Math.floor((lifetime / 4));
+		const refreshesAt = expiresAt - Math.floor(lifetime / 2);
+		const warnsAt = expiresAt - Math.floor(lifetime / 4);
 
 		this.authentication$.next({ expiresAt, refreshesAt, warnsAt });
 
@@ -296,10 +334,13 @@ export class LoginService {
 		this.restoreJwt();
 
 		// Observe the session for expiry changes from other tabs.
-		this.storageService.observeItem(this.expiry_key).pipe(
-			distinctUntilChanged(),
-			tap(() => this.restoreJwt())
-		).subscribe();
+		this.storageService
+			.observeItem(this.expiry_key)
+			.pipe(
+				distinctUntilChanged(),
+				tap(() => this.restoreJwt())
+			)
+			.subscribe();
 	}
 
 	/** Restores the JWT from session storage. */

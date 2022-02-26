@@ -6,10 +6,10 @@
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
-    <PackageReference Include="MailKit" Version="2.10.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="MailKit" Version="2.14.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
-    <PackageReference Include="MimeKit" Version="2.10.1" />
+    <PackageReference Include="MimeKit" Version="2.14.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,7 +17,7 @@
     <ProjectReference Include="..\Pcb.Configuration\Pcb.Configuration.csproj" />
     <ProjectReference Include="..\Pcb.Dto\Pcb.Dto.csproj" />
     <ProjectReference Include="..\Pcb.Mapping\Pcb.Mapping.csproj" />
-    <ProjectReference Include="..\PcbSecurity\Pcb.Security.csproj" />
+    <ProjectReference Include="..\Pcb.Security\Pcb.Security.csproj" />
   </ItemGroup>
 
 </Project>

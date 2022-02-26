@@ -9,11 +9,11 @@
 		</mat-icon>
 		<div class="ui-toast-message-text-content flex-grow-1 flex-box flex-column">
 			<div class="ui-toast-summary">{{message.summary}}</div>
-			<div class="ui-toast-detail">{{message.detail}}</div>
+			<div class="ui-toast-detail" [innerHtml]="message.detail"></div>
 		</div>
 		<button mat-icon-button tabindex="0" class="ui-toast-close-icon" 
 			(click)="onCloseIconClick($event)"
-			(keydown.enter)="onCloseIconClick($event)"
+			(keydown.enter)="onCloseIconClick($event)" title="close"
 			*ngIf="message.closable !== false"><mat-icon>close</mat-icon>
 		</button>
 	</div>

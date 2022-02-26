@@ -7,7 +7,7 @@ import { IScrollPositions } from '@models/common.model';
 import { Conversion } from '@models/conversion';
 import { Ingredient } from '@models/ingredient';
 import { EditedFieldModel, MeasurementModel } from '@models/ingredient-model';
-import { MessageStatus } from '@models/message.models';
+import { MessageStatus } from '@models/message.model';
 import { ReferenceAll, ReferenceItemFull } from '@models/reference.model';
 import { ValidationMessages } from '@models/static-variables';
 import { DateTimeService } from '@services/date-time.service';

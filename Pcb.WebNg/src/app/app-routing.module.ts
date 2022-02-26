@@ -1,21 +1,20 @@
-import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-
-import { WelcomeComponent } from './pages/welcome/welcome.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
+import { HomeComponent } from './pages/home/home.component';
+import { IngredientsComponent } from './pages/ingredients/ingredients.component';
+import { MainComponent } from './pages/main/main.component';
 import { RecipesComponent } from './pages/recipe/recipes.component';
+import { ShoppingComponent } from './pages/shopping/shopping.component';
 import { FavouritesComponent } from './pages/user/favourites/favourites.component';
 import { UserRecipesComponent } from './pages/user/user-recipes/user-recipes.component';
 import { UserSettingsComponent } from './pages/user/user-settings/user-settings.component';
-import { MainComponent } from './pages/main/main.component';
-import { HomeComponent } from './pages/home/home.component';
-import { CalendarComponent } from './pages/calendar/calendar.component';
-import { IngredientsComponent } from './pages/ingredients/ingredients.component';
-import { ShoppingComponent } from './pages/shopping/shopping.component';
-
-import { ScriptsComponent } from './settings/scripts/scripts.component';
-import { AuthGuard } from './guards/auth.guard';
+import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { InterceptorService } from './services/interceptor.service';
+import { ScriptsComponent } from './settings/scripts/scripts.component';
+
+
 
 const accountModule = () => import('@components/account/account.module').then(x => x.AccountModule);
 
@@ -38,26 +37,6 @@ const routes: Routes = [
 				path: '',
 				component: HomeComponent,
 				data: { title: `Provisioner's Cookbook` }
-			},
-			{
-				path: 'calendar/:calView/:calDate/:room',
-				component: CalendarComponent,
-				data: { title: `Book Recipe` }
-			},
-			{
-				path: 'calendar/:calView/:calDate',
-				component: CalendarComponent,
-				data: { title: `Book Recipe` }
-			},
-			{
-				path: 'calendar/:calView',
-				component: CalendarComponent,
-				data: { title: `Book Recipe` }
-			},
-			{
-				path: 'calendar',
-				component: CalendarComponent,
-				data: { title: `Book Recipe` }
 			},
 			{
 				path: 'ingredients',

@@ -22,72 +22,56 @@ import { RestIngredientService } from '@services/rest-ingredient.service';
 import { RestRecipeService } from '@services/rest-recipe.service';
 import { UserProfileService } from '@services/user-profile.service';
 import { fakeRecipeReturn } from '@tests/fake-recipe.model';
-import { autoSpy } from 'autospy';
+import { autoSpy, Spy } from 'autospy';
 import { MockComponent } from 'ng-mocks';
 import { of, Subject } from 'rxjs';
 import { RecipesComponent } from './recipes.component';
 
-
-
-type Spy<T> = T & jasmine.SpyObj<T>;
-
-fdescribe('RecipesComponent', () => {
+describe('RecipesComponent', () => {
 	let component: RecipesComponent;
 	let fixture: ComponentFixture<RecipesComponent>;
 
-
 	const restRecipeServiceSpy: Spy<RestRecipeService> = autoSpy(RestRecipeService);
 	const activatedRouteSpy: Spy<ActivatedRoute> = autoSpy(ActivatedRoute);
-	activatedRouteSpy.snapshot = {routeConfig: {url: '', path: ''}} as unknown as ActivatedRouteSnapshot;
+	activatedRouteSpy.snapshot = { routeConfig: { url: '', path: '' } } as unknown as ActivatedRouteSnapshot;
 	activatedRouteSpy.params = of({});
 	const fakeActivatedRoute = {
 		snapshot: {
-				paramMap: {
-					get(): string {
-						return '123';
-					},
-				},
-				routeConfig: {url: '', path: ''}
+			paramMap: {
+				get(): string {
+					return '123';
+				}
+			},
+			routeConfig: { url: '', path: '' }
 		}
-	 } as unknown as ActivatedRoute;
+	} as unknown as ActivatedRoute;
 
 	const restIngredientServiceSpy: Spy<RestIngredientService> = autoSpy(RestIngredientService);
 	const locationSpy: Spy<Location> = autoSpy(Location);
-	// const store<fromStore.State>Spy: Spy<Store<fromStore.State>> = autoSpy(Store<fromStore.State>);
 	const userProfileServiceSpy: Spy<UserProfileService> = autoSpy(UserProfileService);
 	userProfileServiceSpy.currentData = of({} as User);
 	const toTitleCasePipeSpy: Spy<ToTitleCasePipe> = autoSpy(ToTitleCasePipe);
 	const messageServiceSpy: Spy<MessageService> = autoSpy(MessageService);
 
-
-	beforeEach(waitForAsync(() => {
-		TestBed.configureTestingModule({
-			imports: [
-				MatIconModule,
-				MatToolbarModule,
-				MatTabsModule,
-				MatButtonModule,
-				NoopAnimationsModule,
-			],
-			declarations: [
-				RecipesComponent,
-				MockComponent(RecipeViewComponent),
-				MockComponent(SearchBarComponent)
-			],
-			providers: [
-				{ provide: RestRecipeService, useValue: restRecipeServiceSpy },
-				{ provide: ActivatedRoute, useValue: fakeActivatedRoute },
-				{ provide: RestIngredientService, useValue: restIngredientServiceSpy },
-				{ provide: Location, useValue: locationSpy },
-				{ provide: UserProfileService, useValue: userProfileServiceSpy },
-				{ provide: ToTitleCasePipe, useValue: toTitleCasePipeSpy },
-				{ provide: MessageService, useValue: messageServiceSpy },
-			]
-		}).compileComponents();
-	}));
+	beforeEach(
+		waitForAsync(() => {
+			TestBed.configureTestingModule({
+				imports: [MatIconModule, MatToolbarModule, MatTabsModule, MatButtonModule, NoopAnimationsModule],
+				declarations: [RecipesComponent, MockComponent(RecipeViewComponent), MockComponent(SearchBarComponent)],
+				providers: [
+					{ provide: RestRecipeService, useValue: restRecipeServiceSpy },
+					{ provide: ActivatedRoute, useValue: fakeActivatedRoute },
+					{ provide: RestIngredientService, useValue: restIngredientServiceSpy },
+					{ provide: Location, useValue: locationSpy },
+					{ provide: UserProfileService, useValue: userProfileServiceSpy },
+					{ provide: ToTitleCasePipe, useValue: toTitleCasePipeSpy },
+					{ provide: MessageService, useValue: messageServiceSpy }
+				]
+			}).compileComponents();
+		})
+	);
 
 	beforeEach(() => {
-
 		fixture = TestBed.createComponent(RecipesComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
@@ -99,9 +83,7 @@ fdescribe('RecipesComponent', () => {
 
 	describe('when ngOnInit is called it should', () => {
 		// remove what is not required
-		beforeEach(() => {
-
-		});
+		beforeEach(() => {});
 
 		it('should ...', () => {
 			// arrange
@@ -113,9 +95,7 @@ fdescribe('RecipesComponent', () => {
 	});
 	describe('when showToast is called it should', () => {
 		// remove what is not required
-		beforeEach(() => {
-
-		});
+		beforeEach(() => {});
 
 		it('should ...', () => {
 			// arrange
@@ -127,9 +107,7 @@ fdescribe('RecipesComponent', () => {
 	});
 	describe('when routeParamSubscribe is called it should', () => {
 		// remove what is not required
-		beforeEach(() => {
-
-		});
+		beforeEach(() => {});
 
 		it('should ...', () => {
 			// arrange
@@ -141,9 +119,7 @@ fdescribe('RecipesComponent', () => {
 	});
 	describe('when loadRecipeSelect is called it should', () => {
 		// remove what is not required
-		beforeEach(() => {
-
-		});
+		beforeEach(() => {});
 
 		it('should ...', () => {
 			// arrange
@@ -155,9 +131,7 @@ fdescribe('RecipesComponent', () => {
 	});
 	describe('when changeRecipe is called it should', () => {
 		// remove what is not required
-		beforeEach(() => {
-
-		});
+		beforeEach(() => {});
 
 		it('should ...', () => {
 			// arrange
@@ -169,9 +143,7 @@ fdescribe('RecipesComponent', () => {
 	});
 	describe('when onFilterChange is called it should', () => {
 		// remove what is not required
-		beforeEach(() => {
-
-		});
+		beforeEach(() => {});
 
 		it('should ...', () => {
 			// arrange
@@ -196,14 +168,10 @@ fdescribe('RecipesComponent', () => {
 			subject.next(fakeRecipeReturn);
 			expect(component.recipes).toEqual(fakeRecipeReturn.items);
 		});
-
-
 	});
 	describe('when createOrEdit is called it should', () => {
 		// remove what is not required
-		beforeEach(() => {
-
-		});
+		beforeEach(() => {});
 
 		it('should ...', () => {
 			// arrange
@@ -215,9 +183,7 @@ fdescribe('RecipesComponent', () => {
 	});
 	describe('when selectThisRecipe is called it should', () => {
 		// remove what is not required
-		beforeEach(() => {
-
-		});
+		beforeEach(() => {});
 
 		it('should ...', () => {
 			// arrange
@@ -229,9 +195,7 @@ fdescribe('RecipesComponent', () => {
 	});
 	describe('when changeTab is called it should', () => {
 		// remove what is not required
-		beforeEach(() => {
-
-		});
+		beforeEach(() => {});
 
 		it('should ...', () => {
 			// arrange
@@ -243,9 +207,7 @@ fdescribe('RecipesComponent', () => {
 	});
 	describe('when getSpoonAcularRecipe is called it should', () => {
 		// remove what is not required
-		beforeEach(() => {
-
-		});
+		beforeEach(() => {});
 
 		it('should ...', () => {
 			// arrange
@@ -255,6 +217,4 @@ fdescribe('RecipesComponent', () => {
 			// expect(c).toEqual
 		});
 	});
-
-
 });

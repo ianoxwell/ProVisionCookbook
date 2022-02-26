@@ -1,6 +1,6 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { DialogNewIngredientComponent } from './dialog-new-ingredient.component';
+
 
 describe('DialogNewIngredientComponent', () => {
 	let component: DialogNewIngredientComponent;
@@ -13,7 +13,7 @@ describe('DialogNewIngredientComponent', () => {
 	}));
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(EditCommonMineralsComponent);
+		fixture = TestBed.createComponent(DialogNewIngredientComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

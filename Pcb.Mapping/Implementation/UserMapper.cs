@@ -119,7 +119,7 @@ namespace Pcb.Mapping.Implementation
                 UserRole = MapUserRoleToUserRoleDto(map.UserRole)
             };
         }
-        private List<UserRole> NewUserRole()
+        private static List<UserRole> NewUserRole()
         {
             List<UserRole> newUserRole = new List<UserRole>
             {
@@ -132,7 +132,7 @@ namespace Pcb.Mapping.Implementation
             return newUserRole;
         }
 
-        private string RandomTokenString()
+        private static string RandomTokenString()
         {
             using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
             var randomBytes = new byte[40];

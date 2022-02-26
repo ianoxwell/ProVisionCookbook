@@ -1,17 +1,10 @@
 using Pcb.Configuration;
 using Pcb.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -22,7 +15,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
 using Pcb.Api.Auth;
 using Pcb.Service;
-using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Pcb.Mapping;
 
@@ -42,7 +34,7 @@ namespace Pcb.Api
         {
 
 
-            // Add CPT Configuration
+            // Add PCB Configuration
             services.AddPcbConfiguration(Configuration);
 
             services.AddPcbDatabase(Configuration);
@@ -93,46 +85,6 @@ namespace Pcb.Api
             services.AddVersionedApiExplorer(Options => Options.GroupNameFormat = "'v'VVV");
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             services.AddSwaggerGen();
-            //    services.AddSwaggerGen(c =>
-            //    {
-            //        //c.TagActionsBy(api => api.GroupBySwaggerGroupAttribute());
-
-            //        // c.OperationFilter<TagByApiExplorerSettingsOperationFilter>(); // Nicer way of grouping using MS standard attribute, but Swagger ignores classes with this ATM
-            //        c.SwaggerDoc("v1", new OpenApiInfo
-            //        {
-            //            Version = "v1",
-            //            Title = "CPT API",
-            //            Description = "The api used by the CPT application",
-            //        });
-
-            //        // Set the comments path for the Swagger JSON and UI.
-            //        //var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-            //        //var xmlPath = Path.Combine(basePath, "Iht.Api.xml");
-            //        //c.IncludeXmlComments(xmlPath);
-            //        c.AddSecurityDefinition("basic", new OpenApiSecurityScheme
-            //        {
-            //            Description = "JWT Authorisation header using the Bearer scheme. Example: \"Authorisation: Bearer {token}\"",
-            //            Type = SecuritySchemeType.ApiKey,
-            //            Name = "Authorisation",
-            //            In = ParameterLocation.Header
-            //        });
-
-            //        c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            //        {
-            //            {
-            //                new OpenApiSecurityScheme
-            //                {
-            //                    Reference = new OpenApiReference
-            //                    {
-            //                        Type = ReferenceType.SecurityScheme,
-            //                        Id = "basic"
-            //                    }
-            //                },
-            //                new string[] {}
-            //            }
-            //        });
-            //        //c.OperationFilter<AuthorisationHeaderParameterOperationFilter>();
-            //    });
 
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
@@ -164,14 +116,6 @@ namespace Pcb.Api
             app.UseAuthentication();
             app.UseAuthorization();
 
-            //app.UseSwagger();
-
-            //// Enable middle-ware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CPT API V1");
-            //    c.RoutePrefix = "swagger";
-            //});
 
             app.UseEndpoints(endpoints =>
             {

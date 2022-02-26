@@ -11,8 +11,6 @@ import { ComponentModule } from '@components/component.module';
 import { FooterComponent } from '@components/footer/footer.component';
 import { SharedComponentModule } from '@components/shared-component.module';
 import { SiteLogoComponent } from '@components/site-logo/site-logo.component';
-import { FullCalendarModule } from '@fullcalendar/angular';
-import { SvgIconsModule } from '@ngneat/svg-icon';
 import { PipesModule } from '@pipes/pipes.module';
 import { AccountService } from '@services/account.service';
 import { LogService } from '@services/log.service';
@@ -23,17 +21,14 @@ import { ReferenceService } from '@services/reference.service';
 import { RestIngredientService } from '@services/rest-ingredient.service';
 import { SecurityService } from '@services/security.service';
 import { StateService } from '@services/state.service';
-import { StorageService } from '@services/storage';
+import { StorageService } from '@services/storage.service';
 import { UserService } from '@services/user.service';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
-import { ChartsModule } from 'ng2-charts';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import icons from '../assets/svg/svg-icons';
 import { CompleteMaterialModule } from './app-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DialogModule } from './dialogs/dialogs.module';
-import { CalendarComponent } from './pages/calendar/calendar.component';
 import { HomeDashboardComponent } from './pages/home/home-dashboard/home-dashboard.component';
 import { HomeComponent } from './pages/home/home.component';
 import { IngredientsComponent } from './pages/ingredients/ingredients.component';
@@ -52,7 +47,6 @@ import { UserProfileService } from './services/user-profile.service';
 		AppComponent,
 		FavouritesComponent,
 		RecipesComponent,
-		CalendarComponent,
 		ShoppingComponent,
 		IngredientsComponent,
 		UserSettingsComponent,
@@ -63,7 +57,7 @@ import { UserProfileService } from './services/user-profile.service';
 		WelcomeComponent,
 		AutoCompleteSearchComponent,
 		SiteLogoComponent,
-		FooterComponent,
+		FooterComponent
 	],
 	imports: [
 		BrowserModule,
@@ -79,15 +73,9 @@ import { UserProfileService } from './services/user-profile.service';
 		DialogModule,
 		PipesModule,
 		SharedComponentModule,
-		FullCalendarModule,
-		ChartsModule,
 		NgxMaterialTimepickerModule,
 		NgxMaterialTimepickerModule.setLocale('en-au'),
 		SocialLoginModule,
-		// https://netbasal.com/elegantly-manage-svg-icons-in-angular-applications-5adde68a5c46
-		SvgIconsModule.forRoot({
-			icons
-		})
 	],
 	providers: [
 		{ provide: MAT_DATE_LOCALE, useValue: 'en-AU' },

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Pcb.Api.Auth;
@@ -20,9 +21,14 @@ namespace Pcb.Api.Controllers
     //[Route("api/v1/token")]
 
     [ApiController]
-    [Produces("application/json")]
     [AllowAnonymous]
-    public class TokenController : Controller
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+    public class TokenController : ControllerBase
     {
         /// <summary>
         /// The configuration instance from DI.

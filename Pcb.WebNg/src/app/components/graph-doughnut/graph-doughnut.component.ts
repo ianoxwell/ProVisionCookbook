@@ -7,9 +7,9 @@ export interface DataRef {
 }
 
 @Component({
-  selector: 'app-graph-doughnut',
-  templateUrl: './graph-doughnut.component.html',
-  styleUrls: ['./graph-doughnut.component.scss']
+	selector: 'app-graph-doughnut',
+	templateUrl: './graph-doughnut.component.html',
+	styleUrls: ['./graph-doughnut.component.scss']
 })
 
 // https://codepen.io/jerrylow/pen/OJyREdw?editors=1100
@@ -27,21 +27,13 @@ export class GraphDoughnutComponent implements OnInit, OnChanges {
 		internalSubLabelClass?: string;
 	};
 	@Input() data: any;
-	numberArray: string[] = [
-		'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'
-	];
+	numberArray: string[] = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'];
 	sliceStyle: string;
 	styleObject = {};
-	constructor() { }
+	constructor() {}
 
 	ngOnInit() {
-
-		// this.data.forEach((item, i) => {
-		// 	this.styleObject[`--${this.numberArray[i]}`] = item.value / 100
-		// })
-	this.changeSliceStyle();
-	console.log('doughnut', this.config, this.labels, this.data, this.sliceStyle);
-
+		this.changeSliceStyle();
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -49,17 +41,23 @@ export class GraphDoughnutComponent implements OnInit, OnChanges {
 		this.changeSliceStyle();
 	}
 
+	/**
+	 * Set up the slices and sizes.
+	 */
 	changeSliceStyle() {
-		console.log('this.data', this.data);
-		const total = this.data.reduce((acc,b) => acc + b.value, 0);
+		const total = this.data.reduce((acc, b) => acc + b.value, 0);
 		if (total < 100) {
 			this.data.push({
 				value: 100 - total,
 				color: '50,50,50'
 			});
 		}
-		this.sliceStyle = this.data.reduce((acc,b, i) => acc + `--${this.numberArray[i]}: ${b.value / 100}; --doughnut-color-slice-${this.numberArray[i]}: ${b.color};`, '');
-		this.sliceStyle +=  `--doughnut-size: ${this.config.size}; --doughnut-border-width: ${this.config.borderWidth}; --doughnut-spacing: ${this.config.spacing ? this.config.spacing : 0};`;
+		this.sliceStyle = this.data.reduce(
+			(acc, b, i) => acc + `--${this.numberArray[i]}: ${b.value / 100}; --doughnut-color-slice-${this.numberArray[i]}: ${b.color};`,
+			''
+		);
+		this.sliceStyle += `--doughnut-size: ${this.config.size}; --doughnut-border-width: ${
+			this.config.borderWidth
+		}; --doughnut-spacing: ${this.config.spacing ? this.config.spacing : 0};`;
 	}
-
 }

@@ -1,28 +1,21 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ComponentBase } from '@components/base/base.component.base';
 import { Ingredient } from '@models/ingredient';
 import { MeasurementModel } from '@models/ingredient-model';
+import { MessageStatus } from '@models/message.model';
 import { ReferenceItemFull } from '@models/reference.model';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { ComponentBase } from '../components/base/base.component.base';
+import { Observable } from 'rxjs';
 import { ConfirmDialogComponent } from '../dialogs/dialog-confirm/confirm.component';
 import { DialogIngredientMatchComponent } from '../dialogs/dialog-ingredient-match/dialog-ingredient-match.component';
 import { DialogNewIngredientComponent } from '../dialogs/dialog-new-ingredient/dialog-new-ingredient.component';
-import { MessageStatus, StatusUpdate } from '../models/message.models';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class DialogService extends ComponentBase {
-	/** Broadcasting variable */
-	private statusUpdate = new BehaviorSubject<StatusUpdate>({
-		status: MessageStatus.None,
-		message: '',
-		persist: false
-	});
-	currentStatus = this.statusUpdate.asObservable();
-
-	constructor(private dialog: MatDialog, private matSnackBar: MatSnackBar, private router: Router) {
+	constructor(private dialog: MatDialog, private matSnackBar: MatSnackBar) {
 		super();
 	}
 
@@ -35,11 +28,6 @@ export class DialogService extends ComponentBase {
 		});
 
 		return dialogRef.afterClosed();
-	}
-
-	/** Returns the last value of statusUpdate when this function is called */
-	getStatus() {
-		return this.statusUpdate.getValue();
 	}
 
 	/** Opens a confirm dialog */

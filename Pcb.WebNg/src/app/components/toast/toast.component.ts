@@ -1,114 +1,104 @@
-import { Component,
-	OnInit,
-	AfterContentInit,
-	OnDestroy,
-	Input,
-	Output,
-	EventEmitter,
-	ViewChild,
-	ElementRef,
-	TemplateRef } from '@angular/core';
-import { trigger, transition, query, animateChild, AnimationEvent } from '@angular/animations';
-import { Subscription } from 'rxjs';
+import { animateChild, AnimationEvent, query, transition, trigger } from '@angular/animations';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { ComponentBase } from '@components/base/base.component.base';
+import { CloseMessage, Message } from '@models/message.model';
 import { MessageService } from '@services/message.service';
-import { Message } from '@models/message.models';
+import { Observable } from 'rxjs';
+import { filter, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-toast',
 	templateUrl: './toast.component.html',
 	styleUrls: ['./toast.component.scss'],
-	animations: [
-			trigger('toastAnimation', [
-				transition(':enter, :leave', [
-					query('@*', animateChild())
-				])
-			])
-		]
+	animations: [trigger('toastAnimation', [transition(':enter, :leave', [query('@*', animateChild())])])]
 })
 
 // note - strongly based off of primeFaces - https://primefaces.org/primeng/showcase/#/toast
-export class ToastComponent implements OnInit, AfterContentInit, OnDestroy {
-
-	@Input() key: string;
+export class ToastComponent extends ComponentBase implements OnInit {
+	@Input() key = '';
 
 	@Input() autoZIndex = true;
 
 	@Input() baseZIndex = 0;
 
-	@Input() style: any;
-
-	@Input() styleClass: string;
+	@Input() styleClass = '';
 
 	@Input() position = 'top-right';
 
-	@Input() modal: boolean;
+	@Input() modal = false;
 
 	@Input() showTransitionOptions = '300ms ease-out';
 
 	@Input() hideTransitionOptions = '250ms ease-in';
 
-	@Output() closeToast: EventEmitter<any> = new EventEmitter();
+	@Output() closeToast: EventEmitter<CloseMessage> = new EventEmitter<CloseMessage>();
 
-	@ViewChild('container', { static: false }) containerViewChild: ElementRef;
+	@ViewChild('container', { static: false }) containerViewChild!: ElementRef<HTMLDivElement>;
 
-	messageSubscription: Subscription;
+	messages: Message[] = [];
 
-	clearSubscription: Subscription;
+	mask: HTMLDivElement | null = null;
 
-	messages: Message[];
+	constructor(public messageService: MessageService, private renderer: Renderer2) {
+		super();
+	}
 
-	template: TemplateRef<any>;
+	ngOnInit(): void {
+		this.subscribeMessages().subscribe();
+		this.subscribeClear().subscribe();
+	}
 
-	mask: HTMLDivElement;
-
-	constructor(public messageService: MessageService) {}
-
-	ngOnInit() {
-		this.messageSubscription = this.messageService.messageObserver.subscribe((messages: Message | Message[]) => {
-			if (messages) {
+	/**
+	 * On Init subscribes to messages service. On destroy unsubscribes.
+	 * @returns Observable of Message or array of Messages.
+	 */
+	subscribeMessages(): Observable<Message | Message[]> {
+		return this.messageService.messageObserver.pipe(
+			filter((m) => !!m),
+			tap((messages: Message | Message[]) => {
 				if (messages instanceof Array) {
-					const filteredMessages = messages.filter(m => this.key === m.key);
+					const filteredMessages = messages.filter((m: Message) => this.key === m.key);
 					this.messages = this.messages ? [...this.messages, ...filteredMessages] : [...filteredMessages];
-				} else if (this.key === messages.key) {
+				} else {
 					this.messages = this.messages ? [...this.messages, ...[messages]] : [messages];
 				}
 
 				if (this.modal && this.messages && this.messages.length) {
 					this.enableModality();
 				}
-			}
-		});
+			}),
+			takeUntil(this.ngUnsubscribe)
+		);
+	}
 
-		this.clearSubscription = this.messageService.clearObserver.subscribe(key => {
-			if (key) {
-				if (this.key === key) {
-					this.messages = null;
+	/**
+	 * Listen to the messageService for clearing of messages.
+	 * @returns Observable string.
+	 */
+	subscribeClear(): Observable<string> {
+		return this.messageService.clearObserver.pipe(
+			tap((key: string) => {
+				if (key) {
+					if (this.key === key) {
+						this.messages = [];
+					}
+				} else {
+					this.messages = [];
 				}
-			} else {
-				this.messages = null;
-			}
 
-			if (this.modal) {
-				this.disableModality();
-			}
-		});
+				if (this.modal) {
+					this.disableModality();
+				}
+			}),
+			takeUntil(this.ngUnsubscribe)
+		);
 	}
 
-	ngAfterContentInit() {
-		// this.templates.forEach((item) => {
-		// 	switch (item.getType()) {
-		// 		case 'message':
-		// 			this.template = item.template;
-		// 			break;
-
-		// 		default:
-		// 			this.template = item.template;
-		// 			break;
-		// 	}
-		// });
-	}
-
-	onMessageClose(event) {
+	/**
+	 * Action to take on closing of message - through timeout or manual close.
+	 * @param event index and message.
+	 */
+	onMessageClose(event: CloseMessage): void {
 		this.messages.splice(event.index, 1);
 
 		if (this.messages.length === 0) {
@@ -116,14 +106,19 @@ export class ToastComponent implements OnInit, AfterContentInit, OnDestroy {
 		}
 
 		this.closeToast.emit({
+			index: event.index,
 			message: event.message
 		});
 	}
 
-	enableModality() {
+	/**
+	 * Enables Modality for messages to append to body.
+	 * TODO  verify that this is needed when using Material.
+	 */
+	enableModality(): void {
 		if (!this.mask) {
 			this.mask = document.createElement('div');
-			this.mask.style.zIndex = String(Number(this.containerViewChild.nativeElement.style.zIndex) - 1);
+			this.mask.style.zIndex = String(this.baseZIndex + 1000 - 1);
 			if (this.mask.classList) {
 				this.mask.classList.add('ui-widget-overlay');
 				this.mask.classList.add('ui-dialog-mask');
@@ -134,28 +129,23 @@ export class ToastComponent implements OnInit, AfterContentInit, OnDestroy {
 		}
 	}
 
-	disableModality() {
+	/**
+	 * Disables any modality for the messages.
+	 */
+	disableModality(): void {
 		if (this.mask) {
 			document.body.removeChild(this.mask);
 			this.mask = null;
 		}
 	}
 
-	onAnimationStart(event: AnimationEvent) {
+	/**
+	 * Triggers on Animation start.
+	 * @param event Animation event.
+	 */
+	onAnimationStart(event: AnimationEvent): void {
 		if (event.fromState === 'void' && this.autoZIndex) {
-			this.containerViewChild.nativeElement.style.zIndex = String(this.baseZIndex + 1000);
+			this.containerViewChild.nativeElement.setAttribute('style', `z-index: ${String(this.baseZIndex + 1000)}`);
 		}
-	}
-
-	ngOnDestroy() {
-		if (this.messageSubscription) {
-			this.messageSubscription.unsubscribe();
-		}
-
-		if (this.clearSubscription) {
-			this.clearSubscription.unsubscribe();
-		}
-
-		this.disableModality();
 	}
 }

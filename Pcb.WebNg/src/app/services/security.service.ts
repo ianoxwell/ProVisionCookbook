@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MessageStatus } from '@models/message.models';
+import { MessageStatus } from '@models/message.model';
 import { IClaims, SecurityPermission, SecurityRole } from '@models/security.models';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -8,7 +8,9 @@ import { environment } from 'src/environments/environment';
 import { LogService } from './log.service';
 import { LoginService } from './login.service';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class SecurityService {
 
 	publicUrlPaths = [] = ['/token/google', '/account/'];

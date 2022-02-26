@@ -1,5 +1,5 @@
-$spaces: (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
-$sides: (top, right, bottom, left);
+@use "sass:math";
+@import './variables.scss';
 
 // Bootstrap utility classes:
 // p-0: [padding: 0rem]
@@ -15,69 +15,38 @@ $sides: (top, right, bottom, left);
 
 @each $space in $spaces {
 	.m-#{$space} {
-		margin: #{$space/2}rem;
+		margin: #{math.div($space, 2)}rem;
 	}
+
 	.p-#{$space} {
-		padding: #{$space/2}rem;
+		padding: #{math.div($space, 2)}rem;
 	}
+
 	@each $side in $sides {
 		.m#{str-slice($side, 0, 1)}-#{$space} {
-			margin-#{$side}: #{$space/2}rem !important;
+			margin-#{$side}: #{math.div($space, 2)}rem !important;
 		}
+
 		.p#{str-slice($side, 0, 1)}-#{$space} {
-			padding-#{$side}: #{$space/2}rem !important;
+			padding-#{$side}: #{math.div($space, 2)}rem !important;
 		}
 	}
 }
-$widthsEm: (
-	0,
-	1,
-	2,
-	3,
-	4,
-	5,
-	6,
-	7,
-	8,
-	9,
-	10,
-	11,
-	12,
-	13,
-	14,
-	15,
-	16,
-	17,
-	18,
-	19,
-	20
-);
 @each $width in $widthsEm {
 	.w-#{$width}em {
 		width: #{$width}em;
 	}
 }
-$widthsPercent: (
-	5,
-	10,
-	15,
-	20,
-	25,
-	30,
-	35,
-	40,
-	45,
-	50,
-	60,
-	70,
-	75,
-	80,
-	90,
-	100
-);
+
 @each $width in $widthsPercent {
 	.w-#{$width} {
-		width: percentage($width / 100);
+		width: percentage(math.div($width, 100));
+	}
+}
+
+@each $height in $heightsEm {
+	.h-#{$height}em {
+		height: #{$height}em;
 	}
 }
 
@@ -137,10 +106,28 @@ b {
 }
 
 .flex-row-column {
-	@include flex-direction(column);
-	@include breakpoint(md) {
-		@include flex-direction(row);
+	@include breakpoint(xs) {
+		@include flex-direction(column);
 	}
+
+	@include breakpoint(sm) {
+		@include flex-direction(column);
+	}
+
+	@include breakpoint($min: md) {
+		@include flex-direction(row);
+
+		.max-width-45-large-screens {
+			padding-bottom: 0;
+		}
+	}
+}
+.max-width-45-large-screens {
+	@include breakpoint($min: md) {
+		max-width: 45%;
+		width: 45%;
+	}
+	padding-bottom: 2rem;
 }
 
 .print-only {
@@ -165,6 +152,10 @@ b {
 }
 .accent-left {
 	border-left: 2px $accent solid;
+}
+
+.svg-icon {
+	width: $title;
 }
 
 .recipe-filter-paginator {
@@ -227,4 +218,9 @@ body .ui-toast .ui-toast-message.ui-toast-message-error {
 	background-color: $warn;
 	border: 0 none;
 	color: $colour-text-on-success;
+}
+
+.footer {
+	background-color: $primary;
+	color: $dark-text;
 }

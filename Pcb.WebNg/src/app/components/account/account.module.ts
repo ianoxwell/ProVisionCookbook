@@ -9,9 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { SharedComponentModule } from '@components/shared-component.module';
-import { SvgIconsModule } from '@ngneat/svg-icon';
 import { AccountService } from '@services/account.service';
-import icons from '../../../assets/svg/svg-icons';
 import { AccountRoutingModule } from './account-routing.module';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LoginFormComponent } from './login-form/login-form.component';
@@ -33,9 +31,6 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 		MatButtonModule,
 		MatCheckboxModule,
 		SharedComponentModule,
-		SvgIconsModule.forRoot({
-			icons
-		})
 	],
 	declarations: [
 		LoginFormComponent,

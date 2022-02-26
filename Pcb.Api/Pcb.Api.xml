@@ -21,7 +21,7 @@
         </member>
         <member name="F:Pcb.Api.Auth.JwtFactory.Config">
             <summary>
-            The Cpt configuration instance
+            The Pcb configuration instance
             </summary>
         </member>
         <member name="M:Pcb.Api.Auth.JwtFactory.#ctor(Pcb.Configuration.IPcbConfiguration)">
@@ -109,6 +109,11 @@
             
             </summary>
             <param name="options"></param>
+        </member>
+        <member name="T:Pcb.Api.Controllers.AccountController">
+            <summary>
+            Contains API endpoints to fetch, update and add user accounts.
+            </summary>
         </member>
         <member name="F:Pcb.Api.Controllers.AccountController.AccountService">
             <summary>

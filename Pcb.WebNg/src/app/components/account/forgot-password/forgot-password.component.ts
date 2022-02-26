@@ -4,12 +4,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentBase } from '@components/base/base.component.base';
 import { MessageResult } from '@models/common.model';
-import { MessageStatus } from '@models/message.models';
+import { MessageStatus } from '@models/message.model';
 import { ValidationMessages } from '@models/static-variables';
 import { AccountService } from '@services/account.service';
 import { MessageService } from '@services/message.service';
 import { of } from 'rxjs';
-import { catchError, take, takeUntil, tap } from 'rxjs/operators';
+import { catchError, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-forgot-password',
