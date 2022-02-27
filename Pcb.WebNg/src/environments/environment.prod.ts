@@ -6,5 +6,5 @@ export const environment = {
   apiUrl: 'https://cookbook-api.azurewebsites.net',
   apiVersion: '/api/v1/',
   version: require('../../package.json').version,
-  resultsPerPage: 10,
+  resultsPerPage: 10
 };

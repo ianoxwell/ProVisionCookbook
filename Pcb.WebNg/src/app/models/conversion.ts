@@ -14,18 +14,18 @@ import { MeasurementModel } from './ingredient-model';
 import { ReferenceItemFull } from './reference.model';
 
 export interface Conversion {
-	id?: number;
-	ingredientId?: number;
-	baseState?: ReferenceItemFull;
-	baseMeasurementUnit?: MeasurementModel;
-	baseQuantity: number;
+  id?: number;
+  ingredientId?: number;
+  baseState?: ReferenceItemFull;
+  baseMeasurementUnit?: MeasurementModel;
+  baseQuantity: number;
 
-	convertToState?: ReferenceItemFull;
-	convertToMeasurementUnit?: MeasurementModel;
-	convertToQuantity: number;
-	answer: string;
-	/**
-	 * eg flour is usually purchased in kg and used in cups (volume)
-	 */
-	preference?: number;
+  convertToState?: ReferenceItemFull;
+  convertToMeasurementUnit?: MeasurementModel;
+  convertToQuantity: number;
+  answer: string;
+  /**
+   * eg flour is usually purchased in kg and used in cups (volume)
+   */
+  preference?: number;
 }

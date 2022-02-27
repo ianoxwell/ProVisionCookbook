@@ -2,18 +2,18 @@ import { OnDestroy, Component } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Component({
-	template: ''
+  template: ''
 })
 // tslint:disable-next-line: component-class-suffix
 export class ComponentBase implements OnDestroy {
-	ngUnsubscribe: Subject<any> = new Subject();
+  ngUnsubscribe: Subject<any> = new Subject();
 
-	ngOnDestroy(): void {
-		this.destroySubscriptions();
-	}
+  ngOnDestroy(): void {
+    this.destroySubscriptions();
+  }
 
-	destroySubscriptions(): void {
-		this.ngUnsubscribe.next(undefined);
-		this.ngUnsubscribe.complete();
-	}
+  destroySubscriptions(): void {
+    this.ngUnsubscribe.next(undefined);
+    this.ngUnsubscribe.complete();
+  }
 }

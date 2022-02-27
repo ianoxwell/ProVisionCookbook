@@ -11,9 +11,9 @@
  */
 
 export interface BookingRecipe {
-	recipeId?: string;
-	/**
-	 * Name of the recipe
-	 */
-	name?: string;
+  recipeId?: string;
+  /**
+   * Name of the recipe
+   */
+  name?: string;
 }

@@ -7,27 +7,27 @@ import { ReplaySubject } from 'rxjs';
  * Use the `setParamMap()` method to add the next `paramMap` value.
  */
 export class ActivatedRouteStub {
-	// Use a ReplaySubject to share previous values with subscribers
-	// and pump new values into the `paramMap` observable
-	private subject = new ReplaySubject<ParamMap>();
-	private paramsSubject = new ReplaySubject<Params>();
-	parent: any;
-	snapshot = {};
+  // Use a ReplaySubject to share previous values with subscribers
+  // and pump new values into the `paramMap` observable
+  private subject = new ReplaySubject<ParamMap>();
+  private paramsSubject = new ReplaySubject<Params>();
+  parent: any;
+  snapshot = {};
 
-	constructor(initialParams?: Params) {
-		this.setParamMap(initialParams);
-		this.setParams(initialParams);
-	}
+  constructor(initialParams?: Params) {
+    this.setParamMap(initialParams);
+    this.setParams(initialParams);
+  }
 
-	/** The mock paramMap observable */
-	readonly paramMap = this.subject.asObservable();
-	readonly params = this.paramsSubject.asObservable();
+  /** The mock paramMap observable */
+  readonly paramMap = this.subject.asObservable();
+  readonly params = this.paramsSubject.asObservable();
 
-	/** Set the paramMap observables's next value */
-	setParamMap(params?: Params) {
-		this.subject.next(convertToParamMap(params));
-	}
-	setParams(params?: Params) {
-		this.paramsSubject.next(params);
-	}
+  /** Set the paramMap observables's next value */
+  setParamMap(params?: Params) {
+    this.subject.next(convertToParamMap(params));
+  }
+  setParams(params?: Params) {
+    this.paramsSubject.next(params);
+  }
 }

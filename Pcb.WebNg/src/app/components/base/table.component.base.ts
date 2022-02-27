@@ -6,57 +6,57 @@ import { ISortPageObj, PagedResult, SortPageObj } from '@models/common.model';
 
 @Component({ template: '' })
 export abstract class BaseTableComponent<T = any> implements OnChanges {
-	@Input() data: PagedResult<T> = { items: [], totalCount: 0 };
-	@Input() sortPageObj: ISortPageObj = new SortPageObj();
-	@Output() sortingPageChange = new EventEmitter<ISortPageObj>();
-	@Output() updateTableRequest = new EventEmitter();
+  @Input() data: PagedResult<T> = { items: [], totalCount: 0 };
+  @Input() sortPageObj: ISortPageObj = new SortPageObj();
+  @Output() sortingPageChange = new EventEmitter<ISortPageObj>();
+  @Output() updateTableRequest = new EventEmitter();
 
-	@ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
-	@ViewChild(MatSort, { static: false }) sort!: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort!: MatSort;
 
-	displayedColumns: string[] = [];
-	dataSource: MatTableDataSource<T> = new MatTableDataSource();
-	dataLength = 0;
-	dataCount = 0;
+  displayedColumns: string[] = [];
+  dataSource: MatTableDataSource<T> = new MatTableDataSource();
+  dataLength = 0;
+  dataCount = 0;
 
-	constructor() {	}
+  constructor() {}
 
-	ngOnChanges(change: SimpleChanges): void {
-		if (!!change.data && !change.data.firstChange) {
-			const data: PagedResult<T> = change.data.currentValue;
-			this.dataSource.data = data.items;
-			this.dataCount = data.items.length;
-			this.dataLength = data.totalCount;
-		}
-	}
-	/** This MUST be implemented in the extending class */
-	abstract goto(row: any): void;
+  ngOnChanges(change: SimpleChanges): void {
+    if (!!change.data && !change.data.firstChange) {
+      const data: PagedResult<T> = change.data.currentValue;
+      this.dataSource.data = data.items;
+      this.dataCount = data.items.length;
+      this.dataLength = data.totalCount;
+    }
+  }
+  /** This MUST be implemented in the extending class */
+  abstract goto(row: any): void;
 
-	/** Triggers when there is a sorting change in the template, resets page */
-	onSortChange(ev: Sort): void {
-		this.sortPageObj.orderby = ev.active;
-		this.sortPageObj.order = ev.direction;
-		this.sortPageObj.page = 0;
-		this.sortingPageChange.emit(this.sortPageObj);
-	}
+  /** Triggers when there is a sorting change in the template, resets page */
+  onSortChange(ev: Sort): void {
+    this.sortPageObj.orderby = ev.active;
+    this.sortPageObj.order = ev.direction;
+    this.sortPageObj.page = 0;
+    this.sortingPageChange.emit(this.sortPageObj);
+  }
 
-	/** Triggers from the paginator, resets page when perPage Changes */
-	onPageChange(pageEvent: PageEvent): void {
-		if (pageEvent.pageSize !== this.sortPageObj.perPage) {
-			this.sortPageObj.page = 0;
-			this.sortPageObj.perPage = pageEvent.pageSize;
-		} else {
-			this.sortPageObj.page = pageEvent.pageIndex;
-		}
-		this.sortingPageChange.emit(this.sortPageObj);
-	}
+  /** Triggers from the paginator, resets page when perPage Changes */
+  onPageChange(pageEvent: PageEvent): void {
+    if (pageEvent.pageSize !== this.sortPageObj.perPage) {
+      this.sortPageObj.page = 0;
+      this.sortPageObj.perPage = pageEvent.pageSize;
+    } else {
+      this.sortPageObj.page = pageEvent.pageIndex;
+    }
+    this.sortingPageChange.emit(this.sortPageObj);
+  }
 
-	/** Sets boolean for mouseRow for the row, for css class rollover effect */
-	mouseRow(row: any, inOut: string): void {
-		if (inOut === 'over') {
-			row.mouseRow = true;
-		} else {
-			row.mouseRow = null;
-		}
-	}
+  /** Sets boolean for mouseRow for the row, for css class rollover effect */
+  mouseRow(row: any, inOut: string): void {
+    if (inOut === 'over') {
+      row.mouseRow = true;
+    } else {
+      row.mouseRow = null;
+    }
+  }
 }

@@ -13,31 +13,31 @@ import { BookingRecipe } from './bookingRecipe';
 import { BookingTeachersName } from './bookingTeachersName';
 
 export interface Booking {
-	readonly id?: string;
-	recipe?: BookingRecipe;
-	/**
-	 * time and date recipe is booked for
-	 */
-	timeBooked?: Date;
-	/**
-	 * Name of the college to assist in search
-	 */
-	schoolName?: string;
-	/**
-	 * completing this field disables timeBooked and autopopulates it depending on weekly timetable
-	 */
-	periodBooked?: string;
-	teachersName?: BookingTeachersName;
-	/**
-	 * Further clues as to where the recipe is being booked
-	 */
-	roomName?: string;
-	/**
-	 * Future addition of classes linked to teachers maybe?
-	 */
-	studentGroupName?: string;
-	/**
-	 * Notes for the Food technician
-	 */
-	prepNotes?: string;
+  readonly id?: string;
+  recipe?: BookingRecipe;
+  /**
+   * time and date recipe is booked for
+   */
+  timeBooked?: Date;
+  /**
+   * Name of the college to assist in search
+   */
+  schoolName?: string;
+  /**
+   * completing this field disables timeBooked and autopopulates it depending on weekly timetable
+   */
+  periodBooked?: string;
+  teachersName?: BookingTeachersName;
+  /**
+   * Further clues as to where the recipe is being booked
+   */
+  roomName?: string;
+  /**
+   * Future addition of classes linked to teachers maybe?
+   */
+  studentGroupName?: string;
+  /**
+   * Notes for the Food technician
+   */
+  prepNotes?: string;
 }

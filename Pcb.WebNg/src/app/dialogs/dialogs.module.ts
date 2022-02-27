@@ -12,23 +12,30 @@ import { DialogNewIngredientComponent } from './dialog-new-ingredient/dialog-new
 import { DialogRecipeComponent } from './dialog-recipe/dialog-recipe.component';
 
 @NgModule({
-	imports: [CompleteMaterialModule, CommonModule, FormsModule, ReactiveFormsModule, RouterModule, SharedComponentModule],
-	declarations: [
-		DialogErrorComponent,
-		DialogDeleteIngredientComponent,
-		DialogRecipeComponent,
-		DialogNewIngredientComponent,
-		ConfirmDialogComponent,
-		DialogIngredientMatchComponent
-	],
-	exports: [
-		DialogErrorComponent,
-		DialogDeleteIngredientComponent,
-		DialogRecipeComponent,
-		DialogNewIngredientComponent,
-		ConfirmDialogComponent,
-		DialogIngredientMatchComponent
-	],
-	providers: []
+  imports: [
+    CompleteMaterialModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    SharedComponentModule
+  ],
+  declarations: [
+    DialogErrorComponent,
+    DialogDeleteIngredientComponent,
+    DialogRecipeComponent,
+    DialogNewIngredientComponent,
+    ConfirmDialogComponent,
+    DialogIngredientMatchComponent
+  ],
+  exports: [
+    DialogErrorComponent,
+    DialogDeleteIngredientComponent,
+    DialogRecipeComponent,
+    DialogNewIngredientComponent,
+    ConfirmDialogComponent,
+    DialogIngredientMatchComponent
+  ],
+  providers: []
 })
 export class DialogModule {}

@@ -3,23 +3,24 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RecipeCardComponent } from './recipe-card.component';
 
 describe('RecipeCardComponent', () => {
-	let component: RecipeCardComponent;
-	let fixture: ComponentFixture<RecipeCardComponent>;
+  let component: RecipeCardComponent;
+  let fixture: ComponentFixture<RecipeCardComponent>;
 
-	beforeEach(waitForAsync(() => {
-		TestBed.configureTestingModule({
-		declarations: [ RecipeCardComponent ]
-		})
-		.compileComponents();
-	}));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [RecipeCardComponent]
+      }).compileComponents();
+    })
+  );
 
-	beforeEach(() => {
-		fixture = TestBed.createComponent(RecipeCardComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
-	});
+  beforeEach(() => {
+    fixture = TestBed.createComponent(RecipeCardComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-	it('should create', () => {
-		expect(component).toBeTruthy();
-	});
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

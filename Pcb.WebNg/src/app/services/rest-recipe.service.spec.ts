@@ -5,7 +5,7 @@ describe('RecipeRestIngredientService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-		const service: RestRecipeService = TestBed.inject(RestRecipeService);
-		expect(service).toBeTruthy();
+    const service: RestRecipeService = TestBed.inject(RestRecipeService);
+    expect(service).toBeTruthy();
   });
 });

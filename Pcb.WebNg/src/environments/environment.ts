@@ -10,5 +10,5 @@ export const environment = {
   version: require('../../package.json').version,
   apiUrl: 'https://localhost:44303',
   apiVersion: '/api/v1/',
-  resultsPerPage: 10,
+  resultsPerPage: 10
 };

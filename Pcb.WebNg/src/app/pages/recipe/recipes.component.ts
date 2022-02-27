@@ -20,186 +20,188 @@ import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, filter, first, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
-	selector: 'app-recipes',
-	templateUrl: './recipes.component.html',
-	styleUrls: ['./recipes.component.scss']
+  selector: 'app-recipes',
+  templateUrl: './recipes.component.html',
+  styleUrls: ['./recipes.component.scss']
 })
 export class RecipesComponent extends ComponentBase implements OnInit {
-	recipes: Recipe[] = [];
-	refDataAll: ReferenceAll | undefined;
-	measurementRef: MeasurementModel[] = [];
-	isLoading = false;
-	selectedRecipe: Recipe | undefined;
-	selectedIndex = 0;
-	selectedTab = 0; // controls the selectedIndex of the mat-tab-group
-	isNew = true; // edit or new ingredient;
+  recipes: Recipe[] = [];
+  refDataAll: ReferenceAll | undefined;
+  measurementRef: MeasurementModel[] = [];
+  isLoading = false;
+  selectedRecipe: Recipe | undefined;
+  selectedIndex = 0;
+  selectedTab = 0; // controls the selectedIndex of the mat-tab-group
+  isNew = true; // edit or new ingredient;
 
-	currentPath: string | undefined = '';
-	filterQuery: IRecipeFilterQuery = new RecipeFilterQuery();
-	dataLength = 0;
-	cookBookUserProfile: User | null = null;
+  currentPath: string | undefined = '';
+  filterQuery: IRecipeFilterQuery = new RecipeFilterQuery();
+  dataLength = 0;
+  cookBookUserProfile: User | null = null;
 
-	constructor(
-		private restRecipeService: RestRecipeService,
-		private route: ActivatedRoute,
-		private restIngredientService: RestIngredientService,
-		private location: Location,
-		private userProfileService: UserProfileService,
-		private dialogService: DialogService,
-		private stateService: StateService,
-		private refDataService: RefDataService,
-		private constructRecipeService: ConstructRecipeService
-	) {
-		super();
-	}
+  constructor(
+    private restRecipeService: RestRecipeService,
+    private route: ActivatedRoute,
+    private restIngredientService: RestIngredientService,
+    private location: Location,
+    private userProfileService: UserProfileService,
+    private dialogService: DialogService,
+    private stateService: StateService,
+    private refDataService: RefDataService,
+    private constructRecipeService: ConstructRecipeService
+  ) {
+    super();
+  }
 
-	ngOnInit(): void {
-		this.userProfileService.currentData.subscribe(profile => (this.cookBookUserProfile = profile));
-		this.routeParamSubscribe();
-		this.listenFilterQueryChanges();
-		this.getAllReferences();
-	}
+  ngOnInit(): void {
+    this.userProfileService.getUserProfile().subscribe((profile) => (this.cookBookUserProfile = profile));
+    this.routeParamSubscribe();
+    this.listenFilterQueryChanges();
+    this.getAllReferences();
+  }
 
-	listenFilterQueryChanges(): void {
-		this.stateService
-			.getRecipeFilterQuery()
-			.pipe(
-				switchMap((result: IRecipeFilterQuery) => {
-					this.filterQuery = result;
-					return this.getRecipes();
-				}),
-				takeUntil(this.ngUnsubscribe)
-			)
-			.subscribe();
-	}
-	// paused at the moment till the filtering is sorted
-	routeParamSubscribe(): void {
-		this.route.params
-			.pipe(
-				tap(params => {
-					this.currentPath = this.route.snapshot.routeConfig?.path;
-					if (params.recipeId) {
-						this.loadRecipeSelect(Number(params.recipeId));
-					}
-				}),
-				takeUntil(this.ngUnsubscribe)
-			)
-			.subscribe();
-	}
+  listenFilterQueryChanges(): void {
+    this.stateService
+      .getRecipeFilterQuery()
+      .pipe(
+        switchMap((result: IRecipeFilterQuery) => {
+          this.filterQuery = result;
+          return this.getRecipes();
+        }),
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe();
+  }
+  // paused at the moment till the filtering is sorted
+  routeParamSubscribe(): void {
+    this.route.params
+      .pipe(
+        tap((params) => {
+          this.currentPath = this.route.snapshot.routeConfig?.path;
+          if (params.recipeId) {
+            this.loadRecipeSelect(Number(params.recipeId));
+          }
+        }),
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe();
+  }
 
-	/** listens to refDataService to populate the referenceData, called from init, disposed off after first response */
-	getAllReferences(): void {
-		combineLatest([this.refDataService.getAllReferences(), this.refDataService.getMeasurements()])
-			.pipe(
-				first(),
-				tap(([refAll, measure]: [ReferenceAll, MeasurementModel[]]) => {
-					this.refDataAll = refAll;
-					this.measurementRef = measure;
-				})
-			)
-			.subscribe();
-	}
+  /** listens to refDataService to populate the referenceData, called from init, disposed off after first response */
+  getAllReferences(): void {
+    combineLatest([this.refDataService.getAllReferences(), this.refDataService.getMeasurements()])
+      .pipe(
+        first(),
+        tap(([refAll, measure]: [ReferenceAll, MeasurementModel[]]) => {
+          this.refDataAll = refAll;
+          this.measurementRef = measure;
+        })
+      )
+      .subscribe();
+  }
 
-	loadRecipeSelect(itemId: number | undefined): void {
-		if (!itemId) {
-			return;
-		}
+  loadRecipeSelect(itemId: number | undefined): void {
+    if (!itemId) {
+      return;
+    }
 
-		this.restRecipeService
-			.getRecipeById(itemId)
-			.pipe(
-				tap(singleRecipe => {
-					this.selectedRecipe = singleRecipe;
-					this.changeTab(1);
-					return this.getRecipes();
-				}),
-				catchError(err => {
-					console.log('Error', err);
-					return [];
-				}),
-				takeUntil(this.ngUnsubscribe)
-			)
-			.subscribe();
-	}
+    this.restRecipeService
+      .getRecipeById(itemId)
+      .pipe(
+        tap((singleRecipe) => {
+          this.selectedRecipe = singleRecipe;
+          this.changeTab(1);
+          return this.getRecipes();
+        }),
+        catchError((err) => {
+          console.log('Error', err);
+          return [];
+        }),
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe();
+  }
 
-	changeRecipe(event: { direction: string; id: number | undefined }): void {
-		if (!event.id) {
-			return;
-		}
+  changeRecipe(event: { direction: string; id: number | undefined }): void {
+    if (!event.id) {
+      return;
+    }
 
-		if (this.selectedIndex === 0 && event.direction === 'prev') {
-			this.selectedIndex = this.recipes.length - 1;
-		} else if (this.selectedIndex === this.recipes.length - 1 && event.direction === 'next') {
-			this.selectedIndex = 0;
-		} else if (event.direction === 'prev') {
-			this.selectedIndex--;
-		} else {
-			this.selectedIndex++;
-		}
-		this.selectedRecipe = this.recipes[this.selectedIndex];
-		this.location.replaceState(`savoury/recipes/item/${this.selectedRecipe.id}`);
-	}
+    if (this.selectedIndex === 0 && event.direction === 'prev') {
+      this.selectedIndex = this.recipes.length - 1;
+    } else if (this.selectedIndex === this.recipes.length - 1 && event.direction === 'next') {
+      this.selectedIndex = 0;
+    } else if (event.direction === 'prev') {
+      this.selectedIndex--;
+    } else {
+      this.selectedIndex++;
+    }
+    this.selectedRecipe = this.recipes[this.selectedIndex];
+    this.location.replaceState(`savoury/recipes/item/${this.selectedRecipe.id}`);
+  }
 
-	onFilterChange(ev: RecipeFilterQuery) {
-		console.log('here is the filter change', ev);
-	}
+  onFilterChange(ev: RecipeFilterQuery) {
+    console.log('here is the filter change', ev);
+  }
 
-	getRecipes(): Observable<PagedResult<Recipe>> {
-		this.isLoading = true;
-		this.dataLength = 0;
-		return this.restRecipeService.getRecipe(this.filterQuery).pipe(
-			catchError(err => {
-				this.dialogService.alert('Error getting recipes', err);
-				return of({ items: [], totalCount: 0 });
-			}),
-			tap(() => {
-				this.isLoading = false;
-			}),
-			filter((result: PagedResult<Recipe>) => result.totalCount > 0),
-			tap((recipeResults: PagedResult<Recipe>) => {
-				this.dataLength = recipeResults.totalCount;
-				this.recipes = recipeResults.items;
-			})
-		);
-	}
+  getRecipes(): Observable<PagedResult<Recipe>> {
+    this.isLoading = true;
+    this.dataLength = 0;
+    return this.restRecipeService.getRecipe(this.filterQuery).pipe(
+      catchError((err) => {
+        this.dialogService.alert('Error getting recipes', err);
+        return of({ items: [], totalCount: 0 });
+      }),
+      tap(() => {
+        this.isLoading = false;
+      }),
+      filter((result: PagedResult<Recipe>) => result.totalCount > 0),
+      tap((recipeResults: PagedResult<Recipe>) => {
+        this.dataLength = recipeResults.totalCount;
+        this.recipes = recipeResults.items;
+      })
+    );
+  }
 
-	createOrEdit(action: string) {
-		console.log('new maybe', action);
-	}
+  createOrEdit(action: string) {
+    console.log('new maybe', action);
+  }
 
-	selectThisRecipe(recipe: Recipe, i: number) {
-		// set the selectedRecipe and the selectedIndex
-		this.loadRecipeSelect(recipe.id);
-		this.selectedIndex = i;
-		// change the tab to the recipe
-		// this.changeTab(1);
-	}
+  selectThisRecipe(recipe: Recipe, i: number) {
+    // set the selectedRecipe and the selectedIndex
+    this.loadRecipeSelect(recipe.id);
+    this.selectedIndex = i;
+    // change the tab to the recipe
+    // this.changeTab(1);
+  }
 
-	changeTab(event: any) {
-		this.selectedTab = event;
-		if (this.selectedTab === 0) {
-			this.selectedRecipe = undefined;
-			this.location.replaceState('savoury/recipes/browse');
-		} else if (!!this.selectedRecipe) {
-			this.location.replaceState(`savoury/recipes/item/${this.selectedRecipe.id}`);
-		}
-	}
+  changeTab(event: any) {
+    this.selectedTab = event;
+    if (this.selectedTab === 0) {
+      this.selectedRecipe = undefined;
+      this.location.replaceState('savoury/recipes/browse');
+    } else if (!!this.selectedRecipe) {
+      this.location.replaceState(`savoury/recipes/item/${this.selectedRecipe.id}`);
+    }
+  }
 
-	getSpoonAcularRecipe(count: number): void {
-		this.isLoading = true;
-		if (!this.cookBookUserProfile || !this.refDataAll) {
-			return;
-		}
+  getSpoonAcularRecipe(count: number): void {
+    this.isLoading = true;
+    if (!this.cookBookUserProfile || !this.refDataAll) {
+      return;
+    }
 
-		this.constructRecipeService.getSpoonAcularRecipe(count, this.cookBookUserProfile.id, this.refDataAll, this.measurementRef).pipe(
-			first(),
-			switchMap(() => this.getRecipes()),
-			catchError((err: HttpErrorResponse) => {
-				this.dialogService.alert('Error getting spoon recipe', err.message);
-				this.isLoading = false;
-				return of();
-			})
-		).subscribe();
-	}
-
+    this.constructRecipeService
+      .getSpoonAcularRecipe(count, this.cookBookUserProfile.id, this.refDataAll, this.measurementRef)
+      .pipe(
+        first(),
+        switchMap(() => this.getRecipes()),
+        catchError((err: HttpErrorResponse) => {
+          this.dialogService.alert('Error getting spoon recipe', err.message);
+          this.isLoading = false;
+          return of();
+        })
+      )
+      .subscribe();
+  }
 }

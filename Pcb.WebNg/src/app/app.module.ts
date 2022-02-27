@@ -14,14 +14,14 @@ import { SiteLogoComponent } from '@components/site-logo/site-logo.component';
 import { PipesModule } from '@pipes/pipes.module';
 import { AccountService } from '@services/account.service';
 import { LogService } from '@services/log.service';
-import { LoginService } from '@services/login.service';
+import { LoginService } from '@services/login/login.service';
 import { MessageService } from '@services/message.service';
 import { RefDataService } from '@services/ref-data.service';
 import { ReferenceService } from '@services/reference.service';
 import { RestIngredientService } from '@services/rest-ingredient.service';
 import { SecurityService } from '@services/security.service';
 import { StateService } from '@services/state.service';
-import { StorageService } from '@services/storage.service';
+import { StorageService } from '@services/storage/storage.service';
 import { UserService } from '@services/user.service';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
@@ -43,68 +43,68 @@ import { DialogService } from './services/dialog.service';
 import { UserProfileService } from './services/user-profile.service';
 
 @NgModule({
-	declarations: [
-		AppComponent,
-		FavouritesComponent,
-		RecipesComponent,
-		ShoppingComponent,
-		IngredientsComponent,
-		UserSettingsComponent,
-		UserRecipesComponent,
-		HomeComponent,
-		HomeDashboardComponent,
-		MainComponent,
-		WelcomeComponent,
-		AutoCompleteSearchComponent,
-		SiteLogoComponent,
-		FooterComponent
-	],
-	imports: [
-		BrowserModule,
-		BrowserAnimationsModule,
-		CommonModule,
-		FormsModule,
-		AppRoutingModule,
-		CompleteMaterialModule,
-		HttpClientModule,
-		ReactiveFormsModule,
-		LayoutModule,
-		ComponentModule,
-		DialogModule,
-		PipesModule,
-		SharedComponentModule,
-		NgxMaterialTimepickerModule,
-		NgxMaterialTimepickerModule.setLocale('en-au'),
-		SocialLoginModule,
-	],
-	providers: [
-		{ provide: MAT_DATE_LOCALE, useValue: 'en-AU' },
-		AccountService,
-		RestIngredientService,
-		UserProfileService,
-		ReferenceService,
-		RefDataService,
-		DialogService,
-		LogService,
-		LoginService,
-		StorageService,
-		SecurityService,
-		MessageService,
-		UserService,
-		StateService,
-		{
-			provide: 'SocialAuthServiceConfig',
-			useValue: {
-				autoLogin: false,
-				providers: [
-					{
-						id: GoogleLoginProvider.PROVIDER_ID,
-						provider: new GoogleLoginProvider('74967204697-o4tb5b59r1ou0vig4eoks4lst8c4i7vc.apps.googleusercontent.com')
-					}
-				]
-			} as SocialAuthServiceConfig
-		}
-	],
-	bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    FavouritesComponent,
+    RecipesComponent,
+    ShoppingComponent,
+    IngredientsComponent,
+    UserSettingsComponent,
+    UserRecipesComponent,
+    HomeComponent,
+    HomeDashboardComponent,
+    MainComponent,
+    WelcomeComponent,
+    AutoCompleteSearchComponent,
+    SiteLogoComponent,
+    FooterComponent
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    CommonModule,
+    FormsModule,
+    AppRoutingModule,
+    CompleteMaterialModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    LayoutModule,
+    ComponentModule,
+    DialogModule,
+    PipesModule,
+    SharedComponentModule,
+    NgxMaterialTimepickerModule,
+    NgxMaterialTimepickerModule.setLocale('en-au'),
+    SocialLoginModule
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-AU' },
+    AccountService,
+    RestIngredientService,
+    UserProfileService,
+    ReferenceService,
+    RefDataService,
+    DialogService,
+    LogService,
+    LoginService,
+    StorageService,
+    SecurityService,
+    MessageService,
+    UserService,
+    StateService,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('74967204697-o4tb5b59r1ou0vig4eoks4lst8c4i7vc.apps.googleusercontent.com')
+          }
+        ]
+      } as SocialAuthServiceConfig
+    }
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

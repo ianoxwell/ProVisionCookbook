@@ -7,11 +7,11 @@ import { Ingredient } from '@models/ingredient';
 import { MeasurementModel } from '@models/ingredient-model';
 import { MessageStatus } from '@models/message.model';
 import {
-	IRawFoodIngredient,
-	IRawFoodSuggestion,
-	ISpoonConversion,
-	ISpoonFoodRaw,
-	ISpoonSuggestions
+  IRawFoodIngredient,
+  IRawFoodSuggestion,
+  ISpoonConversion,
+  ISpoonFoodRaw,
+  ISpoonSuggestions
 } from '@models/raw-food-ingredient.model';
 import { ReferenceItemFull } from '@models/reference.model';
 import { ConstructIngredientService } from '@services/construct-ingredient.service';
@@ -36,154 +36,166 @@ import { catchError, debounceTime, filter, first, switchMap, takeUntil, tap } fr
 // TODO Add origin to the dialog (eg recipeImport || ingredients)
 // TODO Create new Ingredient from all the relevant information and if origin was ingredients navigate to the editable ingredient
 export class DialogNewIngredientComponent extends ComponentBase implements OnInit {
-	form: FormGroup;
-	filterRawSuggestions$: Observable<IRawFoodSuggestion[]> = of([]);
-	rawFoodFilter$ = new BehaviorSubject<string>('');
+  form: FormGroup;
+  filterRawSuggestions$: Observable<IRawFoodSuggestion[]> = of([]);
+  rawFoodFilter$ = new BehaviorSubject<string>('');
 
-	isFoodNameAvailable: boolean | null = null;
-	isCheckingFoodName = false;
+  isFoodNameAvailable: boolean | null = null;
+  isCheckingFoodName = false;
 
-	usdaFoodMatched: IRawFoodIngredient | null = null;
-	spoonFoodSuggestions: ISpoonSuggestions[] = [];
-	spoonFoodMatched: ISpoonFoodRaw | null = null;
-	spoonConversion: ISpoonConversion[] = [];
-	newIngredient: Ingredient | null = null;
+  usdaFoodMatched: IRawFoodIngredient | null = null;
+  spoonFoodSuggestions: ISpoonSuggestions[] = [];
+  spoonFoodMatched: ISpoonFoodRaw | null = null;
+  spoonConversion: ISpoonConversion[] = [];
+  newIngredient: Ingredient | null = null;
 
-	constructor(
-		public dialogRef: MatDialogRef<DialogNewIngredientComponent>,
-		@Inject(MAT_DIALOG_DATA) public data: {
-			foodGroup: ReferenceItemFull[],
-			ingredientStateRef: ReferenceItemFull[],
-			measurements: MeasurementModel[] },
-		private fb: FormBuilder,
-		private messageService: MessageService,
-		private constructIngredientService: ConstructIngredientService,
-		private restIngredientService: RestIngredientService
-	) {
-		super();
-		dialogRef.disableClose = true;
-		this.form = this.createForm();
-	}
+  constructor(
+    public dialogRef: MatDialogRef<DialogNewIngredientComponent>,
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      foodGroup: ReferenceItemFull[];
+      ingredientStateRef: ReferenceItemFull[];
+      measurements: MeasurementModel[];
+    },
+    private fb: FormBuilder,
+    private messageService: MessageService,
+    private constructIngredientService: ConstructIngredientService,
+    private restIngredientService: RestIngredientService
+  ) {
+    super();
+    dialogRef.disableClose = true;
+    this.form = this.createForm();
+  }
 
+  ngOnInit() {
+    this.filterRawSuggestions$ = this.listenFormChanges();
+  }
 
-	ngOnInit() {
-		
-		this.filterRawSuggestions$ = this.listenFormChanges();
-	}
+  /**
+   * Listens for changes in rawName and foodGroup in the form.
+   * @returns observable Food suggestions from the raw USDA food db.
+   */
+  listenFormChanges(): Observable<IRawFoodSuggestion[]> {
+    return combineLatest([this.rawName.valueChanges, this.foodGroup.valueChanges]).pipe(
+      debounceTime(200),
+      filter(([item, foodId]: [string, number]) => !!item),
+      switchMap(([rawFood, foodGroupId]: [string, number]) => {
+        if (rawFood.length > 2) {
+          this.checkNameExists(rawFood);
+        } else {
+          this.isFoodNameAvailable = null;
+        }
+        const formRaw = this.form.getRawValue();
+        return this.restIngredientService.getRawFoodSuggestion(rawFood, 20, foodGroupId);
+      })
+    );
+  }
+  get rawName(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
+  get foodGroup(): FormControl {
+    return this.form.get('foodGroup') as FormControl;
+  }
+  /**
+   * Creates the initial form
+   * @returns Form Group containing the form
+   */
+  createForm(): FormGroup {
+    return this.fb.group({
+      name: ['', [Validators.required]],
+      foodGroup: null
+    });
+  }
+  onFilterChange(ev: string): void {
+    this.rawFoodFilter$.next(ev);
+  }
 
-	/**
-	 * Listens for changes in rawName and foodGroup in the form.
-	 * @returns observable Food suggestions from the raw USDA food db.
-	 */
-	listenFormChanges(): Observable<IRawFoodSuggestion[]> {
-		return combineLatest([
-			this.rawName.valueChanges,
-			this.foodGroup.valueChanges
-		])
-		.pipe(
-			debounceTime(200),
-			filter(([item, foodId]: [string, number]) => !!item),
-			switchMap(([rawFood, foodGroupId]: [string, number]) => {
-				if (rawFood.length > 2) {
-					this.checkNameExists(rawFood);
-				} else {
-					this.isFoodNameAvailable = null;
-				}
-				const formRaw = this.form.getRawValue();
-				return this.restIngredientService.getRawFoodSuggestion(rawFood, 20, foodGroupId);
-			}),
-		);
-	}
-	get rawName(): FormControl { return this.form.get('name') as FormControl; }
-	get foodGroup(): FormControl { return this.form.get('foodGroup') as FormControl; }
-	/**
-	 * Creates the initial form
-	 * @returns Form Group containing the form
-	 */
-	createForm(): FormGroup {
-		return this.fb.group({
-			name: ['', [Validators.required]],
-			foodGroup: null
-		});
-	}
-	onFilterChange(ev: string): void {
-		this.rawFoodFilter$.next(ev);
-	}
+  /**
+   * Triggered from the template, uses rest service to populate the usdaFoodMatched.
+   * @param item The Usda food item to be selected.
+   */
+  selectItem(item: IRawFoodSuggestion): void {
+    console.log('selected this item', item);
+    this.restIngredientService
+      .getRawFoodById(item.usdaId)
+      .pipe(
+        first(),
+        tap((result: IRawFoodIngredient) => {
+          console.log('raw food matched', result);
+          this.usdaFoodMatched = result;
+        }),
+        catchError((err: HttpErrorResponse) => {
+          this.messageService.add({
+            severity: MessageStatus.Warning,
+            summary: 'Error getting details about the Usda Food item',
+            detail: err.message
+          });
+          return of();
+        })
+      )
+      .subscribe();
+  }
+  /**
+   * Triggered from the template - creates new ingredient and closes the dialog
+   */
+  onSaveItem() {
+    this.newIngredient = this.constructIngredientService.createNewIngredient(
+      this.form.getRawValue(),
+      this.spoonFoodMatched,
+      this.spoonConversion,
+      this.data.foodGroup,
+      this.data.ingredientStateRef,
+      this.data.measurements,
+      this.usdaFoodMatched
+    );
+    this.dialogRef.close(this.newIngredient);
+  }
 
-	/**
-	 * Triggered from the template, uses rest service to populate the usdaFoodMatched.
-	 * @param item The Usda food item to be selected.
-	 */
-	selectItem(item: IRawFoodSuggestion): void {
-		console.log('selected this item', item);
-		this.restIngredientService.getRawFoodById(item.usdaId).pipe(
-			first(),
-			tap((result: IRawFoodIngredient) => {
-				console.log('raw food matched', result);
-				this.usdaFoodMatched = result;
-			}),
-			catchError((err: HttpErrorResponse) => {
-				this.messageService.add({
-					severity: MessageStatus.Warning,
-					summary: 'Error getting details about the Usda Food item',
-					detail: err.message
-				});
-				return of();
-			})
-		).subscribe();
-	}
-	/**
-	 * Triggered from the template - creates new ingredient and closes the dialog
-	 */
-	onSaveItem() {
-		this.newIngredient = this.constructIngredientService.createNewIngredient(
-			this.form.getRawValue(),
-			this.spoonFoodMatched,
-			this.spoonConversion,
-			this.data.foodGroup,
-			this.data.ingredientStateRef,
-			this.data.measurements,
-			this.usdaFoodMatched,);
-		this.dialogRef.close(this.newIngredient);
-	}
+  checkNameExists(name: string): void {
+    this.isCheckingFoodName = true;
+    this.isFoodNameAvailable = null;
+    this.restIngredientService
+      .checkFoodNameExists(name)
+      .pipe(
+        first(),
+        tap((result: boolean) => {
+          this.isCheckingFoodName = false;
+          this.isFoodNameAvailable = !result;
+        })
+      )
+      .subscribe();
+  }
 
-	checkNameExists(name: string): void {
-		this.isCheckingFoodName = true;
-		this.isFoodNameAvailable = null;
-		this.restIngredientService.checkFoodNameExists(name).pipe(
-			first(),
-			tap((result: boolean) => {
-				this.isCheckingFoodName = false;
-				this.isFoodNameAvailable = !result;
-			})
-		).subscribe();
-	}
+  findSpoonSuggestionsOnline(): void {
+    this.restIngredientService
+      .getSpoonacularSuggestions(this.rawName.value)
+      .pipe(
+        first(),
+        tap((result: ISpoonSuggestions[]) => {
+          this.spoonFoodSuggestions = result;
+        })
+      )
+      .subscribe();
+  }
 
-	findSpoonSuggestionsOnline(): void {
-		this.restIngredientService.getSpoonacularSuggestions(this.rawName.value).pipe(
-			first(),
-			tap((result: ISpoonSuggestions[]) => {
-				this.spoonFoodSuggestions = result;
-			})
-		).subscribe();
-	}
-
-	selectSpoonItem(spoonSuggestion: ISpoonSuggestions): void {
-		this.restIngredientService.getSpoonacularIngredient(spoonSuggestion.id.toString()).pipe(
-			switchMap((result: ISpoonFoodRaw) => {
-				this.spoonFoodMatched = result;
-				// const unitFrom: string = result.shoppingListUnits[0];
-				// const unitFromRef = this.data.measurements
-				// 	.find((measure: MeasurementModel)	=> measure.title.toLowerCase() === unitFrom || measure.shortName.toLowerCase() === unitFrom);
-				const unitFrom = result.possibleUnits.includes('cup') ? 'cup' : 'piece';
-				return this.restIngredientService.getSpoonConversion(result.name, unitFrom, 1, 'grams');
-			}),
-			tap((convertResult: ISpoonConversion) => {
-				this.spoonConversion.push(convertResult);
-				console.log('spoon finished', this.spoonFoodMatched, this.spoonConversion);
-			}),
-			takeUntil(this.ngUnsubscribe)
-		).subscribe();
-	}
-
+  selectSpoonItem(spoonSuggestion: ISpoonSuggestions): void {
+    this.restIngredientService
+      .getSpoonacularIngredient(spoonSuggestion.id.toString())
+      .pipe(
+        switchMap((result: ISpoonFoodRaw) => {
+          this.spoonFoodMatched = result;
+          // const unitFrom: string = result.shoppingListUnits[0];
+          // const unitFromRef = this.data.measurements
+          // 	.find((measure: MeasurementModel)	=> measure.title.toLowerCase() === unitFrom || measure.shortName.toLowerCase() === unitFrom);
+          const unitFrom = result.possibleUnits.includes('cup') ? 'cup' : 'piece';
+          return this.restIngredientService.getSpoonConversion(result.name, unitFrom, 1, 'grams');
+        }),
+        tap((convertResult: ISpoonConversion) => {
+          this.spoonConversion.push(convertResult);
+          console.log('spoon finished', this.spoonFoodMatched, this.spoonConversion);
+        }),
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe();
+  }
 }

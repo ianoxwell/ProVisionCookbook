@@ -19,27 +19,27 @@ import { ResetPasswordFormComponent } from './reset-password-form/reset-password
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 @NgModule({
-	imports: [
-		CommonModule,
-		ReactiveFormsModule,
-		AccountRoutingModule,
-		MatIconModule,
-		MatCardModule,
-		MatFormFieldModule,
-		MatDividerModule,
-		MatInputModule,
-		MatButtonModule,
-		MatCheckboxModule,
-		SharedComponentModule,
-	],
-	declarations: [
-		LoginFormComponent,
-		RegisterFormComponent,
-		ResetPasswordFormComponent,
-		ForgotPasswordComponent,
-		LoginComponent,
-		VerifyEmailComponent
-	],
-	providers: [AccountService]
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    AccountRoutingModule,
+    MatIconModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatDividerModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    SharedComponentModule
+  ],
+  declarations: [
+    LoginFormComponent,
+    RegisterFormComponent,
+    ResetPasswordFormComponent,
+    ForgotPasswordComponent,
+    LoginComponent,
+    VerifyEmailComponent
+  ],
+  providers: [AccountService]
 })
 export class AccountModule {}

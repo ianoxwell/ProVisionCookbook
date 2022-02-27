@@ -10,39 +10,36 @@ import { SentenceCasePipe } from '@pipes/sentence-case.pipe';
   styleUrls: ['./recipe-view.component.scss']
 })
 export class RecipeViewComponent implements OnInit {
-	@Input() selectedRecipe: Recipe | null = null;
-	@Input() measurements: MeasurementModel[] = [];
+  @Input() selectedRecipe: Recipe | null = null;
+  @Input() measurements: MeasurementModel[] = [];
 
-	constructor(
-		private sentenceCase: SentenceCasePipe
-	) { }
+  constructor(private sentenceCase: SentenceCasePipe) {}
 
-	ngOnInit() {
-		console.log('recipe view', this.selectedRecipe);
-	}
+  ngOnInit() {
+    console.log('recipe view', this.selectedRecipe);
+  }
 
-	printView() {
-		// todo complete the print views
-		console.log('go and print');
-	}
+  printView() {
+    // todo complete the print views
+    console.log('go and print');
+  }
 
-	englishIngredientItem(ingredient: IngredientList): string {
-		const unit = ingredient.measurementUnit?.title;
-		if (!unit) {
-			console.log('no unit', ingredient);
-		}
-		// TODO re-establish the below
-		// if (unit.length < 5 || unit === 'tbsps') {
-		// 	const newUnit = this.measurements.find(measure => (measure.shortName === unit || measure.altShortName === unit));
-		// 	if (!!newUnit) {
-		// 		unit = newUnit.title;
-		// 	}
-		// }
-		return `${ingredient.quantity} ${unit} ${this.sentenceCase.transform(ingredient.ingredient?.name)}`;
-	}
+  englishIngredientItem(ingredient: IngredientList): string {
+    const unit = ingredient.measurementUnit?.title;
+    if (!unit) {
+      console.log('no unit', ingredient);
+    }
+    // TODO re-establish the below
+    // if (unit.length < 5 || unit === 'tbsps') {
+    // 	const newUnit = this.measurements.find(measure => (measure.shortName === unit || measure.altShortName === unit));
+    // 	if (!!newUnit) {
+    // 		unit = newUnit.title;
+    // 	}
+    // }
+    return `${ingredient.quantity} ${unit} ${this.sentenceCase.transform(ingredient.ingredient?.name)}`;
+  }
 
-	routerLinkURL(ingredient: IngredientList): string {
-		return `/savoury/ingredients/item/${ingredient.ingredientId}`;
-	}
-
+  routerLinkURL(ingredient: IngredientList): string {
+    return `/savoury/ingredients/item/${ingredient.ingredientId}`;
+  }
 }

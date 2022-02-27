@@ -1,5 +1,5 @@
-import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog-delete-ingredient',
@@ -7,7 +7,5 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
   styleUrls: ['./dialog-delete-ingredient.component.scss']
 })
 export class DialogDeleteIngredientComponent {
-	constructor(
-		@Inject(MAT_DIALOG_DATA) public data: any
-	) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
 }

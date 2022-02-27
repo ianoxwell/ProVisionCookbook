@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" class="flex-box flex-justify-space-between" *ngIf="!!userProfileService.isLoggedIn && !!profile">
+<mat-toolbar color="primary" class="flex-box flex-justify-space-between" *ngIf="isLoggedIn && !!profile">
 	<div class="flex-box flex-row">
 		<h1 class="pr-2">
 			<button type="button" mat-button routerLink="/savoury/" aria-label="Provisioners CookBook">

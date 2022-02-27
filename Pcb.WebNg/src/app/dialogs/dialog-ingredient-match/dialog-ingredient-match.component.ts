@@ -14,134 +14,141 @@ import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, debounceTime, filter, first, switchMap, tap } from 'rxjs/operators';
 
 @Component({
-	selector: 'app-dialog-ingredient-match',
-	templateUrl: './dialog-ingredient-match.component.html',
-	styleUrls: ['./dialog-ingredient-match.component.scss']
+  selector: 'app-dialog-ingredient-match',
+  templateUrl: './dialog-ingredient-match.component.html',
+  styleUrls: ['./dialog-ingredient-match.component.scss']
 })
 export class DialogIngredientMatchComponent extends ComponentBase implements OnInit {
-	form: FormGroup;
-	usdaFoodMatched: IRawFoodIngredient | null = null;
-	filterRawSuggestions$: Observable<IRawFoodSuggestion[]> = of([]);
+  form: FormGroup;
+  usdaFoodMatched: IRawFoodIngredient | null = null;
+  filterRawSuggestions$: Observable<IRawFoodSuggestion[]> = of([]);
 
-	constructor(
-		public dialogRef: MatDialogRef<DialogIngredientMatchComponent>,
-		@Inject(MAT_DIALOG_DATA)
-		public data: {
-			ingredient: Ingredient;
-			foodGroup: ReferenceItemFull[];
-		},
-		private fb: FormBuilder,
-		private constructIngredientService: ConstructIngredientService,
-		private restIngredientService: RestIngredientService,
-		private messageService: MessageService
-	) {
-		super();
-		this.form = this.createForm();
-	}
+  constructor(
+    public dialogRef: MatDialogRef<DialogIngredientMatchComponent>,
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      ingredient: Ingredient;
+      foodGroup: ReferenceItemFull[];
+    },
+    private fb: FormBuilder,
+    private constructIngredientService: ConstructIngredientService,
+    private restIngredientService: RestIngredientService,
+    private messageService: MessageService
+  ) {
+    super();
+    this.form = this.createForm();
+  }
 
-	ngOnInit() {
-		console.log('match dialog', this.data);		
-		this.filterRawSuggestions$ = this.listenFormChanges();
-		// wrapped in timeout to allow time for the dom to draw.
-		setTimeout(() => this.patchForm(this.data.ingredient), 50);
-	}
+  ngOnInit() {
+    console.log('match dialog', this.data);
+    this.filterRawSuggestions$ = this.listenFormChanges();
+    // wrapped in timeout to allow time for the dom to draw.
+    setTimeout(() => this.patchForm(this.data.ingredient), 50);
+  }
 
-	get usdaFoodName(): FormControl {
-		return this.form.get('usdaFoodName') as FormControl;
-	}
-	get foodGroup(): FormControl {
-		return this.form.get('foodGroup') as FormControl;
-	}
-	/**
-	 * Creates the initial form
-	 * @returns Form Group containing the form
-	 */
-	createForm(): FormGroup {
-		return this.fb.group({
-			name: [{ value: this.data.ingredient.name, disabled: true }],
-			usdaFoodName: ['', [Validators.required]],
-			foodGroup: null
-		});
-	}
+  get usdaFoodName(): FormControl {
+    return this.form.get('usdaFoodName') as FormControl;
+  }
+  get foodGroup(): FormControl {
+    return this.form.get('foodGroup') as FormControl;
+  }
+  /**
+   * Creates the initial form
+   * @returns Form Group containing the form
+   */
+  createForm(): FormGroup {
+    return this.fb.group({
+      name: [{ value: this.data.ingredient.name, disabled: true }],
+      usdaFoodName: ['', [Validators.required]],
+      foodGroup: null
+    });
+  }
 
-	/**
-	 * After form creation and listening for changes the form is patched to cause both observables to emit.
-	 * @param ingredient The ingredient to update with.
-	 */
-	patchForm(ingredient: Ingredient, emit = true): void {
-		this.form.patchValue(
-			{
-				usdaFoodName: ingredient.name,
-				foodGroup: ingredient.foodGroup?.id
-			},
-			{ emitEvent: emit }
-		);
-	}
+  /**
+   * After form creation and listening for changes the form is patched to cause both observables to emit.
+   * @param ingredient The ingredient to update with.
+   */
+  patchForm(ingredient: Ingredient, emit = true): void {
+    this.form.patchValue(
+      {
+        usdaFoodName: ingredient.name,
+        foodGroup: ingredient.foodGroup?.id
+      },
+      { emitEvent: emit }
+    );
+  }
 
-	/**
-	 * Listens for changes in rawName and foodGroup in the form.
-	 * Be aware that combineLatest will not emit an initial value until each observable emits at least one value.
-	 * Therefore we are patching the form to trigger both observables on initialisation.
-	 * @returns observable Food suggestions from the raw USDA food db.
-	 */
-	listenFormChanges(): Observable<IRawFoodSuggestion[]> {
-		return combineLatest([this.usdaFoodName.valueChanges, this.foodGroup.valueChanges]).pipe(
-			debounceTime(200),
-			filter(([item, foodId]: [string, number]) => !!item),
-			switchMap(([rawFood, foodGroupId]: [string, number]) => {
-				const formRaw = this.form.getRawValue();
-				this.data.ingredient.foodGroup = this.data.foodGroup.find((group: ReferenceItemFull) => group.id === formRaw.foodGroup);
-				return this.data.ingredient.foodGroup?.title === 'NULL'
-					? this.restIngredientService.getRawFoodSuggestion(rawFood, 20)
-					: this.restIngredientService.getRawFoodSuggestion(rawFood, 20, foodGroupId);
-			})
-		);
-	}
+  /**
+   * Listens for changes in rawName and foodGroup in the form.
+   * Be aware that combineLatest will not emit an initial value until each observable emits at least one value.
+   * Therefore we are patching the form to trigger both observables on initialisation.
+   * @returns observable Food suggestions from the raw USDA food db.
+   */
+  listenFormChanges(): Observable<IRawFoodSuggestion[]> {
+    return combineLatest([this.usdaFoodName.valueChanges, this.foodGroup.valueChanges]).pipe(
+      debounceTime(200),
+      filter(([item, foodId]: [string, number]) => !!item),
+      switchMap(([rawFood, foodGroupId]: [string, number]) => {
+        const formRaw = this.form.getRawValue();
+        this.data.ingredient.foodGroup = this.data.foodGroup.find(
+          (group: ReferenceItemFull) => group.id === formRaw.foodGroup
+        );
+        return this.data.ingredient.foodGroup?.title === 'NULL'
+          ? this.restIngredientService.getRawFoodSuggestion(rawFood, 20)
+          : this.restIngredientService.getRawFoodSuggestion(rawFood, 20, foodGroupId);
+      })
+    );
+  }
 
-	/**
-	 * Triggered from the template, uses rest service to populate the usdaFoodMatched.
-	 * @param item The Usda food item to be selected.
-	 */
-	selectItem(item: IRawFoodSuggestion): void {
-		console.log('selected this item', item);
-		const formRaw = this.form.getRawValue();
-		const nullFoodGroup: ReferenceItemFull | undefined = this.data.foodGroup.find((group: ReferenceItemFull) => group.title === 'NULL');
-		if (!!nullFoodGroup && formRaw.foodGroup === nullFoodGroup.id) {
-			this.data.ingredient.foodGroup = this.data.foodGroup.find(
-				(group: ReferenceItemFull) => group.title.toLowerCase() === item.foodGroup.toLowerCase()
-			);
-			this.data.ingredient.name = item.name;
-			this.patchForm(this.data.ingredient, false);
-		}
-		this.restIngredientService
-			.getRawFoodById(item.usdaId)
-			.pipe(
-				first(),
-				tap((result: IRawFoodIngredient) => {
-					console.log('raw food matched', result);
-					this.usdaFoodMatched = result;
-				}),
-				catchError((err: HttpErrorResponse) => {
-					this.messageService.add({
-						severity: MessageStatus.Warning,
-						summary: 'Error getting details about the Usda Food item',
-						detail: err.message
-					});
-					return of();
-				})
-			)
-			.subscribe();
-	}
+  /**
+   * Triggered from the template, uses rest service to populate the usdaFoodMatched.
+   * @param item The Usda food item to be selected.
+   */
+  selectItem(item: IRawFoodSuggestion): void {
+    console.log('selected this item', item);
+    const formRaw = this.form.getRawValue();
+    const nullFoodGroup: ReferenceItemFull | undefined = this.data.foodGroup.find(
+      (group: ReferenceItemFull) => group.title === 'NULL'
+    );
+    if (!!nullFoodGroup && formRaw.foodGroup === nullFoodGroup.id) {
+      this.data.ingredient.foodGroup = this.data.foodGroup.find(
+        (group: ReferenceItemFull) => group.title.toLowerCase() === item.foodGroup.toLowerCase()
+      );
+      this.data.ingredient.name = item.name;
+      this.patchForm(this.data.ingredient, false);
+    }
+    this.restIngredientService
+      .getRawFoodById(item.usdaId)
+      .pipe(
+        first(),
+        tap((result: IRawFoodIngredient) => {
+          console.log('raw food matched', result);
+          this.usdaFoodMatched = result;
+        }),
+        catchError((err: HttpErrorResponse) => {
+          this.messageService.add({
+            severity: MessageStatus.Warning,
+            summary: 'Error getting details about the Usda Food item',
+            detail: err.message
+          });
+          return of();
+        })
+      )
+      .subscribe();
+  }
 
-	/**
-	 * Triggered from the template - updates the ingredient and closes the dialog
-	 */
-	onSaveItem() {
-		if (!!this.usdaFoodMatched) {
-			const updatedIngredient: Ingredient = this.constructIngredientService.mixinUsdaResults(this.data.ingredient, this.usdaFoodMatched);
-			this.dialogRef.close(updatedIngredient);
-		} else {
-			this.dialogRef.close(this.data.ingredient);
-		}
-	}
+  /**
+   * Triggered from the template - updates the ingredient and closes the dialog
+   */
+  onSaveItem() {
+    if (!!this.usdaFoodMatched) {
+      const updatedIngredient: Ingredient = this.constructIngredientService.mixinUsdaResults(
+        this.data.ingredient,
+        this.usdaFoodMatched
+      );
+      this.dialogRef.close(updatedIngredient);
+    } else {
+      this.dialogRef.close(this.data.ingredient);
+    }
+  }
 }

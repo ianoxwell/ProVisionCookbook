@@ -11,12 +11,12 @@
  */
 
 export interface Price {
-	id?: number;
-	brandName?: string;
-	price: number;
-	quantity: number;
-	measurement?: string;
-	storeName?: string;
-	lastChecked?: number | Date;
-	apiLink?: string;
+  id?: number;
+  brandName?: string;
+  price: number;
+  quantity: number;
+  measurement?: string;
+  storeName?: string;
+  lastChecked?: number | Date;
+  apiLink?: string;
 }

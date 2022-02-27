@@ -11,26 +11,26 @@
  */
 
 export interface History {
-	readonly id?: string;
-	eventDate?: Date;
-	/**
-	 * event that occurred edit, booked, favourited, created
-	 */
-	event?: string;
-	/**
-	 * used in an update
-	 */
-	changeKey?: string;
-	/**
-	 * used in an update
-	 */
-	changeFrom?: string;
-	/**
-	 * used in an update
-	 */
-	changeTo?: string;
-	/**
-	 * polite name of user
-	 */
-	userName?: string;
+  readonly id?: string;
+  eventDate?: Date;
+  /**
+   * event that occurred edit, booked, favourited, created
+   */
+  event?: string;
+  /**
+   * used in an update
+   */
+  changeKey?: string;
+  /**
+   * used in an update
+   */
+  changeFrom?: string;
+  /**
+   * used in an update
+   */
+  changeTo?: string;
+  /**
+   * polite name of user
+   */
+  userName?: string;
 }

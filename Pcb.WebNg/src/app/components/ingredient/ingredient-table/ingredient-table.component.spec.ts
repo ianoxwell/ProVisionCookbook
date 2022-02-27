@@ -7,29 +7,25 @@ import { MatTableModule } from '@angular/material/table';
 import { IngredientTableComponent } from './ingredient-table.component';
 
 describe('DataTableComponent', () => {
-	let component: IngredientTableComponent;
-	let fixture: ComponentFixture<IngredientTableComponent>;
+  let component: IngredientTableComponent;
+  let fixture: ComponentFixture<IngredientTableComponent>;
 
-	beforeEach(waitForAsync(() => {
-			TestBed.configureTestingModule({
-			declarations: [ IngredientTableComponent ],
-			imports: [
-				NoopAnimationsModule,
-				MatPaginatorModule,
-				MatSortModule,
-				MatTableModule,
-			]
-			}).compileComponents();
-		}));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [IngredientTableComponent],
+        imports: [NoopAnimationsModule, MatPaginatorModule, MatSortModule, MatTableModule]
+      }).compileComponents();
+    })
+  );
 
-	beforeEach(() => {
-		fixture = TestBed.createComponent(IngredientTableComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
-	});
+  beforeEach(() => {
+    fixture = TestBed.createComponent(IngredientTableComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-	it('should compile', () => {
-		expect(component).toBeTruthy();
-	});
+  it('should compile', () => {
+    expect(component).toBeTruthy();
+  });
 });
-

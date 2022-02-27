@@ -4,127 +4,127 @@ import { IIngredientFilterObject, IRecipeFilterQuery } from './filter-queries.mo
 
 /** Generic key/values */
 export interface IDictionary<T> {
-	[Key: string]: T;
+  [Key: string]: T;
 }
 
 export interface BaseDbModel {
-	id: number;
-	rowVer: string;
-	createdAt: Date;
+  id: number;
+  rowVer: string;
+  createdAt: Date;
 }
 
 export interface Validations {
-	type: string;
-	message: string;
+  type: string;
+  message: string;
 }
 
 export interface HourMin {
-	hours: number;
-	minutes: number;
+  hours: number;
+  minutes: number;
 }
 
 export interface IdValuePair {
-	id: number | string;
-	value: string | number;
+  id: number | string;
+  value: string | number;
 }
 
 export interface IIdKeyPair {
-	id: number;
-	key: string;
+  id: number;
+  key: string;
 }
 
 export interface IdTitlePair {
-	id: number;
-	title: string;
+  id: number;
+  title: string;
 }
 
 export interface IngredientPaginator {
-	previousPageIndex: number;
-	pageIndex: number;
-	pageSize: number;
-	length: number;
-	active?: string;
-	direction?: SortDirection;
-	filter?: string;
+  previousPageIndex: number;
+  pageIndex: number;
+  pageSize: number;
+  length: number;
+  active?: string;
+  direction?: SortDirection;
+  filter?: string;
 }
 
 export interface PagedResult<T> {
-	items: T[];
-	totalCount: number;
+  items: T[];
+  totalCount: number;
 }
 
 export class MessageResult {
-	message: string;
-	constructor(message: string) {
-		this.message = message;
-	}
+  message: string;
+  constructor(message: string) {
+    this.message = message;
+  }
 }
 
 export interface ISortPageObj {
-	orderby: string;
-	order: SortDirection;
-	perPage: number;
-	page: number;
+  orderby: string;
+  order: SortDirection;
+  perPage: number;
+  page: number;
 }
 
 export class SortPageObj implements ISortPageObj {
-	orderby = 'name';
-	order: SortDirection = 'asc';
-	page = 0;
-	perPage = environment.resultsPerPage;
-	constructor() {}
+  orderby = 'name';
+  order: SortDirection = 'asc';
+  page = 0;
+  perPage = environment.resultsPerPage;
+  constructor() {}
 
-	public update(filterObj: IIngredientFilterObject | IRecipeFilterQuery) {
-		if (filterObj) {
-			this.orderby = filterObj.orderby;
-			this.order = filterObj.order;
-			this.page = filterObj.page;
-			this.perPage = filterObj.perPage;
-		}
-		return this;
-	}
+  public update(filterObj: IIngredientFilterObject | IRecipeFilterQuery) {
+    if (filterObj) {
+      this.orderby = filterObj.orderby;
+      this.order = filterObj.order;
+      this.page = filterObj.page;
+      this.perPage = filterObj.perPage;
+    }
+    return this;
+  }
 }
 
 export interface AdminRights {
-	globalAdmin: boolean;
-	schoolAdmin: IdTitlePair[];
+  globalAdmin: boolean;
+  schoolAdmin: IdTitlePair[];
 }
 
 export interface IValidationMessages {
-	[key: string]: {
-		type: string;
-		message: string;
-	}[];
+  [key: string]: {
+    type: string;
+    message: string;
+  }[];
 }
 
 export interface IScrollPositions {
-	prev: number;
-	current: number;
+  prev: number;
+  current: number;
 }
 
 /* Section Enums
  */
 
 export enum CountryCode {
-	AU,
-	US,
-	ALL
+  AU,
+  US,
+  ALL
 }
 
 export enum MeasurementType {
-	Volume,
-	Weight,
-	Item
+  Volume,
+  Weight,
+  Item
 }
 
 export enum NutritionUnit {
-	g,
-	mg,
-	cal
+  g,
+  mg,
+  cal
 }
 
 export enum PicturePosition {
-	top,
-	left,
-	right
+  top,
+  left,
+  right
 }

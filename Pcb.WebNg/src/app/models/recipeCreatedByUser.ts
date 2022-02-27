@@ -11,16 +11,16 @@
  */
 
 export interface RecipeCreatedByUser {
-	/**
-	 * used to search through with a name change; also search for user profile on click then navigateTo
-	 */
-	userID?: string;
-	/**
-	 * polite name reference
-	 */
-	userName?: string;
-	/**
-	 * api link to the user profile
-	 */
-	link?: string;
+  /**
+   * used to search through with a name change; also search for user profile on click then navigateTo
+   */
+  userID?: string;
+  /**
+   * polite name reference
+   */
+  userName?: string;
+  /**
+   * api link to the user profile
+   */
+  link?: string;
 }

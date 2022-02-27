@@ -4,22 +4,22 @@ import { ToastItemComponent } from './toast-item/toast-item.component';
 import { ToastComponent } from './toast.component';
 
 describe('ToastComponent', () => {
-	let component: ToastComponent;
-	let fixture: ComponentFixture<ToastComponent>;
+  let component: ToastComponent;
+  let fixture: ComponentFixture<ToastComponent>;
 
-	beforeEach(async () => {
-		await TestBed.configureTestingModule({
-			declarations: [ToastComponent, MockComponent(ToastItemComponent)]
-		}).compileComponents();
-	});
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ToastComponent, MockComponent(ToastItemComponent)]
+    }).compileComponents();
+  });
 
-	beforeEach(() => {
-		fixture = TestBed.createComponent(ToastComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
-	});
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ToastComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-	it('should create', () => {
-		expect(component).toBeTruthy();
-	});
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

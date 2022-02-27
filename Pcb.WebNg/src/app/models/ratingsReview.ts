@@ -11,16 +11,16 @@
  */
 
 export interface RatingReviews {
-	id?: number;
-	recipeId: number;
-	// number 0-10 - which presents 3.5/5 stars
-	rating: number;
+  id?: number;
+  recipeId: number;
+  // number 0-10 - which presents 3.5/5 stars
+  rating: number;
 
-	createdAt: number | Date;
-	// Review - YUM
-	title: string;
-	// big text field describing improvements to make etc
-	review?: string;
-	// mongoose objectId - so can use populate to expand the information
-	userID?: number;
+  createdAt: number | Date;
+  // Review - YUM
+  title: string;
+  // big text field describing improvements to make etc
+  review?: string;
+  // mongoose objectId - so can use populate to expand the information
+  userID?: number;
 }

@@ -6,7 +6,7 @@ describe('UserProfileService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-		const service: UserProfileService = TestBed.inject(UserProfileService);
-		expect(service).toBeTruthy();
+    const service: UserProfileService = TestBed.inject(UserProfileService);
+    expect(service).toBeTruthy();
   });
 });

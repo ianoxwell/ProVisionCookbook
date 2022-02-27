@@ -1,10 +1,10 @@
 export enum EmailStatus {
-	Verifying,
-	Failed
+  Verifying,
+  Failed
 }
 
 export enum TokenStatus {
-	Validating,
-	Valid,
-	Invalid
+  Validating,
+  Valid,
+  Invalid
 }

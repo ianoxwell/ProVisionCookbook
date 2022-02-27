@@ -12,74 +12,74 @@ import { DialogIngredientMatchComponent } from '../dialogs/dialog-ingredient-mat
 import { DialogNewIngredientComponent } from '../dialogs/dialog-new-ingredient/dialog-new-ingredient.component';
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root'
 })
 export class DialogService extends ComponentBase {
-	constructor(private dialog: MatDialog, private matSnackBar: MatSnackBar) {
-		super();
-	}
+  constructor(private dialog: MatDialog, private matSnackBar: MatSnackBar) {
+    super();
+  }
 
-	/** Opens Material UI dialog boxes with given parameters */
-	createDialog<T>(data: any, component: any, width: string = '60%'): Observable<T> {
-		const dialogRef = this.dialog.open(component, {
-			width,
-			data,
-			position: { top: '50px' }
-		});
+  /** Opens Material UI dialog boxes with given parameters */
+  createDialog<T>(data: any, component: any, width: string = '60%'): Observable<T> {
+    const dialogRef = this.dialog.open(component, {
+      width,
+      data,
+      position: { top: '50px' }
+    });
 
-		return dialogRef.afterClosed();
-	}
+    return dialogRef.afterClosed();
+  }
 
-	/** Opens a confirm dialog */
-	confirm(status: MessageStatus, title: string, message: string, buttonText: string = 'Confirm'): Observable<boolean> {
-		const data = { status, title, message, buttonText };
-		return this.createDialog<boolean>(data, ConfirmDialogComponent);
-	}
+  /** Opens a confirm dialog */
+  confirm(status: MessageStatus, title: string, message: string, buttonText: string = 'Confirm'): Observable<boolean> {
+    const data = { status, title, message, buttonText };
+    return this.createDialog<boolean>(data, ConfirmDialogComponent);
+  }
 
-	/** Opens an alert dialog */
-	alert(heading: string, err: any, confirmButton: string = 'Okay'): Observable<void> {
-		// if error message if of type HttpErrorResponse then it will have a message
-		const message = !!err.message ? err.message : err;
-		const data = { status: MessageStatus.Error, heading, message, confirmButton };
-		return this.createDialog<void>(data, ConfirmDialogComponent);
-	}
+  /** Opens an alert dialog */
+  alert(heading: string, err: any, confirmButton: string = 'Okay'): Observable<void> {
+    // if error message if of type HttpErrorResponse then it will have a message
+    const message = !!err.message ? err.message : err;
+    const data = { status: MessageStatus.Error, heading, message, confirmButton };
+    return this.createDialog<void>(data, ConfirmDialogComponent);
+  }
 
-	/**
-	 * Opens a new Ingredient Dialog
-	 * @param foodGroup Reference data for the food Groups.
-	 * @param measurements Reference Data for measurements (used in conversions).
-	 * @param ingredientStateRef Reference Data for the ingredient States (i.e. solid, liquid)
-	 * @returns Observable of the new ingredient
-	 */
-	newIngredientDialog(
-		foodGroup: ReferenceItemFull[],
-		measurements: MeasurementModel[],
-		ingredientStateRef: ReferenceItemFull[]
-	): Observable<Ingredient> {
-		return this.createDialog<Ingredient>({ foodGroup, measurements, ingredientStateRef }, DialogNewIngredientComponent);
-	}
+  /**
+   * Opens a new Ingredient Dialog
+   * @param foodGroup Reference data for the food Groups.
+   * @param measurements Reference Data for measurements (used in conversions).
+   * @param ingredientStateRef Reference Data for the ingredient States (i.e. solid, liquid)
+   * @returns Observable of the new ingredient
+   */
+  newIngredientDialog(
+    foodGroup: ReferenceItemFull[],
+    measurements: MeasurementModel[],
+    ingredientStateRef: ReferenceItemFull[]
+  ): Observable<Ingredient> {
+    return this.createDialog<Ingredient>({ foodGroup, measurements, ingredientStateRef }, DialogNewIngredientComponent);
+  }
 
-	/**
-	 * Opens a dialog to match the ingredients with the Usda Food id and populate the nutrients / vitamins / minerals.
-	 * @param ingredient The ingredient to edit.
-	 * @param foodGroup The refData for FoodGroup to match with.
-	 * @returns Observable of the updated ingredient
-	 */
-	matchIngredientDialog(ingredient: Ingredient, foodGroup: ReferenceItemFull[]): Observable<Ingredient> {
-		return this.createDialog<Ingredient>({ ingredient, foodGroup }, DialogIngredientMatchComponent);
-	}
+  /**
+   * Opens a dialog to match the ingredients with the Usda Food id and populate the nutrients / vitamins / minerals.
+   * @param ingredient The ingredient to edit.
+   * @param foodGroup The refData for FoodGroup to match with.
+   * @returns Observable of the updated ingredient
+   */
+  matchIngredientDialog(ingredient: Ingredient, foodGroup: ReferenceItemFull[]): Observable<Ingredient> {
+    return this.createDialog<Ingredient>({ ingredient, foodGroup }, DialogIngredientMatchComponent);
+  }
 
-	/** Closes all dialogs */
-	closeAll() {
-		this.dialog.closeAll();
-	}
+  /** Closes all dialogs */
+  closeAll() {
+    this.dialog.closeAll();
+  }
 
-	/** Opens a snackbar */
-	snackBar(status: MessageStatus, message: string, durationTime: number = 3000) {
-		this.matSnackBar.open(message, 'X', {
-			duration: durationTime,
-			verticalPosition: 'top',
-			panelClass: [status]
-		});
-	}
+  /** Opens a snackbar */
+  snackBar(status: MessageStatus, message: string, durationTime: number = 3000) {
+    this.matSnackBar.open(message, 'X', {
+      duration: durationTime,
+      verticalPosition: 'top',
+      panelClass: [status]
+    });
+  }
 }

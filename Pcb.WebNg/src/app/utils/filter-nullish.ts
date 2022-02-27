@@ -5,7 +5,7 @@ import { UnaryFunction, Observable, pipe, filter, OperatorFunction } from 'rxjs'
  * results out and only continue a defined object in the pipe.
  * @example possiblyUndefined$.pipe(filterNullish(), tap((result: IDefined) => ...))
  * @returns observable of only type T.
-*/
+ */
 export function filterNullish<T>(): UnaryFunction<Observable<T | null | undefined>, Observable<T>> {
   return pipe(
     filter((arg: T | null | undefined) => {

@@ -6,46 +6,49 @@
  * - sync changes to ReferenceType.cs (it's in MET.Dto)
  */
 export enum ReferenceType {
-	AllergyWarning = 1,
-	CuisineType,
-	DishTag,
-	DishType,
-	Equipment,
-	HealthLabel,
-	IngredientFoodGroup,
-	IngredientState,
-	LogLevel,
-	PermissionGroup
+  AllergyWarning = 1,
+  CuisineType,
+  DishTag,
+  DishType,
+  Equipment,
+  HealthLabel,
+  IngredientFoodGroup,
+  IngredientState,
+  LogLevel,
+  PermissionGroup
 }
 
 export enum ReferenceDetail {
-	Basic = 1,
-	Full
+  Basic = 1,
+  Full
 }
 
-export interface ReferenceItem { id: number; title: string; }
+export interface ReferenceItem {
+  id: number;
+  title: string;
+}
 export interface ReferenceItemFull extends ReferenceItem {
-	symbol: string;
-	summary: string;
-	altTitle?: string;
-	onlineId?: number; // equipment has a spoonacular reference
-	sortOrder: number;
-	createdAt: Date;
-	rowVer: string;
+  symbol: string;
+  summary: string;
+  altTitle?: string;
+  onlineId?: number; // equipment has a spoonacular reference
+  sortOrder: number;
+  createdAt: Date;
+  rowVer: string;
 }
 
 /**
  * Note in alphabetical order - add to when references change
  */
 export interface ReferenceAll {
-	AllergyWarning?: ReferenceItemFull[];
-	CuisineType?: ReferenceItemFull[];
-	DishTag?: ReferenceItemFull[];
-	DishType?: ReferenceItemFull[];
-	Equipment?: ReferenceItemFull[];
-	HealthLabel?: ReferenceItemFull[];
-	IngredientFoodGroup?: ReferenceItemFull[];
-	IngredientState?: ReferenceItemFull[];
-	LogLevel?: ReferenceItemFull[];
-	PermissionGroup?: ReferenceItemFull[];
+  AllergyWarning?: ReferenceItemFull[];
+  CuisineType?: ReferenceItemFull[];
+  DishTag?: ReferenceItemFull[];
+  DishType?: ReferenceItemFull[];
+  Equipment?: ReferenceItemFull[];
+  HealthLabel?: ReferenceItemFull[];
+  IngredientFoodGroup?: ReferenceItemFull[];
+  IngredientState?: ReferenceItemFull[];
+  LogLevel?: ReferenceItemFull[];
+  PermissionGroup?: ReferenceItemFull[];
 }

@@ -6,24 +6,23 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class MessageService {
+  private messageSource$ = new Subject<Message | Message[]>();
+  private clearSource$ = new Subject<string>();
 
-	private messageSource$ = new Subject<Message|Message[]>();
-	private clearSource$ = new Subject<string>();
+  messageObserver = this.messageSource$.asObservable();
+  clearObserver = this.clearSource$.asObservable();
 
-	messageObserver = this.messageSource$.asObservable();
-	clearObserver = this.clearSource$.asObservable();
+  add(message: Message) {
+    if (message) {
+      this.messageSource$.next(message);
+    }
+  }
 
-	add(message: Message) {
-		if (message) {
-			this.messageSource$.next(message);
-		}
-	}
-
-	addAll(messages: Message[]) {
-		if (messages && messages.length) {
-			this.messageSource$.next(messages);
-		}
-	}
+  addAll(messages: Message[]) {
+    if (messages && messages.length) {
+      this.messageSource$.next(messages);
+    }
+  }
 
   /** Clears source subject. */
   clear(key?: string): void {
@@ -31,5 +30,4 @@ export class MessageService {
       this.clearSource$.next(key);
     }
   }
-
 }

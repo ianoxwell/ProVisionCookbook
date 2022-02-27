@@ -11,12 +11,12 @@
  */
 
 export interface ApiLinks {
-	/**
-	 * direct api link to the ingredient - get
-	 */
-	self?: string;
-	/**
-	 * direct api link to the recipe Schema or to recipe type or to parent of the ingredient - ie flour
-	 */
-	parent?: string;
+  /**
+   * direct api link to the ingredient - get
+   */
+  self?: string;
+  /**
+   * direct api link to the recipe Schema or to recipe type or to parent of the ingredient - ie flour
+   */
+  parent?: string;
 }

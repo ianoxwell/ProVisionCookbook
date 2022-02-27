@@ -9,20 +9,21 @@ import { ResetPasswordFormComponent } from './reset-password-form/reset-password
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 const routes: Routes = [
-	{
-		path: '', component: LoginComponent,
-		children: [
-			{ path: 'login', component: LoginFormComponent },
-			{ path: 'register', component: RegisterFormComponent },
-			{ path: 'verify-email', component: VerifyEmailComponent },
-			{ path: 'forgot-password', component: ForgotPasswordComponent },
-			{ path: 'reset-password', component: ResetPasswordFormComponent}
-		]
-	}
+  {
+    path: '',
+    component: LoginComponent,
+    children: [
+      { path: 'login', component: LoginFormComponent },
+      { path: 'register', component: RegisterFormComponent },
+      { path: 'verify-email', component: VerifyEmailComponent },
+      { path: 'forgot-password', component: ForgotPasswordComponent },
+      { path: 'reset-password', component: ResetPasswordFormComponent }
+    ]
+  }
 ];
 
 @NgModule({
-	imports: [RouterModule.forChild(routes)],
-	exports: [RouterModule]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
 })
-export class AccountRoutingModule { }
+export class AccountRoutingModule {}

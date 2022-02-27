@@ -6,90 +6,74 @@ import { MockComponent } from 'ng-mocks';
 import { ShoppingComponent } from './shopping.component';
 
 describe('ShoppingComponent', () => {
-	let component: ShoppingComponent;
-	let fixture: ComponentFixture<ShoppingComponent>;
+  let component: ShoppingComponent;
+  let fixture: ComponentFixture<ShoppingComponent>;
 
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [MatToolbarModule, NoopAnimationsModule],
+        declarations: [ShoppingComponent, MockComponent(PageTitleComponent)]
+      }).compileComponents();
+    })
+  );
 
-	beforeEach(waitForAsync(() => {
-		TestBed.configureTestingModule({
-			imports: [
-				MatToolbarModule,
-				NoopAnimationsModule,
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ShoppingComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-			],
-			declarations: [
-				ShoppingComponent, MockComponent(PageTitleComponent)
-			]
-		}).compileComponents();
-	}));
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-	beforeEach(() => {
+  describe('when ngOnInit is called it should', () => {
+    // remove what is not required
+    beforeEach(() => {});
 
-		fixture = TestBed.createComponent(ShoppingComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
-	});
+    it('should ...', () => {
+      // arrange
+      // act
+      // component.ngOnInit();
+      // assert
+      // expect(c).toEqual
+    });
+  });
+  describe('when patchForm is called it should', () => {
+    // remove what is not required
+    beforeEach(() => {});
 
-	it('should create', () => {
-		expect(component).toBeTruthy();
-	});
+    it('should ...', () => {
+      // arrange
+      // act
+      // component.patchForm();
+      // assert
+      // expect(c).toEqual
+    });
+  });
+  describe('when onSubmit is called it should', () => {
+    // remove what is not required
+    beforeEach(() => {});
 
-	describe('when ngOnInit is called it should', () => {
-		// remove what is not required
-		beforeEach(() => {
+    it('should ...', () => {
+      // arrange
+      // act
+      // component.onSubmit();
+      // assert
+      // expect(c).toEqual
+    });
+  });
+  describe('when groupOrControl is called it should', () => {
+    // remove what is not required
+    beforeEach(() => {});
 
-		});
-
-		it('should ...', () => {
-			// arrange
-			// act
-			// component.ngOnInit();
-			// assert
-			// expect(c).toEqual
-		});
-	});
-	describe('when patchForm is called it should', () => {
-		// remove what is not required
-		beforeEach(() => {
-
-		});
-
-		it('should ...', () => {
-			// arrange
-			// act
-			// component.patchForm();
-			// assert
-			// expect(c).toEqual
-		});
-	});
-	describe('when onSubmit is called it should', () => {
-		// remove what is not required
-		beforeEach(() => {
-
-		});
-
-		it('should ...', () => {
-			// arrange
-			// act
-			// component.onSubmit();
-			// assert
-			// expect(c).toEqual
-		});
-	});
-	describe('when groupOrControl is called it should', () => {
-		// remove what is not required
-		beforeEach(() => {
-
-		});
-
-		it('should ...', () => {
-			// arrange
-			// act
-			// component.groupOrControl();
-			// assert
-			// expect(c).toEqual
-		});
-	});
-
-
+    it('should ...', () => {
+      // arrange
+      // act
+      // component.groupOrControl();
+      // assert
+      // expect(c).toEqual
+    });
+  });
 });

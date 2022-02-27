@@ -7,8 +7,8 @@ import { ToastItemComponent } from '../toast/toast-item/toast-item.component';
 import { ToastComponent } from '../toast/toast.component';
 
 @NgModule({
-	imports: [CommonModule, BrowserAnimationsModule, MatIconModule, MatButtonModule],
-	declarations: [ToastItemComponent, ToastComponent],
-	exports: [ToastComponent]
+  imports: [CommonModule, BrowserAnimationsModule, MatIconModule, MatButtonModule],
+  declarations: [ToastItemComponent, ToastComponent],
+  exports: [ToastComponent]
 })
 export class ToastModule {}

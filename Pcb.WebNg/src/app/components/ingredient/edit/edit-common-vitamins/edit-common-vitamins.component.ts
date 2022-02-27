@@ -9,24 +9,25 @@ import { first, tap } from 'rxjs/operators';
   styleUrls: ['./edit-common-vitamins.component.scss']
 })
 export class EditCommonVitaminsComponent implements OnInit {
-	@Input() form!: FormGroup;
-	@Output() markAsDirty = new EventEmitter<void>();
+  @Input() form!: FormGroup;
+  @Output() markAsDirty = new EventEmitter<void>();
 
-	decimalTwoPlaces = DecimalTwoPlaces;
-	decimalThreePlaces = DecimalThreePlaces;
-	constructor() { }
+  decimalTwoPlaces = DecimalTwoPlaces;
+  decimalThreePlaces = DecimalThreePlaces;
+  constructor() {}
 
-	ngOnInit() {
-		this.listenAnyFormChanges();
-	}
+  ngOnInit() {
+    this.listenAnyFormChanges();
+  }
 
-
-	// Mark the parent form as Dirty if any form element changes
-	// only listens for the first change (because then it is dirty) - may have to reload on save...
-	listenAnyFormChanges(): void {
-		this.form.valueChanges.pipe(
-			first(),
-			tap(() => this.markAsDirty.emit()),
-		).subscribe();
-	}
+  // Mark the parent form as Dirty if any form element changes
+  // only listens for the first change (because then it is dirty) - may have to reload on save...
+  listenAnyFormChanges(): void {
+    this.form.valueChanges
+      .pipe(
+        first(),
+        tap(() => this.markAsDirty.emit())
+      )
+      .subscribe();
+  }
 }

@@ -5,20 +5,9 @@ import { SafeHtmlPipe } from './safe-html.pipe';
 import { SentenceCasePipe } from './sentence-case.pipe';
 
 @NgModule({
-	imports: [CommonModule],
-	declarations: [
-		ToTitleCasePipe,
-		SafeHtmlPipe,
-		SentenceCasePipe
-	],
-	exports: [
-		ToTitleCasePipe,
-		SafeHtmlPipe,
-		SentenceCasePipe
-	],
-	providers: [
-		ToTitleCasePipe,
-		SentenceCasePipe
-	]
+  imports: [CommonModule],
+  declarations: [ToTitleCasePipe, SafeHtmlPipe, SentenceCasePipe],
+  exports: [ToTitleCasePipe, SafeHtmlPipe, SentenceCasePipe],
+  providers: [ToTitleCasePipe, SentenceCasePipe]
 })
 export class PipesModule {}

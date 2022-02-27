@@ -10,12 +10,9 @@ import { User } from '../../../models/user';
 export class UserSettingsComponent implements OnInit {
   cookBookUserProfile: User | null = null;
 
-  constructor(
-	public userProfileService: UserProfileService
-  ) { }
+  constructor(public userProfileService: UserProfileService) {}
 
   ngOnInit() {
-	  this.userProfileService.currentData.subscribe(profile => this.cookBookUserProfile = profile);
+    this.userProfileService.getUserProfile().subscribe((profile) => (this.cookBookUserProfile = profile));
   }
-
 }

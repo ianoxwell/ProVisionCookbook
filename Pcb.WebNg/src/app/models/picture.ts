@@ -11,21 +11,21 @@
  */
 
 export interface Picture {
-	id?: number;
-	/**
-	 * if using GridFS - optional field
-	 */
-	fileId?: string;
-	/**
-	 * if none provided - use the recipe name - to populate the alt text of an img
-	 */
-	title?: string;
-	/**
-	 * pure URL location or file_id string if using GridFS
-	 */
-	fileLink: string;
-	/**
-	 * top (banner), left (float left) or right (float right)
-	 */
-	positionPic?: string;
+  id?: number;
+  /**
+   * if using GridFS - optional field
+   */
+  fileId?: string;
+  /**
+   * if none provided - use the recipe name - to populate the alt text of an img
+   */
+  title?: string;
+  /**
+   * pure URL location or file_id string if using GridFS
+   */
+  fileLink: string;
+  /**
+   * top (banner), left (float left) or right (float right)
+   */
+  positionPic?: string;
 }

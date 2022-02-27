@@ -15,39 +15,39 @@ import { of } from 'rxjs';
 import { SearchBarComponent } from './search-bar.component';
 
 describe('SearchBarComponent', () => {
-	let component: SearchBarComponent;
-	let fixture: ComponentFixture<SearchBarComponent>;
+  let component: SearchBarComponent;
+  let fixture: ComponentFixture<SearchBarComponent>;
 
-	const referenceServiceSpy: Spy<ReferenceService> = autoSpy(ReferenceService);
-	referenceServiceSpy.getAllReferences.and.returnValue(of());
-	const stateServiceSpy: Spy<StateService> = autoSpy(StateService);
+  const referenceServiceSpy: Spy<ReferenceService> = autoSpy(ReferenceService);
+  referenceServiceSpy.getAllReferences.and.returnValue(of());
+  const stateServiceSpy: Spy<StateService> = autoSpy(StateService);
 
-	beforeEach(async () => {
-		await TestBed.configureTestingModule({
-			imports: [
-				ReactiveFormsModule,
-				MatInputModule,
-				MatFormFieldModule,
-				MatSelectModule,
-				MatToolbarModule,
-				MatSliderModule,
-				NoopAnimationsModule
-			],
-			declarations: [SearchBarComponent, MockComponent(PaginatorComponent)],
-			providers: [
-				{ provide: ReferenceService, useValue: referenceServiceSpy },
-				{ provider: StateService, useValue: stateServiceSpy }
-			]
-		}).compileComponents();
-	});
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        ReactiveFormsModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatToolbarModule,
+        MatSliderModule,
+        NoopAnimationsModule
+      ],
+      declarations: [SearchBarComponent, MockComponent(PaginatorComponent)],
+      providers: [
+        { provide: ReferenceService, useValue: referenceServiceSpy },
+        { provider: StateService, useValue: stateServiceSpy }
+      ]
+    }).compileComponents();
+  });
 
-	beforeEach(() => {
-		fixture = TestBed.createComponent(SearchBarComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
-	});
+  beforeEach(() => {
+    fixture = TestBed.createComponent(SearchBarComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-	it('should create', () => {
-		expect(component).toBeTruthy();
-	});
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

@@ -7,7 +7,6 @@
  */
 import { waitForAsync, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
-
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
@@ -23,100 +22,81 @@ import { RecipeViewComponent } from './recipe-view.component';
 type Spy<T> = T & jasmine.SpyObj<T>;
 
 describe('RecipeViewComponent', () => {
-	let component: RecipeViewComponent;
-	let fixture: ComponentFixture<RecipeViewComponent>;
+  let component: RecipeViewComponent;
+  let fixture: ComponentFixture<RecipeViewComponent>;
 
+  const sentenceCasePipeSpy: Spy<SentenceCasePipe> = autoSpy(SentenceCasePipe);
+  // exampleServiceSpy.exampleMethod.and.returnValue(of(fakeItem)) - for all items that are called in ngOnInit
 
-	const sentenceCasePipeSpy: Spy<SentenceCasePipe> = autoSpy(SentenceCasePipe);
-	// exampleServiceSpy.exampleMethod.and.returnValue(of(fakeItem)) - for all items that are called in ngOnInit
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [MatIconModule, MatDividerModule, MatChipsModule, MatAutocompleteModule, NoopAnimationsModule],
+        declarations: [
+          RecipeViewComponent
+          // MockComponent(ComponentsUsedInTheHTML)
+        ],
+        providers: [{ provide: SentenceCasePipe, userValue: sentenceCasePipeSpy }]
+      }).compileComponents();
+    })
+  );
 
-	beforeEach(waitForAsync(() => {
-		TestBed.configureTestingModule({
-			imports: [
-				MatIconModule,
-				MatDividerModule,
-				MatChipsModule,
-				MatAutocompleteModule,
-				NoopAnimationsModule,
+  beforeEach(() => {
+    fixture = TestBed.createComponent(RecipeViewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-			],
-			declarations: [
-				RecipeViewComponent,
-				// MockComponent(ComponentsUsedInTheHTML)
-			],
-			providers: [
-				{ provide: SentenceCasePipe, userValue: sentenceCasePipeSpy },
-			]
-		}).compileComponents();
-	}));
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-	beforeEach(() => {
+  describe('when printView is called it should', () => {
+    // remove what is not required
+    beforeEach(() => {});
 
-		fixture = TestBed.createComponent(RecipeViewComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
-	});
+    it('should ...', () => {
+      // arrange
+      // act
+      // component.printView();
+      // assert
+      // expect(c).toEqual
+    });
+  });
+  describe('when ngOnInit is called it should', () => {
+    // remove what is not required
+    beforeEach(() => {});
 
-	it('should create', () => {
-		expect(component).toBeTruthy();
-	});
+    it('should ...', () => {
+      // arrange
+      // act
+      // component.ngOnInit();
+      // assert
+      // expect(c).toEqual
+    });
+  });
+  describe('when englishIngredientItem is called it should', () => {
+    // remove what is not required
+    beforeEach(() => {});
 
-	describe('when printView is called it should', () => {
-		// remove what is not required
-		beforeEach(() => {
+    it('should ...', () => {
+      // arrange
+      // act
+      // component.englishIngredientItem();
+      // assert
+      // expect(c).toEqual
+    });
+  });
+  describe('when routerLinkURL is called it should', () => {
+    // remove what is not required
+    beforeEach(() => {});
 
-		});
-
-		it('should ...', () => {
-			// arrange
-			// act
-			// component.printView();
-			// assert
-			// expect(c).toEqual
-		});
-	});
-	describe('when ngOnInit is called it should', () => {
-		// remove what is not required
-		beforeEach(() => {
-
-		});
-
-		it('should ...', () => {
-			// arrange
-			// act
-			// component.ngOnInit();
-			// assert
-			// expect(c).toEqual
-		});
-	});
-	describe('when englishIngredientItem is called it should', () => {
-		// remove what is not required
-		beforeEach(() => {
-
-		});
-
-		it('should ...', () => {
-			// arrange
-			// act
-			// component.englishIngredientItem();
-			// assert
-			// expect(c).toEqual
-		});
-	});
-	describe('when routerLinkURL is called it should', () => {
-		// remove what is not required
-		beforeEach(() => {
-
-		});
-
-		it('should ...', () => {
-			// arrange
-			// act
-			// component.routerLinkURL();
-			// assert
-			// expect(c).toEqual
-		});
-	});
-
-
+    it('should ...', () => {
+      // arrange
+      // act
+      // component.routerLinkURL();
+      // assert
+      // expect(c).toEqual
+    });
+  });
 });
