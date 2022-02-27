@@ -9,30 +9,32 @@
 <form [formGroup]="loginForm" mat-card-content>
 	<div class="flex-box flex-column" (keyup.enter)="login()">
 		<mat-form-field class="mt-1" appearance="outline">
+			<mat-label>Email address</mat-label>
 			<mat-icon matPrefix class="pr-1">email</mat-icon>
-			<input matInput type="email" autocomplete="email" placeholder="Email" required Title="Email"
-				formControlName="usernameControl">
+			<input matInput type="email" autocomplete="email" required Title="Email"
+				formControlName="username">
 			<mat-error *ngFor="let validation of validationMessages.email">
 				<mat-error class="error-message"
-					*ngIf="f.usernameControl.hasError(validation.type) && (f.usernameControl.dirty || f.usernameControl.touched)">
+					*ngIf="f.username.hasError(validation.type) && (f.username.dirty || f.username.touched)">
 					<span [innerHTML]="validation.message"></span>
 				</mat-error>
 			</mat-error>
 		</mat-form-field>
 		<mat-form-field class="mt-1" appearance="outline">
+			<mat-label>Password</mat-label>
 			<mat-icon matPrefix class="pr-1">lock</mat-icon>
-			<input matInput type="password" placeholder="Password" autocomplete="current-password" #passwordInput
-				Title="Password" required formControlName="passwordControl">
+			<input matInput type="password" autocomplete="current-password" #passwordInput
+				Title="Password" required formControlName="password">
 			<mat-error *ngFor="let validation of validationMessages.password">
 				<mat-error class="error-message"
-					*ngIf="f.passwordControl.hasError(validation.type) && (f.passwordControl.dirty || f.passwordControl.touched)">
+					*ngIf="f.password.hasError(validation.type) && (f.password.dirty || f.password.touched)">
 					<span [innerHTML]="validation.message"></span>
 				</mat-error>
 			</mat-error>
 		</mat-form-field>
 	</div>
 	<div class="flex-box flex-justify-space-between flex-align-center mt-2">
-		<mat-checkbox aria-label="Remember Me" formControlName="rememberControl" (change)="rememberChange($event)">
+		<mat-checkbox aria-label="Remember Me" formControlName="remember" (change)="rememberChange($event)">
 			Remember Me</mat-checkbox>
 		<button mat-flat-button type="button" aria-label="Need an email password reminder?"
 			routerLink="/account/forgot-password">Forgot password?</button>

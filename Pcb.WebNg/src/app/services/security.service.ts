@@ -1,10 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageStatus } from '@models/message.model';
-import { IClaims, SecurityPermission, SecurityRole } from '@models/security.models';
+import { SecurityPermission, SecurityRole } from '@models/security.models';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { ILocalUserJwt } from './jwt/local-user-jwt.model';
 import { LogService } from './log.service';
 import { LoginService } from './login/login.service';
 
@@ -34,7 +35,7 @@ export class SecurityService {
     const isPublic = !path ? false : true;
     return isPublic;
   }
-  private getClaims(): IClaims | null {
+  private getClaims(): string[] | null {
     return this.loginService.getClaims();
   }
 
@@ -50,20 +51,11 @@ export class SecurityService {
 
     // If the perms dictionary doesn't have the permission, no dice
     const permString = SecurityPermission[permission];
-    if (!this.getClaims()?.permissions.hasOwnProperty(permString)) {
+    if (!this.getClaims()?.includes(permString)) {
       return false;
     }
 
-    // User has perm in at least one facility. If no facility is supplied, we're good.
-    if (!facilityId) {
-      return true;
-    }
-
-    // Authorised if no facilities against perm (i.e. user has perm facility-wide),
-    // else if requested facility is there.
-    const facilities = this.getClaims()?.permissions[permString];
-    const isAuth = !facilities || !facilities.length || facilities.includes(facilityId);
-    return isAuth;
+    return true;
   }
 
   /**
@@ -107,19 +99,19 @@ export class SecurityService {
 
   /** Gets the current users username */
   getCurrentUsername(): string {
-    const claims = this.getClaims();
+    const claims: ILocalUserJwt = this.loginService.decodeLocalUserToken();
     // Check for claims - This fails on the login page
     if (!claims) {
       return '';
     }
 
     // Return the users name based on the current user in a common format
-    return claims.name;
+    return claims.email;
   }
 
-  /** Returns an object that contains the family name and given name of the current user */
+  /** Returns an object that contains the family name and given name of the current user from the Jwt */
   getCurrentUserNameDetail(): { surname: string; givenName: string } | null {
-    const claims = this.getClaims();
+    const claims: ILocalUserJwt = this.loginService.decodeLocalUserToken();
 
     // Check for claims - This fails on the login page
     if (!claims) {
@@ -131,21 +123,14 @@ export class SecurityService {
 
   /** Gets the current user id */
   getCurrentUserId(): number {
-    return this.getClaims()?.sub || 0;
+    const localJwt: ILocalUserJwt = this.loginService.decodeLocalUserToken();
+
+    return Number(localJwt.sub) || 0;
   }
 
   /** Gets the current user id */
   getUserRole(role: SecurityRole): string | undefined {
     const claims = this.getClaims();
-    return !!claims ? claims.roles.find((r) => r === role.valueOf()) : '';
-  }
-
-  hasPermission(permission: SecurityPermission): boolean {
-    const claims = this.getClaims();
-    const permString = SecurityPermission[permission];
-    if (!claims?.permissions.hasOwnProperty(permString)) {
-      return false;
-    }
-    return true;
+    return !!claims ? claims.find((r) => r === role.valueOf()) : '';
   }
 }

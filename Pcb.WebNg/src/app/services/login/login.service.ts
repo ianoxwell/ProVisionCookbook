@@ -1,10 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { MessageResult } from '@models/common.model';
 import { ITokenState } from '@models/logout.models';
-import { IClaims, IResponseToken, IToken } from '@models/security.models';
+import { IResponseToken, IToken } from '@models/security.models';
 import { User } from '@models/user';
+import { JwtHelperService } from '@services/jwt/jwt-helper.service';
+import { ILocalUserJwt } from '@services/jwt/local-user-jwt.model';
 import { SocialAuthService, SocialUser } from 'angularx-social-login';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, distinctUntilChanged, filter, first, map, tap } from 'rxjs/operators';
@@ -18,52 +19,63 @@ import { UserProfileService } from '../user-profile.service';
 })
 export class LoginService {
   private authentication$ = new BehaviorSubject<ITokenState | null>(null);
+  private isLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   // JWT token string obtained at login.
   private jwt: IToken = this.initNewJwt();
 
   // Decoded token containing the authenticated user's claims.
-  private claims: IClaims | null = null;
+  private claims: string[] | null = null;
 
   private readonly storageKeys = CStorageKeys;
 
   // State to do with the login timeout.
   private isTokenRefreshInProgress = false;
 
-  // JWT helper service for decoding tokens into something we can use .i.e claims.
-  private jwtHelper: JwtHelperService = new JwtHelperService();
-
   constructor(
     private http: HttpClient,
     private storageService: StorageService,
     private userProfileService: UserProfileService,
-    private authService: SocialAuthService
+    private authService: SocialAuthService,
+    private jwtHelperService: JwtHelperService
   ) {
-    this.getSetJwtInitial();
+    // this.getSetJwtInitial();
   }
 
   getAuthentication(): Observable<ITokenState | null> {
     return this.authentication$.asObservable();
   }
 
-  getClaims(): IClaims | null {
+  getClaims(): string[] | null {
     return this.claims;
+  }
+
+  /**
+   * Gets the current subject containing the isLoggedIn. Only emits when it has value.
+   * @returns Observable of the isLoggedIn items.
+   */
+  getIsLoggedIn(): Observable<boolean> {
+    return this.isLoggedIn$.asObservable();
+  }
+
+  /**
+   * Sets the subject with the isLoggedIn value.
+   * @param value object or array of boolean
+   */
+  setIsLoggedIn(value: boolean): void {
+    this.isLoggedIn$.next(value);
   }
 
   isAuthenticated(): boolean {
     const jwtToken = this.getJwt();
-    return !!jwtToken && jwtToken.length > 8 && this.checkJwtExpiry(jwtToken) && !!this.jwt.token && !!this.claims;
-  }
 
-  /** Checks the JWT Token from local storage and compares the expiry to current time */
-  public checkJwtExpiry(jwt: any): boolean {
-    if (!jwt) {
-      return false;
-    }
-    jwt = this.decode(jwt);
-    const currentTime = new Date().getTime();
-    const expiresAt = jwt.exp * 1000;
-    return expiresAt > currentTime;
+    return (
+      !!jwtToken &&
+      jwtToken.length > 8 &&
+      this.jwtHelperService.isTokenFresh<ILocalUserJwt>(jwtToken, 'exp') &&
+      !!this.jwt.token &&
+      !!this.claims
+    );
   }
 
   // Clears login state.
@@ -100,11 +112,13 @@ export class LoginService {
       ? `${environment.apiUrl}/token/google?email=${email}`
       : `${environment.apiUrl}${environment.apiVersion}token/create`;
 
-    return this.http.post<IResponseToken | MessageResult>(loginUrl, body).pipe(
-      map((response: any) => {
-        if (!!response.message) {
-          return response;
+    return this.http.post<IResponseToken>(loginUrl, body).pipe(
+      map((resp: IResponseToken | MessageResult) => {
+        if (Object.keys(resp).includes('message')) {
+          throw resp;
         }
+
+        const response = resp as IResponseToken;
 
         const jwt = this.processJwtResponse(response);
         this.userProfileService.setLoggedIn(true);
@@ -120,10 +134,9 @@ export class LoginService {
       return of(null);
     }
 
-    const userId = this.decode(this.getJwt())?.sub;
+    const userId = this.jwtHelperService.decodeToken<ILocalUserJwt>(this.getJwt())?.sub;
     return this.http.get<User>(`${environment.apiUrl}${environment.apiVersion}account/get-account?id=${userId}`).pipe(
       tap((user: User) => {
-        console.log('logged in user', user);
         this.userProfileService.setUserProfile(user);
       })
     );
@@ -180,11 +193,13 @@ export class LoginService {
       googleSignInUrl += `?email=${gUser.email}`;
     }
     return this.http.get<IResponseToken>(googleSignInUrl, { headers: newHeaders }).pipe(
-      map((response: any) => {
+      map((resp: IResponseToken | MessageResult) => {
         // if the response is a message to register the user
-        if (!!response && !!response.message) {
-          return 'register';
+        if (!!resp && Object.keys(resp).includes('message')) {
+          throw 'register';
         }
+
+        const response = resp as IResponseToken;
         const jwt = this.processJwtResponse(response);
         this.userProfileService.setLoggedIn(true);
         return this.setJwt(jwt);
@@ -223,7 +238,7 @@ export class LoginService {
    */
   private postRefresh(rToken: string): Observable<boolean> {
     // Construct the http request
-    const username = this.getClaims()?.name;
+    const username = this.decodeLocalUserToken()?.email;
     const body = { refreshToken: rToken, username };
     const loginUrl = `${environment.apiUrl}${environment.apiVersion}token/refresh`;
 
@@ -233,8 +248,8 @@ export class LoginService {
         this.userProfileService.setLoggedIn(true);
         return this.setJwt(jwt);
       }),
-      catchError((err) => {
-        console.log(err);
+      catchError((error: unknown) => {
+        console.log('post Refresh in login', error);
         return of<boolean>(false);
       })
     );
@@ -262,18 +277,20 @@ export class LoginService {
     return newJwt;
   }
 
-  /** Decodes the JWT Token */
-  public decode(token: string): IClaims | null {
+  /** Decodes the JWT Token roles */
+  public decodeRoles(token: string): string[] | null {
     if (token === null || token.length < 8) {
       return null;
     }
 
     // Decode encrypted token
-    const d = this.jwtHelper.decodeToken(token);
+    const d = this.jwtHelperService.decodeToken<ILocalUserJwt>(token);
 
-    // Parse permissions and roles JSON
-    d.roles = JSON.parse(d.roles);
-    return d;
+    return d.roles;
+  }
+
+  public decodeLocalUserToken(): ILocalUserJwt {
+    return this.jwtHelperService.decodeToken<ILocalUserJwt>(this.getJwt());
   }
 
   /** 'Installs' a new JWT */
@@ -305,7 +322,7 @@ export class LoginService {
 
     this.authentication$.next({ expiresAt, refreshesAt, warnsAt });
 
-    this.claims = this.decode(this.jwt.token);
+    this.claims = this.decodeRoles(this.jwt.token);
 
     // Google Analytics - Requires UserId
     // (window as any).ga('set', 'userId', this.claims.sub);
@@ -325,17 +342,14 @@ export class LoginService {
     };
   }
 
-  private getSetJwtInitial(): void {
+  getSetJwtInitial(): Observable<string> {
     this.restoreJwt();
 
     // Observe the session for expiry changes from other tabs.
-    this.storageService
-      .observeStorageEventItem(this.storageKeys.expiryKey)
-      .pipe(
-        distinctUntilChanged(),
-        tap(() => this.restoreJwt())
-      )
-      .subscribe();
+    return this.storageService.observeStorageEventItem(this.storageKeys.expiryKey).pipe(
+      distinctUntilChanged(),
+      tap(() => this.restoreJwt())
+    );
   }
 
   /** Restores the JWT from session storage. */

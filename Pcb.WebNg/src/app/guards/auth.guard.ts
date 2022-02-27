@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { CanActivate, UrlTree } from '@angular/router';
+import { JwtHelperService } from '@services/jwt/jwt-helper.service';
+import { ILocalUserJwt } from '@services/jwt/local-user-jwt.model';
 import { LoginService } from '@services/login/login.service';
 import { Observable } from 'rxjs';
 
@@ -7,13 +9,10 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  constructor(private loginService: LoginService) {}
+  constructor(private loginService: LoginService, private jwtHelperService: JwtHelperService) {}
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     // if there is a local JWT and if it has not expired
-    return this.loginService.checkJwtExpiry(this.loginService.getJwt());
+    return this.jwtHelperService.isTokenFresh<ILocalUserJwt>(this.loginService.getJwt(), 'exp');
   }
 }

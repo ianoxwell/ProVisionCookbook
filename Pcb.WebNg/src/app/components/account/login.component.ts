@@ -7,6 +7,7 @@ import { HttpStatusCode } from '@models/security.models';
 import { DialogService } from '@services/dialog.service';
 import { LoginService } from '@services/login/login.service';
 import { MessageService } from '@services/message.service';
+import { CStorageKeys } from '@services/storage/storage-keys.const';
 import { StorageService } from '@services/storage/storage.service';
 // import { AuthenticationService } from '../../services/authentication.service';
 import { SocialAuthService, SocialUser } from 'angularx-social-login';
@@ -22,6 +23,7 @@ export class LoginComponent extends ComponentBase implements OnInit {
   googleUserData: SocialUser | undefined;
   loggedIn = false;
   isGettingJwt = false;
+  private readonly storageKeys = CStorageKeys;
 
   constructor(
     private authService: SocialAuthService,
@@ -35,7 +37,7 @@ export class LoginComponent extends ComponentBase implements OnInit {
   }
 
   ngOnInit(): void {
-    const gUser: string = this.storageService.getItem('google-user') as string;
+    const gUser: string = this.storageService.getItem(this.storageKeys.googleUser) as string;
     // if GoogleJwtToken checks out then we proceed to authenticate.
     if (!!gUser && gUser.length > 0 && gUser !== 'null') {
       // attempt to verify the token against the api
@@ -66,9 +68,10 @@ export class LoginComponent extends ComponentBase implements OnInit {
 
           this.loggedIn = user != null;
         }),
-        catchError((err: HttpErrorResponse) =>
-          this.dialogService.confirm(MessageStatus.Alert, 'Error on Google login attempt', err.message)
-        ),
+        catchError((error: unknown) => {
+          const err = error as HttpErrorResponse;
+          return this.dialogService.confirm(MessageStatus.Alert, 'Error on Google login attempt', err.message);
+        }),
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe();
@@ -93,7 +96,9 @@ export class LoginComponent extends ComponentBase implements OnInit {
             this.router.navigate(['/savoury/recipes']);
           }
         }),
-        catchError((err: HttpErrorResponse) => {
+        catchError((error: unknown) => {
+          const err = error as HttpErrorResponse;
+
           if (err.status === HttpStatusCode.Forbidden && err.statusText === 'OK') {
             this.dialogService.confirm(
               MessageStatus.Alert,
@@ -112,6 +117,6 @@ export class LoginComponent extends ComponentBase implements OnInit {
   }
   /** sets the localStorage cache of the google-user to null */
   googleClear(): void {
-    this.storageService.removeItem('google-user');
+    this.storageService.removeItem(this.storageKeys.googleUser);
   }
 }

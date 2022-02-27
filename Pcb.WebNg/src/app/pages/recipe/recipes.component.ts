@@ -113,7 +113,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
           this.changeTab(1);
           return this.getRecipes();
         }),
-        catchError((err) => {
+        catchError((err: unknown) => {
           console.log('Error', err);
           return [];
         }),
@@ -148,7 +148,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
     this.isLoading = true;
     this.dataLength = 0;
     return this.restRecipeService.getRecipe(this.filterQuery).pipe(
-      catchError((err) => {
+      catchError((err: unknown) => {
         this.dialogService.alert('Error getting recipes', err);
         return of({ items: [], totalCount: 0 });
       }),
@@ -196,7 +196,8 @@ export class RecipesComponent extends ComponentBase implements OnInit {
       .pipe(
         first(),
         switchMap(() => this.getRecipes()),
-        catchError((err: HttpErrorResponse) => {
+        catchError((error: unknown) => {
+          const err = error as HttpErrorResponse;
           this.dialogService.alert('Error getting spoon recipe', err.message);
           this.isLoading = false;
           return of();

@@ -114,7 +114,8 @@ export class RegisterFormComponent extends ComponentBase implements OnInit {
         switchMap(() => this.loginService.login(this.newUser.email, null, true)),
         filter((authenticated: MessageResult) => authenticated.message === 'Successful login'),
         tap(() => this.router.navigate(['/savoury/browse'])),
-        catchError((err: HttpErrorResponse) => {
+        catchError((error: unknown) => {
+          const err = error as HttpErrorResponse;
           this.isSubmitting = false;
           this.messageService.add({
             severity: MessageStatus.Error,

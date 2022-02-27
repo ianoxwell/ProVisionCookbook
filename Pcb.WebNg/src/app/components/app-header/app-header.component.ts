@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminRights } from '@models/common.model';
+import { ITokenState } from '@models/logout.models';
 import { User } from '@models/user';
 import { LoginService } from '@services/login/login.service';
 import { of } from 'rxjs';
@@ -40,31 +41,39 @@ export class AppHeaderComponent extends ComponentBase implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userProfileService
-      .getIsLoggedIn()
+    console.log('init of the app header');
+    this.loginService.getSetJwtInitial().pipe(takeUntil(this.ngUnsubscribe)).subscribe();
+
+    this.loginService
+      .getAuthentication()
       .pipe(
-        // allow for UserProfile states to settle
-        debounceTime(250),
+        map((result: ITokenState | null) => {
+          console.log('got token result', result);
+          console.log('we have the set of jwt now, ', this.loginService.isAuthenticated());
+          return this.loginService.isAuthenticated();
+        }),
+        // // allow for UserProfile states to settle
+        // debounceTime(250),
         map((isLoggedIn: boolean) => {
           console.log('is logged in?', isLoggedIn);
-          let actuallyLoggedIn = isLoggedIn;
           // on a refresh the isLoggedIn state is null - check the jwt and update the status
           if (isLoggedIn === null) {
-            actuallyLoggedIn = this.loginService.isAuthenticated();
-            this.userProfileService.setLoggedIn(actuallyLoggedIn);
+            this.userProfileService.setLoggedIn(isLoggedIn);
           }
 
-          this.isLoggedIn = actuallyLoggedIn;
-          return actuallyLoggedIn;
+          this.isLoggedIn = isLoggedIn;
+          return isLoggedIn;
         }),
         // if not logged in, leave the userProfile alone
         filter((actuallyLoggedIn: boolean) => actuallyLoggedIn),
         switchMap(() => this.userProfileService.getUserProfile()),
         switchMap((profile: User | null) => {
+          console.log('user profile', profile);
           this.profile = profile;
           if (profile === null) {
             return this.loginService.getSingleUserProfile();
           }
+
           return of(profile);
         }),
         // On logout - profile is reverted to null - no need to keep going.

@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
@@ -13,14 +13,15 @@ import { MessageService } from '@services/message.service';
 import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
 import { Observable, of } from 'rxjs';
 import { catchError, takeUntil, tap } from 'rxjs/operators';
+import { ILoginForm } from './login-form.model';
 
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']
 })
-export class LoginFormComponent extends ComponentBase implements OnInit {
-  @ViewChild('passwordInput', { static: false }) passwordInput!: ElementRef;
+export class LoginFormComponent extends ComponentBase {
+  @ViewChild('passwordInput', { static: false }) passwordInput!: ElementRef<HTMLInputElement>;
   loginForm: FormGroup;
   validationMessages = ValidationMessages;
   isSubmitting = false;
@@ -36,8 +37,6 @@ export class LoginFormComponent extends ComponentBase implements OnInit {
     this.loginForm = this.createForm();
   }
 
-  ngOnInit(): void {}
-
   // convenience getter for easy access to form fields
   get f() {
     return this.loginForm.controls;
@@ -46,12 +45,9 @@ export class LoginFormComponent extends ComponentBase implements OnInit {
   /** Create the controls for the reactive forms */
   createForm(): FormGroup {
     return this.fb.group({
-      usernameControl: [
-        '',
-        [Validators.required, Validators.minLength(2), Validators.maxLength(120), Validators.email]
-      ],
-      passwordControl: ['', [Validators.required, Validators.minLength(2)]],
-      rememberControl: false
+      username: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(120), Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(2)]],
+      remember: false
     });
   }
   rememberChange(ev: MatCheckboxChange) {
@@ -65,30 +61,26 @@ export class LoginFormComponent extends ComponentBase implements OnInit {
     }
 
     this.passwordInput.nativeElement.blur();
-    const form = this.loginForm.getRawValue();
+    const form: ILoginForm = this.loginForm.getRawValue() as ILoginForm;
     this.loginService
-      .login(form.usernameControl, form.passwordControl, false)
+      .login(form.username, form.password, false)
       .pipe(
         tap((result: MessageResult) => this.loginResult(result, form)),
-        catchError((err: HttpErrorResponse) => this.catchFormError(err)),
+        catchError((err: unknown) => this.catchFormError(err)),
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe();
   }
 
-  loginResult(result: MessageResult, form: any): void {
+  loginResult(result: MessageResult, form: ILoginForm): void {
     this.isSubmitting = false;
     if (result.message === 'Successful login') {
       this.router.navigate(['/savoury/recipes/browse']);
     } else if (result.message.indexOf('Lockout') > -1) {
-      const lockOutAttempts: number = Number(result.message.substring(9));
+      const lockOutAttempts = Number(result.message.substring(9));
       if (!!lockOutAttempts && lockOutAttempts > 4) {
-        console.log(
-          'here we locking routing,',
-          lockOutAttempts,
-          `/account/forgot-password?email=${form.usernameControl}`
-        );
-        this.router.navigate(['/account/forgot-password'], { queryParams: { email: form.usernameControl } });
+        console.log('here we locking routing,', lockOutAttempts, `/account/forgot-password?email=${form.username}`);
+        this.router.navigate(['/account/forgot-password'], { queryParams: { email: form.username } });
         this.messageService.add({
           severity: MessageStatus.Warning,
           summary: 'Lockout',
@@ -106,11 +98,13 @@ export class LoginFormComponent extends ComponentBase implements OnInit {
     }
   }
 
-  catchFormError(err: HttpErrorResponse): Observable<void> {
+  catchFormError(error: unknown): Observable<void> {
+    const err = error as HttpErrorResponse;
     this.isSubmitting = false;
     if (err.status === HttpStatusCode.BadRequest) {
-      this.f.passwordControl.setErrors({ wrongPassword: true }, { emitEvent: true });
+      this.f.password.setErrors({ wrongPassword: true }, { emitEvent: true });
       this.cdr.markForCheck();
+
       this.messageService.add({
         severity: MessageStatus.Warning,
         summary: 'Password error',
