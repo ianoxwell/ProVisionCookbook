@@ -1,29 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { AdminRights } from '@models/common.model';
-import { ITokenState } from '@models/logout.models';
-import { User } from '@models/user';
+import { IUser } from '@models/user';
 import { LoginService } from '@services/login/login.service';
-import { of } from 'rxjs';
-import { debounceTime, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { NavigationService } from '@services/navigation/navigation.service';
+import { CRouteList } from '@services/navigation/route-list.const';
+import { Observable, of, timer } from 'rxjs';
+import { delay, filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { filterNullish } from 'src/app/utils/filter-nullish';
 import { UserProfileService } from '../../services/user-profile.service';
-import { ComponentBase } from '../base/base.component.base';
 
 @Component({
   selector: 'app-header',
   templateUrl: './app-header.component.html',
   styleUrls: ['./app-header.component.scss']
 })
-export class AppHeaderComponent extends ComponentBase implements OnInit {
-  profile: any = null;
+export class AppHeaderComponent implements OnInit {
+  profile: IUser | null = null;
+  currentUrl = '';
+  readonly routeList = CRouteList;
 
   mainMenuItems = [
     // commented out to improve completeness in the short term - add back in as features become available.
     // { link: '/savoury/shopping', icon: 'shopping_cart', text: 'Shopping List' },
     // { link: '/savoury/calendar', icon: 'book', text: 'Recipe Calendar' },
-    { link: '/savoury/recipes/browse', icon: 'assignment', text: 'Recipes' },
-    { link: '/savoury/ingredients', icon: 'list_alt', text: 'Ingredients' }
+    { link: this.routeList.recipes, icon: 'assignment', text: 'Recipes' },
+    { link: this.routeList.ingredients, icon: 'list_alt', text: 'Ingredients' }
   ];
 
   adminRights: AdminRights = {
@@ -31,59 +32,63 @@ export class AppHeaderComponent extends ComponentBase implements OnInit {
     schoolAdmin: []
   };
   isLoggedIn = false;
+  /** Delays navigation to ensure the rest of the logout events complete. */
+  navigationDelayOnLogout = 1200;
 
   constructor(
     private userProfileService: UserProfileService,
     private loginService: LoginService,
-    private router: Router
+    private navigationService: NavigationService
   ) {
-    super();
+    this.listenCurrentRoute().subscribe();
   }
 
   ngOnInit(): void {
-    console.log('init of the app header');
-    this.loginService.getSetJwtInitial().pipe(takeUntil(this.ngUnsubscribe)).subscribe();
+    this.initialProfileLoad().subscribe();
+  }
 
-    this.loginService
-      .getAuthentication()
-      .pipe(
-        map((result: ITokenState | null) => {
-          console.log('got token result', result);
-          console.log('we have the set of jwt now, ', this.loginService.isAuthenticated());
-          return this.loginService.isAuthenticated();
-        }),
-        // // allow for UserProfile states to settle
-        // debounceTime(250),
-        map((isLoggedIn: boolean) => {
-          console.log('is logged in?', isLoggedIn);
-          // on a refresh the isLoggedIn state is null - check the jwt and update the status
-          if (isLoggedIn === null) {
-            this.userProfileService.setLoggedIn(isLoggedIn);
-          }
+  /** Listens to the current page route. */
+  listenCurrentRoute(): Observable<string> {
+    return this.navigationService.getPageUrl().pipe(tap((url: string) => (this.currentUrl = url)));
+  }
 
-          this.isLoggedIn = isLoggedIn;
-          return isLoggedIn;
-        }),
-        // if not logged in, leave the userProfile alone
-        filter((actuallyLoggedIn: boolean) => actuallyLoggedIn),
-        switchMap(() => this.userProfileService.getUserProfile()),
-        switchMap((profile: User | null) => {
-          console.log('user profile', profile);
-          this.profile = profile;
-          if (profile === null) {
-            return this.loginService.getSingleUserProfile();
-          }
+  /** Listens for storage key jwt events to potentially trigger a logout. */
+  listenForLogout(): Observable<string> {
+    return this.loginService.listenStorageKeyJwtEvents();
+  }
 
-          return of(profile);
-        }),
-        // On logout - profile is reverted to null - no need to keep going.
-        filterNullish(),
-        tap((profile: User) => {
-          this.adminRights = this.userProfileService.checkAdminRights(profile);
-        }),
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe();
+  /** On init of the app header - which always exists. */
+  initialProfileLoad(): Observable<IUser | null> {
+    this.loginService.restoreJwt();
+
+    return this.loginService.getAuthentication().pipe(
+      map(() => {
+        this.isLoggedIn = this.loginService.isAuthenticated();
+
+        return this.isLoggedIn;
+      }),
+      // if not logged in, leave the userProfile alone, jwt is expired or doesn't exist.
+      filter((actuallyLoggedIn: boolean) => actuallyLoggedIn),
+      switchMap(() => this.userProfileService.getUserProfile()),
+      switchMap((profile: IUser | null) => {
+        this.profile = profile;
+        if (profile === null) {
+          return this.loginService.getSingleUserProfile();
+        }
+
+        return of(profile);
+      }),
+      // On logout - profile is reverted to null - no need to keep going.
+      filterNullish(),
+      // delay to wait for the child routes to completely settle.
+      delay(0),
+      tap((profile: IUser) => {
+        this.adminRights = this.userProfileService.checkAdminRights(profile);
+        if (this.currentUrl.includes(this.routeList.account)) {
+          this.navigationService.navigateToUrl(this.routeList.recipes);
+        }
+      })
+    );
   }
 
   /**
@@ -92,9 +97,11 @@ export class AppHeaderComponent extends ComponentBase implements OnInit {
   signOut(): void {
     this.loginService.hardLogout(true);
     // ensure that the jwt and social auth have enough time to clear
-    setTimeout(() => {
-      console.log('log out route');
-      this.router.navigate(['/account/login']);
-    }, 1200);
+    timer(this.navigationDelayOnLogout)
+      .pipe(
+        take(1),
+        tap(() => this.navigationService.navigateToUrl(this.routeList.login))
+      )
+      .subscribe();
   }
 }
