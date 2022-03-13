@@ -25,7 +25,7 @@ describe('AppHeaderComponent', () => {
   const loginServiceSpy: Spy<LoginService> = autoSpy(LoginService);
 
   loginServiceSpy.getTokenUsingGoogleToken.and.returnValue(of(false));
-  storageServiceSpy.observeItem.and.returnValue(of());
+  storageServiceSpy.observeStorageEventItem.and.returnValue(of());
 
   beforeEach(
     waitForAsync(() => {
@@ -55,6 +55,7 @@ describe('AppHeaderComponent', () => {
     component = fixture.componentInstance;
 
     // Note authState returns an observable, but is declared as a get, therefore ordinary spy methods don't work.
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     Object.defineProperty(socialAuthSpy, 'authState', { get: () => {} });
     spyOnProperty(socialAuthSpy, 'authState', 'get').and.returnValue(of());
 

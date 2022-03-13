@@ -1,26 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { ComponentBase } from '@components/base/base.component.base';
-import { LoginService } from '@services/login/login.service';
+import { Component } from '@angular/core';
+import { NavigationService } from '@services/navigation/navigation.service';
 import { PageTitleService } from '@services/page-title.service';
-import { StorageService } from '@services/storage/storage.service';
-import { UserProfileService } from '@services/user-profile.service';
-import { takeUntil } from 'rxjs/operators';
+import { WidthObserverService } from '@services/width-observer/width-observer.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent extends ComponentBase implements OnInit {
+export class AppComponent {
   constructor(
     private pageTitleService: PageTitleService,
-    private storageService: StorageService,
-    private userProfileService: UserProfileService,
-    private loginService: LoginService
+    private widthObserverService: WidthObserverService,
+    private navigationService: NavigationService
   ) {
-    super();
-  }
-  ngOnInit(): void {
-    this.pageTitleService.listen().pipe(takeUntil(this.ngUnsubscribe)).subscribe();
+    this.navigationService.listenToRouteEnd().subscribe();
+    this.pageTitleService.listen().subscribe();
+    this.widthObserverService.listenBreakpoints().subscribe();
   }
 }
