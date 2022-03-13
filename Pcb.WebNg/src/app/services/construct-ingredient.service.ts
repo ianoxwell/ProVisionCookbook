@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Conversion } from '@models/conversion';
-import { Ingredient } from '@models/ingredient';
-import { MeasurementModel } from '@models/ingredient-model';
+import { IIngredient } from '@models/ingredient/ingredient.model';
+import { IMeasurement } from '@models/ingredient/ingredient-model';
 import { IRawFoodIngredient, ISpoonConversion, ISpoonFoodRaw } from '@models/raw-food-ingredient.model';
-import { ReferenceItemFull } from '@models/reference.model';
+import { IReferenceItemFull } from '@models/reference.model';
 // import { IngredientModel, ConversionModel, PriceModel } from './ingredient-model';
 
 @Injectable({
@@ -14,22 +14,22 @@ export class ConstructIngredientService {
     basicInfo: { name: string; foodGroup: number },
     spoon: ISpoonFoodRaw | null,
     spoonConversions: ISpoonConversion[],
-    foodGroupRef: ReferenceItemFull[] | undefined,
-    ingredientStateRef: ReferenceItemFull[] | undefined,
-    measurementRef: MeasurementModel[],
+    foodGroupRef: IReferenceItemFull[] | undefined,
+    ingredientStateRef: IReferenceItemFull[] | undefined,
+    measurementRef: IMeasurement[],
     usda: IRawFoodIngredient | null
-  ): Ingredient {
+  ): IIngredient {
     if (!spoon) {
       throw 'SpoonFood Raw not defined';
     }
 
-    const ingredientState: ReferenceItemFull | undefined = ingredientStateRef?.find(
-      (state: ReferenceItemFull) => state.title.toLowerCase() === spoon.consistency.toLowerCase()
+    const ingredientState: IReferenceItemFull | undefined = ingredientStateRef?.find(
+      (state: IReferenceItemFull) => state.title.toLowerCase() === spoon.consistency.toLowerCase()
     );
-    let newIngredient: Ingredient = {
+    let newIngredient: IIngredient = {
       id: 0,
       name: basicInfo.name,
-      foodGroup: foodGroupRef?.find((food: ReferenceItemFull) => food.id === basicInfo.foodGroup),
+      foodGroup: foodGroupRef?.find((food: IReferenceItemFull) => food.id === basicInfo.foodGroup),
 
       linkUrl: spoon.id,
       ingredientStateId: ingredientState ? ingredientState.id : 0,
@@ -47,7 +47,7 @@ export class ConstructIngredientService {
    * @param usda The raw result from the Usda food db.
    * @returns Ingredient.
    */
-  mixinUsdaResults(newIngredient: Ingredient, usda: IRawFoodIngredient): Ingredient {
+  mixinUsdaResults(newIngredient: IIngredient, usda: IRawFoodIngredient): IIngredient {
     const mixedResult = {
       ...newIngredient,
       usdaFoodId: usda.id,
@@ -60,16 +60,16 @@ export class ConstructIngredientService {
     return mixedResult;
   }
 
-  findMeasureModel(title: string, measure: MeasurementModel[]): MeasurementModel | undefined {
-    const measurementEach: MeasurementModel | undefined = measure.find(
-      (m: MeasurementModel) => m.title.toLowerCase() === 'each'
+  findMeasureModel(title: string, measure: IMeasurement[]): IMeasurement | undefined {
+    const measurementEach: IMeasurement | undefined = measure.find(
+      (m: IMeasurement) => m.title.toLowerCase() === 'each'
     );
 
     if (!title || title.length === 0) {
       return measurementEach;
     }
 
-    const measurement: MeasurementModel | undefined = measure.find((m: MeasurementModel) => {
+    const measurement: IMeasurement | undefined = measure.find((m: IMeasurement) => {
       const success =
         m.title.toLowerCase() === title.toLowerCase() ||
         m.shortName?.toLowerCase() === title.toLowerCase() ||
@@ -86,8 +86,8 @@ export class ConstructIngredientService {
 
   private conversions(
     convert: ISpoonConversion[],
-    ingredientState: ReferenceItemFull | undefined,
-    measure: MeasurementModel[]
+    ingredientState: IReferenceItemFull | undefined,
+    measure: IMeasurement[]
   ): Conversion[] {
     // expect convert to be an array returned from dialog-ingredient.component or a partial object
     // {key: newKey, value: newValue, changeType: 'sub', subDocName: 'conversions', subId: docSubId}

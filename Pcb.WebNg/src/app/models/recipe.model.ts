@@ -1,10 +1,10 @@
 import { ApiLinks } from './apiLinks';
 import { History } from './history';
-import { IngredientList } from './ingredient-list.model';
+import { IRecipeIngredient } from './recipe-ingredient.model';
 import { Picture } from './picture';
 import { RatingReviews } from './ratingsReview';
 import { RecipeCreatedByUser } from './recipeCreatedByUser';
-import { ReferenceItemFull } from './reference.model';
+import { IReferenceItemFull } from './reference.model';
 import { StepByStepInstructions } from './stepByStepInstructions';
 
 export interface Recipe {
@@ -59,27 +59,27 @@ export interface Recipe {
   numberFavourites?: number;
   numberOfTimesCooked?: number;
 
-  equipmentRequired?: Array<ReferenceItemFull>;
+  equipmentRequired?: Array<IReferenceItemFull>;
 
-  allergyWarnings?: Array<ReferenceItemFull>;
+  allergyWarnings?: Array<IReferenceItemFull>;
   /**
    * mexican, chinese, european, tudor, etc
    */
-  recipeCuisineTypes?: Array<ReferenceItemFull>;
+  recipeCuisineTypes?: Array<IReferenceItemFull>;
 
   /** Very healthy, cheap, popular, sustainable, etc */
-  recipeDishTags?: Array<ReferenceItemFull>;
+  recipeDishTags?: Array<IReferenceItemFull>;
   /**
    * more than one type possible - breakfast, lunch, dinner snack, sauce, base
    */
-  recipeDishTypes?: Array<ReferenceItemFull>;
+  recipeDishTypes?: Array<IReferenceItemFull>;
   /**
    * low sugar, paleo, sugar free
    */
-  recipeHealthLabels?: Array<ReferenceItemFull>;
+  recipeHealthLabels?: Array<IReferenceItemFull>;
   /** analysed Instructions broken down to steps */
   steppedInstructions?: Array<StepByStepInstructions>;
-  recipeIngredientLists?: Array<IngredientList>;
+  recipeIngredientLists?: Array<IRecipeIngredient>;
   recipePictures?: Array<Picture>;
   recipeReviews?: Array<RatingReviews>;
 

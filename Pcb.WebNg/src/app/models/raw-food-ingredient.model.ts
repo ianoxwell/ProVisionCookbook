@@ -1,11 +1,11 @@
-import { ICommonMinerals, ICommonVitamins, INutritionFacts } from './ingredient-model';
-import { ReferenceItemFull } from './reference.model';
+import { ICommonMinerals, ICommonVitamins, INutritionFacts } from './ingredient/ingredient-model';
+import { IReferenceItemFull } from './reference.model';
 
 export interface IRawFoodIngredient {
   commonMinerals: ICommonMinerals;
   commonVitamins: ICommonVitamins;
   foodGroupId: number;
-  foodGroup: ReferenceItemFull;
+  foodGroup: IReferenceItemFull;
   id: number;
   name: string;
   nutritionFacts: INutritionFacts;

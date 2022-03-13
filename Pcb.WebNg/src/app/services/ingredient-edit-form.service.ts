@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Conversion } from '@models/conversion';
-import { Ingredient } from '@models/ingredient';
-import { ICommonMinerals, ICommonVitamins, INutritionFacts, PriceModel } from '@models/ingredient-model';
+import { IIngredient } from '@models/ingredient/ingredient.model';
+import { ICommonMinerals, ICommonVitamins, INutritionFacts, IPrice } from '@models/ingredient/ingredient-model';
 import { Price } from '@models/price';
 import { NutrientTotalValidator } from '../validators/nutrient-total.validator';
 
@@ -107,8 +107,8 @@ export class IngredientEditFormService {
     return fbGroup;
   }
 
-  createPriceModel(): PriceModel {
-    const price: PriceModel = {
+  createPriceModel(): IPrice {
+    const price: IPrice = {
       brandName: '',
       price: 0,
       quantity: 0,
@@ -121,7 +121,7 @@ export class IngredientEditFormService {
     return price;
   }
 
-  createForm(ingredient: Ingredient, isNew: boolean): FormGroup {
+  createForm(ingredient: IIngredient, isNew: boolean): FormGroup {
     let conversionSummary: FormGroup[] = [];
     // let nutritionSummary = [];
     // if editing the ingredient, then populate the additional controls needed to edit any of the sub-documents

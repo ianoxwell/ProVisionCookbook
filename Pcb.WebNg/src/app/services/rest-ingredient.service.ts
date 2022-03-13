@@ -12,8 +12,8 @@ import {
 import { IRawReturnedRecipes } from '@models/spoonacular-recipe.model';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Ingredient } from '../models/ingredient';
-import { Suggestion } from '../models/suggestion';
+import { IIngredient } from '@models/ingredient/ingredient.model';
+import { Suggestion } from '@models/suggestion';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +31,7 @@ export class RestIngredientService {
   }
   constructor(private httpClient: HttpClient) {}
 
-  public getRandomSpoonacularRecipe(count: number): Observable<IRawReturnedRecipes> {
+  getRandomSpoonacularRecipe(count: number): Observable<IRawReturnedRecipes> {
     return this.httpClient.get<IRawReturnedRecipes>(
       `${this.foodUrl}/recipes/random?limitLicense=true&number=${count}&apiKey=${this.foodApiKey}`,
       {
@@ -39,14 +39,14 @@ export class RestIngredientService {
       }
     );
   }
-  public getSpoonacularIngredient(ingredientID: string | number): Observable<ISpoonFoodRaw> {
+  getSpoonacularIngredient(ingredientID: string | number): Observable<ISpoonFoodRaw> {
     return this.httpClient.get<ISpoonFoodRaw>(
       `${this.foodUrl}/food/ingredients/${ingredientID}/information?amount=100&unit=grams&apiKey=${this.foodApiKey}`,
       { headers: this.defaultHeader }
     );
   }
 
-  public getSpoonacularSuggestions(foodName: string, limit: number = 5): Observable<ISpoonSuggestions[]> {
+  getSpoonacularSuggestions(foodName: string, limit = 5): Observable<ISpoonSuggestions[]> {
     const queryStr = `?query=${foodName}&number=${limit}&metaInformation=true`;
     return this.httpClient.get<ISpoonSuggestions[]>(
       `${this.foodUrl}/food/ingredients/autocomplete${queryStr}&apiKey=${this.foodApiKey}`,
@@ -54,7 +54,7 @@ export class RestIngredientService {
     );
   }
 
-  public getSpoonConversion(
+  getSpoonConversion(
     foodName: string,
     sourceUnit: string,
     sourceAmount: number,
@@ -69,7 +69,7 @@ export class RestIngredientService {
     );
   }
 
-  public getIngredientList(filterQuery: IIngredientFilterObject): Observable<PagedResult<Ingredient>> {
+  getIngredientList(filterQuery: IIngredientFilterObject): Observable<PagedResult<IIngredient>> {
     if (!filterQuery) {
       filterQuery = new IngredientFilterObject();
     }
@@ -92,42 +92,40 @@ export class RestIngredientService {
       queryString += `usdaFoodIdNull=true&`;
     }
     queryString = queryString.slice(0, -1);
-    return this.httpClient.get<PagedResult<Ingredient>>(`${this.apiUrl}ingredient/search${queryString}`, {
+    return this.httpClient.get<PagedResult<IIngredient>>(`${this.apiUrl}ingredient/search${queryString}`, {
       headers: this.defaultHeader
     });
   }
 
-  public getIngredientSuggestion(queryString: string): Observable<Suggestion[]> {
+  getIngredientSuggestion(queryString: string): Observable<Suggestion[]> {
     return this.httpClient.get<Suggestion[]>(this.apiUrl + 'ingredient/suggestion' + queryString, {
       headers: this.defaultHeader
     });
   }
-  public getIngredientById(ingredientId: number): Observable<Ingredient> {
-    return this.httpClient.get<Ingredient>(`${this.apiUrl}ingredient/${ingredientId}`, { headers: this.defaultHeader });
-  }
-
-  public getIngredientByOtherId(id: number, searchField: 'linkUrl' | 'usdaFoodId'): Observable<Ingredient> {
-    return this.httpClient.get<Ingredient>(`${this.apiUrl}ingredient/find?id=${id}&searchField=${searchField}`, {
+  getIngredientById(ingredientId: number): Observable<IIngredient> {
+    return this.httpClient.get<IIngredient>(`${this.apiUrl}ingredient/${ingredientId}`, {
       headers: this.defaultHeader
     });
   }
-  public createIngredient(ingredient: Ingredient): Observable<Ingredient> {
-    return this.httpClient.post<Ingredient>(this.apiUrl + 'ingredient', ingredient, { headers: this.defaultHeader });
-  }
-  public updateIngredient(ingredientId: number, update: any): Observable<Ingredient> {
-    return this.httpClient.put<Ingredient>(`${this.apiUrl}ingredient/${ingredientId}`, update, {
+
+  getIngredientByOtherId(id: number, searchField: 'linkUrl' | 'usdaFoodId'): Observable<IIngredient> {
+    return this.httpClient.get<IIngredient>(`${this.apiUrl}ingredient/find?id=${id}&searchField=${searchField}`, {
       headers: this.defaultHeader
     });
   }
-  public deleteItem(itemID: number): Observable<Ingredient> {
-    return this.httpClient.delete<Ingredient>(`${this.apiUrl}ingredient/${itemID}`, { headers: this.defaultHeader });
+  createIngredient(ingredient: IIngredient): Observable<IIngredient> {
+    return this.httpClient.post<IIngredient>(this.apiUrl + 'ingredient', ingredient, { headers: this.defaultHeader });
+  }
+  updateIngredient(ingredientId: number, update: any): Observable<IIngredient> {
+    return this.httpClient.put<IIngredient>(`${this.apiUrl}ingredient/${ingredientId}`, update, {
+      headers: this.defaultHeader
+    });
+  }
+  deleteItem(itemID: number): Observable<IIngredient> {
+    return this.httpClient.delete<IIngredient>(`${this.apiUrl}ingredient/${itemID}`, { headers: this.defaultHeader });
   }
 
-  public getRawFoodSuggestion(
-    queryString: string,
-    limit: number = 10,
-    foodGroupId: number = 0
-  ): Observable<IRawFoodSuggestion[]> {
+  getRawFoodSuggestion(queryString: string, limit = 10, foodGroupId = 0): Observable<IRawFoodSuggestion[]> {
     let queryStr = `?filter=${queryString}&limit=${limit}`;
     if (foodGroupId > 0) {
       queryStr += `&foodGroupId=${foodGroupId}`;
@@ -137,11 +135,11 @@ export class RestIngredientService {
     });
   }
 
-  public getRawFoodById(usdaId: string): Observable<IRawFoodIngredient> {
+  getRawFoodById(usdaId: string): Observable<IRawFoodIngredient> {
     return this.httpClient.get<IRawFoodIngredient>(`${this.apiUrl}rawfooddata/${usdaId}`);
   }
 
-  public checkFoodNameExists(filter: string, foodId: number = 0): Observable<boolean> {
+  checkFoodNameExists(filter: string, foodId = 0): Observable<boolean> {
     const queryStr = `?filter=${filter}&foodId=${foodId}`;
     return this.httpClient.get<boolean>(`${this.apiUrl}ingredient/check-name${queryStr}`);
   }

@@ -1,31 +1,35 @@
 <app-page-title></app-page-title>
 <!-- action bar -->
-<div class="mt-2 mb-2" *ngIf="!!selectedRecipe">
-	<div class="flex-box flex-justify-space-between mt-2 mb-2 pl-2 pr-2" >
+<div class="mt-2 mb-2">
+	<div class="flex-box flex-justify-space-between mt-2 mb-2 pl-2 pr-2">
 		<span class="ml-12"></span>
 		<!-- Hide section if not admin && cookBookUserProfile.lastName==='Oxwell' -->
 		<span *ngIf="!!cookBookUserProfile && selectedTab === 0">
 			<span class="mr-1">Index: {{selectedIndex}}</span>
-			<button mat-flat-button (click)="getSpoonAcularRecipe(1)" type="button" class="mr-1">Get 1 random recipes</button>
-			<button mat-flat-button (click)="getSpoonAcularRecipe(3)" type="button" class="mr-1">Get 3 random recipes</button>
+			<button mat-flat-button (click)="getSpoonAcularRecipe(1)" type="button" class="mr-1">Get 1 random
+				recipes</button>
+			<button mat-flat-button (click)="getSpoonAcularRecipe(3)" type="button" class="mr-1">Get 3 random
+				recipes</button>
 		</span>
-		<span *ngIf="selectedTab === 1">
-			<button type="button" mat-flat-button title="Previous" (click)="changeRecipe({direction: 'prev', id: selectedRecipe.id})">
+		<span *ngIf="selectedTab === 1 && !!selectedRecipe">
+			<button type="button" mat-flat-button title="Previous"
+				(click)="changeRecipe({direction: 'prev', id: selectedRecipe.id})">
 				<mat-icon class="color-on-primary">chevron_left</mat-icon> Prev
 			</button>
-			<button type="button" mat-flat-button title="Next" (click)="changeRecipe({direction: 'next', id: selectedRecipe.id})"
-					class="ml-2">
+			<button type="button" mat-flat-button title="Next"
+				(click)="changeRecipe({direction: 'next', id: selectedRecipe.id})" class="ml-2">
 				Next <mat-icon class="color-on-primary">chevron_right</mat-icon>
 			</button>
 		</span>
-		<span>
-			<h1 >{{selectedRecipe.name}}</h1>
+		<span *ngIf="!!selectedRecipe">
+			<h1>{{selectedRecipe.name}}</h1>
 		</span>
 		<span>
 			<button mat-flat-button type="button" color="accent" *ngIf="selectedTab === 1" (click)="changeTab(0)">
 				<mat-icon class="mr-1">keyboard_return</mat-icon> Back
 			</button>
-			<button mat-flat-button type="button" color="accent" *ngIf="selectedTab === 0" (click)="createOrEdit('new')">
+			<button mat-flat-button type="button" color="accent" *ngIf="selectedTab === 0"
+				(click)="createOrEdit('new')">
 				<mat-icon class="mr-1">add</mat-icon> New
 			</button>
 		</span>
@@ -39,7 +43,8 @@
 				<ng-container *ngIf="!isLoading; else showLoading">
 					<div class="container mt-1 grid-parent">
 						<div *ngFor="let recipe of recipes; let i = index" class="recipeCard">
-							<app-recipe-card [recipeInput]="recipe" (clickedRecipe)="selectThisRecipe($event, i)"></app-recipe-card>
+							<app-recipe-card [recipeInput]="recipe" (clickedRecipe)="selectThisRecipe($event, i)">
+							</app-recipe-card>
 						</div>
 						<ng-container *ngIf="recipes.length === 0">
 							<div>Sorry I can't find any recipes that match the filters</div>
@@ -53,17 +58,17 @@
 		</mat-tab>
 		<mat-tab>
 			<!-- (changeRecipe)="changeRecipe($event)" -->
-			<app-recipe-view [selectedRecipe]="selectedRecipe" ></app-recipe-view>
+			<app-recipe-view [selectedRecipe]="selectedRecipe"></app-recipe-view>
 		</mat-tab>
 	</mat-tab-group>
-	<!-- <div *ngIf="selectedRecipe">
-    <mat-toolbar>
-      <h1>{{'Recipe ' + selectedRecipe.name}}</h1>
-      <button mat-flat-button aria-label="Search Recipes" (click)="selectedRecipe=null">
-        <mat-icon>back</mat-icon>
-        Search Recipes
-      </button>
-    </mat-toolbar>
-    
-  </div> -->
+	<div *ngIf="selectedRecipe">
+		<mat-toolbar>
+			<h1>{{'Recipe ' + selectedRecipe.name}}</h1>
+			<button mat-flat-button aria-label="Search Recipes" (click)="selectedRecipe = undefined">
+				<mat-icon>back</mat-icon>
+				Search Recipes
+			</button>
+		</mat-toolbar>
+
+	</div>
 </div>

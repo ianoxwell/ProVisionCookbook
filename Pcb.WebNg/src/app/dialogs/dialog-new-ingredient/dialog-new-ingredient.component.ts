@@ -3,8 +3,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ComponentBase } from '@components/base/base.component.base';
-import { IIngredient } from '@models/ingredient';
-import { MeasurementModel } from '@models/ingredient-model';
+import { IIngredient } from '@models/ingredient/ingredient.model';
+import { IMeasurement } from '@models/ingredient/ingredient-model';
 import { MessageStatus } from '@models/message.model';
 import {
   IRawFoodIngredient,
@@ -13,7 +13,7 @@ import {
   ISpoonFoodRaw,
   ISpoonSuggestions
 } from '@models/raw-food-ingredient.model';
-import { ReferenceItemFull } from '@models/reference.model';
+import { IReferenceItemFull } from '@models/reference.model';
 import { ConstructIngredientService } from '@services/construct-ingredient.service';
 import { MessageService } from '@services/message.service';
 import { RestIngredientService } from '@services/rest-ingredient.service';
@@ -53,9 +53,9 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
     public dialogRef: MatDialogRef<DialogNewIngredientComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: {
-      foodGroup: ReferenceItemFull[];
-      ingredientStateRef: ReferenceItemFull[];
-      measurements: MeasurementModel[];
+      foodGroup: IReferenceItemFull[];
+      ingredientStateRef: IReferenceItemFull[];
+      measurements: IMeasurement[];
     },
     private fb: FormBuilder,
     private messageService: MessageService,

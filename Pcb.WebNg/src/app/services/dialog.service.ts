@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ComponentBase } from '@components/base/base.component.base';
-import { Ingredient } from '@models/ingredient';
-import { MeasurementModel } from '@models/ingredient-model';
+import { IIngredient } from '@models/ingredient/ingredient.model';
+import { IMeasurement } from '@models/ingredient/ingredient-model';
 import { MessageStatus } from '@models/message.model';
-import { ReferenceItemFull } from '@models/reference.model';
+import { IReferenceItemFull } from '@models/reference.model';
 import { Observable } from 'rxjs';
 import { ConfirmDialogComponent } from '../dialogs/dialog-confirm/confirm.component';
 import { DialogIngredientMatchComponent } from '../dialogs/dialog-ingredient-match/dialog-ingredient-match.component';
@@ -20,7 +20,7 @@ export class DialogService extends ComponentBase {
   }
 
   /** Opens Material UI dialog boxes with given parameters */
-  createDialog<T>(data: any, component: any, width: string = '60%'): Observable<T> {
+  createDialog<T>(data: any, component: any, width = '60%'): Observable<T> {
     const dialogRef = this.dialog.open(component, {
       width,
       data,
@@ -31,13 +31,13 @@ export class DialogService extends ComponentBase {
   }
 
   /** Opens a confirm dialog */
-  confirm(status: MessageStatus, title: string, message: string, buttonText: string = 'Confirm'): Observable<boolean> {
+  confirm(status: MessageStatus, title: string, message: string, buttonText = 'Confirm'): Observable<boolean> {
     const data = { status, title, message, buttonText };
     return this.createDialog<boolean>(data, ConfirmDialogComponent);
   }
 
   /** Opens an alert dialog */
-  alert(heading: string, err: any, confirmButton: string = 'Okay'): Observable<void> {
+  alert(heading: string, err: any, confirmButton = 'Okay'): Observable<void> {
     // if error message if of type HttpErrorResponse then it will have a message
     const message = !!err.message ? err.message : err;
     const data = { status: MessageStatus.Error, heading, message, confirmButton };
@@ -52,11 +52,14 @@ export class DialogService extends ComponentBase {
    * @returns Observable of the new ingredient
    */
   newIngredientDialog(
-    foodGroup: ReferenceItemFull[],
-    measurements: MeasurementModel[],
-    ingredientStateRef: ReferenceItemFull[]
-  ): Observable<Ingredient> {
-    return this.createDialog<Ingredient>({ foodGroup, measurements, ingredientStateRef }, DialogNewIngredientComponent);
+    foodGroup: IReferenceItemFull[],
+    measurements: IMeasurement[],
+    ingredientStateRef: IReferenceItemFull[]
+  ): Observable<IIngredient> {
+    return this.createDialog<IIngredient>(
+      { foodGroup, measurements, ingredientStateRef },
+      DialogNewIngredientComponent
+    );
   }
 
   /**
@@ -65,8 +68,8 @@ export class DialogService extends ComponentBase {
    * @param foodGroup The refData for FoodGroup to match with.
    * @returns Observable of the updated ingredient
    */
-  matchIngredientDialog(ingredient: Ingredient, foodGroup: ReferenceItemFull[]): Observable<Ingredient> {
-    return this.createDialog<Ingredient>({ ingredient, foodGroup }, DialogIngredientMatchComponent);
+  matchIngredientDialog(ingredient: IIngredient, foodGroup: IReferenceItemFull[]): Observable<IIngredient> {
+    return this.createDialog<IIngredient>({ ingredient, foodGroup }, DialogIngredientMatchComponent);
   }
 
   /** Closes all dialogs */
@@ -75,7 +78,7 @@ export class DialogService extends ComponentBase {
   }
 
   /** Opens a snackbar */
-  snackBar(status: MessageStatus, message: string, durationTime: number = 3000) {
+  snackBar(status: MessageStatus, message: string, durationTime = 3000) {
     this.matSnackBar.open(message, 'X', {
       duration: durationTime,
       verticalPosition: 'top',

@@ -30,7 +30,7 @@
 					<mat-label id="purchased-by-label">Generally Purchased By</mat-label>
 					<mat-select placeholder="Purchased By" role="" formControlName="purchasedBy">
 						<div role="listbox" aria-labelledby="purchased-by-label">
-							<mat-option role="option" *ngFor="let type of purchasedByEnum" [value]="type.id" >{{type.item | toTitleCase}}</mat-option>
+							<mat-option role="option" *ngFor="let type of purchasedByList" [value]="type.id" >{{type.item | toTitleCase}}</mat-option>
 						</div>
 					</mat-select>
 				</mat-form-field>

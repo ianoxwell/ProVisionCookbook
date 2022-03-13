@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Ingredient, IngredientNameSpace } from '@models/ingredient';
-import { ReferenceAll } from '@models/reference.model';
+import { CPurchasedBy, IIngredient } from '@models/ingredient/ingredient.model';
+import { IReferenceAll } from '@models/reference.model';
 import { ValidationMessages } from '@models/static-variables';
 import { DialogService } from '@services/dialog.service';
 import { first, tap } from 'rxjs/operators';
@@ -11,19 +11,19 @@ import { first, tap } from 'rxjs/operators';
   templateUrl: './edit-ingredient-basic.component.html',
   styleUrls: ['./edit-ingredient-basic.component.scss']
 })
-export class EditIngredientBasicComponent implements OnInit {
-  @Input() refData!: ReferenceAll;
+export class EditIngredientBasicComponent {
+  @Input() refData!: IReferenceAll;
   @Input() ingredientForm!: FormGroup;
-  @Input() selectedIngredient: Ingredient | null = null;
-  @Output() updatedIngredient = new EventEmitter<Ingredient>();
+  @Input() selectedIngredient: IIngredient | null = null;
+  @Output() updatedIngredient = new EventEmitter<IIngredient>();
   validationMessages = ValidationMessages;
-  purchasedByEnum = Object.values(IngredientNameSpace.PurchasedByEnum).map((item: string, id: number) => ({
+  purchasedByList = CPurchasedBy.map((item: string, id: number) => ({
     id,
     item
   }));
+
   constructor(private dialogService: DialogService) {}
 
-  ngOnInit() {}
   get nameControl(): FormControl {
     return this.ingredientForm.get('name') as FormControl;
   }
@@ -41,7 +41,7 @@ export class EditIngredientBasicComponent implements OnInit {
       .matchIngredientDialog(this.selectedIngredient, this.refData.IngredientFoodGroup)
       .pipe(
         first(),
-        tap((result: Ingredient) => this.updatedIngredient.emit(result))
+        tap((result: IIngredient) => this.updatedIngredient.emit(result))
       )
       .subscribe();
   }

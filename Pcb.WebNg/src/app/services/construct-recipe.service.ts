@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Ingredient } from '@models/ingredient';
-import { IngredientList } from '@models/ingredient-list.model';
-import { MeasurementModel } from '@models/ingredient-model';
+import { IMeasurement } from '@models/ingredient/ingredient-model';
+import { IIngredient } from '@models/ingredient/ingredient.model';
 import { ISpoonConversion, ISpoonFoodRaw } from '@models/raw-food-ingredient.model';
+import { IRecipeIngredient } from '@models/recipe-ingredient.model';
 import { Recipe } from '@models/recipe.model';
-import { ReferenceAll, ReferenceItemFull } from '@models/reference.model';
+import { IReferenceAll, IReferenceItemFull } from '@models/reference.model';
 import {
   IEquipmentIngredient,
   IExtendedIngredients,
@@ -38,10 +38,10 @@ export class ConstructRecipeService {
    */
   createIngredient(
     spoonIngredient: IExtendedIngredients,
-    refDataAll: ReferenceAll,
-    measurementRef: MeasurementModel[]
-  ): Observable<Ingredient> {
-    let newIngredient: Ingredient;
+    refDataAll: IReferenceAll,
+    measurementRef: IMeasurement[]
+  ): Observable<IIngredient> {
+    let newIngredient: IIngredient;
     let spoon: ISpoonFoodRaw;
     return this.restIngredientService.getSpoonacularIngredient(spoonIngredient.id).pipe(
       switchMap((spoonRaw: ISpoonFoodRaw) => {
@@ -50,11 +50,11 @@ export class ConstructRecipeService {
         return this.restIngredientService.getSpoonConversion(spoonRaw.name, unitFrom, 1, 'grams');
       }),
       switchMap((spoonConversions: ISpoonConversion) => {
-        const foodGroupItem: ReferenceItemFull | undefined = refDataAll.IngredientFoodGroup?.find(
-          (fg: ReferenceItemFull) => (!!fg.altTitle ? spoon.aisle.includes(fg.altTitle) : false)
+        const foodGroupItem: IReferenceItemFull | undefined = refDataAll.IngredientFoodGroup?.find(
+          (fg: IReferenceItemFull) => (!!fg.altTitle ? spoon.aisle.includes(fg.altTitle) : false)
         );
         let foodGroup: number | undefined = refDataAll.IngredientFoodGroup?.find(
-          (fg: ReferenceItemFull) => fg.title === 'NULL'
+          (fg: IReferenceItemFull) => fg.title === 'NULL'
         )?.id;
         if (!!foodGroupItem) {
           foodGroup = foodGroupItem.id;
@@ -125,9 +125,9 @@ export class ConstructRecipeService {
     ingredient: IExtendedIngredients,
     index: number,
     ingredientId: number,
-    refDataAll: ReferenceAll,
-    measurementRef: MeasurementModel[]
-  ): IngredientList {
+    refDataAll: IReferenceAll,
+    measurementRef: IMeasurement[]
+  ): IRecipeIngredient {
     const wholeNumberRound = 10;
     const roundTwoPlaces = 100;
     const quantity =
@@ -154,8 +154,8 @@ export class ConstructRecipeService {
    * @param spoonId The spoonacular id of the ingredient to find.
    * @returns A single ingredient.
    */
-  private findIngredient(allIngredients: Ingredient[], spoonId: number): Ingredient | undefined {
-    return allIngredients.find((ing: Ingredient) => ing.linkUrl === spoonId);
+  private findIngredient(allIngredients: IIngredient[], spoonId: number): IIngredient | undefined {
+    return allIngredients.find((ing: IIngredient) => ing.linkUrl === spoonId);
   }
   /**
    * Finds the reference Item from the provided data.
@@ -163,8 +163,8 @@ export class ConstructRecipeService {
    * @param refData The reference Data to search through.
    * @returns a single Reference Item.
    */
-  private findReferenceItem(title: string, refData: ReferenceItemFull[] | undefined): ReferenceItemFull | undefined {
-    return refData?.find((item: ReferenceItemFull) => title.toLowerCase() === item.title.toLowerCase());
+  private findReferenceItem(title: string, refData: IReferenceItemFull[] | undefined): IReferenceItemFull | undefined {
+    return refData?.find((item: IReferenceItemFull) => title.toLowerCase() === item.title.toLowerCase());
   }
 
   /**
@@ -178,10 +178,10 @@ export class ConstructRecipeService {
    */
   private recipeMapping(
     recipe: ISpoonacularRecipeModel,
-    allIngredients: Ingredient[],
+    allIngredients: IIngredient[],
     userId: number,
-    refDataAll: ReferenceAll,
-    measurementRef: MeasurementModel[]
+    refDataAll: IReferenceAll,
+    measurementRef: IMeasurement[]
   ): Recipe {
     const newRecipe: Recipe = this.createNewRecipe(recipe, userId);
     recipe.extendedIngredients.forEach((ingredient: IExtendedIngredients, index: number) => {
@@ -217,13 +217,13 @@ export class ConstructRecipeService {
       // 	}
       // });
     });
-    refDataAll.DishTag?.forEach((tag: ReferenceItemFull) => {
+    refDataAll.DishTag?.forEach((tag: IReferenceItemFull) => {
       const altTag = tag.altTitle as keyof ISpoonacularRecipeModel;
       if (!!tag.altTitle && recipe[altTag] && recipe[altTag] === true) {
         newRecipe.recipeDishTags?.push(tag);
       }
     });
-    refDataAll.HealthLabel?.forEach((diet: ReferenceItemFull) => {
+    refDataAll.HealthLabel?.forEach((diet: IReferenceItemFull) => {
       const altTag = diet.altTitle as keyof ISpoonacularRecipeModel;
 
       if (!!diet.altTitle && recipe[altTag] && recipe[altTag] === true) {
@@ -260,12 +260,12 @@ export class ConstructRecipeService {
   getSpoonAcularRecipe(
     count: number,
     userId: number,
-    refDataAll: ReferenceAll,
-    measurementRef: MeasurementModel[]
+    refDataAll: IReferenceAll,
+    measurementRef: IMeasurement[]
   ): Observable<Recipe[]> {
     let spoonRecipes: ISpoonacularRecipeModel[] = [];
     const ingredientList: IExtendedIngredients[] = [];
-    const ingredientListFull: Ingredient[] = [];
+    const ingredientListFull: IIngredient[] = [];
     return this.restIngredientService.getRandomSpoonacularRecipe(count).pipe(
       switchMap((recipeResults: IRawReturnedRecipes) => {
         console.log('a result', recipeResults);
@@ -293,30 +293,30 @@ export class ConstructRecipeService {
           });
         });
         // forEach through each ingredient and create an array that checks if ingredient exists
-        const ingredientExistMap$: Observable<Ingredient>[] = ingredientList.map((ingredient: IExtendedIngredients) =>
+        const ingredientExistMap$: Observable<IIngredient>[] = ingredientList.map((ingredient: IExtendedIngredients) =>
           this.restIngredientService.getIngredientByOtherId(ingredient.id, 'linkUrl')
         );
         return forkJoin(ingredientExistMap$);
       }),
-      switchMap((existingIngredients: Ingredient[]) => {
+      switchMap((existingIngredients: IIngredient[]) => {
         console.log('any existing ingredients?', existingIngredients);
         // if ingredient exists then add to array
-        existingIngredients.forEach((exIng: Ingredient) => {
+        existingIngredients.forEach((exIng: IIngredient) => {
           if (!!exIng) {
             ingredientListFull.push(exIng);
           }
         });
         // if ingredient doesn't exist then attempt to create it...
-        const ingredientMap$: Observable<Ingredient>[] = [];
+        const ingredientMap$: Observable<IIngredient>[] = [];
         ingredientList.forEach((listItem: IExtendedIngredients) => {
-          const isInList = ingredientListFull.some((ingredient: Ingredient) => ingredient.linkUrl === listItem.id);
+          const isInList = ingredientListFull.some((ingredient: IIngredient) => ingredient.linkUrl === listItem.id);
           if (!isInList) {
             ingredientMap$.push(this.createIngredient(listItem, refDataAll, measurementRef));
           }
         });
         return forkJoin(ingredientMap$);
       }),
-      switchMap((allIngredients: Ingredient[]) => {
+      switchMap((allIngredients: IIngredient[]) => {
         ingredientListFull.push(...allIngredients);
         console.log('this should be the ingredients created plus existing...', ingredientListFull);
         const mappedRecipes$: Observable<Recipe>[] = spoonRecipes.map((recipe: ISpoonacularRecipeModel) =>

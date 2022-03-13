@@ -1,6 +1,6 @@
-import { CountryCode, MeasurementType } from './common.model';
+import { CountryCode, MeasurementType } from '../common.model';
 
-export interface MeasurementModel {
+export interface IMeasurement {
   id: number;
   rowVer: string;
   title: string;
@@ -12,14 +12,14 @@ export interface MeasurementModel {
   countryCode: CountryCode;
   createdAt: Date;
 }
-export interface EditedFieldModel {
+export interface IEditedField {
   key: string;
   value: any;
   changeType: string;
   subDocName?: string;
   subId?: string;
 }
-export interface PriceModel {
+export interface IPrice {
   brandName: string;
   price: number;
   quantity: number;

@@ -15,16 +15,15 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { RecipeViewComponent } from '@components/recipe/recipe-view/recipe-view.component';
 import { SearchBarComponent } from '@components/recipe/search-bar/search-bar.component';
-import { User } from '@models/user';
+import { IUser } from '@models/user';
 import { ToTitleCasePipe } from '@pipes/title-case.pipe';
 import { MessageService } from '@services/message.service';
 import { RestIngredientService } from '@services/rest-ingredient.service';
 import { RestRecipeService } from '@services/rest-recipe.service';
 import { UserProfileService } from '@services/user-profile.service';
-import { fakeRecipeReturn } from '@tests/fake-recipe.model';
 import { autoSpy, Spy } from 'autospy';
 import { MockComponent } from 'ng-mocks';
-import { of, Subject } from 'rxjs';
+import { of } from 'rxjs';
 import { RecipesComponent } from './recipes.component';
 
 describe('RecipesComponent', () => {
@@ -49,7 +48,7 @@ describe('RecipesComponent', () => {
   const restIngredientServiceSpy: Spy<RestIngredientService> = autoSpy(RestIngredientService);
   const locationSpy: Spy<Location> = autoSpy(Location);
   const userProfileServiceSpy: Spy<UserProfileService> = autoSpy(UserProfileService);
-  userProfileServiceSpy.getUserProfile.and.returnValue(of({} as User));
+  userProfileServiceSpy.getUserProfile.and.returnValue(of({} as IUser));
   const toTitleCasePipeSpy: Spy<ToTitleCasePipe> = autoSpy(ToTitleCasePipe);
   const messageServiceSpy: Spy<MessageService> = autoSpy(MessageService);
 
@@ -79,142 +78,5 @@ describe('RecipesComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  describe('when ngOnInit is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.ngOnInit();
-      // assert
-      // expect(c).toEqual
-    });
-  });
-  describe('when showToast is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.showToast();
-      // assert
-      // expect(c).toEqual
-    });
-  });
-  describe('when routeParamSubscribe is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.routeParamSubscribe();
-      // assert
-      // expect(c).toEqual
-    });
-  });
-  describe('when loadRecipeSelect is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.loadRecipeSelect();
-      // assert
-      // expect(c).toEqual
-    });
-  });
-  describe('when changeRecipe is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.changeRecipe();
-      // assert
-      // expect(c).toEqual
-    });
-  });
-  describe('when onFilterChange is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.onFilterChange();
-      // assert
-      // expect(c).toEqual
-    });
-  });
-  describe('Get Recipes', () => {
-    let subject: Subject<any>;
-    beforeEach(() => {
-      subject = new Subject<any>();
-      restRecipeServiceSpy.getRecipe.and.returnValue(subject.asObservable());
-    });
-    it('will probably complain about something here', () => {
-      const steve = true;
-      expect(steve).toBeTrue();
-    });
-    it('should return something good today', () => {
-      component.getRecipes().subscribe();
-      subject.next(fakeRecipeReturn);
-      expect(component.recipes).toEqual(fakeRecipeReturn.items);
-    });
-  });
-  describe('when createOrEdit is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.createOrEdit();
-      // assert
-      // expect(c).toEqual
-    });
-  });
-  describe('when selectThisRecipe is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.selectThisRecipe();
-      // assert
-      // expect(c).toEqual
-    });
-  });
-  describe('when changeTab is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.changeTab();
-      // assert
-      // expect(c).toEqual
-    });
-  });
-  describe('when getSpoonAcularRecipe is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.getSpoonAcularRecipe();
-      // assert
-      // expect(c).toEqual
-    });
   });
 });

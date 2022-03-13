@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IngredientList } from '@models/ingredient-list.model';
-import { MeasurementModel } from '@models/ingredient-model';
+import { IRecipeIngredient } from '@models/recipe-ingredient.model';
+import { IMeasurement } from '@models/ingredient/ingredient-model';
 import { Recipe } from '@models/recipe.model';
 import { SentenceCasePipe } from '@pipes/sentence-case.pipe';
 
@@ -10,8 +10,8 @@ import { SentenceCasePipe } from '@pipes/sentence-case.pipe';
   styleUrls: ['./recipe-view.component.scss']
 })
 export class RecipeViewComponent implements OnInit {
-  @Input() selectedRecipe: Recipe | null = null;
-  @Input() measurements: MeasurementModel[] = [];
+  @Input() selectedRecipe: Recipe | undefined;
+  @Input() measurements: IMeasurement[] = [];
 
   constructor(private sentenceCase: SentenceCasePipe) {}
 
@@ -24,7 +24,7 @@ export class RecipeViewComponent implements OnInit {
     console.log('go and print');
   }
 
-  englishIngredientItem(ingredient: IngredientList): string {
+  englishIngredientItem(ingredient: IRecipeIngredient): string {
     const unit = ingredient.measurementUnit?.title;
     if (!unit) {
       console.log('no unit', ingredient);
@@ -39,7 +39,7 @@ export class RecipeViewComponent implements OnInit {
     return `${ingredient.quantity} ${unit} ${this.sentenceCase.transform(ingredient.ingredient?.name)}`;
   }
 
-  routerLinkURL(ingredient: IngredientList): string {
+  routerLinkURL(ingredient: IRecipeIngredient): string {
     return `/savoury/ingredients/item/${ingredient.ingredientId}`;
   }
 }

@@ -10,18 +10,18 @@
  * Do not edit the class manually.
  */
 
-import { MeasurementModel } from './ingredient-model';
-import { ReferenceItemFull } from './reference.model';
+import { IMeasurement } from './ingredient/ingredient-model';
+import { IReferenceItemFull } from './reference.model';
 
 export interface Conversion {
   id?: number;
   ingredientId?: number;
-  baseState?: ReferenceItemFull;
-  baseMeasurementUnit?: MeasurementModel;
+  baseState?: IReferenceItemFull;
+  baseMeasurementUnit?: IMeasurement;
   baseQuantity: number;
 
-  convertToState?: ReferenceItemFull;
-  convertToMeasurementUnit?: MeasurementModel;
+  convertToState?: IReferenceItemFull;
+  convertToMeasurementUnit?: IMeasurement;
   convertToQuantity: number;
   answer: string;
   /**

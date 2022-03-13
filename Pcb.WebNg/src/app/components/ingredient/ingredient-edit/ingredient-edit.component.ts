@@ -5,10 +5,10 @@ import { MatSelect } from '@angular/material/select';
 import { ComponentBase } from '@components/base/base.component.base';
 import { IScrollPositions } from '@models/common.model';
 import { Conversion } from '@models/conversion';
-import { IIngredient } from '@models/ingredient';
-import { EditedFieldModel, MeasurementModel } from '@models/ingredient-model';
+import { IIngredient } from '@models/ingredient/ingredient.model';
+import { IEditedField, IMeasurement } from '@models/ingredient/ingredient-model';
 import { MessageStatus } from '@models/message.model';
-import { ReferenceAll, ReferenceItemFull } from '@models/reference.model';
+import { IReferenceAll, IReferenceItemFull } from '@models/reference.model';
 import { ValidationMessages } from '@models/static-variables';
 import { DialogService } from '@services/dialog.service';
 import { IngredientEditFormService } from '@services/ingredient-edit-form.service';
@@ -42,8 +42,8 @@ import { catchError, filter, first, switchMap, takeUntil, tap } from 'rxjs/opera
 export class IngredientEditComponent extends ComponentBase implements OnInit {
   @Input() singleIngredient!: IIngredient;
   @Input() isNew = false;
-  @Input() refData!: ReferenceAll;
-  @Input() measurements: MeasurementModel[] = [];
+  @Input() refData!: IReferenceAll;
+  @Input() measurements: IMeasurement[] = [];
   @Output() deleteItem = new EventEmitter<IIngredient>();
   @Output() back = new EventEmitter<void>();
 
@@ -53,7 +53,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit {
   ingredientForm: FormGroup = new FormGroup({});
   // priceForm: FormGroup;
   // conversionsForm: FormGroup;
-  editedItem: EditedFieldModel[] = [];
+  editedItem: IEditedField[] = [];
   validationMessages = ValidationMessages;
 
   // getFormKeys = (controls: FormGroup): string[] => { return Object.keys(controls); }
@@ -142,9 +142,9 @@ export class IngredientEditComponent extends ComponentBase implements OnInit {
       return;
     }
 
-    const findReference = (id: number, refKey: keyof ReferenceAll) =>
-      this.refData[refKey]?.find((item: ReferenceItemFull) => item.id === id);
-    const findMeasurement = (id: number) => this.measurements.find((item: MeasurementModel) => item.id === id);
+    const findReference = (id: number, refKey: keyof IReferenceAll) =>
+      this.refData[refKey]?.find((item: IReferenceItemFull) => item.id === id);
+    const findMeasurement = (id: number) => this.measurements.find((item: IMeasurement) => item.id === id);
 
     this.isSavingResults = true;
     const formRaw = this.ingredientForm.getRawValue();

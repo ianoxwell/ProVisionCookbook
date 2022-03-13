@@ -6,7 +6,7 @@
 
 import { BaseDbModel } from './common.model';
 
-export interface Role extends BaseDbModel {
+export interface IRole extends BaseDbModel {
   rank: number;
   title: string;
   summary: string;
@@ -16,7 +16,7 @@ export interface Role extends BaseDbModel {
   endDate: Date;
 }
 
-export interface School extends BaseDbModel {
+export interface ISchool extends BaseDbModel {
   code: string;
   title: string;
   shortName: string;
@@ -30,16 +30,16 @@ export interface School extends BaseDbModel {
   postcode: string;
   phoneNumber: string;
 }
-export interface UserRole extends BaseDbModel {
+export interface IUserRole extends BaseDbModel {
   isCountryWide: boolean;
   roleId: number;
   schoolId: number;
   userId: number;
-  role: Role;
-  school: School;
+  role: IRole;
+  school: ISchool;
 }
 
-export interface User extends BaseDbModel {
+export interface IUser extends BaseDbModel {
   email: string;
   firstName?: string;
   lastName?: string;
@@ -52,14 +52,10 @@ export interface User extends BaseDbModel {
   lastLogon?: number | Date;
   loginProvider: string;
   loginProviderId?: string;
-  /**
-   * calculated / constructed field
-   */
+  /** calculated / constructed field. */
   fullName?: string;
-  /**
-   * Role taken by user - student, teacher, admin, assistant
-   */
-  userRole?: UserRole[];
+  /** Role taken by user - student, teacher, admin, assistant. */
+  userRole?: IUserRole[];
 
   updated: Date;
 }

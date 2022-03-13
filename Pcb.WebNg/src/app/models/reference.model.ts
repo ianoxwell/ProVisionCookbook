@@ -5,7 +5,7 @@
  * - keep these in alpha order
  * - sync changes to ReferenceType.cs (it's in MET.Dto)
  */
-export enum ReferenceType {
+export enum EReferenceType {
   AllergyWarning = 1,
   CuisineType,
   DishTag,
@@ -18,16 +18,16 @@ export enum ReferenceType {
   PermissionGroup
 }
 
-export enum ReferenceDetail {
+export enum EReferenceDetail {
   Basic = 1,
   Full
 }
 
-export interface ReferenceItem {
+export interface IReferenceItem {
   id: number;
   title: string;
 }
-export interface ReferenceItemFull extends ReferenceItem {
+export interface IReferenceItemFull extends IReferenceItem {
   symbol: string;
   summary: string;
   altTitle?: string;
@@ -40,15 +40,15 @@ export interface ReferenceItemFull extends ReferenceItem {
 /**
  * Note in alphabetical order - add to when references change
  */
-export interface ReferenceAll {
-  AllergyWarning?: ReferenceItemFull[];
-  CuisineType?: ReferenceItemFull[];
-  DishTag?: ReferenceItemFull[];
-  DishType?: ReferenceItemFull[];
-  Equipment?: ReferenceItemFull[];
-  HealthLabel?: ReferenceItemFull[];
-  IngredientFoodGroup?: ReferenceItemFull[];
-  IngredientState?: ReferenceItemFull[];
-  LogLevel?: ReferenceItemFull[];
-  PermissionGroup?: ReferenceItemFull[];
+export interface IReferenceAll {
+  AllergyWarning?: IReferenceItemFull[];
+  CuisineType?: IReferenceItemFull[];
+  DishTag?: IReferenceItemFull[];
+  DishType?: IReferenceItemFull[];
+  Equipment?: IReferenceItemFull[];
+  HealthLabel?: IReferenceItemFull[];
+  IngredientFoodGroup?: IReferenceItemFull[];
+  IngredientState?: IReferenceItemFull[];
+  LogLevel?: IReferenceItemFull[];
+  PermissionGroup?: IReferenceItemFull[];
 }

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ComponentBase } from '@components/base/base.component.base';
 import { IIngredientFilterObject, IngredientFilterObject } from '@models/filter-queries.model';
-import { ReferenceAll } from '@models/reference.model';
+import { IReferenceAll } from '@models/reference.model';
 import { StateService } from '@services/state.service';
 import { Observable, of } from 'rxjs';
 import { debounceTime, map, take, takeUntil, tap } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { debounceTime, map, take, takeUntil, tap } from 'rxjs/operators';
 })
 export class IngredientFilterComponent extends ComponentBase implements OnInit {
   searchForm: FormGroup = new FormGroup({});
-  @Input() refData: ReferenceAll = {};
+  @Input() refData: IReferenceAll = {};
   filterQuery: IIngredientFilterObject = new IngredientFilterObject();
   isFormReady$: Observable<boolean> = of(false);
 

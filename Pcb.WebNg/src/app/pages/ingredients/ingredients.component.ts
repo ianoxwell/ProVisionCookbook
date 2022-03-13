@@ -4,10 +4,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ISortPageObj, PagedResult, SortPageObj } from '@models/common.model';
 import { IIngredientFilterObject, IngredientFilterObject } from '@models/filter-queries.model';
-import { IIngredient } from '@models/ingredient';
-import { MeasurementModel } from '@models/ingredient-model';
+import { IIngredient } from '@models/ingredient/ingredient.model';
+import { IMeasurement } from '@models/ingredient/ingredient-model';
 import { MessageStatus } from '@models/message.model';
-import { ReferenceAll } from '@models/reference.model';
+import { IReferenceAll } from '@models/reference.model';
 import { IUser } from '@models/user';
 import { DialogService } from '@services/dialog.service';
 import { ReferenceService } from '@services/reference.service';
@@ -35,8 +35,8 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
   sortPageObj: SortPageObj = new SortPageObj();
   data$: Observable<PagedResult<IIngredient>>;
   isLoading = false;
-  refData: ReferenceAll | undefined;
-  measurements: MeasurementModel[] = [];
+  refData: IReferenceAll | undefined;
+  measurements: IMeasurement[] = [];
 
   constructor(
     private restIngredientService: RestIngredientService,
@@ -61,7 +61,7 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
     combineLatest([this.referenceService.getAllReferences(), this.referenceService.getMeasurements()])
       .pipe(
         first(),
-        switchMap(([refData, measurements]: [ReferenceAll, MeasurementModel[]]) => {
+        switchMap(([refData, measurements]: [IReferenceAll, IMeasurement[]]) => {
           this.refData = refData;
           this.measurements = measurements;
           return this.routeParamSubscribe();

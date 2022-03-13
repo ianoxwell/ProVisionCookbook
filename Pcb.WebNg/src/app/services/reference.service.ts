@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MeasurementModel } from '@models/ingredient-model';
-import { ReferenceAll } from '@models/reference.model';
+import { IMeasurement } from '@models/ingredient/ingredient-model';
+import { IReferenceAll } from '@models/reference.model';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { RefDataService } from './ref-data.service';
@@ -10,23 +10,23 @@ import { RefDataService } from './ref-data.service';
   providedIn: 'root'
 })
 export class ReferenceService {
-  private refAllSubject$ = new BehaviorSubject<ReferenceAll | undefined>(undefined);
+  private refAllSubject$ = new BehaviorSubject<IReferenceAll | undefined>(undefined);
 
-  private measurementSubject$ = new BehaviorSubject<MeasurementModel[]>([]);
+  private measurementSubject$ = new BehaviorSubject<IMeasurement[]>([]);
 
   constructor(private refDataService: RefDataService) {}
 
-  getAllReferences(): Observable<ReferenceAll> {
+  getAllReferences(): Observable<IReferenceAll> {
     return this.refAllSubject$.pipe(
-      switchMap((refAll: ReferenceAll | undefined) => {
+      switchMap((refAll: IReferenceAll | undefined) => {
         return !!refAll ? of(refAll) : this.setRefAll();
       })
     );
   }
 
-  setRefAll(): Observable<ReferenceAll> {
+  setRefAll(): Observable<IReferenceAll> {
     return this.refDataService.getAllReferences().pipe(
-      map((result: ReferenceAll) => {
+      map((result: IReferenceAll) => {
         this.refAllSubject$.next(result);
         return result;
       }),
@@ -38,13 +38,13 @@ export class ReferenceService {
     );
   }
 
-  getMeasurements(): Observable<Array<MeasurementModel>> {
+  getMeasurements(): Observable<Array<IMeasurement>> {
     return !!this.measurementSubject$.value ? this.measurementSubject$.asObservable() : this.setMeasurements();
   }
 
-  setMeasurements(): Observable<Array<MeasurementModel>> {
+  setMeasurements(): Observable<Array<IMeasurement>> {
     return this.refDataService.getMeasurements().pipe(
-      map((result: MeasurementModel[]) => {
+      map((result: IMeasurement[]) => {
         this.measurementSubject$.next(result);
         return result;
       }),

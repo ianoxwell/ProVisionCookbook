@@ -5,10 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ComponentBase } from '@components/base/base.component.base';
 import { PagedResult } from '@models/common.model';
 import { IRecipeFilterQuery, RecipeFilterQuery } from '@models/filter-queries.model';
-import { MeasurementModel } from '@models/ingredient-model';
+import { IMeasurement } from '@models/ingredient/ingredient-model';
 import { Recipe } from '@models/recipe.model';
-import { ReferenceAll } from '@models/reference.model';
-import { User } from '@models/user';
+import { IReferenceAll } from '@models/reference.model';
+import { IUser } from '@models/user';
 import { ConstructRecipeService } from '@services/construct-recipe.service';
 import { DialogService } from '@services/dialog.service';
 import { RefDataService } from '@services/ref-data.service';
@@ -26,8 +26,8 @@ import { catchError, filter, first, switchMap, takeUntil, tap } from 'rxjs/opera
 })
 export class RecipesComponent extends ComponentBase implements OnInit {
   recipes: Recipe[] = [];
-  refDataAll: ReferenceAll | undefined;
-  measurementRef: MeasurementModel[] = [];
+  refDataAll: IReferenceAll | undefined;
+  measurementRef: IMeasurement[] = [];
   isLoading = false;
   selectedRecipe: Recipe | undefined;
   selectedIndex = 0;
@@ -37,7 +37,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
   currentPath: string | undefined = '';
   filterQuery: IRecipeFilterQuery = new RecipeFilterQuery();
   dataLength = 0;
-  cookBookUserProfile: User | null = null;
+  cookBookUserProfile: IUser | null = null;
 
   constructor(
     private restRecipeService: RestRecipeService,
@@ -51,13 +51,13 @@ export class RecipesComponent extends ComponentBase implements OnInit {
     private constructRecipeService: ConstructRecipeService
   ) {
     super();
+    this.getAllReferences();
   }
 
   ngOnInit(): void {
     this.userProfileService.getUserProfile().subscribe((profile) => (this.cookBookUserProfile = profile));
     this.routeParamSubscribe();
     this.listenFilterQueryChanges();
-    this.getAllReferences();
   }
 
   listenFilterQueryChanges(): void {
@@ -65,6 +65,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
       .getRecipeFilterQuery()
       .pipe(
         switchMap((result: IRecipeFilterQuery) => {
+          console.log('filter result', result);
           this.filterQuery = result;
           return this.getRecipes();
         }),
@@ -78,6 +79,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
       .pipe(
         tap((params) => {
           this.currentPath = this.route.snapshot.routeConfig?.path;
+          console.log('route param', params, this.currentPath);
           if (params.recipeId) {
             this.loadRecipeSelect(Number(params.recipeId));
           }
@@ -92,7 +94,7 @@ export class RecipesComponent extends ComponentBase implements OnInit {
     combineLatest([this.refDataService.getAllReferences(), this.refDataService.getMeasurements()])
       .pipe(
         first(),
-        tap(([refAll, measure]: [ReferenceAll, MeasurementModel[]]) => {
+        tap(([refAll, measure]: [IReferenceAll, IMeasurement[]]) => {
           this.refDataAll = refAll;
           this.measurementRef = measure;
         })
@@ -113,7 +115,8 @@ export class RecipesComponent extends ComponentBase implements OnInit {
           this.changeTab(1);
           return this.getRecipes();
         }),
-        catchError((err: unknown) => {
+        catchError((error: unknown) => {
+          const err = error as HttpErrorResponse;
           console.log('Error', err);
           return [];
         }),
@@ -148,17 +151,20 @@ export class RecipesComponent extends ComponentBase implements OnInit {
     this.isLoading = true;
     this.dataLength = 0;
     return this.restRecipeService.getRecipe(this.filterQuery).pipe(
-      catchError((err: unknown) => {
+      catchError((error: unknown) => {
+        const err = error as HttpErrorResponse;
         this.dialogService.alert('Error getting recipes', err);
         return of({ items: [], totalCount: 0 });
       }),
       tap(() => {
+        console.log('stop loading');
         this.isLoading = false;
       }),
       filter((result: PagedResult<Recipe>) => result.totalCount > 0),
       tap((recipeResults: PagedResult<Recipe>) => {
         this.dataLength = recipeResults.totalCount;
         this.recipes = recipeResults.items;
+        console.log('setting the recipe results', recipeResults, this.dataLength);
       })
     );
   }

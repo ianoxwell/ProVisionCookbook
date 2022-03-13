@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { ComponentBase } from '@components/base/base.component.base';
 import { IRecipeFilterQuery, RecipeFilterQuery } from '@models/filter-queries.model';
-import { ReferenceAll, ReferenceItemFull } from '@models/reference.model';
+import { IReferenceAll, IReferenceItemFull } from '@models/reference.model';
 import { OrderRecipesBy } from '@models/static-variables';
 import { ReferenceService } from '@services/reference.service';
 import { StateService } from '@services/state.service';
@@ -19,15 +19,15 @@ import { environment } from 'src/environments/environment';
 export class SearchBarComponent extends ComponentBase implements OnInit, OnChanges {
   searchForm: FormGroup;
   @Input() filterQuery: IRecipeFilterQuery = new RecipeFilterQuery();
-  @Input() dataLength: number = 0;
+  @Input() dataLength = 0;
   orderRecipesBy = OrderRecipesBy;
-  allergyArray$: Observable<ReferenceItemFull[]>;
+  allergyArray$: Observable<IReferenceItemFull[]>;
 
   constructor(private fb: FormBuilder, private referenceService: ReferenceService, private stateService: StateService) {
     super();
     this.searchForm = this.createForm();
     this.allergyArray$ = this.referenceService.getAllReferences().pipe(
-      map((allRef: ReferenceAll) => {
+      map((allRef: IReferenceAll) => {
         return allRef.AllergyWarning || [];
       })
     );

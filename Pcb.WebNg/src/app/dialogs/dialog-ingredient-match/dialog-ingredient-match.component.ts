@@ -3,10 +3,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ComponentBase } from '@components/base/base.component.base';
-import { IIngredient } from '@models/ingredient';
+import { IIngredient } from '@models/ingredient/ingredient.model';
 import { MessageStatus } from '@models/message.model';
 import { IRawFoodIngredient, IRawFoodSuggestion } from '@models/raw-food-ingredient.model';
-import { ReferenceItemFull } from '@models/reference.model';
+import { IReferenceItemFull } from '@models/reference.model';
 import { ConstructIngredientService } from '@services/construct-ingredient.service';
 import { MessageService } from '@services/message.service';
 import { RestIngredientService } from '@services/rest-ingredient.service';
@@ -28,7 +28,7 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
     @Inject(MAT_DIALOG_DATA)
     public data: {
       ingredient: IIngredient;
-      foodGroup: ReferenceItemFull[];
+      foodGroup: IReferenceItemFull[];
     },
     private fb: FormBuilder,
     private constructIngredientService: ConstructIngredientService,
@@ -91,7 +91,7 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
       switchMap(([rawFood, foodGroupId]: [string, number]) => {
         const formRaw = this.form.getRawValue();
         this.data.ingredient.foodGroup = this.data.foodGroup.find(
-          (group: ReferenceItemFull) => group.id === formRaw.foodGroup
+          (group: IReferenceItemFull) => group.id === formRaw.foodGroup
         );
         return this.data.ingredient.foodGroup?.title === 'NULL'
           ? this.restIngredientService.getRawFoodSuggestion(rawFood, 20)
@@ -107,12 +107,12 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
   selectItem(item: IRawFoodSuggestion): void {
     console.log('selected this item', item);
     const formRaw = this.form.getRawValue();
-    const nullFoodGroup: ReferenceItemFull | undefined = this.data.foodGroup.find(
-      (group: ReferenceItemFull) => group.title === 'NULL'
+    const nullFoodGroup: IReferenceItemFull | undefined = this.data.foodGroup.find(
+      (group: IReferenceItemFull) => group.title === 'NULL'
     );
     if (!!nullFoodGroup && formRaw.foodGroup === nullFoodGroup.id) {
       this.data.ingredient.foodGroup = this.data.foodGroup.find(
-        (group: ReferenceItemFull) => group.title.toLowerCase() === item.foodGroup.toLowerCase()
+        (group: IReferenceItemFull) => group.title.toLowerCase() === item.foodGroup.toLowerCase()
       );
       this.data.ingredient.name = item.name;
       this.patchForm(this.data.ingredient, false);

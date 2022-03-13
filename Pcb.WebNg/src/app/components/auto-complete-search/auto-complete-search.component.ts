@@ -11,11 +11,11 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
+import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { ComponentBase } from '@components/base/base.component.base';
-import { ReferenceItem } from '@models/reference.model';
+import { IReferenceItem } from '@models/reference.model';
 import { isObservable, Observable, of } from 'rxjs';
 import { filter, takeUntil, tap } from 'rxjs/operators';
 
@@ -33,9 +33,9 @@ export class AutoCompleteSearchComponent
   @Input() matHint = '';
 
   // Function to format the display of the ref items.
-  @Input() displayWith: (item: ReferenceItem) => string = (i: ReferenceItem) => i?.title;
+  @Input() displayWith: (item: IReferenceItem) => string = (i: IReferenceItem) => i?.title;
 
-  @Input() values: Observable<ReferenceItem[]> | ReferenceItem[] = [];
+  @Input() values: Observable<IReferenceItem[]> | IReferenceItem[] = [];
   @Output() filterChange = new EventEmitter<string>();
 
   // Gets a reference to the MatAutocompleteTrigger.
@@ -47,11 +47,11 @@ export class AutoCompleteSearchComponent
   };
 
   // Copy of '@Input() values' guaranteed to be an actual observable (as opposed to the 'maybe observable maybe sync data' @Input() values)
-  values$: Observable<ReferenceItem[]> = of([]);
+  values$: Observable<IReferenceItem[]> = of([]);
 
   filterControl = new FormControl();
   control: FormControl = new FormControl();
-  value: ReferenceItem | undefined;
+  value: IReferenceItem | undefined;
   onChange: any = () => {};
   onTouched: any = () => {};
 
@@ -80,7 +80,7 @@ export class AutoCompleteSearchComponent
     this.onChange = fn;
   }
 
-  writeValue(value: ReferenceItem): void {
+  writeValue(value: IReferenceItem): void {
     this.value = value;
   }
 
@@ -124,7 +124,7 @@ export class AutoCompleteSearchComponent
   }
 
   // Resets the filter text when the selected object changes.
-  resetFilterValue(value$: Observable<ReferenceItem>): Observable<any> {
+  resetFilterValue(value$: Observable<IReferenceItem>): Observable<any> {
     const result$ = value$.pipe(
       tap((item) => this.resetFilterControlValue(item)),
       takeUntil(this.ngUnsubscribe)
@@ -133,7 +133,7 @@ export class AutoCompleteSearchComponent
     return result$;
   }
 
-  onSelect(value: ReferenceItem): void {
+  onSelect(value: IReferenceItem): void {
     this.value = value;
     // this.control.setValue(value);
     // this.control.markAsDirty();
@@ -150,7 +150,7 @@ export class AutoCompleteSearchComponent
     }
   }
 
-  private resetFilterControlValue(item: ReferenceItem): void {
+  private resetFilterControlValue(item: IReferenceItem): void {
     const text = this.displayWith(item) ?? '';
     this.filterControl.setValue(text);
   }

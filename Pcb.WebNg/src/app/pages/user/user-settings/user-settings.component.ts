@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserProfileService } from '../../../services/user-profile.service';
-import { User } from '../../../models/user';
+import { IUser } from '../../../models/user';
 
 @Component({
   selector: 'app-user-settings',
@@ -8,7 +8,7 @@ import { User } from '../../../models/user';
   styleUrls: ['./user-settings.component.scss']
 })
 export class UserSettingsComponent implements OnInit {
-  cookBookUserProfile: User | null = null;
+  cookBookUserProfile: IUser | null = null;
 
   constructor(public userProfileService: UserProfileService) {}
 

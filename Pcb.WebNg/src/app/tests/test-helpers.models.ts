@@ -1,6 +1,6 @@
-import { ReferenceItem } from '@models/reference.model';
+import { IReferenceItem } from '@models/reference.model';
 
-export const fakeFacilities: ReferenceItem[] = [
+export const fakeFacilities: IReferenceItem[] = [
   {
     id: 1,
     title: 'Alpha School'

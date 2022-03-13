@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { MessageResult } from '@models/common.model';
 import { ITokenState } from '@models/logout.models';
 import { IResponseToken, IToken } from '@models/security.models';
-import { User } from '@models/user';
+import { IUser } from '@models/user';
 import { JwtHelperService } from '@services/jwt/jwt-helper.service';
 import { ILocalUserJwt } from '@services/jwt/local-user-jwt.model';
 import { SocialAuthService, SocialUser } from 'angularx-social-login';
@@ -73,8 +73,7 @@ export class LoginService {
       !!jwtToken &&
       jwtToken.length > 8 &&
       this.jwtHelperService.isTokenFresh<ILocalUserJwt>(jwtToken, 'exp') &&
-      !!this.jwt.token &&
-      !!this.claims
+      !!this.jwt.token
     );
   }
 
@@ -128,15 +127,15 @@ export class LoginService {
     );
   }
 
-  getSingleUserProfile(): Observable<User | null> {
+  getSingleUserProfile(): Observable<IUser | null> {
     const jwtToken = this.getJwt();
     if (jwtToken === null) {
       return of(null);
     }
 
     const userId = this.jwtHelperService.decodeToken<ILocalUserJwt>(this.getJwt())?.sub;
-    return this.http.get<User>(`${environment.apiUrl}${environment.apiVersion}account/get-account?id=${userId}`).pipe(
-      tap((user: User) => {
+    return this.http.get<IUser>(`${environment.apiUrl}${environment.apiVersion}account/get-account?id=${userId}`).pipe(
+      tap((user: IUser) => {
         this.userProfileService.setUserProfile(user);
       })
     );
@@ -342,9 +341,8 @@ export class LoginService {
     };
   }
 
-  getSetJwtInitial(): Observable<string> {
-    this.restoreJwt();
-
+  /** On startup of the app restores the initial JWT, if it is found in storage. */
+  listenStorageKeyJwtEvents(): Observable<string> {
     // Observe the session for expiry changes from other tabs.
     return this.storageService.observeStorageEventItem(this.storageKeys.expiryKey).pipe(
       distinctUntilChanged(),
@@ -353,7 +351,7 @@ export class LoginService {
   }
 
   /** Restores the JWT from session storage. */
-  private restoreJwt(): void {
+  restoreJwt(): void {
     this.setJwt({
       token: this.getJwt(),
       refreshToken: this.getJwtRefresh(),
