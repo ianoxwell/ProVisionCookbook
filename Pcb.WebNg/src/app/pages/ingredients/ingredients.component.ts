@@ -4,11 +4,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ISortPageObj, PagedResult, SortPageObj } from '@models/common.model';
 import { IIngredientFilterObject, IngredientFilterObject } from '@models/filter-queries.model';
-import { Ingredient } from '@models/ingredient';
+import { IIngredient } from '@models/ingredient';
 import { MeasurementModel } from '@models/ingredient-model';
 import { MessageStatus } from '@models/message.model';
 import { ReferenceAll } from '@models/reference.model';
-import { User } from '@models/user';
+import { IUser } from '@models/user';
 import { DialogService } from '@services/dialog.service';
 import { ReferenceService } from '@services/reference.service';
 // import {ConversionModel, EditedFieldModel, IngredientModel, PriceModel} from '../models/ingredient-model';
@@ -26,14 +26,14 @@ import { ComponentBase } from '../../components/base/base.component.base';
   styleUrls: ['./ingredients.component.scss']
 })
 export class IngredientsComponent extends ComponentBase implements OnInit {
-  selectedIngredient$: Observable<Ingredient> | undefined;
+  selectedIngredient$: Observable<IIngredient> | undefined;
   selectedTab = 0; // controls the selectedIndex of the mat-tab-group
   isNew = true; // edit or new ingredient;
-  cookBookUserProfile$: Observable<User | null>;
+  cookBookUserProfile$: Observable<IUser | null>;
   currentPath: string | undefined = '';
   filterObject: IIngredientFilterObject = new IngredientFilterObject();
   sortPageObj: SortPageObj = new SortPageObj();
-  data$: Observable<PagedResult<Ingredient>>;
+  data$: Observable<PagedResult<IIngredient>>;
   isLoading = false;
   refData: ReferenceAll | undefined;
   measurements: MeasurementModel[] = [];
@@ -66,9 +66,10 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
           this.measurements = measurements;
           return this.routeParamSubscribe();
         }),
-        catchError((err: HttpErrorResponse) =>
-          this.dialogService.alert('Http error while attempting to getting references', err)
-        )
+        catchError((error: unknown) => {
+          const err = error as HttpErrorResponse;
+          return this.dialogService.alert('Http error while attempting to getting references', err);
+        })
       )
       .subscribe();
   }
@@ -90,7 +91,7 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
   /**
    * Listens to the stateService ingredient filter and updates the data in the table on change.
    */
-  listenStateService(): Observable<PagedResult<Ingredient>> {
+  listenStateService(): Observable<PagedResult<IIngredient>> {
     return this.stateService.getIngredientFilterQuery().pipe(
       switchMap((ingredientFilterObj: IIngredientFilterObject) => {
         this.filterObject = ingredientFilterObj;
@@ -100,15 +101,16 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
     );
   }
 
-  getSingleIngredient(itemId: number): Observable<Ingredient> {
+  getSingleIngredient(itemId: number): Observable<IIngredient> {
     this.isNew = false;
     return this.restIngredientService.getIngredientById(itemId).pipe(
-      tap((test) => {
+      tap((ing: IIngredient) => {
         this.selectedTab = 1;
       }),
-      catchError((err) => {
-        this.dialogService.confirm(MessageStatus.Critical, 'Error getting ingredient', err);
-        return of({} as Ingredient);
+      catchError((error: unknown) => {
+        const err = error as HttpErrorResponse;
+        this.dialogService.confirm(MessageStatus.Critical, 'Error getting ingredient', err.message);
+        return of({} as IIngredient);
       }),
       takeUntil(this.ngUnsubscribe)
     );
@@ -118,10 +120,11 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
    * load the ingredients that have been filtered
    * @returns Observable of Paged Result with Ingredient
    */
-  getIngredientList(): Observable<PagedResult<Ingredient>> {
+  getIngredientList(): Observable<PagedResult<IIngredient>> {
     return this.restIngredientService.getIngredientList(this.filterObject).pipe(
-      catchError((err) => {
-        this.dialogService.confirm(MessageStatus.Critical, 'Error getting ingredients', err);
+      catchError((error: unknown) => {
+        const err = error as HttpErrorResponse;
+        this.dialogService.confirm(MessageStatus.Critical, 'Error getting ingredients', err.message);
         return of({ items: [], totalCount: 0 });
       }),
       takeUntil(this.ngUnsubscribe)
@@ -142,7 +145,7 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
     }
     this.stateService.setIngredientFilterQuery(this.filterObject);
   }
-  createOrEdit(editOrNew: string, row?: Ingredient) {
+  createOrEdit(editOrNew: string, row?: IIngredient) {
     console.log('CreateOrEdit', editOrNew, row);
     this.isNew = editOrNew === 'new';
     if (this.isNew && !!this.refData?.IngredientFoodGroup && !!this.refData.IngredientState) {
@@ -150,8 +153,8 @@ export class IngredientsComponent extends ComponentBase implements OnInit {
         .newIngredientDialog(this.refData.IngredientFoodGroup, this.measurements, this.refData.IngredientState)
         .pipe(
           first(),
-          switchMap((result: Ingredient) => this.restIngredientService.createIngredient(result)),
-          tap((savedResult: Ingredient) => {
+          switchMap((result: IIngredient) => this.restIngredientService.createIngredient(result)),
+          tap((savedResult: IIngredient) => {
             this.isNew = false; // ingredient is no longer "new"
             this.selectedIngredient$ = of(savedResult);
             this.changeTab(1);

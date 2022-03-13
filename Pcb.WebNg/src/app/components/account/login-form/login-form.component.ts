@@ -66,7 +66,11 @@ export class LoginFormComponent extends ComponentBase {
       .login(form.username, form.password, false)
       .pipe(
         tap((result: MessageResult) => this.loginResult(result, form)),
-        catchError((err: unknown) => this.catchFormError(err)),
+        catchError((error: unknown) => {
+          const err = error as HttpErrorResponse;
+          return this.catchFormError(err.message);
+        }),
+
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe();

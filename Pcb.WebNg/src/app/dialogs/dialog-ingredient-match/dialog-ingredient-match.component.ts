@@ -3,7 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ComponentBase } from '@components/base/base.component.base';
-import { Ingredient } from '@models/ingredient';
+import { IIngredient } from '@models/ingredient';
 import { MessageStatus } from '@models/message.model';
 import { IRawFoodIngredient, IRawFoodSuggestion } from '@models/raw-food-ingredient.model';
 import { ReferenceItemFull } from '@models/reference.model';
@@ -27,7 +27,7 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
     public dialogRef: MatDialogRef<DialogIngredientMatchComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: {
-      ingredient: Ingredient;
+      ingredient: IIngredient;
       foodGroup: ReferenceItemFull[];
     },
     private fb: FormBuilder,
@@ -68,7 +68,7 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
    * After form creation and listening for changes the form is patched to cause both observables to emit.
    * @param ingredient The ingredient to update with.
    */
-  patchForm(ingredient: Ingredient, emit = true): void {
+  patchForm(ingredient: IIngredient, emit = true): void {
     this.form.patchValue(
       {
         usdaFoodName: ingredient.name,
@@ -125,7 +125,8 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
           console.log('raw food matched', result);
           this.usdaFoodMatched = result;
         }),
-        catchError((err: HttpErrorResponse) => {
+        catchError((error: unknown) => {
+          const err = error as HttpErrorResponse;
           this.messageService.add({
             severity: MessageStatus.Warning,
             summary: 'Error getting details about the Usda Food item',
@@ -142,7 +143,7 @@ export class DialogIngredientMatchComponent extends ComponentBase implements OnI
    */
   onSaveItem() {
     if (!!this.usdaFoodMatched) {
-      const updatedIngredient: Ingredient = this.constructIngredientService.mixinUsdaResults(
+      const updatedIngredient: IIngredient = this.constructIngredientService.mixinUsdaResults(
         this.data.ingredient,
         this.usdaFoodMatched
       );

@@ -58,9 +58,13 @@ export class ResetPasswordFormComponent extends ComponentBase implements OnInit 
       : this.accountService.validateResetToken(this.token).pipe(
           first(),
           map((result: MessageResult) => this.validateResetTokenResult(result)),
-          catchError((err: HttpErrorResponse) =>
-            this.catchErrorMessage('Reset Token Error', 'The server did not receive a correctly formatted token.')
-          )
+          catchError((error: unknown) => {
+            const err = error as HttpErrorResponse;
+            return this.catchErrorMessage(
+              'Reset Token Error',
+              `The server did not receive a correctly formatted token. ${err.message}`
+            );
+          })
         );
   }
 
@@ -111,7 +115,10 @@ export class ResetPasswordFormComponent extends ComponentBase implements OnInit 
       .pipe(
         first(),
         tap((result: MessageResult) => this.resetPasswordResult(result)),
-        catchError((err: HttpErrorResponse) => this.catchErrorMessage('Password reset Error', err.message))
+        catchError((error: unknown) => {
+          const err = error as HttpErrorResponse;
+          return this.catchErrorMessage('Password reset Error', err.message);
+        })
       )
       .subscribe();
   }

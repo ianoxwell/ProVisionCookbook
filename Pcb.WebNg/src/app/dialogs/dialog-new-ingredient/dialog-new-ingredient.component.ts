@@ -3,7 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ComponentBase } from '@components/base/base.component.base';
-import { Ingredient } from '@models/ingredient';
+import { IIngredient } from '@models/ingredient';
 import { MeasurementModel } from '@models/ingredient-model';
 import { MessageStatus } from '@models/message.model';
 import {
@@ -47,7 +47,7 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
   spoonFoodSuggestions: ISpoonSuggestions[] = [];
   spoonFoodMatched: ISpoonFoodRaw | null = null;
   spoonConversion: ISpoonConversion[] = [];
-  newIngredient: Ingredient | null = null;
+  newIngredient: IIngredient | null = null;
 
   constructor(
     public dialogRef: MatDialogRef<DialogNewIngredientComponent>,
@@ -124,7 +124,8 @@ export class DialogNewIngredientComponent extends ComponentBase implements OnIni
           console.log('raw food matched', result);
           this.usdaFoodMatched = result;
         }),
-        catchError((err: HttpErrorResponse) => {
+        catchError((error: unknown) => {
+          const err = error as HttpErrorResponse;
           this.messageService.add({
             severity: MessageStatus.Warning,
             summary: 'Error getting details about the Usda Food item',

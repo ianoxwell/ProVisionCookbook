@@ -30,7 +30,8 @@ export class ReferenceService {
         this.refAllSubject$.next(result);
         return result;
       }),
-      catchError((err: HttpErrorResponse) => {
+      catchError((error: unknown) => {
+        const err = error as HttpErrorResponse;
         console.log('Error getting all reference Data', err);
         return of({});
       })
@@ -47,7 +48,8 @@ export class ReferenceService {
         this.measurementSubject$.next(result);
         return result;
       }),
-      catchError((err: HttpErrorResponse) => {
+      catchError((error: unknown) => {
+        const err = error as HttpErrorResponse;
         console.log('Error getting measurement Data', err);
         return of([]);
       })

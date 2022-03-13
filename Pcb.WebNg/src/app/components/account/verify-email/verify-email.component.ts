@@ -76,7 +76,7 @@ export class VerifyEmailComponent implements OnInit {
         .pipe(
           first(),
           tap((result: MessageResult) => this.verifyTokenResult(result)),
-          catchError((err: HttpErrorResponse) => this.catchError(err))
+          catchError(() => this.catchError())
         )
         .subscribe();
     }
@@ -98,10 +98,10 @@ export class VerifyEmailComponent implements OnInit {
 
   /**
    * Processes the catch error from the api.
-   * @param err Error message from api.
+   * @param error Error message from api.
    * @returns Observable.
    */
-  catchError(err: HttpErrorResponse): Observable<void> {
+  catchError(): Observable<void> {
     this.messageService.add(this.addMessages.catchErrorFail);
     this.emailStatus = EmailStatus.Failed;
     return of();

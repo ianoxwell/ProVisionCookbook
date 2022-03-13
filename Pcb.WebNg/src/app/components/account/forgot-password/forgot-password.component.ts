@@ -80,7 +80,8 @@ export class ForgotPasswordComponent extends ComponentBase implements OnInit {
           this.isSubmitting = false;
           console.log('email send result', result, this.isSubmitting);
         }),
-        catchError((err: HttpErrorResponse) => {
+        catchError((error: unknown) => {
+          const err = error as HttpErrorResponse;
           if (err.status === 400) {
             this.messageService.add({
               severity: MessageStatus.Error,

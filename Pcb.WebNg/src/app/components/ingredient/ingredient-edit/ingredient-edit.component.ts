@@ -5,7 +5,7 @@ import { MatSelect } from '@angular/material/select';
 import { ComponentBase } from '@components/base/base.component.base';
 import { IScrollPositions } from '@models/common.model';
 import { Conversion } from '@models/conversion';
-import { Ingredient } from '@models/ingredient';
+import { IIngredient } from '@models/ingredient';
 import { EditedFieldModel, MeasurementModel } from '@models/ingredient-model';
 import { MessageStatus } from '@models/message.model';
 import { ReferenceAll, ReferenceItemFull } from '@models/reference.model';
@@ -40,16 +40,16 @@ import { catchError, filter, first, switchMap, takeUntil, tap } from 'rxjs/opera
 // Behaviour - edited fields either update or add to array of editedItem, on save this array is then iterated to create
 // the IngredientModel for new or sent through to update
 export class IngredientEditComponent extends ComponentBase implements OnInit {
-  @Input() singleIngredient!: Ingredient;
+  @Input() singleIngredient!: IIngredient;
   @Input() isNew = false;
   @Input() refData!: ReferenceAll;
   @Input() measurements: MeasurementModel[] = [];
-  @Output() deleteItem = new EventEmitter<Ingredient>();
+  @Output() deleteItem = new EventEmitter<IIngredient>();
   @Output() back = new EventEmitter<void>();
 
   @ViewChild('constanceId', { static: true }) constanceSelect!: MatSelect;
 
-  selected: Ingredient | null = null;
+  selected: IIngredient | null = null;
   ingredientForm: FormGroup = new FormGroup({});
   // priceForm: FormGroup;
   // conversionsForm: FormGroup;
@@ -148,7 +148,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit {
 
     this.isSavingResults = true;
     const formRaw = this.ingredientForm.getRawValue();
-    const saveObject: Ingredient = {
+    const saveObject: IIngredient = {
       id: this.selected.id,
       ...formRaw
     };
@@ -173,7 +173,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit {
       : this.restIngredientService.updateIngredient(this.selected.id as number, saveObject);
     ingredientAPI$
       .pipe(
-        tap((item: Ingredient) => {
+        tap((item: IIngredient) => {
           this.messageService.add({
             severity: MessageStatus.Success,
             summary: 'Save Successful'
@@ -185,9 +185,10 @@ export class IngredientEditComponent extends ComponentBase implements OnInit {
             this.isNew = false;
           }
         }),
-        catchError((err: HttpErrorResponse) => {
+        catchError((error: unknown) => {
+          const err = error as HttpErrorResponse;
           this.dialogService.confirm(MessageStatus.Warning, 'Error Saving ingredient', err.message);
-          return of({} as Ingredient);
+          return of({} as IIngredient);
         }),
         takeUntil(this.ngUnsubscribe)
       )
@@ -223,7 +224,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit {
    * Recreates the form - possibly should write a service to patch the form instead...
    * @param ev event containing updated Ingredient from the dialog-ingredient-match
    */
-  updateIngredient(ev: Ingredient): void {
+  updateIngredient(ev: IIngredient): void {
     this.ingredientForm = this.ingredientEditFormService.createForm(ev, this.isNew);
     this.ingredientForm.markAsDirty();
   }
@@ -273,7 +274,7 @@ export class IngredientEditComponent extends ComponentBase implements OnInit {
         first(),
         filter((result: boolean) => !!result),
         switchMap(() => this.restIngredientService.deleteItem(this.selected?.id as number)),
-        tap((deletedIngredient: Ingredient) => {
+        tap((deletedIngredient: IIngredient) => {
           console.log('Deleted Ingredient', deletedIngredient);
           // is there anyway to make this refresh the list?
           this.back.emit();
