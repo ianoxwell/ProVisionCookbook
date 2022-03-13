@@ -72,7 +72,6 @@ export class SortPageObj implements ISortPageObj {
   order: SortDirection = 'asc';
   page = 0;
   perPage = environment.resultsPerPage;
-  constructor() {}
 
   public update(filterObj: IIngredientFilterObject | IRecipeFilterQuery) {
     if (filterObj) {

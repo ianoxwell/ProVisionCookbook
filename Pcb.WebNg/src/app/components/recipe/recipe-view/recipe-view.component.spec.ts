@@ -5,21 +5,15 @@
  * Assuming that the app contains autoSpy and correct path declaration in tsconfig e.g. "autospy": ["src/app/tests/auto-spy"]
  * Also assuming package contains angularMaterial>8 and ng-mocks as a devDependencies - https://github.com/ike18t/ng-mocks#readme
  */
-import { waitForAsync, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-
-import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatChipsModule } from '@angular/material/chips';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
-import { autoSpy } from 'autospy';
-import { MockComponent } from 'ng-mocks';
-import { of, Subject } from 'rxjs';
 import { SentenceCasePipe } from '@pipes/sentence-case.pipe';
+import { autoSpy, Spy } from 'autospy';
 import { RecipeViewComponent } from './recipe-view.component';
-
-type Spy<T> = T & jasmine.SpyObj<T>;
 
 describe('RecipeViewComponent', () => {
   let component: RecipeViewComponent;
@@ -49,54 +43,5 @@ describe('RecipeViewComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  describe('when printView is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.printView();
-      // assert
-      // expect(c).toEqual
-    });
-  });
-  describe('when ngOnInit is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.ngOnInit();
-      // assert
-      // expect(c).toEqual
-    });
-  });
-  describe('when englishIngredientItem is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.englishIngredientItem();
-      // assert
-      // expect(c).toEqual
-    });
-  });
-  describe('when routerLinkURL is called it should', () => {
-    // remove what is not required
-    beforeEach(() => {});
-
-    it('should ...', () => {
-      // arrange
-      // act
-      // component.routerLinkURL();
-      // assert
-      // expect(c).toEqual
-    });
   });
 });

@@ -31,7 +31,6 @@ export class GraphDoughnutComponent implements OnInit, OnChanges {
   numberArray: string[] = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'];
   sliceStyle = '';
   styleObject = {};
-  constructor() {}
 
   ngOnInit() {
     this.changeSliceStyle();

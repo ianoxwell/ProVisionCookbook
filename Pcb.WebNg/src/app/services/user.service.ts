@@ -21,7 +21,9 @@ export class UserService {
   // *
   // TODO add the query filters
   public getUsers(queryString: string | null): Observable<Array<IUser>> {
-    return this.httpClient.get<Array<IUser>>(this.apiURL + 'admin/users' + queryString, { headers: this.defaultHeader });
+    return this.httpClient.get<Array<IUser>>(this.apiURL + 'admin/users' + queryString, {
+      headers: this.defaultHeader
+    });
   }
   public createUser(user: IUser): Observable<IUser> {
     return this.httpClient.post<IUser>(this.apiURL + 'admin/users/save', user, { headers: this.defaultHeader });

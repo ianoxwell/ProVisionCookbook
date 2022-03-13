@@ -14,7 +14,6 @@ export class EditCommonMineralsComponent implements OnInit {
 
   decimalTwoPlaces = DecimalTwoPlaces;
   decimalThreePlaces = DecimalThreePlaces;
-  constructor() {}
 
   ngOnInit() {
     this.listenAnyFormChanges();

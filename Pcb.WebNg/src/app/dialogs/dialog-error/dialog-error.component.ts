@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog-error',
@@ -9,9 +9,9 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 export class DialogErrorComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<DialogErrorComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any // errorMessage should be send as {title: 'Unknown Error', content: error message}
-  ) // therefore data.title and data.content
-  {}
+    // errorMessage should be send as {title: 'Unknown Error', content: error message} // therefore data.title and data.content
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
   onNoClick(): void {
     this.dialogRef.close();
   }

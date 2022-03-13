@@ -4,8 +4,9 @@ import { Subject } from 'rxjs';
 @Component({
   template: ''
 })
-// tslint:disable-next-line: component-class-suffix
+// eslint-disable-next-line @angular-eslint/component-class-suffix
 export class ComponentBase implements OnDestroy {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ngUnsubscribe: Subject<any> = new Subject();
 
   ngOnDestroy(): void {

@@ -5,7 +5,7 @@ import { BaseTableComponent } from './table.component.base';
 
 // must mock the abstract class to a concrete class
 class MockTableComponentBase extends BaseTableComponent {
-  goto(row: any): void {
+  goto(): void {
     return;
   }
 }

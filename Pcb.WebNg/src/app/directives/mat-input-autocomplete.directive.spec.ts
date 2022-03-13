@@ -1,8 +1,8 @@
-import { TestBed, async, ComponentFixture, waitForAsync } from '@angular/core/testing';
-import { MatInputAutoCompleteDirective } from './mat-input-autocomplete.directive';
 import { Component, DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatInputModule } from '@angular/material/input';
 import { By } from '@angular/platform-browser';
+import { MatInputAutoCompleteDirective } from './mat-input-autocomplete.directive';
 
 @Component({
   template: ` <form>

@@ -14,7 +14,6 @@ export class EditCommonVitaminsComponent implements OnInit {
 
   decimalTwoPlaces = DecimalTwoPlaces;
   decimalThreePlaces = DecimalThreePlaces;
-  constructor() {}
 
   ngOnInit() {
     this.listenAnyFormChanges();

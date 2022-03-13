@@ -46,7 +46,7 @@ export class DateTimeService {
     setDate.setHours(DateTimeService.returnHours(timeValue));
     setDate.setMinutes(timeValue.minute);
   }
-  public static timeStringtoDate(theDate: Date, hours: number, minutes: number, amPM: string): Date {
+  public static timeStringToDate(theDate: Date, hours: number, minutes: number, amPM: string): Date {
     if (amPM === 'PM') {
       hours += 12;
     }
@@ -78,5 +78,4 @@ export class DateTimeService {
     }
     return a.preference - b.preference;
   }
-  constructor() {}
 }

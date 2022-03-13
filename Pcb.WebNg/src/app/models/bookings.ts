@@ -11,4 +11,4 @@
  */
 import { Booking } from './booking';
 
-export interface Bookings extends Array<Booking> {}
+export type Bookings = Array<Booking>;

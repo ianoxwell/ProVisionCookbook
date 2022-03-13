@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { PagedResult } from '@models/common.model';
 import { Recipe } from '@models/recipe.model';
 
@@ -16,7 +17,6 @@ export const fakeRecipe1: Recipe = {
   id: 1,
   name: 'Fresh Strawberry Lemonade',
   readyInMinutes: 10,
-  // tslint:disable-next-line: max-line-length
   rawInstructions:
     'Add  cup sugar and 1 cup water in a small saucepan.\nHeat over medium high heat until sugar is dissolved. Stir occasionally.\nBlend strawberries in a blender with 2 cups of water.\nPour into a large pitcher. Add lemon juice to pitcher.\nAdd 1 cup of water and simple syrup.\nStir to blend.',
   sourceOfRecipeName: 'https://pickfreshfoods.com/fresh-strawberry-lemonade/',
@@ -144,7 +144,6 @@ export const fakeRecipe2: Recipe = {
   id: 2,
   name: 'Almond Cookie Bar',
   readyInMinutes: 45,
-  // tslint:disable-next-line: max-line-length
   rawInstructions:
     '<ol><li>Beat butter and sugar until light and fluffy.</li><li>In a bowl combine wholemeal flour and plain flour together, then mix in the butter mixture with a rubber spatula and knead gently to a soft dough.</li><li>Turn out the dough on to a flour surface or line with a plastic sheet below and with another plastic sheet on top. Then roll to a square. Chill for at least 1 hour.</li><li>Transfer the dough on a non grease paper and cover with a plastic sheet on top, then roll to dough to about 3mm thick.</li><li>Prick the dough with a fork and bake for about 15-18 minutes until brown at preheated oven 180C and leave biscuit to cool.</li><li>Spread the apricot jam over the top of the biscuit, set aside.</li><li>Mix topping ingredients and spread evenly on the biscuit with a palette knife.</li><li>Bake for 15 minutes until golden.</li><li>Remove cooked biscuit from the oven and leave to cool completely, then cut into bars.</li></ol>',
   sourceOfRecipeName: 'http://www.foodista.com/recipe/F3QRLC6D/almond-cookie-bar',
@@ -246,7 +245,6 @@ export const fakeRecipe2: Recipe = {
       equipment: ['Spatula', 'Bowl'],
       id: 7,
       stepNumber: 1,
-      // tslint:disable-next-line: max-line-length
       stepDescription:
         'Beat butter and sugar until light and fluffy.In a bowl combine wholemeal flour and plain flour together, then mix in the butter mixture with a rubber spatula and knead gently to a soft dough.Turn out the dough on to a flour surface or line with a plastic sheet below and with another plastic sheet on top. Then roll to a square. Chill for at least 1 hour.'
     },
@@ -255,7 +253,6 @@ export const fakeRecipe2: Recipe = {
       equipment: ['Oven'],
       id: 7,
       stepNumber: 2,
-      // tslint:disable-next-line: max-line-length
       stepDescription:
         'Transfer the dough on a non grease paper and cover with a plastic sheet on top, then roll to dough to about 3mm thick.Prick the dough with a fork and bake for about 15-18 minutes until brown at preheated oven 180C and leave biscuit to cool.'
     },

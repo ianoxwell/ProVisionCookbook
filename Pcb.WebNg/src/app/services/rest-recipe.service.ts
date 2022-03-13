@@ -57,7 +57,7 @@ export class RestRecipeService {
     });
   }
 
-  public checkRecipeNameExists(filter: string, foodId: number = 0): Observable<boolean> {
+  public checkRecipeNameExists(filter: string, foodId = 0): Observable<boolean> {
     const queryStr = `?filter=${filter}&recipeId=${foodId}`;
     return this.httpClient.get<boolean>(`${this.apiUrl}recipe/check-name${queryStr}`);
   }
