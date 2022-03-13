@@ -18,6 +18,11 @@ const accountModule = () => import('@components/account/account.module').then((x
 const routes: Routes = [
   {
     path: '',
+    redirectTo: '/account/login',
+    pathMatch: 'full'
+  },
+  {
+    path: '',
     component: WelcomeComponent,
     children: [
       {
